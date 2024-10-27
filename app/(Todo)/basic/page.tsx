@@ -24,6 +24,7 @@ export default function Page() {
   const handleOnClick = (task: string) => {
     if (task.trim() === "") {
       setTask("");
+      toast.info("Empty input");
       return;
     } else {
       setTaskList((prev) => [...prev, task]);
@@ -43,7 +44,7 @@ export default function Page() {
     <div>
       <h1 className="text-2xl font-semibold">Todo Basic</h1>
       <div className="mt-8 grid grid-cols-2 gap-8">
-        <div className="flex h-fit flex-col gap-4 rounded-lg border border-gray-300 bg-white p-4 dark:bg-transparent">
+        <div className="flex h-fit flex-col gap-4 rounded-lg border border-gray-300 bg-white p-4 shadow dark:bg-transparent">
           <h2 className="text-xl font-semibold">Todo list</h2>
           <form className="flex items-center gap-4">
             <Input
@@ -74,11 +75,11 @@ export default function Page() {
             ))}
           </ul>
         </div>
-        <div className="flex h-fit flex-col gap-4 rounded-lg border border-gray-300 bg-white p-4 dark:bg-transparent">
+        <div className="flex h-fit flex-col gap-4 rounded-lg border border-gray-300 bg-white p-4 shadow dark:bg-transparent">
           <h2 className="text-xl font-semibold">How it work</h2>
           <div className="flex flex-col gap-4">
             <Collapsible className="flex flex-col gap-4 rounded-md border p-2">
-              <CollapsibleTrigger className="w-full text-start text-lg">
+              <CollapsibleTrigger className="w-full px-2 text-start text-lg [[data-state=open]_&]:rounded-sm [[data-state=open]_&]:bg-stone-300 [[data-state=open]_&]:dark:bg-stone-700">
                 Add task
               </CollapsibleTrigger>
               <CollapsibleContent>
@@ -99,10 +100,24 @@ export default function Page() {
   };
   `}
                 </SyntaxHighlighter>
+                <ul className="mt-4 flex list-inside list-disc flex-col gap-2">
+                  <li>
+                    Use{" "}
+                    <span className="font-medium text-green-600">
+                      React.ChangeEvent&lt;HTMLInputElement&gt;
+                    </span>{" "}
+                    for input field.
+                  </li>
+                  <li>
+                    Use{" "}
+                    <span className="font-medium text-yellow-600">trim()</span>{" "}
+                    method to check for empty and space character.
+                  </li>
+                </ul>
               </CollapsibleContent>
             </Collapsible>
             <Collapsible className="flex flex-col gap-4 rounded-md border p-2">
-              <CollapsibleTrigger className="w-full text-start text-lg">
+              <CollapsibleTrigger className="w-full px-2 text-start text-lg [[data-state=open]_&]:rounded-sm [[data-state=open]_&]:bg-stone-300 [[data-state=open]_&]:dark:bg-stone-700">
                 Remove task
               </CollapsibleTrigger>
               <CollapsibleContent>
@@ -114,6 +129,20 @@ export default function Page() {
     toast.info("Task removed");
   };`}
                 </SyntaxHighlighter>
+                <ul className="mt-4 flex list-inside list-disc flex-col gap-2">
+                  <li>
+                    Use{" "}
+                    <span className="font-medium text-yellow-600">
+                      splice()
+                    </span>{" "}
+                    method to directly modify the original taskList array to
+                    increase performance instead of using{" "}
+                    <span className="font-medium text-yellow-600">
+                      filter()
+                    </span>{" "}
+                    method.
+                  </li>
+                </ul>
               </CollapsibleContent>
             </Collapsible>
           </div>

@@ -5,10 +5,10 @@ import {
   BookOpen,
   Bot,
   Frame,
+  ListChecks,
   Map,
   PieChart,
   Settings2,
-  SquareTerminal,
 } from "lucide-react";
 
 import { NavMain } from "@/components/nav-main";
@@ -31,7 +31,7 @@ const data = {
     {
       title: "To-do app",
       url: "#",
-      icon: SquareTerminal,
+      icon: ListChecks,
       isActive: true,
       items: [
         {
@@ -39,8 +39,8 @@ const data = {
           url: "/basic",
         },
         {
-          title: "Advance",
-          url: "#",
+          title: "Local Storage",
+          url: "/local",
         },
       ],
     },

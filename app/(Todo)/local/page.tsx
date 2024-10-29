@@ -19,12 +19,8 @@ export default function LocalStorage() {
 
   // Get value from tasks key or empty array
   React.useEffect(() => {
-    try {
-      const storage = localStorage.getItem("tasks");
-      setTaskList(storage ? JSON.parse(storage) : []);
-    } catch (e) {
-      console.error("Failed to parse tasks from localStorage", e);
-    }
+    const storage = localStorage.getItem("tasks");
+    setTaskList(storage ? JSON.parse(storage) : []);
   }, []);
 
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {

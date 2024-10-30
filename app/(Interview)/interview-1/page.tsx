@@ -9,6 +9,8 @@ import {
 } from "@/components/ui/collapsible";
 
 const BASE_URL = "https://restcountries.com/v3.1";
+// get all countries - use `/all` endpoint.
+// get specific capital - use `/capital/{capital}` endpoint.
 
 const FILTERABLE_CAPITALS = [
   "Tallinn",
@@ -84,8 +86,8 @@ export default function Page() {
                 The list of countries and capitals should be fetched from an
                 API.
               </li>
-              <li>Each country should be displayed in a separate component</li>
-              <li>The user should be able to filter the list by capital</li>
+              <li>Each country should be displayed in a separate component.</li>
+              <li>The user should be able to filter the list by capital.</li>
             </ul>
           </div>
         </CollapsibleContent>

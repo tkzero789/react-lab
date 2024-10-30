@@ -1,91 +1,168 @@
+"use client";
+
 import React from "react";
-import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { vscDarkPlus } from "react-syntax-highlighter/dist/esm/styles/prism";
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { ArrowUpFromLine, Eye, Thermometer, Waves, Wind } from "lucide-react";
+
+const APIKEY = "2ee9027cb53bdd718773abe1ca5efd36";
+
+interface Weather {
+  name: string;
+  sys: {
+    country: string;
+  };
+  weather: [
+    {
+      main: string;
+      icon: string;
+      description: string;
+    },
+  ];
+  main: {
+    temp: number;
+    feels_like: number;
+    temp_min: number;
+    temp_max: number;
+    pressure: number;
+    humidity: number;
+  };
+  wind: {
+    speed: number;
+  };
+  visibility: number;
+}
 
 export default function Weather() {
+  const [weatherData, setWeatherData] = React.useState<Weather>();
+  const [city, setCity] = React.useState<string>("");
+
+  const handleOnClick = (city: string) => {
+    try {
+      const getData = async () => {
+        const data = await fetch(
+          `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${APIKEY}&units=imperial`,
+        );
+        const res = await data.json();
+        setWeatherData(res);
+      };
+      getData();
+    } catch (error) {
+      window.alert(error);
+    }
+  };
+
+  const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setCity(e.target.value);
+  };
+
+  const formatText = (text: string) => {
+    const splitText = text.split(" ");
+    const newText = [];
+    for (let i = 0; i < splitText.length; i++) {
+      newText.push(
+        splitText[i].slice(0, 1).toUpperCase() + splitText[i].slice(1),
+      );
+    }
+    return newText.join(" ");
+  };
+
   return (
     <div>
       <h1 className="text-2xl font-semibold">Weather app</h1>
-      <div className="mt-8 grid grid-cols-2 gap-8">
-        <div className="flex h-fit flex-col gap-4 rounded-lg border bg-white p-4 shadow dark:bg-transparent">
+      <div className="mt-8 flex justify-center">
+        <div className="flex h-fit w-2/5 flex-col gap-4 rounded-lg border bg-white p-4 shadow dark:bg-transparent">
           <h2 className="text-xl font-semibold">Weather info</h2>
-        </div>
-        <div className="flex h-fit flex-col gap-4 rounded-lg border bg-white p-4 shadow dark:bg-transparent">
-          <h2 className="text-xl font-semibold">How it work</h2>
-          <div className="flex flex-col gap-4">
-            <Collapsible className="flex flex-col gap-4 rounded-md border p-2">
-              <CollapsibleTrigger className="w-full px-2 text-start text-lg [[data-state=open]_&]:rounded-sm [[data-state=open]_&]:bg-stone-300 [[data-state=open]_&]:dark:bg-stone-700">
-                Add task
-              </CollapsibleTrigger>
-              <CollapsibleContent>
-                <SyntaxHighlighter language="typescript" style={vscDarkPlus}>
-                  {`const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setTask(e.target.value);
-  };
-
-  const handleOnClick = (task: string) => {
-    if (task.trim() === "") {
-      setTask("");
-      return;
-    } else {
-      setTaskList((prev) => [...prev, task]);
-      setTask("");
-      toast.success("New task added");
-    }
-  };
-  `}
-                </SyntaxHighlighter>
-                <ul className="mt-4 flex list-inside list-disc flex-col gap-2">
-                  <li>
-                    Use{" "}
-                    <span className="font-medium text-green-600">
-                      React.ChangeEvent&lt;HTMLInputElement&gt;
-                    </span>{" "}
-                    for input field.
-                  </li>
-                  <li>
-                    Use{" "}
-                    <span className="font-medium text-yellow-600">trim()</span>{" "}
-                    method to check for empty and space character.
-                  </li>
-                </ul>
-              </CollapsibleContent>
-            </Collapsible>
-            <Collapsible className="flex flex-col gap-4 rounded-md border p-2">
-              <CollapsibleTrigger className="w-full px-2 text-start text-lg [[data-state=open]_&]:rounded-sm [[data-state=open]_&]:bg-stone-300 [[data-state=open]_&]:dark:bg-stone-700">
-                Remove task
-              </CollapsibleTrigger>
-              <CollapsibleContent>
-                <SyntaxHighlighter language="typescript" style={vscDarkPlus}>
-                  {`const handleDelete = (itemIndex: number) => {
-    const itemList = [...taskList];
-    itemList.splice(itemIndex, 1);
-    setTaskList(itemList);
-    toast.info("Task removed");
-  };`}
-                </SyntaxHighlighter>
-                <ul className="mt-4 flex list-inside list-disc flex-col gap-2">
-                  <li>
-                    Use{" "}
-                    <span className="font-medium text-yellow-600">
-                      splice()
-                    </span>{" "}
-                    method to directly modify the original taskList array to
-                    increase performance instead of using{" "}
-                    <span className="font-medium text-yellow-600">
-                      filter()
-                    </span>{" "}
-                    method.
-                  </li>
-                </ul>
-              </CollapsibleContent>
-            </Collapsible>
-          </div>
+          <form action="" className="flex justify-between gap-4">
+            <Input value={city} onChange={(e) => handleOnChange(e)} />
+            <Button
+              onClick={(e) => {
+                e.preventDefault();
+                handleOnClick(city);
+              }}
+            >
+              Find
+            </Button>
+          </form>
+          {weatherData && (
+            <div className="flex flex-col gap-8 rounded-lg border p-4">
+              {/* City & country */}
+              <div className="flex justify-between">
+                <h3>
+                  <span className="font-medium">City:</span> {weatherData?.name}
+                </h3>
+                <h3>
+                  <span className="font-medium">Country:</span>{" "}
+                  {weatherData?.sys.country}
+                </h3>
+              </div>
+              {/* Temperature & description */}
+              <div className="flex flex-col items-center">
+                <div className="text-3xl font-bold">
+                  {weatherData?.main.temp.toFixed()}°F
+                </div>
+                <div className="font-medium">
+                  {formatText(weatherData?.weather[0].description || "")}
+                </div>
+              </div>
+              {/* Humidify & Wind */}
+              <div className="flex justify-between">
+                <div className="flex items-center gap-2">
+                  <Waves className="h-11 w-11" strokeWidth={1} />
+                  <div className="flex flex-col text-sm">
+                    <span className="font-semibold">
+                      {weatherData?.main.humidity.toFixed()} %
+                    </span>
+                    <span>Humidity</span>
+                  </div>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Wind className="h-11 w-11" strokeWidth={1} />
+                  <div className="flex flex-col text-sm">
+                    <span className="font-semibold">
+                      {weatherData?.wind.speed.toFixed()} mph
+                    </span>
+                    <span>Wind</span>
+                  </div>
+                </div>
+              </div>
+              {/* Temp high/low, Pressure & Visibility */}
+              <div className="flex flex-col gap-4">
+                <div className="flex items-center">
+                  <span className="w-[45%]">
+                    <Thermometer />
+                  </span>
+                  <span>High/Low</span>
+                  <span className="ml-auto">
+                    {weatherData?.main.temp_max.toFixed()}°/
+                    {weatherData?.main.temp_min.toFixed()}°
+                  </span>
+                </div>
+                <div className="flex items-center">
+                  <span className="w-[45%]">
+                    <ArrowUpFromLine />
+                  </span>
+                  <span>Pressure</span>
+                  <span className="ml-auto">
+                    {(
+                      Number(weatherData?.main.pressure) * 0.029529983071445
+                    ).toFixed()}{" "}
+                    in
+                  </span>
+                </div>
+                <div className="flex items-center">
+                  <span className="w-[45%]">
+                    <Eye />
+                  </span>
+                  <span className="">Visibility</span>
+                  <span className="ml-auto">
+                    {(Number(weatherData?.visibility) * 0.00062137).toFixed()}{" "}
+                    mi
+                  </span>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>

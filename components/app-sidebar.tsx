@@ -45,13 +45,13 @@ const data = {
       ],
     },
     {
-      title: "useEffect",
+      title: "Interview",
       url: "#",
       icon: Bot,
       items: [
         {
-          title: "Genesis",
-          url: "#",
+          title: "Interview-1",
+          url: "/interview-1",
         },
         {
           title: "Explorer",

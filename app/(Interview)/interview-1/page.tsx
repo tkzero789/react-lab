@@ -57,8 +57,7 @@ export default function Page() {
   }, [capital]);
 
   const handleOnChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const selectedCapital = e.target.value as Capital;
-    setCapital(selectedCapital);
+    setCapital(e.target.value as Capital);
   };
 
   return (

@@ -28,7 +28,7 @@ interface Country {
   capital: string;
 }
 
-export function Country({ name, capital }: Country) {
+export function CountryComponent({ name, capital }: Country) {
   return (
     <div className="flex justify-between rounded-lg border p-2">
       <div className="font-medium text-blue-600">{name.common}</div>
@@ -101,7 +101,7 @@ export default function Page() {
       </select>
       <div className="mt-4 flex flex-col gap-2">
         {countries.map((item) => (
-          <Country
+          <CountryComponent
             key={item.name.common}
             name={item.name}
             capital={item.capital}

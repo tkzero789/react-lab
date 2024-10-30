@@ -46,7 +46,7 @@ export default function Basic() {
     <div>
       <h1 className="text-2xl font-semibold">Todo Basic</h1>
       <div className="mt-8 grid grid-cols-2 gap-8">
-        <div className="flex h-fit flex-col gap-4 rounded-lg border border-gray-300 bg-white p-4 shadow dark:bg-transparent">
+        <div className="flex h-fit flex-col gap-4 rounded-lg border bg-white p-4 shadow dark:bg-transparent">
           <h2 className="text-xl font-semibold">Todo list</h2>
           <form className="flex items-center gap-4">
             <Input
@@ -77,7 +77,7 @@ export default function Basic() {
             ))}
           </ul>
         </div>
-        <div className="flex h-fit flex-col gap-4 rounded-lg border border-gray-300 bg-white p-4 shadow dark:bg-transparent">
+        <div className="flex h-fit flex-col gap-4 rounded-lg border bg-white p-4 shadow dark:bg-transparent">
           <h2 className="text-xl font-semibold">How it work</h2>
           <div className="flex flex-col gap-4">
             <Collapsible className="flex flex-col gap-4 rounded-md border p-2">

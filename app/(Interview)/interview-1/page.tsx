@@ -1,6 +1,5 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import React from "react";
 import {
   Collapsible,
@@ -29,15 +28,10 @@ interface Country {
   capital: string;
 }
 
-type CountryProps = {
-  name: string;
-  capital: string;
-};
-
-export function Country({ name, capital }: CountryProps) {
+export function Country({ name, capital }: Country) {
   return (
     <div className="flex justify-between rounded-lg border p-2">
-      <div className="font-medium text-blue-700">{name}</div>
+      <div className="font-medium text-blue-600">{name.common}</div>
       <div>{capital}</div>
     </div>
   );
@@ -71,10 +65,10 @@ export default function Page() {
     <div>
       <h1 className="text-2xl font-semibold">Interview 1</h1>
       <Collapsible className="mt-4 flex flex-col gap-4 rounded-md border p-2">
-        <CollapsibleTrigger className="rounded-sm bg-blue-300 p-2 font-semibold dark:bg-transparent">
+        <CollapsibleTrigger className="rounded-sm bg-blue-300 p-2 font-semibold dark:bg-transparent [[data-state=open]_&]:dark:bg-stone-700">
           Challenge
         </CollapsibleTrigger>
-        <CollapsibleContent className="rounded-sm [[data-state=open]_&]:bg-blue-100 [[data-state=open]_&]:p-8 [[data-state=open]_&]:dark:bg-transparent">
+        <CollapsibleContent className="rounded-sm [[data-state=open]_&]:bg-blue-100 [[data-state=open]_&]:p-8 [[data-state=open]_&]:dark:bg-stone-900">
           <div className="flex flex-col gap-2">
             <p>
               Create a simple React application that displays a list of
@@ -92,24 +86,20 @@ export default function Page() {
           </div>
         </CollapsibleContent>
       </Collapsible>
-
-      <div className="mt-4 flex justify-between">
-        <select
-          name=""
-          id=""
-          value={capital}
-          onChange={(e) => handleOnChange(e)}
-          className="mt-4"
-        >
-          <option value="">Select capital</option>
-          {FILTERABLE_CAPITALS.map((capital) => (
-            <option value={capital} key={capital}>
-              {capital}
-            </option>
-          ))}
-        </select>
-        <Button>Reset</Button>
-      </div>
+      <select
+        name=""
+        id=""
+        value={capital}
+        onChange={(e) => handleOnChange(e)}
+        className="mt-4 rounded-lg border p-2"
+      >
+        <option value="">Select capital</option>
+        {FILTERABLE_CAPITALS.map((capital) => (
+          <option value={capital} key={capital}>
+            {capital}
+          </option>
+        ))}
+      </select>
       <div className="mt-4">
         Selected capital: <span className="font-semibold">{capital}</span>
       </div>
@@ -117,7 +107,7 @@ export default function Page() {
         {countries.map((item) => (
           <Country
             key={item.name.common}
-            name={item.name.common}
+            name={item.name}
             capital={item.capital}
           />
         ))}

@@ -36,11 +36,11 @@ const data = {
       items: [
         {
           title: "Basic",
-          url: "/basic",
+          url: "/todo/basic",
         },
         {
           title: "Local Storage",
-          url: "/local",
+          url: "/todo/local",
         },
       ],
     },
@@ -51,7 +51,7 @@ const data = {
       items: [
         {
           title: "Interview-1",
-          url: "/interview-1",
+          url: "/interview/interview-1",
         },
         {
           title: "Explorer",

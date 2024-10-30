@@ -99,9 +99,6 @@ export default function Page() {
           </option>
         ))}
       </select>
-      <div className="mt-4">
-        Selected capital: <span className="font-semibold">{capital}</span>
-      </div>
       <div className="mt-4 flex flex-col gap-2">
         {countries.map((item) => (
           <Country

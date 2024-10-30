@@ -8,7 +8,7 @@ import {
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 
-const BASE_URL = "https://restcountries.com/v3.1/all";
+const BASE_URL = "https://restcountries.com/v3.1";
 
 const FILTERABLE_CAPITALS = [
   "Tallinn",
@@ -44,32 +44,25 @@ export function Country({ name, capital }: CountryProps) {
 export default function Page() {
   const [countries, setCountries] = React.useState<Country[]>([]);
   const [capital, setCapital] = React.useState<Capital | "">("");
-  const [filteredCapital, setFilteredCapital] = React.useState<Country[]>([]);
 
   React.useEffect(() => {
-    try {
-      getCountry();
-    } catch (error) {
-      console.log(error);
-    }
-  }, []);
-
-  const getCountry = async () => {
-    const data = await fetch(BASE_URL).then((res) => res.json());
-    setCountries(data);
-  };
+    const getCountry = async () => {
+      try {
+        const url = capital
+          ? `${BASE_URL}/capital/${capital}`
+          : `${BASE_URL}/all`;
+        const data = await fetch(url).then((res) => res.json());
+        setCountries(data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getCountry();
+  }, [capital]);
 
   const handleOnChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedCapital = e.target.value as Capital;
     setCapital(selectedCapital);
-    const filtered = countries.filter((item) =>
-      item.capital?.includes(selectedCapital),
-    );
-    setFilteredCapital(filtered);
-  };
-
-  const handleReset = () => {
-    setFilteredCapital([]);
   };
 
   return (
@@ -113,27 +106,19 @@ export default function Page() {
             </option>
           ))}
         </select>
-        <Button onClick={handleReset}>Reset</Button>
+        <Button>Reset</Button>
       </div>
       <div className="mt-4">
         Selected capital: <span className="font-semibold">{capital}</span>
       </div>
       <div className="mt-4 flex flex-col gap-2">
-        {filteredCapital.length > 0
-          ? filteredCapital.map((item) => (
-              <Country
-                key={item.name.common}
-                name={item.name.common}
-                capital={item.capital}
-              />
-            ))
-          : countries.map((item) => (
-              <Country
-                key={item.name.common}
-                name={item.name.common}
-                capital={item.capital}
-              />
-            ))}
+        {countries.map((item) => (
+          <Country
+            key={item.name.common}
+            name={item.name.common}
+            capital={item.capital}
+          />
+        ))}
       </div>
     </div>
   );

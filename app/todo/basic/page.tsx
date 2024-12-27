@@ -25,7 +25,7 @@ export default function Basic() {
   const handleOnClick = (task: string) => {
     if (task.trim() === "") {
       setTask("");
-      toast.info("Empty input");
+      toast.error("Empty input");
       return;
     } else {
       setTaskList((prev) => [...prev, task]);

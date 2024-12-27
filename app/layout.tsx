@@ -31,7 +31,16 @@ export default function RootLayout({
             <AppSidebar />
             <SidebarInset className="bg-gray-100 dark:bg-black">
               {children}
-              <Toaster richColors />
+              <Toaster
+                toastOptions={{
+                  className: "flex gap-2 items-center",
+                  classNames: {
+                    error: "border-red-500 text-red-700",
+                    success: "border-green-500 text-green-700",
+                    info: "border-blue-500 text-blue-700",
+                  },
+                }}
+              />
             </SidebarInset>
           </SidebarProvider>
         </ThemeProvider>

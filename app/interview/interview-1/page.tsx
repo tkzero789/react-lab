@@ -30,16 +30,20 @@ interface Country {
 
 export function CountryComponent({ name, capital }: Country) {
   return (
-    <div className="flex justify-between rounded-lg border p-2">
+    <div className="flex flex-col rounded-lg border p-4 shadow-sm">
       <div className="font-medium text-blue-600">{name.common}</div>
-      <div>{capital}</div>
+      <div className="text-sm">{capital}</div>
     </div>
   );
 }
 
 export default function Page() {
   const [countries, setCountries] = React.useState<Country[]>([]);
+  const [filteredCountries, setFilteredCountries] = React.useState<Country[]>(
+    [],
+  );
   const [capital, setCapital] = React.useState<Capital | "">("");
+  const [search, setSearch] = React.useState<string>("");
 
   React.useEffect(() => {
     const getCountry = async () => {
@@ -47,8 +51,10 @@ export default function Page() {
         const url = capital
           ? `${BASE_URL}/capital/${capital}`
           : `${BASE_URL}/all`;
-        const data = await fetch(url).then((res) => res.json());
+        const response = await fetch(url);
+        const data = await response.json();
         setCountries(data);
+        setFilteredCountries(data);
       } catch (error) {
         console.log(error);
       }
@@ -56,8 +62,20 @@ export default function Page() {
     getCountry();
   }, [capital]);
 
-  const handleOnChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  // Select
+  const handleSelectOnChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setCapital(e.target.value as Capital);
+  };
+
+  // Input search
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const searchKey = e.target.value;
+    setSearch(searchKey);
+    setFilteredCountries(
+      countries.filter((item) =>
+        item.name.common.toLowerCase().includes(searchKey.toLowerCase()),
+      ),
+    );
   };
 
   return (
@@ -85,22 +103,31 @@ export default function Page() {
           </div>
         </CollapsibleContent>
       </Collapsible>
-      <select
-        name=""
-        id=""
-        value={capital}
-        onChange={(e) => handleOnChange(e)}
-        className="mt-4 rounded-lg border p-2"
-      >
-        <option value="">Select capital</option>
-        {FILTERABLE_CAPITALS.map((capital) => (
-          <option value={capital} key={capital}>
-            {capital}
-          </option>
-        ))}
-      </select>
-      <div className="mt-4 flex flex-col gap-2">
-        {countries.map((item) => (
+      <div className="mt-4 grid grid-cols-4 gap-4">
+        <select
+          name=""
+          id=""
+          value={capital}
+          onChange={(e) => handleSelectOnChange(e)}
+          className="rounded-lg border p-2"
+        >
+          <option value="">Select capital</option>
+          {FILTERABLE_CAPITALS.map((capital) => (
+            <option value={capital} key={capital}>
+              {capital}
+            </option>
+          ))}
+        </select>
+        <input
+          value={search}
+          placeholder="Search country"
+          onChange={handleSearch}
+          className="col-span-3 h-10 rounded-md border px-3"
+        />
+      </div>
+      <div>{search}</div>
+      <div className="mt-4 grid grid-cols-4 gap-4">
+        {filteredCountries.map((item) => (
           <CountryComponent
             key={item.name.common}
             name={item.name}

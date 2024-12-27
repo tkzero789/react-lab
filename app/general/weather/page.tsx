@@ -4,6 +4,7 @@ import React from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { ArrowUpFromLine, Eye, Thermometer, Waves, Wind } from "lucide-react";
+import { toast } from "sonner";
 
 const APIKEY = "2ee9027cb53bdd718773abe1ca5efd36";
 
@@ -37,18 +38,29 @@ export default function Weather() {
   const [weatherData, setWeatherData] = React.useState<Weather>();
   const [city, setCity] = React.useState<string>("");
 
-  const handleOnClick = (city: string) => {
-    try {
-      const getData = async () => {
-        const data = await fetch(
-          `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${APIKEY}&units=imperial`,
-        );
-        const res = await data.json();
-        setWeatherData(res);
-      };
-      getData();
-    } catch (error) {
-      window.alert(error);
+  const handleOnClick = async (city: string) => {
+    if (city.trim() === "") {
+      toast.error("Empty input");
+      return;
+    } else {
+      try {
+        const getData = async () => {
+          const response = await fetch(
+            `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${APIKEY}&units=imperial`,
+          );
+          const data = await response.json();
+          console.log(data);
+          if (data.cod === "404") {
+            toast.error("City not found");
+            return;
+          } else {
+            setWeatherData(data);
+          }
+        };
+        await getData();
+      } catch (error) {
+        window.alert(error);
+      }
     }
   };
 

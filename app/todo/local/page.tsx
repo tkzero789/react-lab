@@ -31,7 +31,7 @@ export default function LocalStorage() {
   const handleOnClick = () => {
     if (task.trim() === "") {
       setTask("");
-      toast.info("Empty input");
+      toast.error("Empty input");
       return;
     } else {
       const newTasks = [...taskList, task];
@@ -135,7 +135,7 @@ export default function LocalStorage() {
                   {`const handleOnClick = () => {
     if (task.trim() === "") {
       setTask("");
-      toast.info("Empty input");
+      toast.error("Empty input");
       return;
     } else {
       const newTasks = [...taskList, task];

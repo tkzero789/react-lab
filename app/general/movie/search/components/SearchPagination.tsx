@@ -4,21 +4,10 @@ import React from "react";
 import {
   Pagination,
   PaginationContent,
-  PaginationEllipsis,
   PaginationItem,
   PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
 } from "@/components/ui/pagination";
 import { useSearchParams } from "next/navigation";
-
-type MovieList = {
-  _id: string;
-  name: string;
-  slug: string;
-  poster_url: string;
-  year: number;
-}[];
 
 type Props = {
   totalPage: number;
@@ -29,7 +18,7 @@ export default function SearchPagination({ totalPage }: Props) {
   const searchTerm = search.get("s");
   const currentPage = search.get("page");
 
-  let pageArray = [];
+  const pageArray = [];
 
   for (let i = 0; i < totalPage; i++) {
     pageArray.push({

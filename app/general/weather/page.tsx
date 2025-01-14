@@ -83,7 +83,7 @@ export default function Weather() {
     <div>
       <h1 className="text-2xl font-semibold">Weather app</h1>
       <div className="mt-8 flex justify-center">
-        <div className="flex h-fit w-2/5 flex-col gap-4 rounded-lg border bg-white p-4 shadow dark:bg-transparent">
+        <div className="flex h-fit w-full max-w-lg flex-col gap-4 rounded-lg border bg-white p-4 shadow dark:bg-transparent">
           <h2 className="text-xl font-semibold">Weather info</h2>
           <form action="" className="flex justify-between gap-4">
             <Input value={city} onChange={(e) => handleOnChange(e)} />

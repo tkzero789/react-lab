@@ -6,10 +6,18 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
+import { Country } from "./components/Country";
 
 const BASE_URL = "https://restcountries.com/v3.1";
 // get all countries - use `/all` endpoint.
 // get specific capital - use `/capital/{capital}` endpoint.
+
+interface Country {
+  name: {
+    common: string;
+  };
+  capital: string;
+}
 
 const FILTERABLE_CAPITALS = [
   "Tallinn",
@@ -20,22 +28,6 @@ const FILTERABLE_CAPITALS = [
   "Reykjavik",
 ] as const;
 type Capital = (typeof FILTERABLE_CAPITALS)[number];
-
-interface Country {
-  name: {
-    common: string;
-  };
-  capital: string;
-}
-
-export function CountryComponent({ name, capital }: Country) {
-  return (
-    <div className="flex flex-col rounded-lg border p-4 shadow-sm">
-      <div className="font-medium text-blue-600">{name.common}</div>
-      <div className="text-sm">{capital}</div>
-    </div>
-  );
-}
 
 export default function Page() {
   const [countries, setCountries] = React.useState<Country[]>([]);
@@ -125,10 +117,9 @@ export default function Page() {
           className="col-span-3 h-10 rounded-md border px-3"
         />
       </div>
-      <div>{search}</div>
       <div className="mt-4 grid grid-cols-4 gap-4">
         {filteredCountries.map((item) => (
-          <CountryComponent
+          <Country
             key={item.name.common}
             name={item.name}
             capital={item.capital}

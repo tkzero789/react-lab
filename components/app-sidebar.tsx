@@ -25,14 +25,12 @@ import { Button } from "./ui/button";
 import Link from "next/link";
 import { ThemeToggle } from "./theme-toggle";
 
-// This is sample data.
 const data = {
   navMain: [
     {
       title: "To-do app",
       url: "#",
       icon: ListChecks,
-      isActive: true,
       items: [
         {
           title: "Basic",
@@ -52,6 +50,10 @@ const data = {
         {
           title: "Weather app",
           url: "/general/weather",
+        },
+        {
+          title: "Movie app",
+          url: "/general/movie?page=1",
         },
       ],
     },
@@ -123,7 +125,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     <Sidebar
       collapsible="none"
       {...props}
-      className="sticky left-0 top-0 h-dvh"
+      className="sticky left-0 top-0 hidden h-dvh xl:block"
     >
       <SidebarHeader className="flex items-center justify-center overflow-hidden p-4">
         <Button

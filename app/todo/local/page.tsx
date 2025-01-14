@@ -55,7 +55,7 @@ export default function LocalStorage() {
     <div>
       <h1 className="text-2xl font-semibold">Todo Local Storage</h1>
       <div className="mt-8 grid grid-cols-2 gap-8">
-        <div className="flex h-fit flex-col gap-4 rounded-lg border border-gray-300 bg-white p-4 shadow dark:bg-transparent">
+        <div className="flex h-fit flex-col gap-4 rounded-lg border bg-white p-4 shadow dark:bg-transparent">
           <h2 className="text-xl font-semibold">Todo list</h2>
           <form className="flex items-center gap-4">
             <Input
@@ -76,7 +76,7 @@ export default function LocalStorage() {
             {taskList?.map((item, index) => (
               <li
                 key={index}
-                className="flex items-center justify-between rounded-md border border-gray-400 p-2"
+                className="flex items-center justify-between rounded-md border p-2"
               >
                 {item}
                 <button onClick={() => handleDelete(index)}>
@@ -86,7 +86,7 @@ export default function LocalStorage() {
             ))}
           </ul>
         </div>
-        <div className="flex h-fit flex-col gap-4 rounded-lg border border-gray-300 bg-white p-4 shadow dark:bg-transparent">
+        <div className="flex h-fit flex-col gap-4 rounded-lg border bg-white p-4 shadow dark:bg-transparent">
           <h2 className="text-xl font-semibold">How it work</h2>
           <p className="text-sm font-medium">
             * The values of the keys are stored as a single string in
@@ -94,7 +94,7 @@ export default function LocalStorage() {
           </p>
           <div className="flex flex-col gap-4">
             <Collapsible className="flex flex-col gap-4 rounded-md border p-2">
-              <CollapsibleTrigger className="w-full px-2 text-start text-lg [[data-state=open]_&]:rounded-sm [[data-state=open]_&]:bg-stone-300 [[data-state=open]_&]:dark:bg-stone-700">
+              <CollapsibleTrigger className="w-full px-2 text-start text-lg dark:rounded-sm dark:bg-background [[data-state=open]_&]:rounded-sm [[data-state=open]_&]:bg-stone-300 [[data-state=open]_&]:dark:bg-stone-700">
                 Initialization
               </CollapsibleTrigger>
               <CollapsibleContent>
@@ -127,7 +127,7 @@ export default function LocalStorage() {
               </CollapsibleContent>
             </Collapsible>
             <Collapsible className="flex flex-col gap-4 rounded-md border p-2">
-              <CollapsibleTrigger className="w-full px-2 text-start text-lg [[data-state=open]_&]:rounded-sm [[data-state=open]_&]:bg-stone-300 [[data-state=open]_&]:dark:bg-stone-700">
+              <CollapsibleTrigger className="w-full px-2 text-start text-lg dark:rounded-sm dark:bg-background [[data-state=open]_&]:rounded-sm [[data-state=open]_&]:bg-stone-300 [[data-state=open]_&]:dark:bg-stone-700">
                 Add task
               </CollapsibleTrigger>
               <CollapsibleContent>
@@ -170,7 +170,7 @@ export default function LocalStorage() {
               </CollapsibleContent>
             </Collapsible>
             <Collapsible className="flex flex-col gap-4 rounded-md border p-2">
-              <CollapsibleTrigger className="w-full px-2 text-start text-lg [[data-state=open]_&]:rounded-sm [[data-state=open]_&]:bg-stone-300 [[data-state=open]_&]:dark:bg-stone-700">
+              <CollapsibleTrigger className="w-full px-2 text-start text-lg dark:rounded-sm dark:bg-background [[data-state=open]_&]:rounded-sm [[data-state=open]_&]:bg-stone-300 [[data-state=open]_&]:dark:bg-stone-700">
                 Remove task
               </CollapsibleTrigger>
               <CollapsibleContent>

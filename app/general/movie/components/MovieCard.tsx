@@ -37,7 +37,7 @@ export default function MovieCard({ name, slug, poster_url, year }: MovieList) {
           </div>
         </div>
       </div>
-      <h2 className="movie-title flex-1 rounded-b-md bg-gray-800 px-2 pb-4 pt-2 text-white">
+      <h2 className="movie-title flex-1 rounded-b-md bg-gray-800 px-2 pb-4 pt-2 text-white dark:bg-background">
         {name}
       </h2>
     </Link>

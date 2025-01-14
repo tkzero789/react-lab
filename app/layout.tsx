@@ -29,15 +29,17 @@ export default function RootLayout({
         >
           <SidebarProvider>
             <AppSidebar />
-            <SidebarInset className="bg-gray-100 dark:bg-black">
+            <SidebarInset className="bg-gray-100 dark:bg-[#0f0f0f]">
               {children}
               <Toaster
                 toastOptions={{
-                  className: "flex gap-2 items-center",
+                  className: "flex gap-2 items-center dark:bg-background",
                   classNames: {
-                    error: "border-red-500 text-red-700",
-                    success: "border-green-500 text-green-700",
-                    info: "border-blue-500 text-blue-700",
+                    error:
+                      "border-red-500 text-red-700 dark:border-border dark:text-red-500",
+                    success:
+                      "border-green-500 text-green-700 dark:border-border dark:text-green-500",
+                    info: "border-blue-500 text-blue-700 dark:border-border dark:text-blue-500",
                   },
                 }}
               />

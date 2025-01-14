@@ -81,7 +81,7 @@ export default function Basic() {
           <h2 className="text-xl font-semibold">How it work</h2>
           <div className="flex flex-col gap-4">
             <Collapsible className="flex flex-col gap-4 rounded-md border p-2">
-              <CollapsibleTrigger className="w-full px-2 text-start text-lg [[data-state=open]_&]:rounded-sm [[data-state=open]_&]:bg-stone-300 [[data-state=open]_&]:dark:bg-stone-700">
+              <CollapsibleTrigger className="w-full px-2 text-start text-lg dark:rounded-sm dark:bg-background [[data-state=open]_&]:rounded-sm [[data-state=open]_&]:bg-stone-300 [[data-state=open]_&]:dark:bg-stone-700">
                 Add task
               </CollapsibleTrigger>
               <CollapsibleContent>
@@ -119,7 +119,7 @@ export default function Basic() {
               </CollapsibleContent>
             </Collapsible>
             <Collapsible className="flex flex-col gap-4 rounded-md border p-2">
-              <CollapsibleTrigger className="w-full px-2 text-start text-lg [[data-state=open]_&]:rounded-sm [[data-state=open]_&]:bg-stone-300 [[data-state=open]_&]:dark:bg-stone-700">
+              <CollapsibleTrigger className="w-full px-2 text-start text-lg dark:rounded-sm dark:bg-background [[data-state=open]_&]:rounded-sm [[data-state=open]_&]:bg-stone-300 [[data-state=open]_&]:dark:bg-stone-700">
                 Remove task
               </CollapsibleTrigger>
               <CollapsibleContent>

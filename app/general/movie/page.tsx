@@ -70,7 +70,7 @@ export default function MoviePage({ searchParams }: Props) {
               {Array.from({ length: 10 }).map((_, index) => (
                 <div
                   key={index}
-                  className="h-[22rem] animate-pulse bg-gray-300"
+                  className="h-[22rem] animate-pulse bg-gray-300 dark:bg-background"
                 ></div>
               ))}
             </>

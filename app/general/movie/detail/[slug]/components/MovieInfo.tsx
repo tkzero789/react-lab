@@ -48,7 +48,7 @@ export default function MovieInfo({ movie, episodes }: Props) {
   }, [search, episodes]);
 
   const handleChangeEpisode = (index: number) => {
-    router.push(`/general/movie/${movie.slug}?episode=${index + 1}`);
+    router.push(`/general/movie/detail/${movie.slug}?episode=${index + 1}`);
     const updateSource = episodes[index].link_embed;
     setSource(updateSource);
   };
@@ -64,10 +64,10 @@ export default function MovieInfo({ movie, episodes }: Props) {
         <div className="rounded-sm bg-gradient-to-r from-violet-600 to-fuchsia-600 px-2 py-1 text-sm font-bold text-white">
           {movie.quality}
         </div>
-        <div className="rounded-sm bg-gray-900 bg-opacity-70 px-2 py-1 text-sm font-semibold text-white">
+        <div className="rounded-sm bg-gray-900 bg-opacity-70 px-2 py-1 text-sm font-semibold text-white dark:bg-background">
           {movie.episode_total} tập
         </div>
-        <div className="rounded-sm bg-gray-900 bg-opacity-70 px-2 py-1 text-sm font-semibold text-white">
+        <div className="rounded-sm bg-gray-900 bg-opacity-70 px-2 py-1 text-sm font-semibold text-white dark:bg-background">
           {movie.time}
         </div>
       </div>
@@ -81,14 +81,16 @@ export default function MovieInfo({ movie, episodes }: Props) {
           </div>
         ))}
       </div>
-      <p className="mt-4 rounded-md bg-gray-200 p-4">{movie.content}</p>
+      <p className="mt-4 rounded-md bg-gray-200 p-4 dark:bg-background">
+        {movie.content}
+      </p>
       <div className="mt-4">
         Actors:
         <div className="mt-2 flex items-center gap-2">
           {movie.actor.map((item, index) => (
             <div
               key={index}
-              className="rounded-sm bg-gray-200 bg-opacity-90 px-2 py-1 text-sm shadow-sm"
+              className="rounded-sm bg-gray-200 bg-opacity-90 px-2 py-1 text-sm shadow-sm dark:bg-background"
             >
               {item}
             </div>
@@ -97,10 +99,15 @@ export default function MovieInfo({ movie, episodes }: Props) {
       </div>
       <div className="mt-4">
         Episodes:
-        <div className="mt-2 flex flex-wrap items-center gap-2">
+        <div className="mt-2 grid grid-cols-[repeat(14,minmax(0,1fr))]">
           {episodes.map((item, index) => (
-            <Button key={index} onClick={() => handleChangeEpisode(index)}>
-              {item.name}
+            <Button
+              key={index}
+              onClick={() => handleChangeEpisode(index)}
+              variant="outline"
+              className="rounded-none"
+            >
+              {item.name.split(" ")[1]}
             </Button>
           ))}
         </div>

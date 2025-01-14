@@ -86,7 +86,11 @@ export default function Weather() {
         <div className="flex h-fit w-full max-w-lg flex-col gap-4 rounded-lg border bg-white p-4 shadow dark:bg-transparent">
           <h2 className="text-xl font-semibold">Weather info</h2>
           <form action="" className="flex justify-between gap-4">
-            <Input value={city} onChange={(e) => handleOnChange(e)} />
+            <Input
+              value={city}
+              onChange={(e) => handleOnChange(e)}
+              placeholder="Enter city"
+            />
             <Button
               onClick={(e) => {
                 e.preventDefault();
@@ -97,7 +101,7 @@ export default function Weather() {
             </Button>
           </form>
           {weatherData && (
-            <div className="flex flex-col gap-8 rounded-lg border p-4">
+            <div className="flex flex-col gap-8 rounded-lg border p-4 dark:bg-background">
               {/* City & country */}
               <div className="flex justify-between">
                 <h3>

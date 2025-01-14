@@ -49,9 +49,6 @@ export default async function MovieSearchPage({ searchParams }: Props) {
       <div className="px-32">
         <div className="mt-8 flex items-center justify-between">
           <MovieSearch />
-          <div className="mt-8 w-fit rounded-md bg-gray-300 p-2">
-            Keyword: {searchTerm}
-          </div>
         </div>
         <div className="mt-8 grid grid-cols-5 gap-x-4 gap-y-8">
           {filteredMovies.map((movie: Movie) => (

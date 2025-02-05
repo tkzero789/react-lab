@@ -19,11 +19,11 @@ import {
   SidebarContent,
   SidebarFooter,
   SidebarHeader,
-  SidebarRail,
 } from "@/components/ui/sidebar";
 import { Button } from "./ui/button";
 import Link from "next/link";
 import { ThemeToggle } from "./theme-toggle";
+import { usePathname } from "next/navigation";
 
 const data = {
   navMain: [
@@ -76,7 +76,6 @@ const data = {
         },
       ],
     },
-
     {
       title: "Settings",
       url: "#",
@@ -121,13 +120,20 @@ const data = {
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const path = usePathname();
+
+  const navWithActive = data.navMain.map((item) => ({
+    ...item,
+    isActive: item.items?.some((subItem) => subItem.url === path),
+  }));
+
   return (
     <Sidebar
-      collapsible="none"
+      collapsible="icon"
       {...props}
       className="sticky left-0 top-0 hidden h-dvh xl:block"
     >
-      <SidebarHeader className="flex items-center justify-center overflow-hidden p-4">
+      <SidebarHeader className="flex items-center overflow-hidden p-4">
         <Button
           asChild
           className="w-fit bg-transparent text-2xl font-bold text-foreground hover:bg-transparent hover:text-foreground"
@@ -136,13 +142,12 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         </Button>
       </SidebarHeader>
       <SidebarContent>
-        <NavMain items={data.navMain} />
+        <NavMain items={navWithActive} />
         <NavProjects projects={data.projects} />
       </SidebarContent>
       <SidebarFooter className="p-4">
         <ThemeToggle />
       </SidebarFooter>
-      <SidebarRail />
     </Sidebar>
   );
 }

@@ -132,7 +132,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           asChild
           className="w-fit bg-transparent text-2xl font-bold text-foreground hover:bg-transparent hover:text-foreground"
         >
-          <Link href="/">React Studio</Link>
+          <Link href="/">Workshop</Link>
         </Button>
       </SidebarHeader>
       <SidebarContent>

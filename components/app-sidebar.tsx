@@ -4,9 +4,8 @@ import * as React from "react";
 import {
   AppWindow,
   Bot,
-  Frame,
+  Laptop,
   ListChecks,
-  Map,
   PieChart,
   Settings2,
 } from "lucide-react";
@@ -102,19 +101,14 @@ const data = {
   ],
   projects: [
     {
-      name: "Design Engineering",
+      name: "Web Replicas",
       url: "#",
-      icon: Frame,
+      icon: Laptop,
     },
     {
-      name: "Sales & Marketing",
+      name: "ThreeJS",
       url: "#",
       icon: PieChart,
-    },
-    {
-      name: "Travel",
-      url: "#",
-      icon: Map,
     },
   ],
 };
@@ -138,7 +132,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           asChild
           className="w-fit bg-transparent text-2xl font-bold text-foreground hover:bg-transparent hover:text-foreground"
         >
-          <Link href="/">React Lab</Link>
+          <Link href="/">React Studio</Link>
         </Button>
       </SidebarHeader>
       <SidebarContent>

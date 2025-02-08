@@ -33,7 +33,7 @@ export function NavMain({
     }[];
   }[];
 }) {
-  const path = usePathname();
+  const pathName = usePathname();
 
   return (
     <SidebarGroup>
@@ -63,7 +63,7 @@ export function NavMain({
                     <SidebarMenuSubItem key={subItem.title}>
                       <SidebarMenuSubButton
                         asChild
-                        isActive={path === subItem.url}
+                        isActive={pathName.startsWith(subItem.url)}
                       >
                         <a href={subItem.url}>
                           <span>{subItem.title}</span>

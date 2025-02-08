@@ -30,22 +30,16 @@ export default function SearchPagination({ totalPage }: Props) {
   return (
     <Pagination className="mt-8">
       <PaginationContent>
-        {/* <PaginationItem>
-          <PaginationPrevious href="#" />
-        </PaginationItem> */}
         {pageArray.map((item, index) => (
           <PaginationItem key={index}>
             <PaginationLink
-              href={`/general/movie/search?s=${searchTerm}&page=${item.page}`}
+              href={`/workshop/general/movie/search?s=${searchTerm}&page=${item.page}`}
               isActive={Number(currentPage) === item.id}
             >
               {item.page}
             </PaginationLink>
           </PaginationItem>
         ))}
-        {/* <PaginationItem>
-          <PaginationNext href="#" />
-        </PaginationItem> */}
       </PaginationContent>
     </Pagination>
   );

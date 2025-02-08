@@ -14,7 +14,7 @@ type MovieList = {
 export default function MovieCard({ name, slug, poster_url, year }: MovieList) {
   return (
     <Link
-      href={`/general/movie/detail/${slug}?episode=1`}
+      href={`/workshop/general/movie/detail/${slug}?episode=1`}
       className="flex h-full flex-col rounded-md shadow-sm"
     >
       <div className="movie-image relative h-80 overflow-hidden rounded-t-md">

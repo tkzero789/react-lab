@@ -48,40 +48,52 @@ export default function MovieInfo({ movie, episodes }: Props) {
   }, [search, episodes]);
 
   const handleChangeEpisode = (index: number) => {
-    router.push(`/general/movie/detail/${movie.slug}?episode=${index + 1}`);
+    router.push(
+      `/workshop/general/movie/detail/${movie.slug}?episode=${index + 1}`,
+    );
     const updateSource = episodes[index].link_embed;
     setSource(updateSource);
   };
 
+  console.log(episodes);
+
   return (
     <div>
       <MovieVideo source={source} />
-      <div className="mt-8 flex gap-2">
-        <h1 className="text-3xl font-semibold">{movie.name}</h1>
-        <div className="text-3xl">({movie.year})</div>
-      </div>
-      <div className="mt-4 flex items-center gap-2">
-        <div className="rounded-sm bg-gradient-to-r from-violet-600 to-fuchsia-600 px-2 py-1 text-sm font-bold text-white">
-          {movie.quality}
+      <div className="mt-8 flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <h1 className="text-3xl font-semibold">{movie.name}</h1>
+          <div className="text-3xl">({movie.year})</div>
         </div>
-        <div className="rounded-sm bg-gray-900 bg-opacity-70 px-2 py-1 text-sm font-semibold text-white dark:bg-background">
-          {movie.episode_total} tập
-        </div>
-        <div className="rounded-sm bg-gray-900 bg-opacity-70 px-2 py-1 text-sm font-semibold text-white dark:bg-background">
-          {movie.time}
+
+        <div className="rounded-sm bg-gray-200 px-4 py-2 text-lg">
+          Tập {search}
         </div>
       </div>
-      <div className="mt-4 flex items-center gap-2">
-        {movie.category.map((item) => (
-          <div
-            key={item.id}
-            className="rounded-sm bg-blue-900 bg-opacity-90 px-2 py-1 text-sm font-semibold text-white"
-          >
-            {item.name}
+      <div className="flex items-center justify-between gap-8">
+        <div className="mt-4 flex items-center gap-2">
+          <div className="rounded-sm bg-gradient-to-r from-violet-600 to-fuchsia-600 px-2 py-1 text-sm font-bold text-white">
+            {movie.quality}
           </div>
-        ))}
+          <div className="rounded-sm bg-gray-900 bg-opacity-70 px-2 py-1 text-sm font-semibold text-white dark:bg-background">
+            {movie.episode_total} tập
+          </div>
+          <div className="rounded-sm bg-gray-900 bg-opacity-70 px-2 py-1 text-sm font-semibold text-white dark:bg-background">
+            {movie.time}
+          </div>
+        </div>
+        <div className="mt-4 flex items-center gap-2">
+          {movie.category.map((item) => (
+            <div
+              key={item.id}
+              className="rounded-sm bg-blue-900 bg-opacity-90 px-2 py-1 text-sm font-semibold text-white"
+            >
+              {item.name}
+            </div>
+          ))}
+        </div>
       </div>
-      <p className="mt-4 rounded-md bg-gray-200 p-4 dark:bg-background">
+      <p className="mt-8 rounded-md bg-gray-200 p-4 dark:bg-background">
         {movie.content}
       </p>
       <div className="mt-4">

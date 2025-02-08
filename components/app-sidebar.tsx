@@ -1,14 +1,7 @@
 "use client";
 
 import * as React from "react";
-import {
-  AppWindow,
-  Bot,
-  Laptop,
-  ListChecks,
-  PieChart,
-  Settings2,
-} from "lucide-react";
+import { AppWindow, Bot, Laptop, ListChecks, PieChart } from "lucide-react";
 
 import { NavMain } from "@/components/nav-main";
 import { NavProjects } from "@/components/nav-projects";
@@ -30,14 +23,15 @@ const data = {
       title: "To-do app",
       url: "#",
       icon: ListChecks,
+      activeCheck: "/workshop/todo",
       items: [
         {
           title: "Basic",
-          url: "/todo/basic",
+          url: "/workshop/todo/basic",
         },
         {
           title: "Local Storage",
-          url: "/todo/local",
+          url: "/workshop/todo/local",
         },
       ],
     },
@@ -45,14 +39,15 @@ const data = {
       title: "General app",
       url: "#",
       icon: AppWindow,
+      activeCheck: "/workshop/general",
       items: [
         {
           title: "Weather app",
-          url: "/general/weather",
+          url: "/workshop/general/weather",
         },
         {
           title: "Movie app",
-          url: "/general/movie?page=1",
+          url: "/workshop/general/movie",
         },
       ],
     },
@@ -60,10 +55,11 @@ const data = {
       title: "Interview",
       url: "#",
       icon: Bot,
+      activeCheck: "/workshop/interview",
       items: [
         {
           title: "Interview-1",
-          url: "/interview/interview-1",
+          url: "/workshop/interview/interview-1",
         },
         {
           title: "Explorer",
@@ -71,29 +67,6 @@ const data = {
         },
         {
           title: "Quantum",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Settings",
-      url: "#",
-      icon: Settings2,
-      items: [
-        {
-          title: "General",
-          url: "#",
-        },
-        {
-          title: "Team",
-          url: "#",
-        },
-        {
-          title: "Billing",
-          url: "#",
-        },
-        {
-          title: "Limits",
           url: "#",
         },
       ],
@@ -114,11 +87,11 @@ const data = {
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const path = usePathname();
+  const pathName = usePathname();
 
   const navWithActive = data.navMain.map((item) => ({
     ...item,
-    isActive: item.items?.some((subItem) => subItem.url === path),
+    isActive: pathName.startsWith(item.activeCheck),
   }));
 
   return (

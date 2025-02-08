@@ -46,23 +46,22 @@ export default async function MovieSearchPage({ searchParams }: Props) {
   return (
     <div>
       <h1 className="text-2xl font-semibold">Search</h1>
-      <div className="px-32">
-        <div className="mt-8 flex items-center justify-between">
-          <MovieSearch />
-        </div>
-        <div className="mt-8 grid grid-cols-5 gap-x-4 gap-y-8">
-          {filteredMovies.map((movie: Movie) => (
-            <MovieCard
-              key={movie._id}
-              name={movie.name}
-              slug={movie.slug}
-              poster_url={movie.poster_url}
-              year={movie.year}
-            />
-          ))}
-        </div>
-        <SearchPagination totalPage={totalPage} />
+
+      <div className="mt-8 flex items-center justify-between">
+        <MovieSearch />
       </div>
+      <div className="mt-8 grid grid-cols-5 gap-x-4 gap-y-8">
+        {filteredMovies.map((movie: Movie) => (
+          <MovieCard
+            key={movie._id}
+            name={movie.name}
+            slug={movie.slug}
+            poster_url={movie.poster_url}
+            year={movie.year}
+          />
+        ))}
+      </div>
+      <SearchPagination totalPage={totalPage} />
     </div>
   );
 }

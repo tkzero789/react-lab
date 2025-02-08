@@ -1,7 +1,7 @@
-export default function PlaygroundPage() {
+export default function WorkshopPage() {
   return (
     <div className="flex h-screen w-full items-center justify-center text-2xl font-bold">
-      Playground
+      Workshop
     </div>
   );
 }

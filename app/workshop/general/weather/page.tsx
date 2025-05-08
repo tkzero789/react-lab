@@ -34,7 +34,7 @@ interface Weather {
   visibility: number;
 }
 
-export default function Weather() {
+export default function WeatherPage() {
   const [weatherData, setWeatherData] = React.useState<Weather>();
   const [city, setCity] = React.useState<string>("");
 
@@ -80,7 +80,7 @@ export default function Weather() {
   };
 
   return (
-    <div>
+    <>
       <h1 className="text-2xl font-semibold">Weather app</h1>
       <div className="mt-8 flex justify-center">
         <div className="flex h-fit w-full max-w-lg flex-col gap-4 rounded-lg border bg-white p-4 shadow dark:bg-transparent">
@@ -181,6 +181,6 @@ export default function Weather() {
           )}
         </div>
       </div>
-    </div>
+    </>
   );
 }

@@ -71,7 +71,7 @@ export default function Page() {
   };
 
   return (
-    <div>
+    <>
       <h1 className="text-2xl font-semibold">Interview 1</h1>
       <Collapsible className="mt-4 flex flex-col gap-4 rounded-md border p-2">
         <CollapsibleTrigger className="rounded-sm bg-blue-300 p-2 font-semibold dark:bg-background [[data-state=open]_&]:dark:bg-stone-700">
@@ -126,6 +126,6 @@ export default function Page() {
           />
         ))}
       </div>
-    </div>
+    </>
   );
 }

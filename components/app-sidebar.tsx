@@ -1,7 +1,14 @@
 "use client";
 
 import * as React from "react";
-import { AppWindow, Bot, Laptop, ListChecks, PieChart } from "lucide-react";
+import {
+  AppWindow,
+  Bot,
+  FerrisWheel,
+  Laptop,
+  ListChecks,
+  PieChart,
+} from "lucide-react";
 
 import { NavMain } from "@/components/nav-main";
 import { NavProjects } from "@/components/nav-projects";
@@ -42,13 +49,14 @@ const data = {
       activeCheck: "/workshop/general",
       items: [
         {
-          title: "Weather app",
+          title: "Weather",
           url: "/workshop/general/weather",
         },
         {
-          title: "Movie app",
+          title: "Movie",
           url: "/workshop/general/movie",
         },
+        { title: "Pomodoro", url: "/workshop/general/pomodoro" },
       ],
     },
     {
@@ -68,6 +76,18 @@ const data = {
         {
           title: "Quantum",
           url: "#",
+        },
+      ],
+    },
+    {
+      title: "Playground",
+      url: "#",
+      icon: FerrisWheel,
+      activeCheck: "/workshop/playground",
+      items: [
+        {
+          title: "Field",
+          url: "/workshop/playground/field",
         },
       ],
     },

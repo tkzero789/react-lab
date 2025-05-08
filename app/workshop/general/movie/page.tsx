@@ -58,7 +58,7 @@ export default function MoviePage({ searchParams }: Props) {
   };
 
   return (
-    <div>
+    <>
       <h1 className="text-2xl font-semibold">Movie app</h1>
       <div className="mt-8 flex items-center justify-between">
         <MovieSearch />
@@ -101,6 +101,6 @@ export default function MoviePage({ searchParams }: Props) {
           Next
         </Button>
       </div>
-    </div>
+    </>
   );
 }

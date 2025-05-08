@@ -44,7 +44,7 @@ const replicas = [
 
 export default function ReplicasPage() {
   return (
-    <div className="flex w-full flex-col items-center justify-center gap-16 bg-green-50/50 py-16">
+    <div className="flex w-full flex-col items-center justify-center gap-16 py-16">
       <div className="flex flex-col items-center gap-6">
         <div className="flex w-fit items-center justify-center rounded-2xl bg-gradient-to-b from-green-300/70 to-green-500 p-4 transition-all duration-300 group-hover:scale-105">
           <Replicas />
@@ -56,21 +56,24 @@ export default function ReplicasPage() {
           <Link
             href={item.href}
             key={item.title}
-            className="group flex flex-col rounded-3xl border bg-white shadow-sm transition-all duration-300 hover:shadow-md"
+            className="group flex flex-col rounded-3xl bg-neutral-100 p-2"
           >
-            <div className="overflow-hidden rounded-t-3xl">
-              <Image
-                src={item.img}
-                width={400}
-                height={220}
-                alt="Application image"
-                className="h-full w-full rounded-t-3xl transition-all duration-300 group-hover:scale-105"
-              />
+            <div className="overflow-hidden rounded-xl border shadow-sm group-hover:shadow">
+              <div className="overflow-hidden">
+                <Image
+                  src={item.img}
+                  width={400}
+                  height={220}
+                  alt="Application image"
+                  className="h-full w-full rounded-t-xl transition-all duration-300 group-hover:scale-105"
+                />
+              </div>
+              <div className="bg-white p-4 shadow-sm group-hover:shadow">
+                <h2 className="text-lg font-semibold group-hover:underline">
+                  {item.title}
+                </h2>
+              </div>
             </div>
-
-            <h2 className="border-t p-4 text-lg font-semibold group-hover:underline">
-              {item.title}
-            </h2>
           </Link>
         ))}
       </div>

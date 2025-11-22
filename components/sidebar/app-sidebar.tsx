@@ -10,8 +10,8 @@ import {
   PieChart,
 } from "lucide-react";
 
-import { NavMain } from "@/components/nav-main";
-import { NavProjects } from "@/components/nav-projects";
+import { NavMain } from "@/components/sidebar/nav-main";
+import { NavProjects } from "@/components/sidebar/nav-projects";
 
 import {
   Sidebar,
@@ -19,9 +19,9 @@ import {
   SidebarFooter,
   SidebarHeader,
 } from "@/components/ui/sidebar";
-import { Button } from "./ui/button";
+import { Button } from "../ui/button";
 import Link from "next/link";
-import { ThemeToggle } from "./theme-toggle";
+import { ThemeToggle } from "../theme/theme-toggle";
 import { usePathname } from "next/navigation";
 
 const data = {
@@ -118,7 +118,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     <Sidebar
       collapsible="icon"
       {...props}
-      className="sticky left-0 top-0 hidden h-dvh xl:block"
+      className="sticky left-0 top-0 hidden h-dvh group-data-[side=left]:border-r-0 xl:block"
     >
       <SidebarHeader className="flex items-center overflow-hidden p-4">
         <Button

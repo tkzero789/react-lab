@@ -5,6 +5,8 @@ import MovieCard from "./components/MovieCard";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import MovieSearch from "./components/MovieSearch";
+import Container from "@/components/layout/container";
+import { Skeleton } from "@/components/ui/skeleton";
 
 type MovieList = {
   _id: string;
@@ -58,30 +60,21 @@ export default function MoviePage({ searchParams }: Props) {
   };
 
   return (
-    <>
-      <h1 className="text-2xl font-semibold">Movie app</h1>
+    <Container>
+      <h1>Movie app</h1>
       <div className="mt-8 flex items-center justify-between">
         <MovieSearch />
       </div>
-      <div className="mt-8 grid grid-cols-5 gap-x-4 gap-y-8">
+      <div className="mt-8 grid grid-cols-5 gap-4">
         {isLoading ? (
           <>
             {Array.from({ length: 10 }).map((_, index) => (
-              <div
-                key={index}
-                className="h-[22rem] animate-pulse bg-gray-300 dark:bg-background"
-              ></div>
+              <Skeleton key={index} className="h-[22rem]"></Skeleton>
             ))}
           </>
         ) : (
           data?.map((movie: MovieList) => (
-            <MovieCard
-              key={movie._id}
-              name={movie.name}
-              slug={movie.slug}
-              poster_url={movie.poster_url}
-              year={movie.year}
-            />
+            <MovieCard key={movie._id} movie={movie} />
           ))
         )}
       </div>
@@ -101,6 +94,6 @@ export default function MoviePage({ searchParams }: Props) {
           Next
         </Button>
       </div>
-    </>
+    </Container>
   );
 }

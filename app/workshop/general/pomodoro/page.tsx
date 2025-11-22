@@ -1,6 +1,8 @@
 "use client";
 
+import Container from "@/components/layout/container";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import React from "react";
 
 export default function PomodoroPage() {
@@ -33,11 +35,13 @@ export default function PomodoroPage() {
   };
 
   return (
-    <>
+    <Container className="max-w-xl">
       <h1 className="text-2xl font-semibold">Pomodoro</h1>
-      <div className="mx-auto mt-8 max-w-sm rounded-2xl bg-neutral-100 p-2">
-        <div className="flex w-full flex-col items-center gap-4 rounded-xl border bg-white p-8 shadow-sm">
-          <h2 className="text-2xl font-semibold">Timer</h2>
+      <Card className="mt-8">
+        <CardHeader>
+          <CardTitle className="text-center">Timer</CardTitle>
+        </CardHeader>
+        <CardContent className="flex flex-col items-center gap-4">
           <div className="text-8xl font-bold">{time}</div>
           <div className="flex items-center gap-8">
             <Button variant="outline" onClick={resetTimer}>
@@ -54,8 +58,8 @@ export default function PomodoroPage() {
                   : "Continue"}
             </Button>
           </div>
-        </div>
-      </div>
-    </>
+        </CardContent>
+      </Card>
+    </Container>
   );
 }

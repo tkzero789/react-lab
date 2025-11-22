@@ -3,43 +3,51 @@ import Link from "next/link";
 import React from "react";
 import "./Movie.css";
 import { Play } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 
-type MovieList = {
+type Movie = {
   name: string;
   slug: string;
   poster_url: string;
   year: number;
 };
 
-export default function MovieCard({ name, slug, poster_url, year }: MovieList) {
+type Props = {
+  movie: Movie;
+};
+
+export default function MovieCard({ movie }: Props) {
+  console.log(movie);
+
   return (
     <Link
-      href={`/workshop/general/movie/detail/${slug}?episode=1`}
-      className="flex h-full flex-col rounded-md shadow-sm"
+      href={`/workshop/general/movie/detail/${movie.slug}?episode=1`}
+      className="flex h-full flex-col rounded-xl border bg-card"
     >
-      <div className="movie-image relative h-80 overflow-hidden rounded-t-md">
-        <Image
-          src={poster_url}
-          alt={name}
-          width={295}
-          height={384}
-          className="h-full w-full rounded-t-md"
-        />
-        <div className="absolute right-2 top-2 rounded-md bg-gradient-to-r from-lime-500 to-green-600 px-2 py-1 text-sm text-white">
-          {year}
+      <div className="movie-image group relative p-2">
+        <div className="relative h-80 overflow-hidden rounded-xl">
+          <Image
+            priority
+            src={movie.poster_url}
+            alt={movie.name}
+            width={230}
+            height={240}
+            className="h-full w-full rounded-xl object-cover transition-all duration-300 group-hover:scale-105"
+          />
+          <Badge className="absolute right-2 top-2">{movie.year}</Badge>
         </div>
-        <div className="movie-info-layer absolute left-0 top-0 flex h-full w-full items-center justify-center rounded-t-md bg-gray-800 bg-opacity-40">
-          <div className="rounded-full bg-gray-800 bg-opacity-80 p-4">
+        <div className="movie-info-layer absolute left-0 top-0 flex h-full w-full items-center justify-center rounded-t-md bg-muted/20">
+          <div className="rounded-xl p-4">
             <Play
-              className="h-10 w-10 text-white text-opacity-80"
+              className="h-10 w-10 text-primary-foreground"
               strokeWidth={2}
             />
           </div>
         </div>
       </div>
-      <h2 className="movie-title flex-1 rounded-b-md bg-gray-800 px-2 pb-4 pt-2 text-white dark:bg-background">
-        {name}
-      </h2>
+      <div className="rounded-b-xl px-4 pb-2">
+        <div className="truncate font-semibold">{movie.name}</div>
+      </div>
     </Link>
   );
 }

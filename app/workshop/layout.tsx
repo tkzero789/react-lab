@@ -1,5 +1,6 @@
+import DashboardContainer from "@/components/layout/dashboard-container";
 import SideBar from "@/components/sidebar/SideBar";
-import { ThemeProvider } from "@/components/theme-provider";
+import { ThemeProvider } from "@/components/theme/theme-provider";
 import React from "react";
 
 export default function layout({ children }: { children: React.ReactNode }) {
@@ -9,7 +10,9 @@ export default function layout({ children }: { children: React.ReactNode }) {
       defaultTheme="light"
       disableTransitionOnChange
     >
-      <SideBar>{children}</SideBar>
+      <SideBar>
+        <DashboardContainer>{children}</DashboardContainer>
+      </SideBar>
     </ThemeProvider>
   );
 }

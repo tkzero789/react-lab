@@ -5,6 +5,8 @@ import { useRouter, useSearchParams } from "next/navigation";
 
 import React from "react";
 import MovieVideo from "./MovieVideo";
+import Container from "@/components/layout/container";
+import { Badge } from "@/components/ui/badge";
 
 type MovieDetail = {
   name: string;
@@ -58,7 +60,7 @@ export default function MovieInfo({ movie, episodes }: Props) {
   console.log(episodes);
 
   return (
-    <div>
+    <Container>
       <MovieVideo source={source} />
       <div className="mt-8 flex items-center justify-between">
         <div className="flex items-center gap-2">
@@ -66,46 +68,32 @@ export default function MovieInfo({ movie, episodes }: Props) {
           <div className="text-3xl">({movie.year})</div>
         </div>
 
-        <div className="rounded-sm bg-gray-200 px-4 py-2 text-lg">
+        <div className="rounded-xl bg-muted px-4 py-2 font-semibold">
           Tập {search}
         </div>
       </div>
       <div className="flex items-center justify-between gap-8">
         <div className="mt-4 flex items-center gap-2">
-          <div className="rounded-sm bg-gradient-to-r from-violet-600 to-fuchsia-600 px-2 py-1 text-sm font-bold text-white">
-            {movie.quality}
-          </div>
-          <div className="rounded-sm bg-gray-900 bg-opacity-70 px-2 py-1 text-sm font-semibold text-white dark:bg-background">
-            {movie.episode_total} tập
-          </div>
-          <div className="rounded-sm bg-gray-900 bg-opacity-70 px-2 py-1 text-sm font-semibold text-white dark:bg-background">
-            {movie.time}
-          </div>
+          <Badge>{movie.quality}</Badge>
+          <Badge variant="secondary">{movie.episode_total} tập</Badge>
+          <Badge variant="secondary">{movie.time}</Badge>
         </div>
         <div className="mt-4 flex items-center gap-2">
           {movie.category.map((item) => (
-            <div
-              key={item.id}
-              className="rounded-sm bg-blue-900 bg-opacity-90 px-2 py-1 text-sm font-semibold text-white"
-            >
+            <Badge variant="secondary" key={item.id}>
               {item.name}
-            </div>
+            </Badge>
           ))}
         </div>
       </div>
-      <p className="mt-8 rounded-md bg-gray-200 p-4 dark:bg-background">
-        {movie.content}
-      </p>
+      <div className="mt-8 rounded-xl bg-muted p-4">{movie.content}</div>
       <div className="mt-4">
-        Actors:
-        <div className="mt-2 flex items-center gap-2">
+        <div className="font-semibold">Actors:</div>
+        <div className="mt-2 flex flex-wrap items-center gap-2">
           {movie.actor.map((item, index) => (
-            <div
-              key={index}
-              className="rounded-sm bg-gray-200 bg-opacity-90 px-2 py-1 text-sm shadow-sm dark:bg-background"
-            >
+            <Badge variant="muted" key={index} className="whitespace-nowrap">
               {item}
-            </div>
+            </Badge>
           ))}
         </div>
       </div>
@@ -114,16 +102,17 @@ export default function MovieInfo({ movie, episodes }: Props) {
         <div className="mt-2 grid grid-cols-[repeat(14,minmax(0,1fr))]">
           {episodes.map((item, index) => (
             <Button
+              variant="outline"
+              size="sm"
               key={index}
               onClick={() => handleChangeEpisode(index)}
-              variant="outline"
-              className="rounded-none"
+              className="rounded-none border-r-0 last:border-r"
             >
               {item.name.split(" ")[1]}
             </Button>
           ))}
         </div>
       </div>
-    </div>
+    </Container>
   );
 }

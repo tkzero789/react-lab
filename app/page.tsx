@@ -29,18 +29,18 @@ const cardItems = [
 
 export default function Page() {
   return (
-    <div className="flex h-screen w-full flex-col items-center justify-center gap-16">
+    <div className="bg-dashboard flex h-screen w-full flex-col items-center justify-center gap-16">
       <h1 className="text-4xl font-bold">React Lab</h1>
       <div className="grid grid-cols-3 place-items-center gap-8">
         {cardItems.map((item) => (
           <Link
             href={item.href}
             key={item.title}
-            className={`group size-56 rounded-2xl bg-neutral-100 p-2 transition-all duration-300 ${item.hoverBackground}`}
+            className={`group size-56 rounded-xl bg-neutral-100 p-2 transition-all duration-300 ${item.hoverBackground}`}
           >
             <div className="flex h-full flex-col items-center justify-center gap-2 rounded-xl border bg-white shadow-sm">
               <div
-                className={`flex size-14 items-center justify-center rounded-2xl p-4 transition-all duration-300 group-hover:scale-105 ${item.iconBackground}`}
+                className={`flex size-14 items-center justify-center rounded-xl p-4 transition-all duration-300 group-hover:scale-105 ${item.iconBackground}`}
               >
                 <item.icon />
               </div>

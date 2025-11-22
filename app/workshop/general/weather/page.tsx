@@ -5,6 +5,8 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { ArrowUpFromLine, Eye, Thermometer, Waves, Wind } from "lucide-react";
 import { toast } from "sonner";
+import Container from "@/components/layout/container";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 const APIKEY = "2ee9027cb53bdd718773abe1ca5efd36";
 
@@ -80,11 +82,13 @@ export default function WeatherPage() {
   };
 
   return (
-    <>
-      <h1 className="text-2xl font-semibold">Weather app</h1>
-      <div className="mt-8 flex justify-center">
-        <div className="flex h-fit w-full max-w-lg flex-col gap-4 rounded-lg border bg-white p-4 shadow dark:bg-transparent">
-          <h2 className="text-xl font-semibold">Weather info</h2>
+    <Container className="max-w-2xl">
+      <h1>Weather app</h1>
+      <Card className="mt-8">
+        <CardHeader>
+          <CardTitle>Weather info</CardTitle>
+        </CardHeader>
+        <CardContent>
           <form action="" className="flex justify-between gap-4">
             <Input
               value={city}
@@ -101,7 +105,7 @@ export default function WeatherPage() {
             </Button>
           </form>
           {weatherData && (
-            <div className="flex flex-col gap-8 rounded-lg border p-4 dark:bg-background">
+            <div className="mt-4 flex flex-col gap-8 rounded-xl border p-4">
               {/* City & country */}
               <div className="flex justify-between">
                 <h3>
@@ -179,8 +183,8 @@ export default function WeatherPage() {
               </div>
             </div>
           )}
-        </div>
-      </div>
-    </>
+        </CardContent>
+      </Card>
+    </Container>
   );
 }

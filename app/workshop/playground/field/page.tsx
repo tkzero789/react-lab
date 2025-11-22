@@ -51,7 +51,7 @@ export default function FieldPage() {
           {taskList.map((item, index) => (
             <li
               key={index}
-              className="flex items-center justify-between rounded-md border px-4 py-2 shadow-md"
+              className="flex items-center justify-between rounded-xl border px-4 py-2 shadow-md"
             >
               {item}
               <Button variant="destructive" onClick={() => handleRemove(index)}>

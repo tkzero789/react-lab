@@ -1,9 +1,9 @@
 .fadeInCard {
-  animation: fadeIn 0.5s ease-in-out;
+  animation: fadeIn 0.2s ease-in-out;
 }
 
 .fadeInTodo {
-  animation: fadeIn 0.5s ease-in-out;
+  animation: fadeIn 0.2s ease-in-out;
 }
 
 @keyframes fadeIn {
@@ -11,6 +11,6 @@
     opacity: 0;
   }
   100% {
-    opacity: 100;
+    opacity: 1;
   }
 }

@@ -73,11 +73,11 @@ export default function Page() {
   return (
     <>
       <h1 className="text-2xl font-semibold">Interview 1</h1>
-      <Collapsible className="mt-4 flex flex-col gap-4 rounded-md border p-2">
-        <CollapsibleTrigger className="rounded-sm bg-blue-300 p-2 font-semibold dark:bg-background [[data-state=open]_&]:dark:bg-stone-700">
+      <Collapsible className="mt-4 flex flex-col gap-4 rounded-xl border p-2">
+        <CollapsibleTrigger className="rounded-xl bg-blue-300 p-2 font-semibold">
           Challenge
         </CollapsibleTrigger>
-        <CollapsibleContent className="rounded-sm [[data-state=open]_&]:bg-blue-100 [[data-state=open]_&]:p-8 [[data-state=open]_&]:dark:bg-background">
+        <CollapsibleContent className="rounded-xl [[data-state=open]_&]:bg-blue-100 [[data-state=open]_&]:p-8">
           <div className="flex flex-col gap-2">
             <p>
               Create a simple React application that displays a list of
@@ -101,7 +101,7 @@ export default function Page() {
           id=""
           value={capital}
           onChange={(e) => handleSelectOnChange(e)}
-          className="rounded-lg border p-2 dark:bg-background"
+          className="rounded-xl border p-2"
         >
           <option value="">Select capital</option>
           {FILTERABLE_CAPITALS.map((capital) => (
@@ -114,7 +114,7 @@ export default function Page() {
           value={search}
           placeholder="Search country"
           onChange={handleSearch}
-          className="col-span-3 h-10 rounded-md border px-3 dark:bg-background"
+          className="col-span-3 h-10 rounded-xl border px-3"
         />
       </div>
       <div className="mt-4 grid grid-cols-4 gap-4">

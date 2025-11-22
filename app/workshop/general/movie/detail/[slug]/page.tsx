@@ -14,9 +14,5 @@ export default async function MovieDetailPage({ params }: Props) {
   const movieDetail = data.movie;
   const movieEpisodes = data.episodes[0].server_data;
 
-  return (
-    <div>
-      <MovieInfo movie={movieDetail} episodes={movieEpisodes} />
-    </div>
-  );
+  return <MovieInfo movie={movieDetail} episodes={movieEpisodes} />;
 }

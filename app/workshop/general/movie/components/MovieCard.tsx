@@ -17,8 +17,6 @@ type Props = {
 };
 
 export default function MovieCard({ movie }: Props) {
-  console.log(movie);
-
   return (
     <Link
       href={`/workshop/general/movie/detail/${movie.slug}?episode=1`}

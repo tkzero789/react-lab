@@ -1,38 +1,30 @@
 "use client";
 
-import Container from "@/components/layout/container";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Trash2 } from "lucide-react";
 import React from "react";
 import { toast } from "sonner";
-import styles from "../scss/todo.module.scss";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import styles from "./scss/todo.module.scss";
+import Container from "@/components/layout/container";
 
-export default function LocalStorage() {
+export default function TodoPage() {
   const [task, setTask] = React.useState<string>("");
   const [taskList, setTaskList] = React.useState<string[]>([]);
-
-  // Get value from tasks key or empty array
-  React.useEffect(() => {
-    const storage = localStorage.getItem("tasks");
-    setTaskList(storage ? JSON.parse(storage) : []);
-  }, []);
 
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTask(e.target.value);
   };
 
   // Add task
-  const handleOnClick = () => {
+  const handleOnClick = (task: string) => {
     if (task.trim() === "") {
       setTask("");
       toast.error("Empty input");
       return;
     } else {
-      const newTasks = [...taskList, task];
-      setTaskList(newTasks);
-      localStorage.setItem("tasks", JSON.stringify(newTasks));
+      setTaskList((prev) => [...prev, task]);
       setTask("");
       toast.success("New task added");
     }
@@ -40,16 +32,13 @@ export default function LocalStorage() {
 
   // Delete task
   const handleDelete = (itemIndex: number) => {
-    const itemList = [...taskList];
-    itemList.splice(itemIndex, 1);
-    setTaskList(itemList);
-    localStorage.setItem("tasks", JSON.stringify(itemList));
+    setTaskList(taskList.filter((_, index) => index !== itemIndex));
     toast.info("Task removed");
   };
 
   return (
     <Container className="max-w-2xl">
-      <h1>Todo local storage</h1>
+      <h1>Todo</h1>
       <Card className={`mt-8 ${styles.fadeInCard}`}>
         <CardHeader>
           <CardTitle>Add todo</CardTitle>
@@ -64,7 +53,7 @@ export default function LocalStorage() {
             <Button
               onClick={(e) => {
                 e.preventDefault();
-                handleOnClick();
+                handleOnClick(task);
               }}
             >
               Add
@@ -76,10 +65,10 @@ export default function LocalStorage() {
         <div className="mt-4">
           <h2 className="p-2">Todo list</h2>
           <ul className="flex flex-col gap-4">
-            {taskList?.map((item, index) => (
+            {taskList.map((item, index) => (
               <li
                 key={index}
-                className={`flex items-center justify-between rounded-xl border border-neutral-300 bg-white px-4 py-2 shadow-sm transition-all duration-200 hover:scale-[1.01] hover:shadow ${styles.fadeInTodo}`}
+                className={`flex items-center justify-between rounded-xl border bg-background px-4 py-2 shadow-sm transition-all duration-200 hover:scale-[1.01] hover:shadow ${styles.fadeInTodo}`}
               >
                 {item}
                 <Button

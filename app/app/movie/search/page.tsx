@@ -27,7 +27,7 @@ export default async function MovieSearchPage({ searchParams }: Props) {
     `https://phimapi.com/v1/api/tim-kiem?keyword=${formatSearchTerm}`,
   );
   const data = await res.json();
-  const totalPage = Math.ceil(data.data.items.length / 10);
+  const totalPage = Math.ceil(data.data.items?.length / 10);
 
   let filteredMovies: Movie[] = [];
 
@@ -35,7 +35,7 @@ export default async function MovieSearchPage({ searchParams }: Props) {
   const endIndex = Number(currentPage) * 10;
 
   filteredMovies = data.data.items
-    .slice(startIndex, endIndex)
+    ?.slice(startIndex, endIndex)
     .map((item: Movie) => ({
       ...item,
       poster_url: `https://phimimg.com/${item.poster_url}`,
@@ -51,7 +51,7 @@ export default async function MovieSearchPage({ searchParams }: Props) {
         <MovieSearch />
       </div>
       <div className="mt-8 grid grid-cols-5 gap-x-4 gap-y-8">
-        {filteredMovies.map((movie: Movie) => (
+        {filteredMovies?.map((movie: Movie) => (
           <MovieCard key={movie._id} movie={movie} />
         ))}
       </div>

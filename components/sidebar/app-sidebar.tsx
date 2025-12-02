@@ -1,95 +1,35 @@
 "use client";
 
 import * as React from "react";
-import {
-  AppWindow,
-  Bot,
-  FerrisWheel,
-  Laptop,
-  ListChecks,
-  PieChart,
-} from "lucide-react";
-
-import { NavMain } from "@/components/sidebar/nav-main";
+import { CassetteTape, Laptop, ListChecks, Map, PieChart } from "lucide-react";
 import { NavProjects } from "@/components/sidebar/nav-projects";
-
+import { Button } from "../ui/button";
+import Link from "next/link";
+import { ThemeToggle } from "../theme/theme-toggle";
+import { NavApps } from "./nav-app";
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
   SidebarHeader,
 } from "@/components/ui/sidebar";
-import { Button } from "../ui/button";
-import Link from "next/link";
-import { ThemeToggle } from "../theme/theme-toggle";
-import { usePathname } from "next/navigation";
 
-const data = {
-  navMain: [
+const sidebarItems = {
+  apps: [
     {
-      title: "To-do app",
-      url: "#",
+      name: "Todo",
+      url: "/app/todo",
       icon: ListChecks,
-      activeCheck: "/workshop/todo",
-      items: [
-        {
-          title: "Basic",
-          url: "/workshop/todo/basic",
-        },
-        {
-          title: "Local Storage",
-          url: "/workshop/todo/local",
-        },
-      ],
     },
     {
-      title: "General app",
-      url: "#",
-      icon: AppWindow,
-      activeCheck: "/workshop/general",
-      items: [
-        {
-          title: "Weather",
-          url: "/workshop/general/weather",
-        },
-        {
-          title: "Movie",
-          url: "/workshop/general/movie",
-        },
-        { title: "Pomodoro", url: "/workshop/general/pomodoro" },
-      ],
+      name: "Weather",
+      url: "/app/weather",
+      icon: Map,
     },
     {
-      title: "Interview",
-      url: "#",
-      icon: Bot,
-      activeCheck: "/workshop/interview",
-      items: [
-        {
-          title: "Interview-1",
-          url: "/workshop/interview/interview-1",
-        },
-        {
-          title: "Explorer",
-          url: "#",
-        },
-        {
-          title: "Quantum",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Playground",
-      url: "#",
-      icon: FerrisWheel,
-      activeCheck: "/workshop/playground",
-      items: [
-        {
-          title: "Field",
-          url: "/workshop/playground/field",
-        },
-      ],
+      name: "Movie",
+      url: "/app/movie",
+      icon: CassetteTape,
     },
   ],
   projects: [
@@ -107,13 +47,6 @@ const data = {
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const pathName = usePathname();
-
-  const navWithActive = data.navMain.map((item) => ({
-    ...item,
-    isActive: pathName.startsWith(item.activeCheck),
-  }));
-
   return (
     <Sidebar
       collapsible="icon"
@@ -125,12 +58,12 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           asChild
           className="w-fit bg-transparent text-2xl font-bold text-foreground hover:bg-transparent hover:text-foreground"
         >
-          <Link href="/">Workshop</Link>
+          <Link href="/">Apps</Link>
         </Button>
       </SidebarHeader>
       <SidebarContent>
-        <NavMain items={navWithActive} />
-        <NavProjects projects={data.projects} />
+        <NavApps apps={sidebarItems.apps} />
+        <NavProjects projects={sidebarItems.projects} />
       </SidebarContent>
       <SidebarFooter className="p-4">
         <ThemeToggle />

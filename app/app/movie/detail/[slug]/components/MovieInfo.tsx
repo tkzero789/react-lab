@@ -7,6 +7,7 @@ import React from "react";
 import MovieVideo from "./MovieVideo";
 import Container from "@/components/layout/container";
 import { Badge } from "@/components/ui/badge";
+import { cn } from "@/lib/utils";
 
 type MovieDetail = {
   name: string;
@@ -26,38 +27,36 @@ type MovieDetail = {
   }[];
 };
 
-type MovieEpisodes = {
+type MovieEpisode = {
   name: string;
   slug: string;
   filename: string;
   link_embed: string;
-}[];
+};
 
 type Props = {
   movie: MovieDetail;
-  episodes: MovieEpisodes;
+  episodes: MovieEpisode[];
 };
 
 export default function MovieInfo({ movie, episodes }: Props) {
   const router = useRouter();
-  const search = useSearchParams().get("episode");
+  const searchParams = useSearchParams().get("episode");
   const [source, setSource] = React.useState<string>("");
 
   React.useEffect(() => {
-    if (search === "1") {
+    if (!searchParams) {
+      router.push(
+        `/app/movie/detail/${movie.slug}?episode=${episodes[0].slug}`,
+      );
       setSource(episodes[0].link_embed);
     }
-  }, [search, episodes]);
+  }, [episodes, movie.slug, router, searchParams]);
 
-  const handleChangeEpisode = (index: number) => {
-    router.push(
-      `/workshop/general/movie/detail/${movie.slug}?episode=${index + 1}`,
-    );
-    const updateSource = episodes[index].link_embed;
-    setSource(updateSource);
+  const handleChangeEpisode = (episode: MovieEpisode) => {
+    router.push(`/app/movie/detail/${movie.slug}?episode=${episode.slug}`);
+    setSource(episode.link_embed);
   };
-
-  console.log(episodes);
 
   return (
     <Container>
@@ -68,9 +67,7 @@ export default function MovieInfo({ movie, episodes }: Props) {
           <div className="text-3xl">({movie.year})</div>
         </div>
 
-        <div className="rounded-xl bg-muted px-4 py-2 font-semibold">
-          Tập {search}
-        </div>
+        <div className="rounded-xl bg-muted px-4 py-2 font-semibold">Tập</div>
       </div>
       <div className="flex items-center justify-between gap-8">
         <div className="mt-4 flex items-center gap-2">
@@ -100,15 +97,19 @@ export default function MovieInfo({ movie, episodes }: Props) {
       <div className="mt-4">
         Episodes:
         <div className="mt-2 grid grid-cols-[repeat(14,minmax(0,1fr))]">
-          {episodes.map((item, index) => (
+          {episodes.map((episode) => (
             <Button
+              key={episode.name}
               variant="outline"
               size="sm"
-              key={index}
-              onClick={() => handleChangeEpisode(index)}
-              className="rounded-none border-r-0 last:border-r"
+              onClick={() => handleChangeEpisode(episode)}
+              className={cn(
+                "rounded-none border-r-0 last:border-r",
+                episode.slug === searchParams && "bg-muted",
+                episode.slug === "full" && "bg-muted",
+              )}
             >
-              {item.name.split(" ")[1]}
+              {episode.slug === "full" ? "Full" : episode.name.split(" ")[1]}
             </Button>
           ))}
         </div>

@@ -16,7 +16,7 @@ export default function MovieSearch() {
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formatSearchTerm = searchTerm.trim().split(" ").join("-");
-    router.push(`/workshop/general/movie/search?s=${formatSearchTerm}&page=1`);
+    router.push(`/app/movie/search?s=${formatSearchTerm}&page=1`);
   };
 
   return (

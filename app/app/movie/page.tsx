@@ -49,14 +49,14 @@ export default function MoviePage({ searchParams }: Props) {
     setIsLoading(true);
     const pageNumber = Number(page) - 1;
     setPage(pageNumber.toString());
-    router.push(`/workshop/general/movie?page=${pageNumber}`);
+    router.push(`/app/movie?page=${pageNumber}`);
   };
 
   const handleNextPage = (page: string) => {
     setIsLoading(true);
     const pageNumber = Number(page) + 1;
     setPage(pageNumber.toString());
-    router.push(`/workshop/general/movie?page=${pageNumber}`);
+    router.push(`/app/movie?page=${pageNumber}`);
   };
 
   return (

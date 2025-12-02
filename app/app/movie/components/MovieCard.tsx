@@ -19,7 +19,8 @@ type Props = {
 export default function MovieCard({ movie }: Props) {
   return (
     <Link
-      href={`/workshop/general/movie/detail/${movie.slug}?episode=1`}
+      href={`/app/movie/detail/${movie.slug}`}
+      replace={false}
       className="flex h-full flex-col rounded-xl border bg-card"
     >
       <div className="movie-image group relative p-2">

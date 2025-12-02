@@ -33,7 +33,7 @@ export default function SearchPagination({ totalPage }: Props) {
         {pageArray.map((item, index) => (
           <PaginationItem key={index}>
             <PaginationLink
-              href={`/workshop/general/movie/search?s=${searchTerm}&page=${item.page}`}
+              href={`/app/movie/search?s=${searchTerm}&page=${item.page}`}
               isActive={Number(currentPage) === item.id}
             >
               {item.page}

@@ -83,7 +83,7 @@ export default function WeatherPage() {
 
   return (
     <Container className="max-w-2xl">
-      <h1>Weather app</h1>
+      <h1>Weather</h1>
       <Card className="mt-8">
         <CardHeader>
           <CardTitle>Weather info</CardTitle>

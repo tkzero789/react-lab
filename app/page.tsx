@@ -21,15 +21,15 @@ const cardItems = [
   {
     icon: Nextjs,
     iconBackground: "bg-gradient-to-b from-slate-400/50 to-slate-700/90",
-    title: "Workshop",
-    href: "/workshop",
+    title: "Apps",
+    href: "/app",
     hoverBackground: "hover:bg-slate-300/30",
   },
 ];
 
 export default function Page() {
   return (
-    <div className="bg-dashboard flex h-screen w-full flex-col items-center justify-center gap-16">
+    <div className="flex h-screen w-full flex-col items-center justify-center gap-16 bg-dashboard">
       <h1 className="text-4xl font-bold">React Lab</h1>
       <div className="grid grid-cols-3 place-items-center gap-8">
         {cardItems.map((item) => (

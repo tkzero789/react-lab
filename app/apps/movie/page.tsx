@@ -5,7 +5,6 @@ import MovieCard from "./components/MovieCard";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import MovieSearch from "./components/MovieSearch";
-import Container from "@/components/layout/container";
 import { Skeleton } from "@/components/ui/skeleton";
 import DashboardBreadcrumb from "../components/dashboard-breadcrumb";
 import DashboardContainer from "@/components/layout/dashboard-container";

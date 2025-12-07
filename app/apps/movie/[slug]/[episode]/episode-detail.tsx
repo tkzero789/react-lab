@@ -1,11 +1,8 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import React from "react";
 import Container from "@/components/layout/container";
-import { Badge } from "@/components/ui/badge";
-import { cn } from "@/lib/utils";
 import MovieVideo from "../components/movie-video";
 
 type MovieDetail = {

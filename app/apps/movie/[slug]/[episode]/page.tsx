@@ -6,12 +6,35 @@ import MovieVideo from "../components/movie-video";
 import DashboardBreadcrumb from "@/app/apps/components/dashboard-breadcrumb";
 import DashboardContainer from "@/components/layout/dashboard-container";
 
+type MovieDetail = {
+  name: string;
+  slug: string;
+  content: string;
+  thumb_url: string;
+  poster_url: string;
+  time: string;
+  episode_total: string;
+  quality: string;
+  year: number;
+  actor: string[];
+  category: {
+    id: string;
+    name: string;
+    slug: string;
+  }[];
+};
+
+type MovieEpisode = {
+  name: string;
+  slug: string;
+  filename: string;
+  link_embed: string;
+};
+
 export default function EpisodePage() {
   const params = useParams();
-  const [movie, setMovie] = React.useState<any>();
+  const [movie, setMovie] = React.useState<MovieDetail>();
   const [source, setSource] = React.useState<string>("");
-
-  console.log(movie);
 
   React.useEffect(() => {
     const getData = async () => {
@@ -20,7 +43,7 @@ export default function EpisodePage() {
         const data = await response.json();
         setMovie(data.movie);
         const episodes = data.episodes[0].server_data;
-        episodes.find((item: any) => {
+        episodes.find((item: MovieEpisode) => {
           if (item.slug === params.episode) {
             setSource(item.link_embed);
           }
@@ -30,7 +53,7 @@ export default function EpisodePage() {
       }
     };
     getData();
-  }, []);
+  }, [params.slug, params.episode]);
 
   return (
     <>
@@ -45,7 +68,7 @@ export default function EpisodePage() {
             href: "/apps/movie",
           },
           {
-            title: movie && movie.name,
+            title: movie?.name ?? "",
           },
         ]}
       />

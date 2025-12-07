@@ -10,10 +10,9 @@ export default function MovieVideo({ source }: Props) {
       src={source}
       width="100%"
       height="800px"
-      frameBorder="0"
       allowFullScreen
       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-      className="rounded-xl"
+      className="h-[400px] rounded-xl lg:h-[800px]"
     ></iframe>
   );
 }

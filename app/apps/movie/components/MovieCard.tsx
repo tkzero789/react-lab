@@ -1,9 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
-import "./Movie.css";
 import { Play } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import "./Movie.css";
 
 type Movie = {
   name: string;
@@ -19,19 +19,18 @@ type Props = {
 export default function MovieCard({ movie }: Props) {
   return (
     <Link
-      href={`/app/movie/detail/${movie.slug}`}
-      replace={false}
+      href={`/apps/movie/${movie.slug}`}
       className="flex h-full flex-col rounded-xl border bg-card"
     >
       <div className="movie-image group relative p-2">
-        <div className="relative h-80 overflow-hidden rounded-xl">
+        <div className="relative overflow-hidden rounded-xl lg:h-80">
           <Image
             priority
             src={movie.poster_url}
             alt={movie.name}
-            width={230}
-            height={240}
-            className="h-full w-full rounded-xl object-cover transition-all duration-300 group-hover:scale-105"
+            width={600}
+            height={900}
+            className="aspect-[2/3] h-full w-full rounded-xl object-cover transition-all duration-300 group-hover:scale-105"
           />
           <Badge className="absolute right-2 top-2">{movie.year}</Badge>
         </div>

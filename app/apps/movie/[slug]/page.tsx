@@ -1,5 +1,5 @@
 import React from "react";
-import MovieInfo from "./components/MovieInfo";
+import MovieDetail from "./components/movie-detail";
 
 type Props = {
   params: Promise<{ slug: string }>;
@@ -14,5 +14,5 @@ export default async function MovieDetailPage({ params }: Props) {
   const movieDetail = data.movie;
   const movieEpisodes = data.episodes[0].server_data;
 
-  return <MovieInfo movie={movieDetail} episodes={movieEpisodes} />;
+  return <MovieDetail movie={movieDetail} episodes={movieEpisodes} />;
 }

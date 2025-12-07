@@ -2,33 +2,32 @@
 
 import * as React from "react";
 import { CassetteTape, Laptop, ListChecks, Map, PieChart } from "lucide-react";
-import { NavProjects } from "@/components/sidebar/nav-projects";
-import { Button } from "../ui/button";
-import Link from "next/link";
-import { ThemeToggle } from "../theme/theme-toggle";
 import { NavApps } from "./nav-app";
+import { NavProjects } from "@/components/sidebar/nav-projects";
+import { ThemeToggle } from "../theme/theme-toggle";
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
   SidebarHeader,
 } from "@/components/ui/sidebar";
+import { TeamSwitcher } from "./team-switcher";
 
 const sidebarItems = {
   apps: [
     {
       name: "Todo",
-      url: "/app/todo",
+      url: "/apps/todo",
       icon: ListChecks,
     },
     {
       name: "Weather",
-      url: "/app/weather",
+      url: "/apps/weather",
       icon: Map,
     },
     {
       name: "Movie",
-      url: "/app/movie",
+      url: "/apps/movie",
       icon: CassetteTape,
     },
   ],
@@ -48,18 +47,9 @@ const sidebarItems = {
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
-    <Sidebar
-      collapsible="icon"
-      {...props}
-      className="sticky left-0 top-0 hidden h-dvh group-data-[side=left]:border-r-0 xl:block"
-    >
-      <SidebarHeader className="flex items-center overflow-hidden p-4">
-        <Button
-          asChild
-          className="w-fit bg-transparent text-2xl font-bold text-foreground hover:bg-transparent hover:text-foreground"
-        >
-          <Link href="/">Apps</Link>
-        </Button>
+    <Sidebar variant="inset" {...props}>
+      <SidebarHeader>
+        <TeamSwitcher />
       </SidebarHeader>
       <SidebarContent>
         <NavApps apps={sidebarItems.apps} />

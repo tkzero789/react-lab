@@ -60,9 +60,6 @@ const config: Config = {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
-        dashboard: {
-          DEFAULT: "hsl(var(--dashboard))",
-        },
       },
       borderRadius: {
         lg: "var(--radius)",

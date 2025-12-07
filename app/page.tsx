@@ -22,21 +22,21 @@ const cardItems = [
     icon: Nextjs,
     iconBackground: "bg-gradient-to-b from-slate-400/50 to-slate-700/90",
     title: "Apps",
-    href: "/app",
+    href: "/apps",
     hoverBackground: "hover:bg-slate-300/30",
   },
 ];
 
 export default function Page() {
   return (
-    <div className="flex h-screen w-full flex-col items-center justify-center gap-16 bg-dashboard">
+    <div className="flex h-dvh w-full flex-col items-center justify-center gap-16">
       <h1 className="text-4xl font-bold">React Lab</h1>
-      <div className="grid grid-cols-3 place-items-center gap-8">
+      <div className="grid place-items-center gap-8 md:grid-cols-3">
         {cardItems.map((item) => (
           <Link
             href={item.href}
             key={item.title}
-            className={`group size-56 rounded-xl bg-neutral-100 p-2 transition-all duration-300 ${item.hoverBackground}`}
+            className={`group size-40 rounded-xl bg-neutral-100 p-2 transition-all duration-300 lg:size-56 ${item.hoverBackground}`}
           >
             <div className="flex h-full flex-col items-center justify-center gap-2 rounded-xl border bg-white shadow-sm">
               <div

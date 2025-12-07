@@ -1,6 +1,6 @@
-import DashboardContainer from "@/components/layout/dashboard-container";
-import SideBar from "@/components/sidebar/SideBar";
+import { AppSidebar } from "@/components/sidebar/app-sidebar";
 import { ThemeProvider } from "@/components/theme/theme-provider";
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import React from "react";
 
 export default function layout({ children }: { children: React.ReactNode }) {
@@ -10,9 +10,10 @@ export default function layout({ children }: { children: React.ReactNode }) {
       defaultTheme="light"
       disableTransitionOnChange
     >
-      <SideBar>
-        <DashboardContainer>{children}</DashboardContainer>
-      </SideBar>
+      <SidebarProvider>
+        <AppSidebar />
+        <SidebarInset>{children}</SidebarInset>
+      </SidebarProvider>
     </ThemeProvider>
   );
 }

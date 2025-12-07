@@ -8,12 +8,8 @@ type Props = {
 
 export default function DashboardContainer({ children, className }: Props) {
   return (
-    <div className="w-full bg-sidebar p-2">
-      <div
-        className={cn("h-full w-full rounded-xl bg-background p-6", className)}
-      >
-        {children}
-      </div>
+    <div className={cn("mx-auto w-full max-w-7xl p-4", className)}>
+      {children}
     </div>
   );
 }

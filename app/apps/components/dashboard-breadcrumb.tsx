@@ -33,14 +33,14 @@ export default function DashboardBreadcrumb({ breadcrumbs }: Props) {
             {breadcrumbs.map((item: BreadcrumbStep, index) => {
               if (index < breadcrumbs.length - 1) {
                 return (
-                  <>
+                  <React.Fragment key={item.title}>
                     <BreadcrumbItem>
-                      <BreadcrumbLink key={item.title} href={item.href}>
+                      <BreadcrumbLink href={item.href}>
                         {item.title}
                       </BreadcrumbLink>
                     </BreadcrumbItem>
                     <BreadcrumbSeparator />
-                  </>
+                  </React.Fragment>
                 );
               } else {
                 return (

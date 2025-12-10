@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import { Play } from "lucide-react";
@@ -24,9 +23,9 @@ export default function MovieCard({ movie }: Props) {
     >
       <div className="movie-image group relative p-2">
         <div className="relative overflow-hidden rounded-xl lg:h-80">
-          <Image
-            priority
-            src={movie.poster_url}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={`https://phimapi.com/image.php?url=${movie.poster_url}`}
             alt={movie.name}
             width={600}
             height={900}

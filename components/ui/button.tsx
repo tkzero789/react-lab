@@ -12,17 +12,17 @@ const buttonVariants = cva(
         default: "bg-primary text-primary-foreground hover:bg-primary/90",
         destructive:
           "bg-destructive text-destructive-foreground hover:bg-destructive/90",
-        outline: "bg-transparent border hover:bg-muted",
+        outline: "bg-background border shadow hover:bg-muted",
         secondary:
           "bg-secondary text-secondary-foreground hover:bg-secondary/90",
         ghost: "bg-transparent hover:bg-muted",
-        link: "bg-transparent hover:underline",
+        link: "bg-transparent hover:underline hover:text-accent-foreground",
       },
       size: {
         default: "h-10 px-4 py-2",
-        sm: "h-9 px-3",
-        lg: "h-11 px-8",
+        sm: "h-8 px-3",
         icon: "h-10 w-10",
+        "icon-sm": "h-8 w-8",
       },
     },
     defaultVariants: {

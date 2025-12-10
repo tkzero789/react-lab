@@ -1,6 +1,6 @@
 import React from "react";
-import MovieSearch from "../components/MovieSearch";
-import MovieCard from "../components/MovieCard";
+import MovieSearch from "../components/movie-search";
+import MovieCard from "../components/movie-card";
 import SearchPagination from "./components/SearchPagination";
 
 type Movie = {

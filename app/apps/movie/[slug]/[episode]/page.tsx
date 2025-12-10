@@ -2,9 +2,9 @@
 
 import { useParams } from "next/navigation";
 import React from "react";
-import MovieVideo from "../components/movie-video";
 import DashboardBreadcrumb from "@/app/apps/components/dashboard-breadcrumb";
 import DashboardContainer from "@/components/layout/dashboard-container";
+import EpisodeVideo from "./components/episode-video";
 
 type MovieDetail = {
   name: string;
@@ -73,7 +73,7 @@ export default function EpisodePage() {
         ]}
       />
       <DashboardContainer>
-        <MovieVideo source={source} />
+        <EpisodeVideo source={source} />
       </DashboardContainer>
     </>
   );

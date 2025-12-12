@@ -2,7 +2,7 @@ import React from "react";
 import type { Metadata } from "next";
 import { Roboto } from "next/font/google";
 import { Toaster } from "@/components/ui/sonner";
-import "./globals.css";
+import "./css/globals.css";
 
 const roboto = Roboto({ subsets: ["latin"], weight: "400" });
 

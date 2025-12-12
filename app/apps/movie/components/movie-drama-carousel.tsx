@@ -1,15 +1,17 @@
 "use client";
 
 import React from "react";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "@/components/ui/carousel";
+
 import { Skeleton } from "@/components/ui/skeleton";
 import Link from "next/link";
+import {
+  Carousel,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrev,
+  usePrevNextButtons,
+} from "@/components/ui/carousel";
+import useEmblaCarousel from "embla-carousel-react";
 import { ButtonGroup } from "@/components/ui/button-group";
 
 type MovieDetail = {
@@ -33,7 +35,15 @@ type MovieDetail = {
 
 export default function MovieDramaCarousel() {
   const [movies, setMovies] = React.useState<MovieDetail[]>();
-  const [isLoading, setIsLoading] = React.useState<boolean>(true);
+
+  const [emblaRef, emblaApi] = useEmblaCarousel({ align: "start" });
+
+  const {
+    prevBtnDisabled,
+    nextBtnDisabled,
+    onPrevButtonClick,
+    onNextButtonClick,
+  } = usePrevNextButtons(emblaApi);
 
   React.useEffect(() => {
     const getMovies = async () => {
@@ -43,10 +53,8 @@ export default function MovieDramaCarousel() {
         );
         const data = await response.json();
         setMovies(data.data.items);
-        setIsLoading(false);
       } catch (error) {
         console.error(error);
-        setIsLoading(false);
       }
     };
     getMovies();
@@ -60,26 +68,38 @@ export default function MovieDramaCarousel() {
     }
   };
 
+  if (!movies) {
+    return <Skeleton className="h-56 md:h-[470px] lg:h-[550px]" />;
+  }
+
   return (
-    <Carousel className="flex flex-col gap-4 overflow-auto rounded-xl">
+    <div className="flex flex-col gap-4">
       <div className="flex items-center justify-between">
-        <div className="text-2xl font-semibold">Drama</div>
+        <h2 className="text-2xl">Drama</h2>
         <ButtonGroup>
-          <CarouselPrevious className="static translate-y-0" />
-          <CarouselNext className="static translate-y-0" />
+          <CarouselPrev
+            variant="outline"
+            size="icon"
+            disabled={prevBtnDisabled}
+            onClick={onPrevButtonClick}
+            className="static -translate-y-0"
+          />
+          <CarouselNext
+            variant="outline"
+            size="icon"
+            disabled={nextBtnDisabled}
+            onClick={onNextButtonClick}
+            className="static -translate-y-0"
+          />
         </ButtonGroup>
       </div>
-      <CarouselContent className="-ml-1 rounded-xl">
-        {isLoading ? (
-          <CarouselItem className="pl-0">
-            <Skeleton className="h-56 sm:h-[26rem] lg:h-[30rem]" />
-          </CarouselItem>
-        ) : (
-          movies &&
+
+      <Carousel ref={emblaRef} className="-ml-4">
+        {movies &&
           movies.map((movie: MovieDetail) => (
             <CarouselItem
               key={movie.slug}
-              className="relative basis-1/2 overflow-hidden rounded-xl pl-1 transition-all xl:basis-1/3"
+              className="basis-1/2 pl-4 xl:basis-1/3"
             >
               <Link href={`/apps/movie/${movie.slug}`} title={movie.name}>
                 <div className="relative h-56 sm:h-[26rem] lg:h-[30rem]">
@@ -116,9 +136,8 @@ export default function MovieDramaCarousel() {
                 </div>
               </Link>
             </CarouselItem>
-          ))
-        )}
-      </CarouselContent>
-    </Carousel>
+          ))}
+      </Carousel>
+    </div>
   );
 }

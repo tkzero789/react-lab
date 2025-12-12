@@ -60,7 +60,7 @@ export default function MovieNav() {
           asChild
           variant="link"
           size="sm"
-          className="hover:no-underline lg:flex"
+          className="hidden hover:no-underline lg:flex"
         >
           <Link
             href={`https://phimapi.com/v1/api/danh-sach/${genre.params}`}

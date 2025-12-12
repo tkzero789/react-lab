@@ -55,6 +55,11 @@ export default function EpisodePage() {
     getData();
   }, [params.slug, params.episode]);
 
+  const episodeNumber =
+    typeof params.episode === "string"
+      ? params.episode.split("-").pop()
+      : params.episode?.[0];
+
   return (
     <>
       <DashboardBreadcrumb
@@ -69,7 +74,9 @@ export default function EpisodePage() {
           },
           {
             title: movie?.name ?? "",
+            href: `/apps/movie/${movie?.slug}`,
           },
+          { title: `Tập ${episodeNumber}` },
         ]}
       />
       <DashboardContainer>

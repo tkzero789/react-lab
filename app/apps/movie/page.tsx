@@ -21,7 +21,7 @@ export default function MoviePage() {
       />
 
       <MovieNav />
-      <DashboardContainer className="flex flex-col gap-4">
+      <DashboardContainer className="flex flex-col gap-12">
         <MovieBannerCarousel />
         <MovieDramaCarousel />
       </DashboardContainer>

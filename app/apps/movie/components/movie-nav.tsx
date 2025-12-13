@@ -48,7 +48,7 @@ const movieGenres: MovieGenre[] = [
 
 export default function MovieNav() {
   return (
-    <div className="flex items-center border-b bg-accent p-4">
+    <div className="sticky top-0 z-50 flex items-center border-b bg-accent p-4">
       <Button asChild size="icon-sm" className="mr-3">
         <Link href="/apps/movie">
           <CassetteTape />

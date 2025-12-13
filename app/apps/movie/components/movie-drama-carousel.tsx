@@ -6,6 +6,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import Link from "next/link";
 import {
   Carousel,
+  CarouselContainer,
   CarouselItem,
   CarouselNext,
   CarouselPrev,
@@ -13,6 +14,7 @@ import {
 } from "@/components/ui/carousel";
 import useEmblaCarousel from "embla-carousel-react";
 import { ButtonGroup } from "@/components/ui/button-group";
+import Container from "@/components/layout/container";
 
 type MovieDetail = {
   name: string;
@@ -69,75 +71,88 @@ export default function MovieDramaCarousel() {
   };
 
   if (!movies) {
-    return <Skeleton className="h-56 md:h-[470px] lg:h-[550px]" />;
+    return (
+      <Container className="flex flex-col gap-4">
+        <h2 className="text-2xl">Drama</h2>
+        <div className="flex gap-4">
+          <Skeleton className="h-56 md:h-[470px] lg:h-[550px]" />
+          <Skeleton className="h-56 md:h-[470px] lg:h-[550px]" />
+          <Skeleton className="hidden h-56 md:h-[470px] lg:block lg:h-[550px]" />
+        </div>
+      </Container>
+    );
   }
 
   return (
-    <div className="flex flex-col gap-4">
-      <div className="flex items-center justify-between">
-        <h2 className="text-2xl">Drama</h2>
-        <ButtonGroup>
-          <CarouselPrev
-            variant="outline"
-            size="icon"
-            disabled={prevBtnDisabled}
-            onClick={onPrevButtonClick}
-            className="static -translate-y-0"
-          />
-          <CarouselNext
-            variant="outline"
-            size="icon"
-            disabled={nextBtnDisabled}
-            onClick={onNextButtonClick}
-            className="static -translate-y-0"
-          />
-        </ButtonGroup>
-      </div>
+    <Container>
+      <div className="flex flex-col gap-4">
+        <div className="flex items-center justify-between">
+          <h2 className="text-2xl">Drama</h2>
+          <ButtonGroup>
+            <CarouselPrev
+              variant="outline"
+              size="icon"
+              disabled={prevBtnDisabled}
+              onClick={onPrevButtonClick}
+              className="static -translate-y-0"
+            />
+            <CarouselNext
+              variant="outline"
+              size="icon"
+              disabled={nextBtnDisabled}
+              onClick={onNextButtonClick}
+              className="static -translate-y-0"
+            />
+          </ButtonGroup>
+        </div>
 
-      <Carousel ref={emblaRef} className="-ml-4">
-        {movies &&
-          movies.map((movie: MovieDetail) => (
-            <CarouselItem
-              key={movie.slug}
-              className="basis-1/2 pl-4 xl:basis-1/3"
-            >
-              <Link href={`/apps/movie/${movie.slug}`} title={movie.name}>
-                <div className="relative h-56 sm:h-[26rem] lg:h-[30rem]">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={`https://phimapi.com/image.php?url=https://phimimg.com/${movie.poster_url}`}
-                    alt={movie.name}
-                    width={600}
-                    height={900}
-                    className="h-full w-full rounded-xl object-cover"
-                  />
-                  <div className="absolute bottom-2 left-2 right-2 flex flex-col gap-1 rounded-xl bg-secondary/50 p-2 backdrop-blur-sm lg:bottom-6 lg:left-6 lg:right-6 lg:gap-2 lg:p-6">
-                    {/* Name */}
-                    <div className="truncate text-sm font-semibold text-background lg:text-lg">
-                      {movie.name}
+        <Carousel ref={emblaRef}>
+          <CarouselContainer className="-ml-4">
+            {movies &&
+              movies.map((movie: MovieDetail) => (
+                <CarouselItem
+                  key={movie.slug}
+                  className="basis-1/2 pl-4 xl:basis-1/3"
+                >
+                  <Link href={`/apps/movie/${movie.slug}`} title={movie.name}>
+                    <div className="relative h-56 sm:h-[26rem] lg:h-[30rem]">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={`https://phimapi.com/image.php?url=https://phimimg.com/${movie.poster_url}`}
+                        alt={movie.name}
+                        width={600}
+                        height={900}
+                        className="h-full w-full rounded-xl object-cover"
+                      />
+                      <div className="absolute bottom-2 left-2 right-2 flex flex-col gap-1 rounded-xl bg-secondary/50 p-2 backdrop-blur-sm lg:bottom-6 lg:left-6 lg:right-6 lg:gap-2 lg:p-6">
+                        {/* Name */}
+                        <div className="truncate text-sm font-semibold text-background lg:text-lg">
+                          {movie.name}
+                        </div>
+                        {/* Additional details */}
+                        <div className="flex items-center gap-2 text-background">
+                          <div className="text-sm lg:text-base">
+                            {movie.quality}
+                          </div>
+                          <div className="translate-y-[-1px]">|</div>
+                          <div className="text-sm lg:text-base">
+                            {getTotalEpisodes(movie.episode_current)} tập
+                          </div>
+                          <div className="hidden translate-y-[-1px] md:block">
+                            |
+                          </div>
+                          <div className="hidden text-sm md:block lg:text-base">
+                            {movie.time}
+                          </div>
+                        </div>
+                      </div>
                     </div>
-                    {/* Additional details */}
-                    <div className="flex items-center gap-2 text-background">
-                      <div className="text-sm lg:text-base">
-                        {movie.quality}
-                      </div>
-                      <div className="translate-y-[-1px]">|</div>
-                      <div className="text-sm lg:text-base">
-                        {getTotalEpisodes(movie.episode_current)} tập
-                      </div>
-                      <div className="hidden translate-y-[-1px] md:block">
-                        |
-                      </div>
-                      <div className="hidden text-sm md:block lg:text-base">
-                        {movie.time}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </Link>
-            </CarouselItem>
-          ))}
-      </Carousel>
-    </div>
+                  </Link>
+                </CarouselItem>
+              ))}
+          </CarouselContainer>
+        </Carousel>
+      </div>
+    </Container>
   );
 }

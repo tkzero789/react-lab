@@ -3,7 +3,6 @@
 import React from "react";
 import DashboardBreadcrumb from "../../components/dashboard-breadcrumb";
 import DashboardContainer from "@/components/layout/dashboard-container";
-import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { useParams } from "next/navigation";
@@ -79,21 +78,21 @@ export default function MovieDetailPage() {
         {!movie ? (
           <div></div>
         ) : (
-          <div className="flex flex-col gap-4 lg:flex-row">
-            <Image
-              src={movie.poster_url}
+          <div className="grid grid-cols-1 gap-4 lg:grid-cols-4">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={`https://phimapi.com/image.php?url=${movie.thumb_url}`}
               alt="Movie poster"
-              width={600}
-              height={900}
-              priority
-              className="aspect-[2/3] w-full rounded-xl lg:w-[30rem]"
+              width={800}
+              height={600}
+              className="col-span-full w-full rounded-xl lg:col-span-2"
             />
-            <div className="flex flex-col gap-4">
+            <div className="col-span-full flex flex-col gap-4 lg:col-span-2">
               {/* Name */}
-              <h1 className="text-3xl font-semibold">{movie.name}</h1>
+              <h1>{movie.name}</h1>
               {/* Badges */}
               <div className="flex flex-col gap-1">
-                <div className="flex items-center gap-2">
+                <div className="flex flex-wrap items-center gap-2">
                   <div className="text-lg">{movie.quality}</div>
                   <div className="translate-y-[-1px]">|</div>
                   <div className="text-lg">{movie.year}</div>
@@ -102,9 +101,11 @@ export default function MovieDetailPage() {
                   <div className="translate-y-[-1px]">|</div>
                   <div className="text-lg">{movie.time}</div>
                 </div>
-                <div className="flex items-center gap-2">
+                <div className="flex flex-wrap items-center gap-2">
                   {movie.category.map((item) => (
-                    <Badge key={item.id}>{item.name}</Badge>
+                    <Badge key={item.id} className="whitespace-nowrap">
+                      {item.name}
+                    </Badge>
                   ))}
                 </div>
               </div>

@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import {
   Carousel,
+  CarouselContainer,
   CarouselItem,
   CarouselNext,
   CarouselPrev,
@@ -13,6 +14,7 @@ import {
 
 import useEmblaCarousel from "embla-carousel-react";
 import { Skeleton } from "@/components/ui/skeleton";
+import Container from "@/components/layout/container";
 
 type Movie = {
   _id: string;
@@ -61,62 +63,70 @@ export default function MovieBannerCarousel() {
   };
 
   if (!movies) {
-    return <Skeleton className="h-56 md:h-[400px] lg:h-[550px] xl:h-[700px]" />;
+    return (
+      <Container className="max-w-full px-0 lg:max-w-7xl lg:px-4">
+        <Skeleton className="h-56 rounded-none md:h-[400px] lg:h-[550px] lg:rounded-xl xl:h-[700px]" />
+      </Container>
+    );
   }
 
   return (
-    <div className="relative">
-      <Carousel ref={emblaRef}>
-        {movies.map((movie) => (
-          <CarouselItem key={movie._id}>
-            <Link
-              href={`/apps/movie/${movie.slug}`}
-              title={movie.name}
-              className="relative"
-            >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={`https://phimapi.com/image.php?url=${movie.thumb_url}`}
-                alt={movie.name}
-                width={1280}
-                className="h-full w-full"
-              />
-              <div className="absolute bottom-2 left-2 right-2 flex flex-col gap-1 rounded-xl bg-secondary/50 p-2 backdrop-blur-sm lg:bottom-6 lg:left-6 lg:right-6 lg:gap-4 lg:p-6">
-                {/* Name */}
-                <div className="text-lg font-semibold text-background lg:text-2xl">
-                  {movie.name}
-                </div>
-                {/* Additional details */}
-                <div className="flex items-center gap-2 text-background">
-                  <div className="text-sm lg:text-lg">{movie.quality}</div>
-                  <div className="translate-y-[-1px]">|</div>
-                  <div className="text-sm lg:text-lg">{movie.year}</div>
-                  <div className="translate-y-[-1px]">|</div>
-                  <div className="text-sm lg:text-lg">
-                    {getTotalEpisodes(movie.episode_current)} tập
+    <Container className="px-0 lg:px-4">
+      <div className="relative">
+        <Carousel ref={emblaRef} className="lg:rounded-xl">
+          <CarouselContainer>
+            {movies.map((movie) => (
+              <CarouselItem key={movie._id}>
+                <Link
+                  href={`/apps/movie/${movie.slug}`}
+                  title={movie.name}
+                  className="relative"
+                >
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={`https://phimapi.com/image.php?url=${movie.thumb_url}`}
+                    alt={movie.name}
+                    width={1280}
+                    className="h-full w-full"
+                  />
+                  <div className="absolute bottom-2 left-2 right-2 flex flex-col gap-1 rounded-xl bg-secondary/50 p-2 backdrop-blur-sm lg:bottom-6 lg:left-6 lg:right-6 lg:gap-4 lg:p-6">
+                    {/* Name */}
+                    <div className="text-lg font-semibold text-background lg:text-2xl">
+                      {movie.name}
+                    </div>
+                    {/* Additional details */}
+                    <div className="flex items-center gap-2 text-background">
+                      <div className="text-sm lg:text-lg">{movie.quality}</div>
+                      <div className="translate-y-[-1px]">|</div>
+                      <div className="text-sm lg:text-lg">{movie.year}</div>
+                      <div className="translate-y-[-1px]">|</div>
+                      <div className="text-sm lg:text-lg">
+                        {getTotalEpisodes(movie.episode_current)} tập
+                      </div>
+                      <div className="translate-y-[-1px]">|</div>
+                      <div className="text-sm lg:text-lg">{movie.time}</div>
+                    </div>
+                    {/* Category */}
+                    <div className="hidden items-center gap-2 lg:flex">
+                      {movie.category.map((item) => (
+                        <Badge key={item.id}>{item.name}</Badge>
+                      ))}
+                    </div>
                   </div>
-                  <div className="translate-y-[-1px]">|</div>
-                  <div className="text-sm lg:text-lg">{movie.time}</div>
-                </div>
-                {/* Category */}
-                <div className="hidden items-center gap-2 lg:flex">
-                  {movie.category.map((item) => (
-                    <Badge key={item.id}>{item.name}</Badge>
-                  ))}
-                </div>
-              </div>
-            </Link>
-          </CarouselItem>
-        ))}
-      </Carousel>
-      <CarouselPrev
-        onClick={onPrevButtonClick}
-        className="hidden h-12 w-12 rounded-full bg-secondary/20 text-background hover:bg-secondary/40 lg:flex [&_svg]:size-10"
-      />
-      <CarouselNext
-        onClick={onNextButtonClick}
-        className="hidden h-12 w-12 rounded-full bg-secondary/20 text-background hover:bg-secondary/40 lg:flex [&_svg]:size-10"
-      />
-    </div>
+                </Link>
+              </CarouselItem>
+            ))}
+          </CarouselContainer>
+        </Carousel>
+        <CarouselPrev
+          onClick={onPrevButtonClick}
+          className="hidden h-12 w-12 rounded-full bg-secondary/20 text-background hover:bg-secondary/40 lg:flex [&_svg]:size-10"
+        />
+        <CarouselNext
+          onClick={onNextButtonClick}
+          className="hidden h-12 w-12 rounded-full bg-secondary/20 text-background hover:bg-secondary/40 lg:flex [&_svg]:size-10"
+        />
+      </div>
+    </Container>
   );
 }

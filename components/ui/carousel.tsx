@@ -14,12 +14,19 @@ const Carousel = React.forwardRef<
 >(function Carousel({ className, children }, ref) {
   return (
     <div className="relative">
-      <div className="overflow-hidden rounded-xl" ref={ref}>
-        <div className={cn("carousel__container", className)}>{children}</div>
+      <div ref={ref} className={cn("overflow-hidden", className)}>
+        {children}
       </div>
     </div>
   );
 });
+
+function CarouselContainer({
+  className,
+  ...props
+}: React.ComponentProps<"div">) {
+  return <div className={cn("carousel__container", className)} {...props} />;
+}
 
 function CarouselItem({ className, ...props }: React.ComponentProps<"div">) {
   return (
@@ -159,6 +166,7 @@ const DotButton: React.FC<PropType> = (props) => {
 
 export {
   Carousel,
+  CarouselContainer,
   CarouselItem,
   usePrevNextButtons,
   CarouselPrev,

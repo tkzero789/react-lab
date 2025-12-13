@@ -5,6 +5,8 @@ import React from "react";
 import DashboardBreadcrumb from "@/app/apps/components/dashboard-breadcrumb";
 import DashboardContainer from "@/components/layout/dashboard-container";
 import EpisodeVideo from "./components/episode-video";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 type MovieDetail = {
   name: string;
@@ -34,6 +36,7 @@ type MovieEpisode = {
 export default function EpisodePage() {
   const params = useParams();
   const [movie, setMovie] = React.useState<MovieDetail>();
+  const [episodes, setEpisodes] = React.useState<MovieEpisode[]>();
   const [source, setSource] = React.useState<string>("");
 
   React.useEffect(() => {
@@ -43,6 +46,7 @@ export default function EpisodePage() {
         const data = await response.json();
         setMovie(data.movie);
         const episodes = data.episodes[0].server_data;
+        setEpisodes(episodes);
         episodes.find((item: MovieEpisode) => {
           if (item.slug === params.episode) {
             setSource(item.link_embed);
@@ -79,8 +83,29 @@ export default function EpisodePage() {
           { title: `Tập ${episodeNumber}` },
         ]}
       />
-      <DashboardContainer>
+      <DashboardContainer className="flex flex-col gap-8">
         <EpisodeVideo source={source} />
+        <div className="flex flex-col gap-2">
+          <div className="font-semibold">Episodes:</div>
+          <div className="flex flex-wrap gap-1">
+            {episodes?.map((episode) => (
+              <Button
+                key={episode.name}
+                asChild
+                variant={
+                  episode.slug === params.episode ? "default" : "secondary"
+                }
+                size="sm"
+              >
+                <Link href={`/apps/movie/${movie?.slug}/${episode.slug}`}>
+                  {episode.slug === "full"
+                    ? "Full"
+                    : `Tập ${episode.name.split(" ")[1]}`}
+                </Link>
+              </Button>
+            ))}
+          </div>
+        </div>
       </DashboardContainer>
     </>
   );

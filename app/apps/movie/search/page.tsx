@@ -45,7 +45,7 @@ export default async function MovieSearchPage({ searchParams }: Props) {
 
   return (
     <div>
-      <h1 className="text-2xl font-semibold">Search</h1>
+      <h1>Search</h1>
 
       <div className="mt-8 flex items-center justify-between">
         <MovieSearch />

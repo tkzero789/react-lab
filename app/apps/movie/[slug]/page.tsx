@@ -7,7 +7,6 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { useParams } from "next/navigation";
 import Link from "next/link";
-import MovieNav from "../components/movie-nav";
 
 type MovieDetail = {
   name: string;
@@ -73,7 +72,6 @@ export default function MovieDetailPage() {
           },
         ]}
       />
-      <MovieNav />
       <DashboardContainer className="relative flex-1">
         {!movie ? (
           <div></div>
@@ -134,7 +132,7 @@ export default function MovieDetailPage() {
                     <Button
                       key={episode.name}
                       asChild
-                      variant="secondary"
+                      variant="muted"
                       size="sm"
                     >
                       <Link href={`/apps/movie/${movie.slug}/${episode.slug}`}>

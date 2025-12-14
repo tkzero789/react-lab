@@ -92,9 +92,7 @@ export default function EpisodePage() {
               <Button
                 key={episode.name}
                 asChild
-                variant={
-                  episode.slug === params.episode ? "default" : "secondary"
-                }
+                variant={episode.slug === params.episode ? "primary" : "muted"}
                 size="sm"
               >
                 <Link href={`/apps/movie/${movie?.slug}/${episode.slug}`}>

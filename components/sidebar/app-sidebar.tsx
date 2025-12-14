@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { CassetteTape, Laptop, ListChecks, Map, PieChart } from "lucide-react";
+import { CloudMoon, Film, Laptop, ListChecks, PieChart } from "lucide-react";
 import { NavApps } from "./nav-app";
 import { NavProjects } from "@/components/sidebar/nav-projects";
 import { ThemeToggle } from "../theme/theme-toggle";
@@ -23,12 +23,12 @@ const sidebarItems = {
     {
       name: "Weather",
       url: "/apps/weather",
-      icon: Map,
+      icon: CloudMoon,
     },
     {
       name: "Movie",
       url: "/apps/movie",
-      icon: CassetteTape,
+      icon: Film,
     },
   ],
   projects: [

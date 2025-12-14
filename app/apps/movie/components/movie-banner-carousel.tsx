@@ -15,6 +15,7 @@ import {
 import useEmblaCarousel from "embla-carousel-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import Container from "@/components/layout/container";
+import Autoplay from "embla-carousel-autoplay";
 
 type Movie = {
   _id: string;
@@ -35,7 +36,9 @@ type Movie = {
 export default function MovieBannerCarousel() {
   const [movies, setMovies] = React.useState<Movie[]>();
 
-  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true });
+  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true }, [
+    Autoplay({ delay: 5000 }),
+  ]);
 
   const { onPrevButtonClick, onNextButtonClick } = usePrevNextButtons(emblaApi);
 
@@ -87,8 +90,9 @@ export default function MovieBannerCarousel() {
                     src={`https://phimapi.com/image.php?url=${movie.thumb_url}`}
                     alt={movie.name}
                     width={1280}
-                    className="h-full w-full"
+                    className="aspect-video h-full w-full object-cover"
                   />
+
                   <div className="absolute bottom-2 left-2 right-2 flex flex-col gap-1 rounded-xl bg-secondary/50 p-2 backdrop-blur-sm lg:bottom-6 lg:left-6 lg:right-6 lg:gap-4 lg:p-6">
                     {/* Name */}
                     <div className="text-lg font-semibold text-background lg:text-2xl">

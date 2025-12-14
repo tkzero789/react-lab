@@ -24,7 +24,7 @@ body {
     --primary-foreground: 0 0% 100%;
     --secondary: 210 25% 7.8431%;
     --secondary-foreground: 0 0% 100%;
-    --muted: 240 1.9608% 90%;
+    --muted: 240 1.9608% 92%;
     --muted-foreground: 210 25% 7.8431%;
     --accent: 211.5789 51.3514% 92.7451%;
     --accent-foreground: 203.8863 88.2845% 53.1373%;
@@ -58,7 +58,7 @@ body {
     --primary-foreground: 0 0% 100%;
     --secondary: 195 15.3846% 94.902%;
     --secondary-foreground: 210 25% 7.8431%;
-    --muted: 0 0% 9.4118%;
+    --muted: 0 0% 12%;
     --muted-foreground: 210 3.3898% 46.2745%;
     --accent: 205.7143 70% 7.8431%;
     --accent-foreground: 203.7736 87.6033% 52.549%;
@@ -95,7 +95,7 @@ body {
 /* Custom */
 h1,
 h2 {
-  @apply font-semibold;
+  @apply font-semibold tracking-wide;
 }
 
 h1 {

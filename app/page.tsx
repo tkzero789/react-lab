@@ -44,7 +44,7 @@ export default function Page() {
               >
                 <item.icon />
               </div>
-              <div className="flex items-center justify-center font-semibold">
+              <div className="flex items-center justify-center font-medium">
                 {item.title}
               </div>
             </div>

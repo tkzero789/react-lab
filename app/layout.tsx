@@ -4,7 +4,7 @@ import { Roboto } from "next/font/google";
 import { Toaster } from "@/components/ui/sonner";
 import "./css/globals.css";
 
-const roboto = Roboto({ subsets: ["latin"], weight: "400" });
+const roboto = Roboto({ subsets: ["latin"], weight: ["400", "500"] });
 
 export const metadata: Metadata = {
   title: "React Lab",

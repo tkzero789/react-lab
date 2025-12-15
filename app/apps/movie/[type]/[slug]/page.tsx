@@ -1,12 +1,12 @@
 "use client";
 
 import React from "react";
-import DashboardBreadcrumb from "../../components/dashboard-breadcrumb";
 import DashboardContainer from "@/components/layout/dashboard-container";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { useParams } from "next/navigation";
 import Link from "next/link";
+import DashboardBreadcrumb from "@/app/apps/components/dashboard-breadcrumb";
 
 type MovieDetail = {
   name: string;
@@ -35,11 +35,8 @@ type MovieEpisode = {
 
 export default function MovieDetailPage() {
   const params = useParams();
-
   const [movie, setMovie] = React.useState<MovieDetail>();
   const [episodes, setEpisodes] = React.useState<MovieEpisode[]>();
-
-  console.log(episodes);
 
   React.useEffect(() => {
     const getData = async () => {

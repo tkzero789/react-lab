@@ -18,18 +18,17 @@ import Container from "@/components/layout/container";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 
-type MovieDetail = {
+type Movie = {
+  _id: string;
   name: string;
-  origin_name: string;
+  type: string;
   slug: string;
-  content: string;
-  thumb_url: string;
   poster_url: string;
+  thumb_url: string;
   time: string;
   episode_current: string;
   quality: string;
   year: number;
-  actor: string[];
   category: {
     id: string;
     name: string;
@@ -43,7 +42,7 @@ type Props = {
 };
 
 export default function MovieCarousel({ title, type_list }: Props) {
-  const [movies, setMovies] = React.useState<MovieDetail[]>();
+  const [movies, setMovies] = React.useState<Movie[]>();
 
   const [emblaRef, emblaApi] = useEmblaCarousel({
     align: "start",
@@ -119,12 +118,15 @@ export default function MovieCarousel({ title, type_list }: Props) {
           <Carousel ref={emblaRef}>
             <CarouselContainer className="-ml-4">
               {movies &&
-                movies.map((movie: MovieDetail) => (
+                movies.map((movie: Movie) => (
                   <CarouselItem
                     key={movie.slug}
                     className="basis-1/2 pl-4 xl:basis-1/3"
                   >
-                    <Link href={`/apps/movie/${movie.slug}`} title={movie.name}>
+                    <Link
+                      href={`/apps/movie/${movie.type}/${movie.slug}`}
+                      title={movie.name}
+                    >
                       <div className="relative h-56 sm:h-[26rem] lg:h-[30rem]">
                         {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img

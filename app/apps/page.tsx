@@ -36,7 +36,7 @@ export default function AppsPage() {
       <DashboardContainer className="grid grid-cols-1 gap-4 lg:grid-cols-4">
         {apps.map((app) => (
           <Link key={app.title} href={app.href} className="group">
-            <Card className="transition-all group-hover:bg-accent">
+            <Card className="transition-all group-hover:bg-muted">
               <CardHeader className="pb-4">
                 <CardTitle>{app.title}</CardTitle>
               </CardHeader>

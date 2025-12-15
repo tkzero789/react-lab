@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import { Search } from "lucide-react";
 import Link from "next/link";
@@ -9,45 +11,64 @@ import {
   InputGroupAddon,
   InputGroupInput,
 } from "@/components/ui/input-group";
+import { useParams } from "next/navigation";
+import { cn } from "@/lib/utils";
 
-type MovieGenre = {
+type MovieType = {
   title: string;
-  params: string;
+  params?: "movie" | "series" | "hoathinh" | "tv-shows";
+  type_list?: "phim-le" | "phim-bo" | "hoat-hinh" | "tv-shows";
 };
 
-const movieGenres: MovieGenre[] = [
+const movieTypes: MovieType[] = [
+  { title: "Home" },
   {
     title: "Movie",
-    params: "phim-le",
+    params: "movie",
+    type_list: "phim-le",
   },
   {
     title: "Series",
-    params: "phim-bo",
+    params: "series",
+    type_list: "phim-bo",
   },
   {
     title: "Animation",
-    params: "hoat-hinh",
+    params: "hoathinh",
+    type_list: "hoat-hinh",
   },
   {
     title: "TV Shows",
     params: "tv-shows",
+    type_list: "tv-shows",
   },
 ];
 
 export default function MovieNav() {
+  const params = useParams();
+
   return (
     <div className="sticky top-0 z-50 bg-background">
       <Container className="flex items-center justify-between py-4">
         <div className="w-fit rounded-xl bg-muted p-1">
-          {movieGenres.map((genre) => (
+          {movieTypes.map((type) => (
             <Button
-              key={genre.title}
+              key={type.title}
               asChild
               variant="ghost"
               size="sm"
-              className="hover:bg-background dark:hover:bg-secondary dark:hover:text-secondary-foreground"
+              className={cn(
+                "hover:bg-background hover:text-foreground dark:hover:bg-foreground dark:hover:text-background",
+                type.params === params.type && "bg-background",
+              )}
             >
-              <Link href={genre.params}>{genre.title}</Link>
+              <Link
+                href={
+                  type?.params ? `/apps/movie/${type?.params}` : `/apps/movie`
+                }
+              >
+                {type.title}
+              </Link>
             </Button>
           ))}
         </div>
@@ -57,7 +78,6 @@ export default function MovieNav() {
           </InputGroupAddon>
           <InputGroupInput placeholder="Search..." />
         </InputGroup>
-
         <Button variant="ghost" size="icon" className="bg-muted lg:hidden">
           <Search />
         </Button>

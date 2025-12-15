@@ -20,6 +20,7 @@ import Autoplay from "embla-carousel-autoplay";
 type Movie = {
   _id: string;
   name: string;
+  type: string;
   slug: string;
   thumb_url: string;
   time: string;
@@ -81,7 +82,7 @@ export default function MovieBannerCarousel() {
             {movies.map((movie) => (
               <CarouselItem key={movie._id}>
                 <Link
-                  href={`/apps/movie/${movie.slug}`}
+                  href={`/apps/movie/${movie.type}/${movie.slug}`}
                   title={movie.name}
                   className="relative"
                 >

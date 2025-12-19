@@ -4,7 +4,7 @@ type Props = {
   source: string;
 };
 
-export default function EpisodeVideo({ source }: Props) {
+export default function MovieVideo({ source }: Props) {
   return (
     <iframe
       src={source}

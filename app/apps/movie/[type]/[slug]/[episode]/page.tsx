@@ -4,12 +4,13 @@ import { useParams } from "next/navigation";
 import React from "react";
 import DashboardBreadcrumb from "@/app/apps/components/dashboard-breadcrumb";
 import DashboardContainer from "@/components/layout/dashboard-container";
-import EpisodeVideo from "./components/episode-video";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import MovieVideo from "../../../components/movie-video";
 
 type MovieDetail = {
   name: string;
+  type: string;
   slug: string;
   content: string;
   thumb_url: string;
@@ -59,6 +60,22 @@ export default function EpisodePage() {
     getData();
   }, [params.slug, params.episode]);
 
+  let typeTitle: string = "";
+  switch (movie?.type as string) {
+    case "movie":
+      typeTitle = "Movie";
+      break;
+    case "series":
+      typeTitle = "Series";
+      break;
+    case "hoathinh":
+      typeTitle = "Animation";
+      break;
+    case "tvshows":
+      typeTitle = "TV Shows";
+      break;
+  }
+
   const episodeNumber =
     typeof params.episode === "string"
       ? params.episode.split("-").pop()
@@ -77,14 +94,18 @@ export default function EpisodePage() {
             href: "/apps/movie",
           },
           {
+            title: typeTitle,
+            href: `/apps/movie/${movie?.type === "tvshows" ? "tv-shows" : movie?.type}`,
+          },
+          {
             title: movie?.name ?? "",
-            href: `/apps/movie/${movie?.slug}`,
+            href: `/apps/movie/${movie?.type}/${movie?.slug}`,
           },
           { title: `Tập ${episodeNumber}` },
         ]}
       />
       <DashboardContainer className="flex flex-col gap-8">
-        <EpisodeVideo source={source} />
+        <MovieVideo source={source} />
         <div className="flex flex-col gap-2">
           <div className="font-semibold">Episodes:</div>
           <div className="flex flex-wrap gap-1">

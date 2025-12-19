@@ -3,7 +3,6 @@
 import React from "react";
 
 import { Skeleton } from "@/components/ui/skeleton";
-import Link from "next/link";
 import {
   Carousel,
   CarouselContainer,
@@ -13,10 +12,15 @@ import {
   usePrevNextButtons,
 } from "@/components/ui/carousel";
 import useEmblaCarousel from "embla-carousel-react";
-import { ButtonGroup } from "@/components/ui/button-group";
+import {
+  ButtonGroup,
+  ButtonGroupSeparator,
+} from "@/components/ui/button-group";
 import Container from "@/components/layout/container";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import MovieCard from "./movie-card";
 import { cn } from "@/lib/utils";
+import styles from "./movie.module.css";
 
 type Movie = {
   _id: string;
@@ -71,22 +75,24 @@ export default function MovieCarousel({ title, type_list }: Props) {
     getMovies();
   }, [type_list]);
 
-  const getTotalEpisodes = (currentEpisode: string) => {
-    if (currentEpisode.startsWith("Tập")) {
-      return currentEpisode.split(" ")[1];
-    } else {
-      return currentEpisode?.split("/")[1]?.split(")")[0];
-    }
-  };
-
   if (!movies) {
     return (
       <Container className="flex flex-col gap-4">
         <h2 className="text-2xl">{title}</h2>
-        <div className="flex gap-4">
-          <Skeleton className="h-56 md:h-[470px] lg:h-[550px]" />
-          <Skeleton className="h-56 md:h-[470px] lg:h-[550px]" />
-          <Skeleton className="hidden h-56 md:h-[470px] lg:block lg:h-[550px]" />
+        <div
+          className={cn(
+            "flex gap-4",
+            `[&>*:nth-child(3)]:hidden sm:[&>*:nth-child(3)]:block`,
+            `[&>*:nth-child(4)]:hidden xl:[&>*:nth-child(4)]:block`,
+            `[&>*:nth-child(5)]:hidden 2xl:[&>*:nth-child(5)]:block`,
+          )}
+        >
+          {Array.from({ length: 5 }).map((_, index) => (
+            <Skeleton
+              key={index}
+              className="h-[16rem] min-[425px]:h-[20rem] sm:h-[18rem] lg:h-[22rem]"
+            />
+          ))}
         </div>
       </Container>
     );
@@ -97,20 +103,29 @@ export default function MovieCarousel({ title, type_list }: Props) {
       <Card>
         <CardHeader className="flex items-center justify-between">
           <CardTitle>{title}</CardTitle>
-          <ButtonGroup>
+          <ButtonGroup className="group shadow">
             <CarouselPrev
-              variant="surface"
+              variant="outline"
               size="icon-sm"
               disabled={prevBtnDisabled}
               onClick={onPrevButtonClick}
-              className="static -translate-y-0"
+              className={cn(
+                "static -translate-y-0 border-r-0 shadow-none",
+                styles.carouselPrev,
+              )}
+            />
+            <ButtonGroupSeparator
+              className={cn("transition-colors", styles.buttonGroupSeparator)}
             />
             <CarouselNext
-              variant="surface"
+              variant="outline"
               size="icon-sm"
               disabled={nextBtnDisabled}
               onClick={onNextButtonClick}
-              className="static -translate-y-0"
+              className={cn(
+                "static -translate-y-0 shadow-none",
+                styles.carouselNext,
+              )}
             />
           </ButtonGroup>
         </CardHeader>
@@ -121,54 +136,9 @@ export default function MovieCarousel({ title, type_list }: Props) {
                 movies.map((movie: Movie) => (
                   <CarouselItem
                     key={movie.slug}
-                    className="basis-1/2 pl-4 xl:basis-1/3"
+                    className="basis-1/2 pl-4 sm:basis-1/3 md:basis-1/2 xl:basis-1/4 2xl:basis-1/5"
                   >
-                    <Link
-                      href={`/apps/movie/${movie.type}/${movie.slug}`}
-                      title={movie.name}
-                    >
-                      <div className="relative h-56 sm:h-[26rem] lg:h-[30rem]">
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img
-                          src={`https://phimapi.com/image.php?url=https://phimimg.com/${movie.poster_url}`}
-                          alt={movie.name}
-                          width={600}
-                          height={900}
-                          className="h-full w-full rounded-xl object-cover"
-                        />
-                        <div className="absolute bottom-2 left-2 right-2 flex flex-col gap-1 rounded-xl bg-secondary/50 p-2 backdrop-blur-sm lg:bottom-6 lg:left-6 lg:right-6 lg:gap-2 lg:p-6">
-                          {/* Name */}
-                          <div className="truncate text-sm font-semibold text-background lg:text-lg">
-                            {movie.name}
-                          </div>
-                          {/* Additional details */}
-                          <div className="flex items-center gap-2 text-background">
-                            <div className="text-sm lg:text-base">
-                              {movie.quality}
-                            </div>
-                            <div className="translate-y-[-1px]">|</div>
-                            {movie.episode_current !== "Full" && (
-                              <div className="text-sm lg:text-base">
-                                {getTotalEpisodes(movie.episode_current)} tập
-                              </div>
-                            )}
-                            {movie.episode_current !== "Full" && (
-                              <div className="hidden translate-y-[-1px] md:block">
-                                |
-                              </div>
-                            )}
-                            <div
-                              className={cn(
-                                "hidden text-sm md:block lg:text-base",
-                                movie.episode_current === "Full" && "block",
-                              )}
-                            >
-                              {movie.time}
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </Link>
+                    <MovieCard movie={movie} />
                   </CarouselItem>
                 ))}
             </CarouselContainer>

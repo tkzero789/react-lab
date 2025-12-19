@@ -1,7 +1,14 @@
 "use client";
 
 import * as React from "react";
-import { CloudMoon, Film, Laptop, ListChecks, PieChart } from "lucide-react";
+import {
+  AppWindow,
+  CloudMoon,
+  Film,
+  Laptop,
+  ListChecks,
+  PieChart,
+} from "lucide-react";
 import { NavApps } from "./nav-app";
 import { NavProjects } from "@/components/sidebar/nav-projects";
 import { ThemeToggle } from "../theme/theme-toggle";
@@ -32,6 +39,7 @@ const sidebarItems = {
     },
   ],
   projects: [
+    { name: "Apps", url: "/apps", icon: AppWindow },
     {
       name: "Web Replicas",
       url: "#",

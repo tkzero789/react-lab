@@ -2,16 +2,17 @@
 
 import React from "react";
 import DashboardBreadcrumb from "../../components/dashboard-breadcrumb";
-import { useParams } from "next/navigation";
-import DashboardContainer from "@/components/layout/dashboard-container";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import { useParams, useSearchParams } from "next/navigation";
 import MovieNav from "../components/movie-nav";
+import MovieCard from "../components/movie-card";
+import { Skeleton } from "@/components/ui/skeleton";
+import MoviePagination from "../components/movie-pagination";
+import Container from "@/components/layout/container";
 
 type MovieType = {
   title: string;
   params?: "movie" | "series" | "hoathinh" | "tv-shows";
-  type_list?: "phim-le" | "phim-bo" | "hoat-hinh" | "tv-shows";
+  typeList?: "phim-le" | "phim-bo" | "hoat-hinh" | "tv-shows";
 };
 
 const movieTypes: MovieType[] = [
@@ -19,22 +20,22 @@ const movieTypes: MovieType[] = [
   {
     title: "Movie",
     params: "movie",
-    type_list: "phim-le",
+    typeList: "phim-le",
   },
   {
     title: "Series",
     params: "series",
-    type_list: "phim-bo",
+    typeList: "phim-bo",
   },
   {
     title: "Animation",
     params: "hoathinh",
-    type_list: "hoat-hinh",
+    typeList: "hoat-hinh",
   },
   {
     title: "TV Shows",
     params: "tv-shows",
-    type_list: "tv-shows",
+    typeList: "tv-shows",
   },
 ];
 
@@ -56,10 +57,35 @@ type Movie = {
   }[];
 };
 
+type MovieState = {
+  items: Movie[];
+  params: {
+    pagination: {
+      currentPage: number;
+      totalItems: number;
+      totalItemsPerPage: number;
+      totalPages: number;
+    };
+  };
+};
+
 export default function MovieTypePage() {
   const params = useParams();
+  const searchParams = useSearchParams();
+  const currentPage = searchParams.get("page");
   const movieType = params.type;
-  const [movies, setMovies] = React.useState<Movie[]>();
+  const [isLoading, setIsLoading] = React.useState<boolean>(true);
+  const [movies, setMovies] = React.useState<MovieState>({
+    items: [],
+    params: {
+      pagination: {
+        currentPage: 0,
+        totalItems: 0,
+        totalItemsPerPage: 0,
+        totalPages: 0,
+      },
+    },
+  });
 
   React.useEffect(() => {
     const getData = async () => {
@@ -72,20 +98,34 @@ export default function MovieTypePage() {
             (item) => item.params === movieType,
           );
           const response = await fetch(
-            `https://phimapi.com/v1/api/danh-sach/${movieObject?.type_list}`,
+            `https://phimapi.com/v1/api/danh-sach/${movieObject?.typeList}?page=${currentPage}`,
           );
           const data = await response.json();
-          setMovies(data.data.items);
+          setMovies(data.data);
         }
       } catch (error) {
         console.error(error);
+      } finally {
+        setIsLoading(false);
       }
     };
     getData();
-  }, [params, movieType]);
+  }, [params, movieType, currentPage]);
 
-  if (!movies) {
-    return <div>loading</div>;
+  let typeTitle: string = "";
+  switch (movieType as string) {
+    case "movie":
+      typeTitle = "Movie";
+      break;
+    case "series":
+      typeTitle = "Series";
+      break;
+    case "hoathinh":
+      typeTitle = "Animation";
+      break;
+    case "tv-shows":
+      typeTitle = "TV Shows";
+      break;
   }
 
   return (
@@ -100,33 +140,31 @@ export default function MovieTypePage() {
             title: "Movie",
             href: "/apps/movie",
           },
-          { title: "Type" },
+          {
+            title: typeTitle,
+          },
         ]}
       />
       <MovieNav />
-      <DashboardContainer className="grid grid-cols-4 gap-4">
-        {movies.map((movie) => (
-          <Card key={movie._id}>
-            <CardHeader>
-              <CardTitle>{movie.name}</CardTitle>
-            </CardHeader>
-            <CardContent className="flex flex-col gap-2">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={`https://phimapi.com/image.php?url=https://phimimg.com/${movie.poster_url}`}
-                alt={movie.name}
-                width={400}
-                className="aspect-auto w-full rounded-xl object-cover"
-              />
-              <div className="flex flex-wrap gap-2">
-                {movie.category.map((item) => (
-                  <Badge key={item.id}>{item.name}</Badge>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-        ))}
-      </DashboardContainer>
+      <Container className="flex flex-col gap-8 pb-[72px]">
+        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-2 xl:grid-cols-4 2xl:grid-cols-5">
+          {isLoading
+            ? Array.from({ length: 10 }).map((_, index) => (
+                <Skeleton
+                  key={index}
+                  className="h-[16rem] overflow-hidden rounded-xl min-[425px]:h-[20rem] sm:h-[18rem] lg:h-[22rem]"
+                ></Skeleton>
+              ))
+            : movies.items.map((movie) => (
+                <MovieCard key={movie._id} movie={movie} />
+              ))}
+        </div>
+        <MoviePagination
+          path={`/apps/movie/${movieType}`}
+          currentPage={Number(currentPage)}
+          totalPages={movies.params.pagination.totalPages}
+        />
+      </Container>
     </>
   );
 }

@@ -1,23 +1,22 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Search } from "lucide-react";
+import { Menu, Search } from "lucide-react";
 import Link from "next/link";
 import React from "react";
-
 import Container from "@/components/layout/container";
-import {
-  InputGroup,
-  InputGroupAddon,
-  InputGroupInput,
-} from "@/components/ui/input-group";
 import { useParams } from "next/navigation";
 import { cn } from "@/lib/utils";
-
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 type MovieType = {
   title: string;
   params?: "movie" | "series" | "hoathinh" | "tv-shows";
-  type_list?: "phim-le" | "phim-bo" | "hoat-hinh" | "tv-shows";
+  typeList?: "phim-le" | "phim-bo" | "hoat-hinh" | "tv-shows";
 };
 
 const movieTypes: MovieType[] = [
@@ -25,22 +24,22 @@ const movieTypes: MovieType[] = [
   {
     title: "Movie",
     params: "movie",
-    type_list: "phim-le",
+    typeList: "phim-le",
   },
   {
     title: "Series",
     params: "series",
-    type_list: "phim-bo",
+    typeList: "phim-bo",
   },
   {
     title: "Animation",
     params: "hoathinh",
-    type_list: "hoat-hinh",
+    typeList: "hoat-hinh",
   },
   {
     title: "TV Shows",
     params: "tv-shows",
-    type_list: "tv-shows",
+    typeList: "tv-shows",
   },
 ];
 
@@ -50,7 +49,7 @@ export default function MovieNav() {
   return (
     <div className="sticky top-0 z-50 bg-background">
       <Container className="flex items-center justify-between py-4">
-        <div className="w-fit rounded-xl bg-muted p-1">
+        <div className="hidden h-10 w-fit items-center gap-1 rounded-xl bg-muted p-1 lg:flex">
           {movieTypes.map((type) => (
             <Button
               key={type.title}
@@ -59,7 +58,8 @@ export default function MovieNav() {
               size="sm"
               className={cn(
                 "hover:bg-background hover:text-foreground dark:hover:bg-foreground dark:hover:text-background",
-                type.params === params.type && "bg-background",
+                type.params === params.type &&
+                  "bg-background dark:bg-foreground dark:text-secondary-foreground",
               )}
             >
               <Link
@@ -72,14 +72,33 @@ export default function MovieNav() {
             </Button>
           ))}
         </div>
-        <InputGroup className="max-w-64 bg-muted">
-          <InputGroupAddon>
-            <Search />
-          </InputGroupAddon>
-          <InputGroupInput placeholder="Search..." />
-        </InputGroup>
-        <Button variant="ghost" size="icon" className="bg-muted lg:hidden">
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild className="lg:hidden">
+            <Button variant="muted">
+              <Menu /> Menu
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className="w-56" align="start">
+            {movieTypes.map((type) => (
+              <DropdownMenuItem
+                key={type.title}
+                asChild
+                className={cn(type.params === params.type && "bg-muted")}
+              >
+                <Link
+                  href={
+                    type?.params ? `/apps/movie/${type?.params}` : `/apps/movie`
+                  }
+                >
+                  {type.title}
+                </Link>
+              </DropdownMenuItem>
+            ))}
+          </DropdownMenuContent>
+        </DropdownMenu>
+        <Button variant="muted">
           <Search />
+          Search
         </Button>
       </Container>
     </div>

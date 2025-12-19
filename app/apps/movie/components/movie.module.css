@@ -1,0 +1,15 @@
+.carouselPrev:hover ~ .buttonGroupSeparator {
+  @apply bg-accent-foreground;
+}
+
+.carouselPrev:disabled:hover ~ .buttonGroupSeparator {
+  @apply bg-accent-foreground/50;
+}
+
+.buttonGroupSeparator:has(+ .carouselNext:hover) {
+  @apply bg-accent-foreground;
+}
+
+.buttonGroupSeparator:has(+ .carouselNext:disabled:hover) {
+  @apply bg-accent-foreground/50;
+}

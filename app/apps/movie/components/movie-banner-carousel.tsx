@@ -94,21 +94,25 @@ export default function MovieBannerCarousel() {
                     className="aspect-video h-full w-full object-cover"
                   />
 
-                  <div className="absolute bottom-2 left-2 right-2 flex flex-col gap-1 rounded-xl bg-secondary/50 p-2 backdrop-blur-sm lg:bottom-6 lg:left-6 lg:right-6 lg:gap-4 lg:p-6">
+                  <div className="absolute bottom-2 left-2 right-2 flex flex-col gap-1 rounded-xl bg-secondary/50 p-2 text-secondary-foreground backdrop-blur-sm dark:bg-muted/50 dark:text-foreground lg:bottom-6 lg:left-6 lg:right-6 lg:gap-4 lg:p-6">
                     {/* Name */}
-                    <div className="text-lg font-semibold text-background lg:text-2xl">
+                    <div className="text-lg font-medium lg:text-2xl">
                       {movie.name}
                     </div>
                     {/* Additional details */}
-                    <div className="flex items-center gap-2 text-background">
+                    <div className="flex items-center gap-2">
                       <div className="text-sm lg:text-lg">{movie.quality}</div>
                       <div className="translate-y-[-1px]">|</div>
                       <div className="text-sm lg:text-lg">{movie.year}</div>
                       <div className="translate-y-[-1px]">|</div>
-                      <div className="text-sm lg:text-lg">
-                        {getTotalEpisodes(movie.episode_current)} tập
-                      </div>
-                      <div className="translate-y-[-1px]">|</div>
+                      {movie.episode_current !== "Full" && (
+                        <div className="text-sm lg:text-lg">
+                          {getTotalEpisodes(movie.episode_current)} tập
+                        </div>
+                      )}
+                      {movie.episode_current !== "Full" && (
+                        <div className="translate-y-[-1px]">|</div>
+                      )}
                       <div className="text-sm lg:text-lg">{movie.time}</div>
                     </div>
                     {/* Category */}
@@ -125,11 +129,11 @@ export default function MovieBannerCarousel() {
         </Carousel>
         <CarouselPrev
           onClick={onPrevButtonClick}
-          className="hidden h-12 w-12 rounded-full bg-secondary/20 text-background hover:bg-secondary/40 lg:flex [&_svg]:size-10"
+          className="hidden h-12 w-12 rounded-full bg-secondary/20 text-background hover:bg-secondary/40 dark:bg-muted/20 dark:text-foreground dark:hover:bg-muted/40 lg:flex [&_svg]:size-10"
         />
         <CarouselNext
           onClick={onNextButtonClick}
-          className="hidden h-12 w-12 rounded-full bg-secondary/20 text-background hover:bg-secondary/40 lg:flex [&_svg]:size-10"
+          className="hidden h-12 w-12 rounded-full bg-secondary/20 text-background hover:bg-secondary/40 dark:bg-muted/20 dark:text-foreground dark:hover:bg-muted/40 lg:flex [&_svg]:size-10"
         />
       </div>
     </Container>

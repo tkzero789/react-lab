@@ -1,7 +1,13 @@
 import Nextjs from "@/components/icons/nextjs-icon";
 import Replicas from "@/components/icons/replicas-icon";
 import Threejs from "@/components/icons/threejs-icon";
+import { headers } from "next/headers";
 import Link from "next/link";
+
+const SUBDOMAIN_MAP: Record<string, string> = {
+  Apps: "apps",
+  Replicas: "replicas",
+};
 
 const cardItems = [
   {
@@ -27,14 +33,27 @@ const cardItems = [
   },
 ];
 
+function getSubdomainHref(title: string, fallbackHref: string, host: string) {
+  const subdomain = SUBDOMAIN_MAP[title];
+  if (!subdomain) return fallbackHref;
+
+  const isLocalhost = host.includes("localhost");
+  if (isLocalhost) return fallbackHref;
+
+  // e.g. thinhtran.dev → apps.thinhtran.dev
+  const baseDomain = host.replace(/^www\./, "");
+  return `https://${subdomain}.${baseDomain}`;
+}
+
 export default function Page() {
+  const host = headers().get("host") || "localhost";
   return (
     <div className="flex h-dvh w-full flex-col items-center justify-center gap-16">
       <h1>React Lab</h1>
       <div className="grid place-items-center gap-8 md:grid-cols-3">
         {cardItems.map((item) => (
           <Link
-            href={item.href}
+            href={getSubdomainHref(item.title, item.href, host)}
             key={item.title}
             className={`group size-40 rounded-xl bg-muted p-2 transition-all duration-300 lg:size-48 ${item.hoverBackground}`}
           >

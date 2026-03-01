@@ -17,12 +17,11 @@ import {
 } from "@/components/ui/drawer";
 import {
   NativeSelect,
-  NativeSelectOptGroup,
+
   NativeSelectOption,
 } from "@/components/ui/native-select";
 import { cn } from "@/lib/utils";
 import { Filter } from "lucide-react";
-import { useParams, useRouter } from "next/navigation";
 import React from "react";
 import { useIsMobile } from "@/hooks/use-mobile";
 
@@ -34,8 +33,7 @@ type MovieFilter = {
 
 export default function MovieFilter() {
   const isMobile = useIsMobile();
-  const router = useRouter();
-  const params = useParams();
+
   const [isOpen, setIsOpen] = React.useState<boolean>(false);
   const [filter, setFilter] = React.useState<{
     category: MovieFilter[];

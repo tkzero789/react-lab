@@ -3,7 +3,7 @@
 import * as React from "react";
 import {
   AppWindow,
-  CloudMoon,
+  CloudSun,
   Film,
   Laptop,
   ListChecks,
@@ -30,7 +30,7 @@ const sidebarItems = {
     {
       name: "Weather",
       url: "/apps/weather",
-      icon: CloudMoon,
+      icon: CloudSun,
     },
     {
       name: "Movie",

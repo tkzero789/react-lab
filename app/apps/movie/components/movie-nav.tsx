@@ -1,18 +1,15 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Menu, Search } from "lucide-react";
+import { Search } from "lucide-react";
 import Link from "next/link";
 import React from "react";
 import Container from "@/components/layout/container";
 import { useParams } from "next/navigation";
 import { cn } from "@/lib/utils";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import MovieFilter from "./movie-filter";
+import MovieMenu from "./movie-menu";
+
 type MovieType = {
   title: string;
   params?: "movie" | "series" | "hoathinh" | "tv-shows";
@@ -72,34 +69,14 @@ export default function MovieNav() {
             </Button>
           ))}
         </div>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild className="lg:hidden">
-            <Button variant="muted">
-              <Menu /> Menu
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent className="w-56" align="start">
-            {movieTypes.map((type) => (
-              <DropdownMenuItem
-                key={type.title}
-                asChild
-                className={cn(type.params === params.type && "bg-muted")}
-              >
-                <Link
-                  href={
-                    type?.params ? `/apps/movie/${type?.params}` : `/apps/movie`
-                  }
-                >
-                  {type.title}
-                </Link>
-              </DropdownMenuItem>
-            ))}
-          </DropdownMenuContent>
-        </DropdownMenu>
-        <Button variant="muted">
-          <Search />
-          Search
-        </Button>
+        <MovieMenu paramsType={params?.type as string} />
+        <div className="flex items-center gap-2 lg:gap-4">
+          {params.type && <MovieFilter />}
+          <Button variant="muted">
+            <Search />
+            <span className="hidden lg:block">Search</span>
+          </Button>
+        </div>
       </Container>
     </div>
   );

@@ -43,9 +43,10 @@ function getSubdomainHref(title: string, fallbackHref: string, host: string) {
     return `http://${subdomain}.${host}`;
   }
 
-  // e.g. thinhtran.dev → apps.thinhtran.dev
-  const baseDomain = host.replace(/^www\./, "");
-  return `https://${subdomain}.${baseDomain}`;
+  // e.g. lab.thinhtran.dev → apps.thinhtran.dev
+  const parts = host.replace(/^www\./, "").split(".");
+  const rootDomain = parts.slice(-2).join(".");
+  return `https://${subdomain}.${rootDomain}`;
 }
 
 export default function Page() {

@@ -3,6 +3,7 @@ import DashboardBreadcrumb from "../components/dashboard-breadcrumb";
 import MovieBannerCarousel from "./components/movie-banner-carousel";
 import MovieNav from "./components/movie-nav";
 import MovieCarousel from "./components/movie-carousel";
+import { appPath } from "@/lib/paths";
 
 export default function MoviePage() {
   return (
@@ -11,7 +12,7 @@ export default function MoviePage() {
         breadcrumbs={[
           {
             title: "Apps",
-            href: "/apps",
+            href: appPath("/apps"),
           },
           {
             title: "Movie",

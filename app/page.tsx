@@ -38,7 +38,10 @@ function getSubdomainHref(title: string, fallbackHref: string, host: string) {
   if (!subdomain) return fallbackHref;
 
   const isLocalhost = host.includes("localhost");
-  if (isLocalhost) return fallbackHref;
+  if (isLocalhost) {
+    // e.g. localhost:3000 → apps.localhost:3000
+    return `http://${subdomain}.${host}`;
+  }
 
   // e.g. thinhtran.dev → apps.thinhtran.dev
   const baseDomain = host.replace(/^www\./, "");

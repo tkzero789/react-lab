@@ -8,6 +8,7 @@ import {
   Laptop,
   ListChecks,
   PieChart,
+  ShoppingBasket,
 } from "lucide-react";
 import { NavApps } from "./nav-app";
 import { NavProjects } from "@/components/sidebar/nav-projects";
@@ -36,6 +37,11 @@ const sidebarItems = {
       name: "Movie",
       url: "/apps/movie",
       icon: Film,
+    },
+    {
+      name: "Grocery",
+      url: "/apps/grocery",
+      icon: ShoppingBasket,
     },
   ],
   projects: [

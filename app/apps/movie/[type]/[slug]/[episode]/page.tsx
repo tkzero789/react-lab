@@ -7,6 +7,7 @@ import DashboardContainer from "@/components/layout/dashboard-container";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import MovieVideo from "../../../components/movie-video";
+import { appPathClient } from "@/lib/paths-client";
 
 type MovieDetail = {
   name: string;
@@ -87,19 +88,21 @@ export default function EpisodePage() {
         breadcrumbs={[
           {
             title: "Apps",
-            href: "/apps",
+            href: appPathClient("/apps"),
           },
           {
             title: "Movie",
-            href: "/apps/movie",
+            href: appPathClient("/apps/movie"),
           },
           {
             title: typeTitle,
-            href: `/apps/movie/${movie?.type === "tvshows" ? "tv-shows" : movie?.type}`,
+            href: appPathClient(
+              `/apps/movie/${movie?.type === "tvshows" ? "tv-shows" : movie?.type}`,
+            ),
           },
           {
             title: movie?.name ?? "",
-            href: `/apps/movie/${movie?.type}/${movie?.slug}`,
+            href: appPathClient(`/apps/movie/${movie?.type}/${movie?.slug}`),
           },
           { title: `Tập ${episodeNumber}` },
         ]}
@@ -116,7 +119,11 @@ export default function EpisodePage() {
                 variant={episode.slug === params.episode ? "primary" : "muted"}
                 size="sm"
               >
-                <Link href={`/apps/movie/${movie?.slug}/${episode.slug}`}>
+                <Link
+                  href={appPathClient(
+                    `/apps/movie/${movie?.type}/${movie?.slug}/${episode.slug}`,
+                  )}
+                >
                   {episode.slug === "full"
                     ? "Full"
                     : `Tập ${episode.name.split(" ")[1]}`}

@@ -12,7 +12,6 @@ export function middleware(request: NextRequest) {
 
   if (SUBDOMAINS.includes(subdomain)) {
     // Skip if the path already starts with the subdomain prefix
-    // (prevents double rewriting)
     if (pathname.startsWith(`/${subdomain}`)) {
       return NextResponse.next();
     }

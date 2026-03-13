@@ -1,7 +1,7 @@
 import Link from "next/link";
 import React from "react";
 import { cn } from "@/lib/utils";
-import { appPathClient } from "@/lib/paths-client";
+import { pathClient } from "@/lib/path-client";
 
 type Movie = {
   _id: string;
@@ -36,7 +36,9 @@ export default function MovieCard({ movie }: Props) {
 
   return (
     <Link
-      href={appPathClient(`/apps/movie/${movie.type === "tvshows" ? "tv-shows" : movie.type}/${movie.slug}`)}
+      href={pathClient(
+        `/apps/movie/${movie.type === "tvshows" ? "tv-shows" : movie.type}/${movie.slug}`,
+      )}
       className="group"
     >
       <div className="relative h-[16rem] overflow-hidden rounded-xl min-[425px]:h-[20rem] sm:h-[18rem] lg:h-[22rem]">

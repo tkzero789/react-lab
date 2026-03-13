@@ -8,7 +8,7 @@ import MovieCard from "../components/movie-card";
 import { Skeleton } from "@/components/ui/skeleton";
 import MoviePagination from "../components/movie-pagination";
 import Container from "@/components/layout/container";
-import { appPathClient } from "@/lib/paths-client";
+import { pathClient } from "@/lib/path-client";
 
 type MovieType = {
   title: string;
@@ -135,11 +135,11 @@ export default function MovieTypePage() {
         breadcrumbs={[
           {
             title: "Apps",
-            href: appPathClient("/apps"),
+            href: pathClient("/apps"),
           },
           {
             title: "Movie",
-            href: appPathClient("/apps/movie"),
+            href: pathClient("/apps/movie"),
           },
           {
             title: typeTitle,
@@ -161,7 +161,7 @@ export default function MovieTypePage() {
               ))}
         </div>
         <MoviePagination
-          path={appPathClient(`/apps/movie/${movieType}`)}
+          path={pathClient(`/apps/movie/${movieType}`)}
           currentPage={Number(currentPage)}
           totalPages={movies.params.pagination.totalPages}
         />

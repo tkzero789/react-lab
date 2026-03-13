@@ -10,6 +10,7 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { usePathname } from "next/navigation";
+import { pathClient } from "@/lib/path-client";
 
 type AppSidebar = {
   name: string;
@@ -27,7 +28,8 @@ export function NavApps({ apps }: Props) {
 
   const activeAppSidebar = apps.map((app) => ({
     ...app,
-    isActive: pathName.startsWith(app.url),
+    url: pathClient(app.url),
+    isActive: pathName.startsWith(pathClient(app.url)),
   }));
 
   return (

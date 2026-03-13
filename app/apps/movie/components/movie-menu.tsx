@@ -13,10 +13,10 @@ import {
   DrawerTrigger,
 } from "@/components/ui/drawer";
 import { cn } from "@/lib/utils";
-import { appPathClient } from "@/lib/paths-client";
 import { Menu } from "lucide-react";
 import Link from "next/link";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { pathClient } from "@/lib/path-client";
 
 type MovieType = {
   title: string;
@@ -81,7 +81,9 @@ export default function MovieMenu({ paramsType }: Props) {
               >
                 <Link
                   href={
-                    type?.params ? appPathClient(`/apps/movie/${type?.params}`) : appPathClient(`/apps/movie`)
+                    type?.params
+                      ? pathClient(`/apps/movie/${type?.params}`)
+                      : pathClient(`/apps/movie`)
                   }
                 >
                   {type.title}
@@ -109,7 +111,9 @@ export default function MovieMenu({ paramsType }: Props) {
             >
               <Link
                 href={
-                  type?.params ? appPathClient(`/apps/movie/${type?.params}`) : appPathClient(`/apps/movie`)
+                  type?.params
+                    ? appPathClient(`/apps/movie/${type?.params}`)
+                    : appPathClient(`/apps/movie`)
                 }
               >
                 {type.title}

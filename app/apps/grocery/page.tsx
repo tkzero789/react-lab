@@ -6,10 +6,11 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import DashboardBreadcrumb from "../components/dashboard-breadcrumb";
 import DashboardContainer from "@/components/layout/dashboard-container";
-import { appPathClient } from "@/lib/paths-client";
+
 import { Check, Pencil, Plus, RotateCcw, Trash2, X } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+import { pathClient } from "@/lib/path-client";
 
 const STORAGE_KEY = "grocery-app";
 
@@ -206,7 +207,7 @@ export default function GroceryPage() {
     <>
       <DashboardBreadcrumb
         breadcrumbs={[
-          { title: "Apps", href: appPathClient("/apps") },
+          { title: "Apps", href: pathClient("/apps") },
           { title: "Grocery" },
         ]}
       />

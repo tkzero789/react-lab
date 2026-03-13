@@ -7,9 +7,9 @@ import React from "react";
 import Container from "@/components/layout/container";
 import { useParams } from "next/navigation";
 import { cn } from "@/lib/utils";
-import { appPathClient } from "@/lib/paths-client";
 import MovieFilter from "./movie-filter";
 import MovieMenu from "./movie-menu";
+import { pathClient } from "@/lib/path-client";
 
 type MovieType = {
   title: string;
@@ -62,7 +62,9 @@ export default function MovieNav() {
             >
               <Link
                 href={
-                  type?.params ? appPathClient(`/apps/movie/${type?.params}`) : appPathClient(`/apps/movie`)
+                  type?.params
+                    ? pathClient(`/apps/movie/${type?.params}`)
+                    : pathClient(`/apps/movie`)
                 }
               >
                 {type.title}

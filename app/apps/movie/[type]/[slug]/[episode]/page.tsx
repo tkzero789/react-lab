@@ -7,7 +7,7 @@ import DashboardContainer from "@/components/layout/dashboard-container";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import MovieVideo from "../../../components/movie-video";
-import { appPathClient } from "@/lib/paths-client";
+import { pathClient } from "@/lib/path-client";
 
 type MovieDetail = {
   name: string;
@@ -88,21 +88,21 @@ export default function EpisodePage() {
         breadcrumbs={[
           {
             title: "Apps",
-            href: appPathClient("/apps"),
+            href: pathClient("/apps"),
           },
           {
             title: "Movie",
-            href: appPathClient("/apps/movie"),
+            href: pathClient("/apps/movie"),
           },
           {
             title: typeTitle,
-            href: appPathClient(
+            href: pathClient(
               `/apps/movie/${movie?.type === "tvshows" ? "tv-shows" : movie?.type}`,
             ),
           },
           {
             title: movie?.name ?? "",
-            href: appPathClient(`/apps/movie/${movie?.type}/${movie?.slug}`),
+            href: pathClient(`/apps/movie/${movie?.type}/${movie?.slug}`),
           },
           { title: `Tập ${episodeNumber}` },
         ]}
@@ -120,7 +120,7 @@ export default function EpisodePage() {
                 size="sm"
               >
                 <Link
-                  href={appPathClient(
+                  href={pathClient(
                     `/apps/movie/${movie?.type}/${movie?.slug}/${episode.slug}`,
                   )}
                 >

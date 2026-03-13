@@ -8,7 +8,7 @@ import {
   PaginationLink,
 } from "@/components/ui/pagination";
 import { useSearchParams } from "next/navigation";
-import { appPathClient } from "@/lib/paths-client";
+import { pathClient } from "@/lib/path-client";
 
 type Props = {
   totalPage: number;
@@ -34,7 +34,9 @@ export default function SearchPagination({ totalPage }: Props) {
         {pageArray.map((item, index) => (
           <PaginationItem key={index}>
             <PaginationLink
-              href={appPathClient(`/apps/movie/search?s=${searchTerm}&page=${item.page}`)}
+              href={pathClient(
+                `/apps/movie/search?s=${searchTerm}&page=${item.page}`,
+              )}
               isActive={Number(currentPage) === item.id}
             >
               {item.page}

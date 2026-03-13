@@ -9,6 +9,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
+import { pathClient } from "@/lib/path-client";
 
 export function NavProjects({
   projects,
@@ -26,7 +27,7 @@ export function NavProjects({
         {projects.map((item) => (
           <SidebarMenuItem key={item.name}>
             <SidebarMenuButton asChild>
-              <a href={item.url}>
+              <a href={pathClient(item.url)}>
                 <item.icon />
                 <span>{item.name}</span>
               </a>

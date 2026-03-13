@@ -1,9 +1,9 @@
 "use client";
 
 import { Input } from "@/components/ui/input";
+import { pathClient } from "@/lib/path-client";
 import { useRouter } from "next/navigation";
 import React, { ChangeEvent, FormEvent } from "react";
-import { appPathClient } from "@/lib/paths-client";
 
 export default function MovieSearch() {
   const router = useRouter();
@@ -17,7 +17,7 @@ export default function MovieSearch() {
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formatSearchTerm = searchTerm.trim().split(" ").join("-");
-    router.push(appPathClient(`/apps/movie/search?s=${formatSearchTerm}&page=1`));
+    router.push(pathClient(`/apps/movie/search?s=${formatSearchTerm}&page=1`));
   };
 
   return (

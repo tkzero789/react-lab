@@ -112,8 +112,8 @@ export default function MovieMenu({ paramsType }: Props) {
               <Link
                 href={
                   type?.params
-                    ? appPathClient(`/apps/movie/${type?.params}`)
-                    : appPathClient(`/apps/movie`)
+                    ? pathClient(`/apps/movie/${type?.params}`)
+                    : pathClient(`/apps/movie`)
                 }
               >
                 {type.title}

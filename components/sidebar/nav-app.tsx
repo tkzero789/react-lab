@@ -29,7 +29,7 @@ export function NavApps({ apps }: Props) {
   const activeAppSidebar = apps.map((app) => ({
     ...app,
     url: pathClient(app.url),
-    isActive: pathName.startsWith(pathClient(app.url)),
+    isActive: pathName.startsWith(app.url),
   }));
 
   return (

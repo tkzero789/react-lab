@@ -6,10 +6,19 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import DashboardBreadcrumb from "../components/dashboard-breadcrumb";
 import DashboardContainer from "@/components/layout/dashboard-container";
-
 import { Check, Pencil, Plus, RotateCcw, Trash2, X } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/components/ui/drawer";
 
 const STORAGE_KEY = "grocery-app";
 
@@ -83,11 +92,7 @@ export default function GroceryPage() {
   function handleAddIngredient(e: React.FormEvent) {
     e.preventDefault();
     if (!name.trim()) {
-      toast.error("Ingredient name is required");
-      return;
-    }
-    if (!price.trim()) {
-      toast.error("Price is required");
+      toast.error("Item name is required");
       return;
     }
     const isDuplicate = ingredients.some(
@@ -217,8 +222,9 @@ export default function GroceryPage() {
                   variant="ghost"
                   size="sm"
                   className={cn(
-                    "hover:bg-background hover:text-foreground",
-                    tab === "ingredient" && "bg-background shadow-sm",
+                    "hover:bg-background hover:text-foreground dark:hover:bg-foreground dark:hover:text-background",
+                    tab === "ingredient" &&
+                      "bg-background dark:bg-foreground dark:text-secondary-foreground",
                   )}
                   onClick={() => setTab("ingredient")}
                 >
@@ -228,8 +234,9 @@ export default function GroceryPage() {
                   variant="ghost"
                   size="sm"
                   className={cn(
-                    "hover:bg-background hover:text-foreground",
-                    tab === "dish" && "bg-background shadow-sm",
+                    "hover:bg-background hover:text-foreground dark:hover:bg-foreground dark:hover:text-background",
+                    tab === "dish" &&
+                      "bg-background dark:bg-foreground dark:text-secondary-foreground",
                   )}
                   onClick={() => setTab("dish")}
                 >
@@ -326,13 +333,34 @@ export default function GroceryPage() {
                           className="flex items-center justify-between rounded-xl bg-muted px-4 py-2 text-sm"
                         >
                           <span className="font-medium">{dish.name}</span>
-                          <Button
-                            variant="ghost"
-                            size="icon-sm"
-                            onClick={() => handleRemoveDish(dish.id)}
-                          >
-                            <X />
-                          </Button>
+
+                          <Drawer>
+                            <DrawerTrigger asChild>
+                              <Button variant="ghost" size="icon-sm">
+                                <Trash2 />
+                              </Button>
+                            </DrawerTrigger>
+                            <DrawerContent>
+                              <DrawerHeader>
+                                <DrawerTitle>Delete dish</DrawerTitle>
+                                <DrawerDescription>
+                                  {dish.name}
+                                </DrawerDescription>
+                              </DrawerHeader>
+                              <DrawerFooter>
+                                <Button
+                                  onClick={() => handleRemoveDish(dish.id)}
+                                >
+                                  Delete
+                                </Button>
+                                <DrawerClose>
+                                  <Button variant="outline" className="w-full">
+                                    Cancel
+                                  </Button>
+                                </DrawerClose>
+                              </DrawerFooter>
+                            </DrawerContent>
+                          </Drawer>
                         </div>
                       ))}
                     </div>
@@ -447,11 +475,7 @@ function IngredientRow({
 
   function handleSave() {
     if (!editName.trim()) {
-      toast.error("Ingredient name is required");
-      return;
-    }
-    if (!editPrice.trim()) {
-      toast.error("Price is required");
+      toast.error("Item name is required");
       return;
     }
     const success = onEdit(item.id, {
@@ -525,7 +549,7 @@ function IngredientRow({
             </div>
           </div>
         )}
-        <div className="flex justify-end gap-1">
+        <div className="flex justify-end gap-2">
           <Button variant="ghost" size="sm" onClick={handleCancel}>
             <X className="size-4" />
             Cancel
@@ -571,13 +595,30 @@ function IngredientRow({
         <Button variant="ghost" size="icon-sm" onClick={() => setEditing(true)}>
           <Pencil />
         </Button>
-        <Button
-          variant="ghost"
-          size="icon-sm"
-          onClick={() => onRemove(item.id)}
-        >
-          <Trash2 />
-        </Button>
+
+        <Drawer>
+          <DrawerTrigger asChild>
+            <Button variant="ghost" size="icon-sm">
+              <Trash2 />
+            </Button>
+          </DrawerTrigger>
+          <DrawerContent>
+            <DrawerHeader>
+              <DrawerTitle>Delete ingredient</DrawerTitle>
+              <DrawerDescription>{item.name}</DrawerDescription>
+            </DrawerHeader>
+            <DrawerFooter>
+              <Button variant="destructive" onClick={() => onRemove(item.id)}>
+                Delete
+              </Button>
+              <DrawerClose>
+                <Button variant="outline" className="w-full">
+                  Cancel
+                </Button>
+              </DrawerClose>
+            </DrawerFooter>
+          </DrawerContent>
+        </Drawer>
       </div>
     </div>
   );

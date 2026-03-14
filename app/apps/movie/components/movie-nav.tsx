@@ -9,7 +9,6 @@ import { useParams } from "next/navigation";
 import { cn } from "@/lib/utils";
 import MovieFilter from "./movie-filter";
 import MovieMenu from "./movie-menu";
-import { pathClient } from "@/lib/path-client";
 
 type MovieType = {
   title: string;
@@ -60,13 +59,7 @@ export default function MovieNav() {
                   "bg-background dark:bg-foreground dark:text-secondary-foreground",
               )}
             >
-              <Link
-                href={
-                  type?.params
-                    ? pathClient(`/apps/movie/${type?.params}`)
-                    : pathClient(`/apps/movie`)
-                }
-              >
+              <Link href={type?.params ? `/movie/${type?.params}` : `/movie`}>
                 {type.title}
               </Link>
             </Button>

@@ -3,7 +3,6 @@ import DashboardBreadcrumb from "./components/dashboard-breadcrumb";
 import DashboardContainer from "@/components/layout/dashboard-container";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { pathServer } from "@/lib/path-server";
 
 export const metadata: Metadata = {
   title: "Apps",
@@ -41,7 +40,7 @@ export default function AppsPage() {
       <DashboardContainer className="grid grid-cols-1 gap-4 lg:grid-cols-3">
         {apps.map((app) => (
           <Button key={app.title} asChild variant="muted">
-            <Link href={pathServer(app.href)}>{app.title}</Link>
+            <Link href={app.href}>{app.title}</Link>
           </Button>
         ))}
       </DashboardContainer>

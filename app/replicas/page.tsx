@@ -8,13 +8,12 @@ import Emirates from "@/public/images/emirates/emirates.webp";
 import TelaDochealth from "@/public/images/teladochealth/teladochealth.webp";
 import Spotify from "@/public/images/spotify/spotify.webp";
 import Sixsenses from "@/public/images/sixsenses/sixsenses.webp";
-import { pathServer } from "@/lib/path-server";
 
 const replicas = [
   {
     title: "Appwrite",
     img: Appwrite,
-    href: "/replicas/appwrite",
+    href: "/appwrite",
   },
   {
     title: "The Port of Virginia",
@@ -55,7 +54,7 @@ export default function ReplicasPage() {
       <div className="grid w-full max-w-7xl gap-10 px-4 lg:grid-cols-2 xl:grid-cols-3 xl:px-0">
         {replicas.map((item) => (
           <Link
-            href={pathServer(item.href)}
+            href={item.href}
             key={item.title}
             className="group flex flex-col rounded-xl bg-neutral-100 p-2"
           >

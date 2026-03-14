@@ -16,7 +16,6 @@ import { cn } from "@/lib/utils";
 import { Menu } from "lucide-react";
 import Link from "next/link";
 import { useIsMobile } from "@/hooks/use-mobile";
-import { pathClient } from "@/lib/path-client";
 
 type MovieType = {
   title: string;
@@ -79,13 +78,7 @@ export default function MovieMenu({ paramsType }: Props) {
                     "bg-primary text-primary-foreground",
                 )}
               >
-                <Link
-                  href={
-                    type?.params
-                      ? pathClient(`/apps/movie/${type?.params}`)
-                      : pathClient(`/apps/movie`)
-                  }
-                >
+                <Link href={type?.params ? `/movie/${type?.params}` : `/movie`}>
                   {type.title}
                 </Link>
               </Button>
@@ -109,13 +102,7 @@ export default function MovieMenu({ paramsType }: Props) {
               asChild
               className={cn(type.params === paramsType && "bg-muted")}
             >
-              <Link
-                href={
-                  type?.params
-                    ? pathClient(`/apps/movie/${type?.params}`)
-                    : pathClient(`/apps/movie`)
-                }
-              >
+              <Link href={type?.params ? `/movie/${type?.params}` : `/movie`}>
                 {type.title}
               </Link>
             </DropdownMenuItem>

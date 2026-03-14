@@ -10,9 +10,7 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { usePathname } from "next/navigation";
-import { pathClient } from "@/lib/path-client";
 import Link from "next/link";
-import { useEffect, useState } from "react";
 
 type AppSidebar = {
   name: string;
@@ -27,15 +25,8 @@ type Props = {
 
 export function NavApps({ apps }: Props) {
   const pathName = usePathname();
-  const [resolvedApps, setResolvedApps] = useState(apps);
 
-  useEffect(() => {
-    setResolvedApps(
-      apps.map((app) => ({ ...app, url: pathClient(app.url) }))
-    );
-  }, [apps]);
-
-  const activeAppSidebar = resolvedApps.map((app, i) => ({
+  const activeAppSidebar = apps.map((app, i) => ({
     ...app,
     isActive: pathName.startsWith(apps[i].url),
   }));

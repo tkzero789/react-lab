@@ -8,7 +8,6 @@ import MovieCard from "../components/movie-card";
 import { Skeleton } from "@/components/ui/skeleton";
 import MoviePagination from "../components/movie-pagination";
 import Container from "@/components/layout/container";
-import { pathClient } from "@/lib/path-client";
 
 type MovieType = {
   title: string;
@@ -161,7 +160,7 @@ export default function MovieTypePage() {
               ))}
         </div>
         <MoviePagination
-          path={pathClient(`/apps/movie/${movieType}`)}
+          path={`/movie/${movieType}`}
           currentPage={Number(currentPage)}
           totalPages={movies.params.pagination.totalPages}
         />

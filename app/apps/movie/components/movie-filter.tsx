@@ -17,7 +17,6 @@ import {
 } from "@/components/ui/drawer";
 import {
   NativeSelect,
-
   NativeSelectOption,
 } from "@/components/ui/native-select";
 import { cn } from "@/lib/utils";
@@ -76,14 +75,6 @@ export default function MovieFilter() {
       ...prev,
       [filterType]: filterObject,
     }));
-
-    // const currentParams = new URLSearchParams(window.location.search);
-    // currentParams.set(
-    //   filterType === "category" ? "category" : "country",
-    //   filterObject.slug,
-    // );
-    // const newUrl = `/apps/movie/${params.type}?${currentParams.toString()}`;
-    // router.push(newUrl);
   };
 
   if (isMobile) {

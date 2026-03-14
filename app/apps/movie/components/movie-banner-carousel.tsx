@@ -16,7 +16,6 @@ import useEmblaCarousel from "embla-carousel-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import Container from "@/components/layout/container";
 import Autoplay from "embla-carousel-autoplay";
-import { pathClient } from "@/lib/path-client";
 
 type Movie = {
   _id: string;
@@ -83,7 +82,7 @@ export default function MovieBannerCarousel() {
             {movies.map((movie) => (
               <CarouselItem key={movie._id}>
                 <Link
-                  href={pathClient(`/apps/movie/${movie.type}/${movie.slug}`)}
+                  href={`/movie/${movie.type}/${movie.slug}`}
                   title={movie.name}
                   className="relative"
                 >

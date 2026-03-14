@@ -8,7 +8,6 @@ import { useParams } from "next/navigation";
 import Link from "next/link";
 import DashboardBreadcrumb from "@/app/apps/components/dashboard-breadcrumb";
 import { Skeleton } from "@/components/ui/skeleton";
-import { pathClient } from "@/lib/path-client";
 
 type MovieDetail = {
   name: string;
@@ -59,8 +58,8 @@ export default function MovieDetailPage() {
 
   let typeTitle: string = "";
   switch (movie?.type as string) {
-    case "movie":
-      typeTitle = "Movie";
+    case "single":
+      typeTitle = "Single";
       break;
     case "series":
       typeTitle = "Series";
@@ -81,23 +80,23 @@ export default function MovieDetailPage() {
     }
   };
 
+  console.log(movie?.type);
+
   return (
     <>
       <DashboardBreadcrumb
         breadcrumbs={[
           {
             title: "Apps",
-            href: pathClient("/apps"),
+            href: "/",
           },
           {
             title: "Movie",
-            href: pathClient("/apps/movie"),
+            href: "/movie",
           },
           {
             title: typeTitle,
-            href: pathClient(
-              `/apps/movie/${movie?.type === "tvshows" ? "tv-shows" : movie?.type}`,
-            ),
+            href: `/movie/${movie?.type === "tvshows" ? "tv-shows" : movie?.type}`,
           },
           {
             title: movie?.name ?? "",
@@ -192,9 +191,7 @@ export default function MovieDetailPage() {
                       size="sm"
                     >
                       <Link
-                        href={pathClient(
-                          `/apps/movie/${movie.type}/${movie.slug}/${episode.slug}`,
-                        )}
+                        href={`/movie/${movie.type}/${movie.slug}/${episode.slug}`}
                       >
                         {episode.slug === "full"
                           ? "Full"

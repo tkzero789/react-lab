@@ -13,15 +13,15 @@ import { pathClient } from "@/lib/path-client";
 
 type MovieType = {
   title: string;
-  params?: "movie" | "series" | "hoathinh" | "tv-shows";
+  params?: "single" | "series" | "hoathinh" | "tv-shows";
   typeList?: "phim-le" | "phim-bo" | "hoat-hinh" | "tv-shows";
 };
 
 const movieTypes: MovieType[] = [
   { title: "Home" },
   {
-    title: "Movie",
-    params: "movie",
+    title: "Single",
+    params: "single",
     typeList: "phim-le",
   },
   {

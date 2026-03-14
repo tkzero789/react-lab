@@ -43,7 +43,7 @@ export default function TodoPage() {
         breadcrumbs={[
           {
             title: "Apps",
-            href: "/apps",
+            href: "/",
           },
           {
             title: "Todo",

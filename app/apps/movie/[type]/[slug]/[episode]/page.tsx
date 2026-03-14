@@ -63,8 +63,8 @@ export default function EpisodePage() {
 
   let typeTitle: string = "";
   switch (movie?.type as string) {
-    case "movie":
-      typeTitle = "Movie";
+    case "single":
+      typeTitle = "Single";
       break;
     case "series":
       typeTitle = "Series";
@@ -88,7 +88,7 @@ export default function EpisodePage() {
         breadcrumbs={[
           {
             title: "Apps",
-            href: pathClient("/apps"),
+            href: "/apps",
           },
           {
             title: "Movie",

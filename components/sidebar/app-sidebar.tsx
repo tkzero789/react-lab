@@ -25,27 +25,27 @@ const sidebarItems = {
   apps: [
     {
       name: "Todo",
-      url: "/apps/todo",
+      url: "/todo",
       icon: ListChecks,
     },
     {
       name: "Weather",
-      url: "/apps/weather",
+      url: "/weather",
       icon: CloudSun,
     },
     {
       name: "Movie",
-      url: "/apps/movie",
+      url: "/movie",
       icon: Film,
     },
     {
       name: "Grocery",
-      url: "/apps/grocery",
+      url: "/grocery",
       icon: ShoppingBasket,
     },
   ],
   projects: [
-    { name: "Apps", url: "/apps", icon: AppWindow },
+    { name: "Apps", url: "/", icon: AppWindow },
     {
       name: "Web Replicas",
       url: "#",

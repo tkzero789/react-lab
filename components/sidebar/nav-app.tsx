@@ -11,6 +11,8 @@ import {
 } from "@/components/ui/sidebar";
 import { usePathname } from "next/navigation";
 import { pathClient } from "@/lib/path-client";
+import Link from "next/link";
+import { useEffect, useState } from "react";
 
 type AppSidebar = {
   name: string;
@@ -25,24 +27,30 @@ type Props = {
 
 export function NavApps({ apps }: Props) {
   const pathName = usePathname();
+  const [resolvedApps, setResolvedApps] = useState(apps);
 
-  const activeAppSidebar = apps.map((app) => ({
+  useEffect(() => {
+    setResolvedApps(
+      apps.map((app) => ({ ...app, url: pathClient(app.url) }))
+    );
+  }, [apps]);
+
+  const activeAppSidebar = resolvedApps.map((app, i) => ({
     ...app,
-    url: pathClient(app.url),
-    isActive: pathName.startsWith(app.url),
+    isActive: pathName.startsWith(apps[i].url),
   }));
 
   return (
     <SidebarGroup className="group-data-[collapsible=icon]:hidden">
-      <SidebarGroupLabel>Projects</SidebarGroupLabel>
+      <SidebarGroupLabel>Apps</SidebarGroupLabel>
       <SidebarMenu>
         {activeAppSidebar.map((app: AppSidebar) => (
           <SidebarMenuItem key={app.name}>
             <SidebarMenuButton asChild isActive={app.isActive}>
-              <a href={app.url}>
+              <Link href={app.url}>
                 <app.icon />
                 <span>{app.name}</span>
-              </a>
+              </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
         ))}

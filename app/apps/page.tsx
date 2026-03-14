@@ -12,19 +12,19 @@ export const metadata: Metadata = {
 const apps = [
   {
     title: "Todo",
-    href: "/apps/todo",
+    href: "/todo",
   },
   {
     title: "Weather",
-    href: "/apps/weather",
+    href: "/weather",
   },
   {
     title: "Movie",
-    href: "/apps/movie",
+    href: "/movie",
   },
   {
     title: "Grocery",
-    href: "/apps/grocery",
+    href: "/grocery",
   },
 ];
 

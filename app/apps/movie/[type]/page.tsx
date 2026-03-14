@@ -12,15 +12,15 @@ import { pathClient } from "@/lib/path-client";
 
 type MovieType = {
   title: string;
-  params?: "movie" | "series" | "hoathinh" | "tv-shows";
+  params?: "single" | "series" | "hoathinh" | "tv-shows";
   typeList?: "phim-le" | "phim-bo" | "hoat-hinh" | "tv-shows";
 };
 
 const movieTypes: MovieType[] = [
   { title: "Home" },
   {
-    title: "Movie",
-    params: "movie",
+    title: "Single",
+    params: "single",
     typeList: "phim-le",
   },
   {
@@ -115,8 +115,8 @@ export default function MovieTypePage() {
 
   let typeTitle: string = "";
   switch (movieType as string) {
-    case "movie":
-      typeTitle = "Movie";
+    case "single":
+      typeTitle = "Single";
       break;
     case "series":
       typeTitle = "Series";
@@ -135,11 +135,11 @@ export default function MovieTypePage() {
         breadcrumbs={[
           {
             title: "Apps",
-            href: pathClient("/apps"),
+            href: "/apps",
           },
           {
             title: "Movie",
-            href: pathClient("/apps/movie"),
+            href: "/movie",
           },
           {
             title: typeTitle,

@@ -88,7 +88,7 @@ export default function WeatherPage() {
         breadcrumbs={[
           {
             title: "Apps",
-            href: "/apps",
+            href: "/",
           },
           {
             title: "Weather",

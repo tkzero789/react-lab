@@ -10,7 +10,6 @@ import DashboardContainer from "@/components/layout/dashboard-container";
 import { Check, Pencil, Plus, RotateCcw, Trash2, X } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
-import { pathClient } from "@/lib/path-client";
 
 const STORAGE_KEY = "grocery-app";
 
@@ -206,10 +205,7 @@ export default function GroceryPage() {
   return (
     <>
       <DashboardBreadcrumb
-        breadcrumbs={[
-          { title: "Apps", href: pathClient("/apps") },
-          { title: "Grocery" },
-        ]}
+        breadcrumbs={[{ title: "Apps", href: "/" }, { title: "Grocery" }]}
       />
       <DashboardContainer className="max-w-3xl">
         <div className="flex flex-col gap-4">

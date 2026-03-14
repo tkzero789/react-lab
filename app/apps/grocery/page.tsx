@@ -212,163 +212,182 @@ export default function GroceryPage() {
       <DashboardBreadcrumb
         breadcrumbs={[{ title: "Apps", href: "/" }, { title: "Grocery" }]}
       />
-      <DashboardContainer className="max-w-3xl">
+      <DashboardContainer className="max-w-3xl flex-1">
         <div className="flex flex-col gap-4">
           {/* Add card with tabs */}
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between">
-              <div className="flex h-10 w-fit items-center gap-1 rounded-xl bg-muted p-1">
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className={cn(
-                    "hover:bg-background hover:text-foreground dark:hover:bg-foreground dark:hover:text-background",
-                    tab === "ingredient" &&
-                      "bg-background dark:bg-foreground dark:text-secondary-foreground",
-                  )}
-                  onClick={() => setTab("ingredient")}
-                >
-                  Ingredient
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className={cn(
-                    "hover:bg-background hover:text-foreground dark:hover:bg-foreground dark:hover:text-background",
-                    tab === "dish" &&
-                      "bg-background dark:bg-foreground dark:text-secondary-foreground",
-                  )}
-                  onClick={() => setTab("dish")}
-                >
-                  Dish
-                </Button>
-              </div>
-              <Button variant="ghost" size="sm" onClick={handleReset}>
-                <RotateCcw />
-                Reset
+          <Drawer>
+            <DrawerTrigger asChild className="fixed bottom-8 right-8">
+              <Button>
+                <Plus /> Add
               </Button>
-            </CardHeader>
-            <CardContent className="flex flex-col gap-3">
-              {tab === "ingredient" ? (
-                <>
-                  <form
-                    onSubmit={handleAddIngredient}
-                    className="flex flex-col gap-2 sm:flex-row sm:items-center"
-                  >
-                    <Input
-                      value={name}
-                      onChange={(e) => setName(e.target.value)}
-                      placeholder="Ingredient name"
-                      className="flex-1"
-                    />
-                    <Input
-                      type="number"
-                      value={qty}
-                      onChange={(e) => setQty(e.target.value)}
-                      placeholder="Qty"
-                      className="w-full sm:w-20"
-                    />
-                    <Input
-                      type="number"
-                      step="0.01"
-                      min="0"
-                      value={price}
-                      onChange={(e) => setPrice(e.target.value)}
-                      placeholder="Price"
-                      className="w-full sm:w-24"
-                    />
-                    <Button type="submit">
-                      <Plus className="size-4" />
-                      Add
+            </DrawerTrigger>
+            <DrawerContent>
+              <DrawerHeader>
+                <DrawerTitle>Are you absolutely sure?</DrawerTitle>
+                <DrawerDescription>
+                  This action cannot be undone.
+                </DrawerDescription>
+              </DrawerHeader>
+              <Card>
+                <CardHeader className="flex flex-row items-center justify-between">
+                  <div className="flex h-10 w-fit items-center gap-1 rounded-xl bg-muted p-1">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className={cn(
+                        "hover:bg-background hover:text-foreground dark:hover:bg-foreground dark:hover:text-background",
+                        tab === "ingredient" &&
+                          "bg-background dark:bg-foreground dark:text-secondary-foreground",
+                      )}
+                      onClick={() => setTab("ingredient")}
+                    >
+                      Ingredient
                     </Button>
-                  </form>
-                  {/* Dish assignment */}
-                  {dishes.length > 0 && (
-                    <div className="flex flex-col gap-1.5">
-                      <span className="text-sm text-muted-foreground">
-                        Assign to dish (optional):
-                      </span>
-                      <div className="flex flex-wrap gap-1.5">
-                        {dishes.map((dish) => (
-                          <Button
-                            key={dish.id}
-                            type="button"
-                            variant={
-                              selectedDishIds.includes(dish.id)
-                                ? "primary"
-                                : "muted"
-                            }
-                            size="sm"
-                            onClick={() => toggleDishSelection(dish.id)}
-                          >
-                            {dish.name}
-                          </Button>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                </>
-              ) : (
-                <>
-                  <form
-                    onSubmit={handleAddDish}
-                    className="flex items-center gap-2"
-                  >
-                    <Input
-                      value={dishName}
-                      onChange={(e) => setDishName(e.target.value)}
-                      placeholder="Dish name (e.g. Spaghetti Bolognese)"
-                      className="flex-1"
-                    />
-                    <Button type="submit">
-                      <Plus className="size-4" />
-                      Add
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className={cn(
+                        "hover:bg-background hover:text-foreground dark:hover:bg-foreground dark:hover:text-background",
+                        tab === "dish" &&
+                          "bg-background dark:bg-foreground dark:text-secondary-foreground",
+                      )}
+                      onClick={() => setTab("dish")}
+                    >
+                      Dish
                     </Button>
-                  </form>
-                  {dishes.length > 0 && (
-                    <div className="flex flex-col gap-2">
-                      {dishes.map((dish) => (
-                        <div
-                          key={dish.id}
-                          className="flex items-center justify-between rounded-xl bg-muted px-4 py-2 text-sm"
-                        >
-                          <span className="font-medium">{dish.name}</span>
-
-                          <Drawer>
-                            <DrawerTrigger asChild>
-                              <Button variant="ghost" size="icon-sm">
-                                <Trash2 />
+                  </div>
+                  <Button variant="ghost" size="sm" onClick={handleReset}>
+                    <RotateCcw />
+                    Reset
+                  </Button>
+                </CardHeader>
+                <CardContent className="flex flex-col gap-3">
+                  {tab === "ingredient" ? (
+                    <>
+                      <form
+                        onSubmit={handleAddIngredient}
+                        className="flex flex-col gap-2 sm:flex-row sm:items-center"
+                      >
+                        <Input
+                          value={name}
+                          onChange={(e) => setName(e.target.value)}
+                          placeholder="Ingredient name"
+                          className="h-10 flex-1"
+                        />
+                        <Input
+                          type="number"
+                          value={qty}
+                          onChange={(e) => setQty(e.target.value)}
+                          placeholder="Qty"
+                          className="w-full sm:w-20"
+                        />
+                        <Input
+                          type="number"
+                          step="0.01"
+                          min="0"
+                          value={price}
+                          onChange={(e) => setPrice(e.target.value)}
+                          placeholder="Price"
+                          className="w-full sm:w-24"
+                        />
+                        <Button type="submit">
+                          <Plus className="size-4" />
+                          Add
+                        </Button>
+                      </form>
+                      {/* Dish assignment */}
+                      {dishes.length > 0 && (
+                        <div className="flex flex-col gap-1.5">
+                          <span className="text-sm text-muted-foreground">
+                            List of dishes:
+                          </span>
+                          <div className="flex flex-wrap gap-1.5">
+                            {dishes.map((dish) => (
+                              <Button
+                                key={dish.id}
+                                type="button"
+                                variant={
+                                  selectedDishIds.includes(dish.id)
+                                    ? "primary"
+                                    : "muted"
+                                }
+                                size="sm"
+                                onClick={() => toggleDishSelection(dish.id)}
+                              >
+                                {dish.name}
                               </Button>
-                            </DrawerTrigger>
-                            <DrawerContent>
-                              <DrawerHeader>
-                                <DrawerTitle>Delete dish</DrawerTitle>
-                                <DrawerDescription>
-                                  {dish.name}
-                                </DrawerDescription>
-                              </DrawerHeader>
-                              <DrawerFooter>
-                                <Button
-                                  onClick={() => handleRemoveDish(dish.id)}
-                                >
-                                  Delete
-                                </Button>
-                                <DrawerClose>
-                                  <Button variant="outline" className="w-full">
-                                    Cancel
-                                  </Button>
-                                </DrawerClose>
-                              </DrawerFooter>
-                            </DrawerContent>
-                          </Drawer>
+                            ))}
+                          </div>
                         </div>
-                      ))}
-                    </div>
+                      )}
+                    </>
+                  ) : (
+                    <>
+                      <form
+                        onSubmit={handleAddDish}
+                        className="flex items-center gap-2"
+                      >
+                        <Input
+                          value={dishName}
+                          onChange={(e) => setDishName(e.target.value)}
+                          placeholder="Dish name (e.g. Spaghetti Bolognese)"
+                          className="flex-1"
+                        />
+                        <Button type="submit">
+                          <Plus className="size-4" />
+                          Add
+                        </Button>
+                      </form>
+                      {dishes.length > 0 && (
+                        <div className="flex flex-col gap-2">
+                          {dishes.map((dish) => (
+                            <div
+                              key={dish.id}
+                              className="flex items-center justify-between rounded-xl bg-muted px-4 py-2 text-sm"
+                            >
+                              <span className="font-medium">{dish.name}</span>
+
+                              <Drawer>
+                                <DrawerTrigger asChild>
+                                  <Button variant="ghost" size="icon-sm">
+                                    <Trash2 />
+                                  </Button>
+                                </DrawerTrigger>
+                                <DrawerContent>
+                                  <DrawerHeader>
+                                    <DrawerTitle>Delete dish</DrawerTitle>
+                                    <DrawerDescription>
+                                      {dish.name}
+                                    </DrawerDescription>
+                                  </DrawerHeader>
+                                  <DrawerFooter>
+                                    <Button
+                                      variant="destructive"
+                                      onClick={() => handleRemoveDish(dish.id)}
+                                    >
+                                      Delete
+                                    </Button>
+                                    <DrawerClose>
+                                      <Button
+                                        variant="outline"
+                                        className="w-full"
+                                      >
+                                        Cancel
+                                      </Button>
+                                    </DrawerClose>
+                                  </DrawerFooter>
+                                </DrawerContent>
+                              </Drawer>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </>
                   )}
-                </>
-              )}
-            </CardContent>
-          </Card>
+                </CardContent>
+              </Card>
+            </DrawerContent>
+          </Drawer>
 
           {/* Grocery list */}
           {ingredients.length > 0 && (

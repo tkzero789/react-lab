@@ -8,6 +8,7 @@ import { toast } from "sonner";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import DashboardBreadcrumb from "../components/dashboard-breadcrumb";
 import DashboardContainer from "@/components/layout/dashboard-container";
+import { pathClient } from "@/lib/path-client";
 import styles from "./scss/todo.module.scss";
 
 export default function TodoPage() {
@@ -43,7 +44,7 @@ export default function TodoPage() {
         breadcrumbs={[
           {
             title: "Apps",
-            href: "/",
+            href: pathClient("/apps"),
           },
           {
             title: "Todo",

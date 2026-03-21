@@ -19,41 +19,41 @@ import {
   SidebarFooter,
   SidebarHeader,
 } from "@/components/ui/sidebar";
-import { TeamSwitcher } from "./team-switcher";
+import { SidebarUser } from "./sidebar-user";
 
 const sidebarItems = {
   apps: [
     {
       name: "Todo",
-      url: "/todo",
+      url: "/apps/todo",
       icon: ListChecks,
     },
     {
       name: "Weather",
-      url: "/weather",
+      url: "/apps/weather",
       icon: CloudSun,
     },
     {
       name: "Movie",
-      url: "/movie",
+      url: "/apps/movie",
       icon: Film,
     },
     {
       name: "Grocery",
-      url: "/grocery",
+      url: "/apps/grocery",
       icon: ShoppingBasket,
     },
   ],
   projects: [
-    { name: "Apps", url: "/", icon: AppWindow },
+    { name: "Apps", url: "/apps", icon: AppWindow },
     {
       name: "Web Replicas",
-      url: "#",
+      url: "/replicas",
       icon: Laptop,
     },
     {
       name: "ThreeJS",
-      url: "#",
+      url: "/threejs",
       icon: PieChart,
     },
   ],
@@ -63,13 +63,13 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar variant="inset" {...props}>
       <SidebarHeader>
-        <TeamSwitcher />
+        <SidebarUser />
       </SidebarHeader>
       <SidebarContent>
         <NavApps apps={sidebarItems.apps} />
         <NavProjects projects={sidebarItems.projects} />
       </SidebarContent>
-      <SidebarFooter className="p-4">
+      <SidebarFooter className="flex flex-col gap-2 p-4">
         <ThemeToggle />
       </SidebarFooter>
     </Sidebar>

@@ -2,7 +2,7 @@ import React from "react";
 import type { Metadata } from "next";
 import { Roboto } from "next/font/google";
 import { Toaster } from "@/components/ui/sonner";
-import ConvexClientProvider from "@/components/providers/convex-provider";
+import { ConvexClientProvider } from "@/app/convex-client-provider";
 import "./css/globals.css";
 
 const roboto = Roboto({ subsets: ["latin"], weight: ["400", "500"] });

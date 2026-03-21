@@ -1,5 +1,6 @@
 import React from "react";
 import DashboardBreadcrumb from "../components/dashboard-breadcrumb";
+import { pathServer } from "@/lib/path-server";
 import MovieBannerCarousel from "./components/movie-banner-carousel";
 import MovieNav from "./components/movie-nav";
 import MovieCarousel from "./components/movie-carousel";
@@ -11,7 +12,7 @@ export default function MoviePage() {
         breadcrumbs={[
           {
             title: "Apps",
-            href: "/",
+            href: pathServer("/apps"),
           },
           {
             title: "Movie",

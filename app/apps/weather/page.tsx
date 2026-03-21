@@ -8,6 +8,7 @@ import { toast } from "sonner";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import DashboardBreadcrumb from "../components/dashboard-breadcrumb";
 import DashboardContainer from "@/components/layout/dashboard-container";
+import { pathClient } from "@/lib/path-client";
 
 const APIKEY = "2ee9027cb53bdd718773abe1ca5efd36";
 
@@ -88,7 +89,7 @@ export default function WeatherPage() {
         breadcrumbs={[
           {
             title: "Apps",
-            href: "/",
+            href: pathClient("/apps"),
           },
           {
             title: "Weather",

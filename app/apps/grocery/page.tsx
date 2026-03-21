@@ -20,6 +20,7 @@ import {
   DrawerTrigger,
 } from "@/components/ui/drawer";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { pathClient } from "@/lib/path-client";
 import { useQuery, useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
@@ -202,7 +203,7 @@ export default function GroceryPage() {
   return (
     <>
       <DashboardBreadcrumb
-        breadcrumbs={[{ title: "Apps", href: "/" }, { title: "Grocery" }]}
+        breadcrumbs={[{ title: "Apps", href: pathClient("/apps") }, { title: "Grocery" }]}
       />
       <DashboardContainer className="max-w-3xl flex-1">
         <div className="flex flex-col gap-4">

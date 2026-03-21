@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/sidebar";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
+import { pathClient } from "@/lib/path-client";
 
 type AppSidebar = {
   name: string;
@@ -28,7 +29,8 @@ export function NavApps({ apps }: Props) {
 
   const activeAppSidebar = apps.map((app, i) => ({
     ...app,
-    isActive: pathName.startsWith(apps[i].url),
+    url: pathClient(apps[i].url),
+    isActive: pathName.startsWith(pathClient(apps[i].url)),
   }));
 
   return (

@@ -9,6 +9,15 @@ import { useQuery, useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
 import { authClient } from "@/lib/auth-client";
+import { LogIn } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import {
+  Empty,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+  EmptyDescription,
+} from "@/components/ui/empty";
 import GroceryDrawer from "./components/grocery-drawer";
 import GroceryStats from "./components/grocery-stats";
 import IngredientList from "./components/ingredient-list";
@@ -21,7 +30,8 @@ export default function GroceryPage() {
   const isMobile = useIsMobile();
   const { data: session } = authClient.useSession();
   const isAuthenticated = !!session?.user;
-  const ingredients = useQuery(api.ingredients.list, isAuthenticated ? {} : "skip") ?? [];
+  const ingredients =
+    useQuery(api.ingredients.list, isAuthenticated ? {} : "skip") ?? [];
   const dishes = useQuery(api.dishes.list, isAuthenticated ? {} : "skip") ?? [];
 
   const addIngredient = useMutation(api.ingredients.add);
@@ -78,35 +88,57 @@ export default function GroceryPage() {
   return (
     <>
       <DashboardBreadcrumb
-        breadcrumbs={[
-          { title: "Apps", href: "/apps" },
-          { title: "Grocery" },
-        ]}
+        breadcrumbs={[{ title: "Apps", href: "/apps" }, { title: "Grocery" }]}
       />
       <DashboardContainer className="max-w-3xl flex-1">
-        <div className="flex flex-col gap-4">
-          <GroceryDrawer
-            ingredients={ingredients}
-            dishes={dishes}
-            onAddIngredient={(args) => addIngredient(args)}
-            onAddDish={(args) => addDish(args)}
-            onRemoveDish={(id) => removeDish({ id })}
-            onReset={handleReset}
-          />
+        {!isAuthenticated ? (
+          <Empty>
+            <EmptyHeader>
+              <EmptyMedia variant="icon">
+                <LogIn />
+              </EmptyMedia>
+              <EmptyTitle>Sign in to get started</EmptyTitle>
+              <EmptyDescription>
+                Log in to add ingredients and dishes to your grocery list.
+              </EmptyDescription>
+            </EmptyHeader>
+            <Button
+              variant="outline"
+              onClick={() =>
+                authClient.signIn.social({
+                  provider: "google",
+                  callbackURL: "/apps/grocery",
+                })
+              }
+            >
+              Sign in with Google
+            </Button>
+          </Empty>
+        ) : (
+          <div className="flex flex-col gap-4">
+            <GroceryDrawer
+              ingredients={ingredients}
+              dishes={dishes}
+              onAddIngredient={(args) => addIngredient(args)}
+              onAddDish={(args) => addDish(args)}
+              onRemoveDish={(id) => removeDish({ id })}
+              onReset={handleReset}
+            />
 
-          {ingredients.length > 0 && (
-            <>
-              <GroceryStats ingredients={ingredients} />
-              <IngredientList
-                ingredients={ingredients}
-                dishes={dishes}
-                onToggle={handleToggle}
-                onRemove={handleRemove}
-                onEdit={handleEdit}
-              />
-            </>
-          )}
-        </div>
+            {ingredients.length > 0 && (
+              <>
+                <GroceryStats ingredients={ingredients} />
+                <IngredientList
+                  ingredients={ingredients}
+                  dishes={dishes}
+                  onToggle={handleToggle}
+                  onRemove={handleRemove}
+                  onEdit={handleEdit}
+                />
+              </>
+            )}
+          </div>
+        )}
       </DashboardContainer>
     </>
   );

@@ -1,24 +1,36 @@
 import { v } from "convex/values";
 import { mutation, query } from "./_generated/server";
+import { getCurrentUserId } from "./users";
 
 export const list = query({
   handler: async (ctx) => {
-    return await ctx.db.query("dishes").collect();
+    const userId = await getCurrentUserId(ctx);
+    return await ctx.db
+      .query("dishes")
+      .withIndex("by_userId", (q) => q.eq("userId", userId))
+      .collect();
   },
 });
 
 export const add = mutation({
   args: { name: v.string() },
   handler: async (ctx, args) => {
-    return await ctx.db.insert("dishes", { name: args.name });
+    const userId = await getCurrentUserId(ctx);
+    return await ctx.db.insert("dishes", { name: args.name, userId });
   },
 });
 
-// Remove dish reference from all ingredients
 export const remove = mutation({
   args: { id: v.id("dishes") },
   handler: async (ctx, args) => {
-    const ingredients = await ctx.db.query("ingredients").collect();
+    const userId = await getCurrentUserId(ctx);
+    const dish = await ctx.db.get(args.id);
+    if (!dish || dish.userId !== userId) return;
+
+    const ingredients = await ctx.db
+      .query("ingredients")
+      .withIndex("by_userId", (q) => q.eq("userId", userId))
+      .collect();
     for (const ingredient of ingredients) {
       if (ingredient.dishIds.includes(args.id)) {
         await ctx.db.patch(ingredient._id, {

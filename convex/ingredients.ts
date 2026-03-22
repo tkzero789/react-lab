@@ -1,9 +1,14 @@
 import { v } from "convex/values";
 import { mutation, query } from "./_generated/server";
+import { getCurrentUserId } from "./users";
 
 export const list = query({
   handler: async (ctx) => {
-    return await ctx.db.query("ingredients").collect();
+    const userId = await getCurrentUserId(ctx);
+    return await ctx.db
+      .query("ingredients")
+      .withIndex("by_userId", (q) => q.eq("userId", userId))
+      .collect();
   },
 });
 
@@ -15,12 +20,14 @@ export const add = mutation({
     dishIds: v.array(v.id("dishes")),
   },
   handler: async (ctx, args) => {
+    const userId = await getCurrentUserId(ctx);
     return await ctx.db.insert("ingredients", {
       name: args.name,
       quantity: args.quantity,
       price: args.price,
       checked: false,
       dishIds: args.dishIds,
+      userId,
     });
   },
 });
@@ -34,6 +41,9 @@ export const update = mutation({
     dishIds: v.array(v.id("dishes")),
   },
   handler: async (ctx, args) => {
+    const userId = await getCurrentUserId(ctx);
+    const ingredient = await ctx.db.get(args.id);
+    if (!ingredient || ingredient.userId !== userId) return;
     await ctx.db.patch(args.id, {
       name: args.name,
       quantity: args.quantity,
@@ -46,8 +56,9 @@ export const update = mutation({
 export const toggleChecked = mutation({
   args: { id: v.id("ingredients") },
   handler: async (ctx, args) => {
+    const userId = await getCurrentUserId(ctx);
     const ingredient = await ctx.db.get(args.id);
-    if (!ingredient) return;
+    if (!ingredient || ingredient.userId !== userId) return;
     await ctx.db.patch(args.id, { checked: !ingredient.checked });
   },
 });
@@ -55,17 +66,27 @@ export const toggleChecked = mutation({
 export const remove = mutation({
   args: { id: v.id("ingredients") },
   handler: async (ctx, args) => {
+    const userId = await getCurrentUserId(ctx);
+    const ingredient = await ctx.db.get(args.id);
+    if (!ingredient || ingredient.userId !== userId) return;
     await ctx.db.delete(args.id);
   },
 });
 
 export const removeAll = mutation({
   handler: async (ctx) => {
-    const ingredients = await ctx.db.query("ingredients").collect();
+    const userId = await getCurrentUserId(ctx);
+    const ingredients = await ctx.db
+      .query("ingredients")
+      .withIndex("by_userId", (q) => q.eq("userId", userId))
+      .collect();
     for (const ingredient of ingredients) {
       await ctx.db.delete(ingredient._id);
     }
-    const dishes = await ctx.db.query("dishes").collect();
+    const dishes = await ctx.db
+      .query("dishes")
+      .withIndex("by_userId", (q) => q.eq("userId", userId))
+      .collect();
     for (const dish of dishes) {
       await ctx.db.delete(dish._id);
     }

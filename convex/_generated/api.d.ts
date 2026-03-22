@@ -12,6 +12,7 @@ import type * as auth from "../auth.js";
 import type * as dishes from "../dishes.js";
 import type * as http from "../http.js";
 import type * as ingredients from "../ingredients.js";
+import type * as users from "../users.js";
 
 import type {
   ApiFromModules,
@@ -24,6 +25,7 @@ declare const fullApi: ApiFromModules<{
   dishes: typeof dishes;
   http: typeof http;
   ingredients: typeof ingredients;
+  users: typeof users;
 }>;
 
 /**

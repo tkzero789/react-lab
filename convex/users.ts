@@ -5,13 +5,14 @@ import { Id } from "./_generated/dataModel";
 
 export async function getCurrentUserId(
   ctx: QueryCtx | MutationCtx,
-): Promise<Id<"users">> {
+): Promise<Id<"users"> | null> {
   const authUser = await authComponent.getAuthUser(ctx);
+  if (!authUser) return null;
   const user = await ctx.db
     .query("users")
     .withIndex("by_authId", (q) => q.eq("authId", authUser._id))
     .unique();
-  if (!user) throw new Error("User not found");
+  if (!user) return null;
   return user._id;
 }
 

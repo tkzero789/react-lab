@@ -5,6 +5,7 @@ import { getCurrentUserId } from "./users";
 export const list = query({
   handler: async (ctx) => {
     const userId = await getCurrentUserId(ctx);
+    if (!userId) return [];
     return await ctx.db
       .query("dishes")
       .withIndex("by_userId", (q) => q.eq("userId", userId))
@@ -16,6 +17,7 @@ export const add = mutation({
   args: { name: v.string() },
   handler: async (ctx, args) => {
     const userId = await getCurrentUserId(ctx);
+    if (!userId) throw new Error("Not authenticated");
     return await ctx.db.insert("dishes", { name: args.name, userId });
   },
 });
@@ -24,6 +26,7 @@ export const remove = mutation({
   args: { id: v.id("dishes") },
   handler: async (ctx, args) => {
     const userId = await getCurrentUserId(ctx);
+    if (!userId) throw new Error("Not authenticated");
     const dish = await ctx.db.get(args.id);
     if (!dish || dish.userId !== userId) return;
 

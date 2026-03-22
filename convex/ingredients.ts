@@ -5,6 +5,7 @@ import { getCurrentUserId } from "./users";
 export const list = query({
   handler: async (ctx) => {
     const userId = await getCurrentUserId(ctx);
+    if (!userId) return [];
     return await ctx.db
       .query("ingredients")
       .withIndex("by_userId", (q) => q.eq("userId", userId))
@@ -21,6 +22,7 @@ export const add = mutation({
   },
   handler: async (ctx, args) => {
     const userId = await getCurrentUserId(ctx);
+    if (!userId) throw new Error("Not authenticated");
     return await ctx.db.insert("ingredients", {
       name: args.name,
       quantity: args.quantity,
@@ -42,6 +44,7 @@ export const update = mutation({
   },
   handler: async (ctx, args) => {
     const userId = await getCurrentUserId(ctx);
+    if (!userId) throw new Error("Not authenticated");
     const ingredient = await ctx.db.get(args.id);
     if (!ingredient || ingredient.userId !== userId) return;
     await ctx.db.patch(args.id, {
@@ -57,6 +60,7 @@ export const toggleChecked = mutation({
   args: { id: v.id("ingredients") },
   handler: async (ctx, args) => {
     const userId = await getCurrentUserId(ctx);
+    if (!userId) throw new Error("Not authenticated");
     const ingredient = await ctx.db.get(args.id);
     if (!ingredient || ingredient.userId !== userId) return;
     await ctx.db.patch(args.id, { checked: !ingredient.checked });
@@ -67,6 +71,7 @@ export const remove = mutation({
   args: { id: v.id("ingredients") },
   handler: async (ctx, args) => {
     const userId = await getCurrentUserId(ctx);
+    if (!userId) throw new Error("Not authenticated");
     const ingredient = await ctx.db.get(args.id);
     if (!ingredient || ingredient.userId !== userId) return;
     await ctx.db.delete(args.id);
@@ -76,6 +81,7 @@ export const remove = mutation({
 export const removeAll = mutation({
   handler: async (ctx) => {
     const userId = await getCurrentUserId(ctx);
+    if (!userId) throw new Error("Not authenticated");
     const ingredients = await ctx.db
       .query("ingredients")
       .withIndex("by_userId", (q) => q.eq("userId", userId))

@@ -8,6 +8,7 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import { useQuery, useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
+import { authClient } from "@/lib/auth-client";
 import GroceryDrawer from "./components/grocery-drawer";
 import GroceryStats from "./components/grocery-stats";
 import IngredientList from "./components/ingredient-list";
@@ -18,8 +19,10 @@ function normalize(str: string) {
 
 export default function GroceryPage() {
   const isMobile = useIsMobile();
-  const ingredients = useQuery(api.ingredients.list) ?? [];
-  const dishes = useQuery(api.dishes.list) ?? [];
+  const { data: session } = authClient.useSession();
+  const isAuthenticated = !!session?.user;
+  const ingredients = useQuery(api.ingredients.list, isAuthenticated ? {} : "skip") ?? [];
+  const dishes = useQuery(api.dishes.list, isAuthenticated ? {} : "skip") ?? [];
 
   const addIngredient = useMutation(api.ingredients.add);
   const updateIngredient = useMutation(api.ingredients.update);

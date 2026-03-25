@@ -9,10 +9,13 @@
  */
 
 import type * as auth from "../auth.js";
+import type * as bodyWeights from "../bodyWeights.js";
 import type * as dishes from "../dishes.js";
+import type * as exercises from "../exercises.js";
 import type * as http from "../http.js";
 import type * as ingredients from "../ingredients.js";
 import type * as users from "../users.js";
+import type * as workoutLogs from "../workoutLogs.js";
 
 import type {
   ApiFromModules,
@@ -22,10 +25,13 @@ import type {
 
 declare const fullApi: ApiFromModules<{
   auth: typeof auth;
+  bodyWeights: typeof bodyWeights;
   dishes: typeof dishes;
+  exercises: typeof exercises;
   http: typeof http;
   ingredients: typeof ingredients;
   users: typeof users;
+  workoutLogs: typeof workoutLogs;
 }>;
 
 /**

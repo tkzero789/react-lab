@@ -4,6 +4,7 @@ import * as React from "react";
 import {
   AppWindow,
   CloudSun,
+  Dumbbell,
   Film,
   Laptop,
   ListChecks,
@@ -42,6 +43,11 @@ const sidebarItems = {
       name: "Grocery",
       url: "/apps/grocery",
       icon: ShoppingBasket,
+    },
+    {
+      name: "Workout",
+      url: "/apps/workout",
+      icon: Dumbbell,
     },
   ],
   projects: [

@@ -5,6 +5,9 @@ import {
 } from "@convex-dev/better-auth/client/plugins";
 
 export const authClient = createAuthClient({
-  baseURL: process.env.NEXT_PUBLIC_SITE_URL,
+  baseURL:
+    typeof window !== "undefined"
+      ? window.location.origin
+      : process.env.NEXT_PUBLIC_SITE_URL,
   plugins: [convexClient(), crossDomainClient()],
 });

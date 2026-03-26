@@ -22,6 +22,14 @@ import {
   Dumbbell,
   X,
 } from "lucide-react";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Id } from "@/convex/_generated/dataModel";
 import { format, startOfWeek, endOfWeek, isWithinInterval } from "date-fns";
 
@@ -58,9 +66,9 @@ export default function WorkoutLogger({
 }: Props) {
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [selectedExercise, setSelectedExercise] = useState<Id<"exercises"> | "">(
-    "",
-  );
+  const [selectedExercise, setSelectedExercise] = useState<
+    Id<"exercises"> | ""
+  >("");
   const [sets, setSets] = useState<{ reps: string; weight: string }[]>([
     { reps: "", weight: "" },
   ]);
@@ -121,15 +129,15 @@ export default function WorkoutLogger({
     const diff = weight - exercise.personalBest;
     if (diff > 0)
       return (
-        <span className="flex items-center gap-0.5 text-xs text-green-600">
+        <span className="flex items-center gap-0.5 text-xs font-medium text-green-600">
           <ArrowUp className="h-3 w-3" />
           New PR! +{diff} lbs
         </span>
       );
     if (diff < 0)
       return (
-        <span className="flex items-center gap-0.5 text-xs text-muted-foreground">
-          <ArrowDown className="h-3 w-3" />
+        <span className="flex items-center gap-1 text-sm font-medium text-muted-foreground">
+          <ArrowDown className="size-4" />
           {diff} lbs from PB
         </span>
       );
@@ -151,8 +159,7 @@ export default function WorkoutLogger({
             onSelect={(d) => d && setSelectedDate(d)}
             modifiers={{ logged: datesWithLogs }}
             modifiersClassNames={{
-              logged:
-                "!bg-primary/15 !text-primary !font-semibold rounded-md",
+              logged: "bg-muted rounded-xl",
             }}
           />
           <div className="flex w-full gap-2 text-center text-sm">
@@ -183,25 +190,28 @@ export default function WorkoutLogger({
                   <label className="mb-1 block text-sm font-medium">
                     Exercise
                   </label>
-                  <select
-                    className="w-full rounded-md border bg-background px-3 py-2 text-sm"
-                    value={selectedExercise}
-                    onChange={(e) =>
-                      setSelectedExercise(
-                        e.target.value as Id<"exercises"> | "",
-                      )
+                  <Select
+                    value={selectedExercise || undefined}
+                    onValueChange={(value) =>
+                      setSelectedExercise(value as Id<"exercises">)
                     }
                   >
-                    <option value="">Select an exercise</option>
-                    {exercises.map((ex) => (
-                      <option key={ex._id} value={ex._id}>
-                        {ex.name}{" "}
-                        {ex.personalBest > 0
-                          ? `(PB: ${ex.personalBest} lbs)`
-                          : ""}
-                      </option>
-                    ))}
-                  </select>
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Select an exercise" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectGroup>
+                        {exercises.map((ex) => (
+                          <SelectItem key={ex._id} value={ex._id}>
+                            {ex.name}{" "}
+                            {ex.personalBest > 0
+                              ? `(PB: ${ex.personalBest} lbs)`
+                              : ""}
+                          </SelectItem>
+                        ))}
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
                 </div>
 
                 <div>
@@ -260,8 +270,7 @@ export default function WorkoutLogger({
                 <Button
                   type="submit"
                   disabled={
-                    !selectedExercise ||
-                    !sets.some((s) => s.reps && s.weight)
+                    !selectedExercise || !sets.some((s) => s.reps && s.weight)
                   }
                 >
                   <Dumbbell className="mr-1 h-4 w-4" />
@@ -297,10 +306,10 @@ export default function WorkoutLogger({
                 return (
                   <div
                     key={log._id}
-                    className="rounded-lg border p-3"
+                    className="flex flex-col gap-2 rounded-xl border bg-background p-4"
                   >
-                    <div className="mb-2 flex items-center justify-between">
-                      <div>
+                    <div className="flex items-center justify-between">
+                      <div className="flex flex-col gap-1">
                         <span className="font-medium">
                           {exercise?.name ?? "Unknown"}
                         </span>
@@ -308,11 +317,10 @@ export default function WorkoutLogger({
                       </div>
                       <Button
                         variant="ghost"
-                        size="icon"
-                        className="h-7 w-7"
+                        size="icon-sm"
                         onClick={() => onRemove(log._id)}
                       >
-                        <Trash2 className="h-3.5 w-3.5 text-destructive" />
+                        <Trash2 className="text-destructive" />
                       </Button>
                     </div>
                     <div className="flex flex-wrap gap-2">

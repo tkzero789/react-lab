@@ -108,7 +108,7 @@ export default function GroceryPage() {
               onClick={() =>
                 authClient.signIn.social({
                   provider: "google",
-                  callbackURL: pathClient("/apps/grocery"),
+                  callbackURL: pathClient(""),
                 })
               }
             >

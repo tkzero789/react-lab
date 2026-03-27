@@ -30,6 +30,7 @@ import ExerciseForm from "./components/exercise-form";
 import ExerciseList from "./components/exercise-list";
 import BodyWeightTracker from "./components/body-weight-tracker";
 import WorkoutLogger from "./components/workout-logger";
+import { pathClient } from "@/lib/path-client";
 
 export default function WorkoutPage() {
   const isMobile = useIsMobile();
@@ -123,7 +124,7 @@ export default function WorkoutPage() {
               onClick={() =>
                 authClient.signIn.social({
                   provider: "google",
-                  callbackURL: "/apps/workout",
+                  callbackURL: pathClient("/apps/workout"),
                 })
               }
             >

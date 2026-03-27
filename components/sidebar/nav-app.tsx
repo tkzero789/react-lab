@@ -40,7 +40,7 @@ export function NavApps({ apps }: Props) {
         {activeAppSidebar.map((app: AppSidebar) => (
           <SidebarMenuItem key={app.name}>
             <SidebarMenuButton asChild isActive={app.isActive}>
-              <Link href={app.url}>
+              <Link href={pathClient(app.url)}>
                 <app.icon />
                 <span>{app.name}</span>
               </Link>

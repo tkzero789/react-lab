@@ -6,6 +6,7 @@ import {
   CloudSun,
   Dumbbell,
   Film,
+  FlaskConical,
   Laptop,
   ListChecks,
   PieChart,
@@ -51,6 +52,11 @@ const sidebarItems = {
     },
   ],
   projects: [
+    {
+      name: "Lab",
+      url: process.env.NODE_ENV === "production" ? "https://lab.thinhtran.dev" : "/",
+      icon: FlaskConical,
+    },
     { name: "Apps", url: "/apps", icon: AppWindow },
     {
       name: "Web Replicas",

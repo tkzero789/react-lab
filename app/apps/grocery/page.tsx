@@ -21,7 +21,6 @@ import {
 import GroceryDrawer from "./components/grocery-drawer";
 import GroceryStats from "./components/grocery-stats";
 import IngredientList from "./components/ingredient-list";
-import { pathClient } from "@/lib/path-client";
 
 function normalize(str: string) {
   return str.replace(/\s+/g, "").toLowerCase();
@@ -108,7 +107,7 @@ export default function GroceryPage() {
               onClick={() =>
                 authClient.signIn.social({
                   provider: "google",
-                  callbackURL: pathClient(""),
+                  callbackURL: window.location.href,
                 })
               }
             >

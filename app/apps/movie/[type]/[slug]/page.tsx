@@ -97,7 +97,9 @@ export default function MovieDetailPage() {
           },
           {
             title: typeTitle,
-            href: pathClient(`/apps/movie/${movie?.type === "tvshows" ? "tv-shows" : movie?.type}`),
+            href: pathClient(
+              `/apps/movie/${movie?.type === "tvshows" ? "tv-shows" : movie?.type}`,
+            ),
           },
           {
             title: movie?.name ?? "",
@@ -105,7 +107,7 @@ export default function MovieDetailPage() {
         ]}
       />
       <DashboardContainer>
-        <div className="grid grid-cols-1 gap-4">
+        <div className="flex flex-col gap-4">
           {!movie ? (
             <Skeleton className="h-56 md:h-[400px] lg:h-[550px] xl:h-[700px]" />
           ) : (
@@ -149,7 +151,7 @@ export default function MovieDetailPage() {
             </div>
           )}
           {!movie ? (
-            <Skeleton className="flex h-[32rem] flex-col gap-4" />
+            <Skeleton className="flex h-96 flex-col gap-4 lg:h-48" />
           ) : (
             <div className="flex flex-col gap-4">
               {/* Content */}
@@ -192,7 +194,9 @@ export default function MovieDetailPage() {
                       size="sm"
                     >
                       <Link
-                        href={pathClient(`/apps/movie/${movie.type}/${movie.slug}/${episode.slug}`)}
+                        href={pathClient(
+                          `/apps/movie/${movie.type}/${movie.slug}/${episode.slug}`,
+                        )}
                       >
                         {episode.slug === "full"
                           ? "Full"

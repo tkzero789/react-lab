@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/drawer";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { Id } from "@/convex/_generated/dataModel";
-import type { Ingredient, Dish } from "../types";
+import { Dish, Ingredient } from "@/types/grocery";
 
 type Props = {
   item: Ingredient;
@@ -187,10 +187,7 @@ export default function IngredientRow({
               <DrawerTitle>{item.name}</DrawerTitle>
             </DrawerHeader>
             <DrawerFooter>
-              <Button
-                variant="destructive"
-                onClick={() => onRemove(item._id)}
-              >
+              <Button variant="destructive" onClick={() => onRemove(item._id)}>
                 Delete
               </Button>
               <DrawerClose>

@@ -3,11 +3,11 @@ import { NextRequest, NextResponse } from "next/server";
 const SUBDOMAINS = ["apps", "replicas"];
 
 function isLocalhost(hostname: string) {
-  return hostname.includes("localhost") || hostname.includes("127.0.0.1");
+  return hostname.includes("localhost") || hostname.includes("127.0.0.1") || hostname.includes("192.168.");
 }
 
-export function middleware(request: NextRequest) {
-  const hostname = request.headers.get("host") || "";
+export function proxy(request: NextRequest) {
+  const hostname = request.headers.get("x-forwarded-host") || request.headers.get("host") || "";
   const pathname = request.nextUrl.pathname;
 
   // Skip subdomain rewriting for localhost — use path-based routing instead
@@ -39,6 +39,6 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  // Skip middleware for static files and Next.js internals
+  // Skip proxy for static files and Next.js internals
   matcher: ["/((?!_next/static|_next/image|favicon.ico|images/).*)"],
 };

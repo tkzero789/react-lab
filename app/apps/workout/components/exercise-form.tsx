@@ -4,8 +4,9 @@ import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { MUSCLE_GROUPS, type MuscleGroup } from "../types";
+
 import { Plus, X } from "lucide-react";
+import { MUSCLE_GROUPS, MuscleGroup } from "@/types/workout";
 
 type Props = {
   onSubmit: (data: {

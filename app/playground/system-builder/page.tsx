@@ -113,7 +113,7 @@ const products = [
   },
 ];
 
-export default function PlaygroundPage() {
+export default function SystemBuilderPage() {
   return (
     <div className="flex flex-col items-center justify-center p-4">
       <div className="flex w-full max-w-4xl flex-col gap-4">

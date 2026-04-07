@@ -7,8 +7,8 @@ const SUBDOMAINS = ["apps", "replicas"];
  * On subdomain: strips the prefix → `/apps/movie` becomes `/movie`
  * On main domain: returns the path as-is → `/apps/movie`
  */
-export function pathServer(path: string) {
-  const host = headers().get("host") || "";
+export async function pathServer(path: string) {
+  const host = (await headers()).get("host") || "";
   const subdomain = host.split(".")[0];
 
   if (SUBDOMAINS.includes(subdomain) && path.startsWith(`/${subdomain}`)) {

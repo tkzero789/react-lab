@@ -12,9 +12,9 @@ import {
   DrawerTrigger,
 } from "@/components/ui/drawer";
 import { Id } from "@/convex/_generated/dataModel";
-import type { Ingredient, Dish } from "../types";
 import IngredientForm from "./ingredient-form";
 import DishForm from "./dish-form";
+import { Dish, Ingredient } from "@/types/grocery";
 
 type Tab = "ingredient" | "dish";
 

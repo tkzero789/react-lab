@@ -10,6 +10,7 @@ import {
   Laptop,
   ListChecks,
   PieChart,
+  RollerCoaster,
   ShoppingBasket,
 } from "lucide-react";
 import { NavApps } from "./nav-app";
@@ -54,7 +55,10 @@ const sidebarItems = {
   projects: [
     {
       name: "Lab",
-      url: process.env.NODE_ENV === "production" ? "https://lab.thinhtran.dev" : "/",
+      url:
+        process.env.NODE_ENV === "production"
+          ? "https://lab.thinhtran.dev"
+          : "/",
       icon: FlaskConical,
     },
     { name: "Apps", url: "/apps", icon: AppWindow },
@@ -62,6 +66,11 @@ const sidebarItems = {
       name: "Web Replicas",
       url: "/replicas",
       icon: Laptop,
+    },
+    {
+      name: "Playground",
+      url: "/playground",
+      icon: RollerCoaster,
     },
     {
       name: "ThreeJS",

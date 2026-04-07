@@ -5,7 +5,7 @@ import { Plus } from "lucide-react";
 import { toast } from "sonner";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { Id } from "@/convex/_generated/dataModel";
-import type { Ingredient, Dish } from "../types";
+import { Dish, Ingredient } from "@/types/grocery";
 
 function normalize(str: string) {
   return str.replace(/\s+/g, "").toLowerCase();
@@ -105,9 +105,7 @@ export default function IngredientForm({ ingredients, dishes, onAdd }: Props) {
       </form>
       {dishes.length > 0 && (
         <div className="flex flex-col gap-1.5">
-          <span className="text-sm text-muted-foreground">
-            List of dishes:
-          </span>
+          <span className="text-sm text-muted-foreground">List of dishes:</span>
           <div className="flex flex-wrap gap-1.5">
             {dishes.map((dish) => (
               <Button

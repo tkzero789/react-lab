@@ -14,7 +14,8 @@ import {
 } from "@/components/ui/drawer";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { Id } from "@/convex/_generated/dataModel";
-import type { Dish } from "../types";
+import { Dish } from "@/types/grocery";
+
 
 function normalize(str: string) {
   return str.replace(/\s+/g, "").toLowerCase();

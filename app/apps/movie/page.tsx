@@ -5,14 +5,16 @@ import MovieBannerCarousel from "./components/movie-banner-carousel";
 import MovieNav from "./components/movie-nav";
 import MovieCarousel from "./components/movie-carousel";
 
-export default function MoviePage() {
+export default async function MoviePage() {
+  const appsHref = await pathServer("/apps");
+
   return (
     <>
       <DashboardBreadcrumb
         breadcrumbs={[
           {
             title: "Apps",
-            href: pathServer("/apps"),
+            href: appsHref,
           },
           {
             title: "Movie",

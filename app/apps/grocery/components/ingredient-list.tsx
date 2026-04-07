@@ -1,7 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Id } from "@/convex/_generated/dataModel";
-import type { Ingredient, Dish } from "../types";
 import IngredientRow from "./ingredient-row";
+import { Dish, Ingredient } from "@/types/grocery";
 
 type Props = {
   ingredients: Ingredient[];
@@ -69,8 +69,7 @@ export default function IngredientList({
                     item={item}
                     allDishes={dishes}
                     otherDishes={dishes.filter(
-                      (d) =>
-                        d._id !== dish._id && item.dishIds.includes(d._id),
+                      (d) => d._id !== dish._id && item.dishIds.includes(d._id),
                     )}
                     onToggle={onToggle}
                     onRemove={onRemove}

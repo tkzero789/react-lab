@@ -10,7 +10,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { LogIn, LogOut } from "lucide-react";
+import { LogOut, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 type Props = {
@@ -45,7 +45,7 @@ export default function UserMenu({ type = "default" }: Props) {
   function handleGoogleSignIn() {
     authClient.signIn.social({
       provider: "google",
-      callbackURL: "/",
+      callbackURL: window.location.href,
     });
   }
 
@@ -55,12 +55,12 @@ export default function UserMenu({ type = "default" }: Props) {
   }
   function renderDefaultTrigger() {
     return (
-      <Button variant="outline">
+      <Button variant="outline" className="h-12">
         {session?.user ? (
           <>
-            <Avatar className="size-8 rounded-xl">
+            <Avatar className="size-8">
               <AvatarImage src={session.user.image ?? undefined} />
-              <AvatarFallback className="rounded-xl bg-sidebar-primary text-xs text-sidebar-primary-foreground">
+              <AvatarFallback className="rounded-full bg-sidebar-primary text-xs text-sidebar-primary-foreground">
                 {session.user.name?.charAt(0)?.toUpperCase() ?? "?"}
               </AvatarFallback>
             </Avatar>
@@ -86,9 +86,9 @@ export default function UserMenu({ type = "default" }: Props) {
       <div className="flex flex-1 items-center gap-2 p-2">
         {session?.user ? (
           <>
-            <Avatar className="size-8 rounded-xl">
+            <Avatar className="size-8 rounded-full">
               <AvatarImage src={session.user.image ?? undefined} />
-              <AvatarFallback className="rounded-xl bg-sidebar-primary text-xs text-sidebar-primary-foreground">
+              <AvatarFallback className="rounded-full bg-sidebar-primary text-xs text-sidebar-primary-foreground">
                 {session.user.name?.charAt(0)?.toUpperCase() ?? "?"}
               </AvatarFallback>
             </Avatar>
@@ -101,9 +101,10 @@ export default function UserMenu({ type = "default" }: Props) {
           </>
         ) : (
           <>
-            <div className="flex aspect-square size-8 items-center justify-center rounded-xl bg-sidebar-primary text-sidebar-primary-foreground">
-              <LogIn className="size-4" />
-            </div>
+            <Button variant="outline" size="icon-sm" className="rounded-full">
+              <User />
+            </Button>
+
             <div className="grid flex-1 text-left text-sm leading-tight">
               <span className="truncate font-medium">Sign in</span>
               <span className="truncate text-xs text-muted-foreground">
@@ -127,7 +128,7 @@ export default function UserMenu({ type = "default" }: Props) {
             <DialogHeader>
               <DialogTitle>Account</DialogTitle>
             </DialogHeader>
-            <div className="flex items-center gap-3 py-4">
+            <div className="flex items-center gap-2">
               <Avatar className="size-12">
                 <AvatarImage src={session.user.image ?? undefined} />
                 <AvatarFallback>

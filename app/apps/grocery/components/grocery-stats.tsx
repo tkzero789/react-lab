@@ -1,4 +1,4 @@
-import type { Ingredient } from "../types";
+import { Ingredient } from "@/types/grocery";
 
 type Props = {
   ingredients: Ingredient[];
@@ -20,8 +20,7 @@ export default function GroceryStats({ ingredients }: Props) {
         </span>
       </div>
       <div className="flex flex-col items-center gap-1">
-        Checked{" "}
-        <span className="font-medium">${checkedTotal.toFixed(2)}</span>
+        Checked <span className="font-medium">${checkedTotal.toFixed(2)}</span>
       </div>
       <div className="flex flex-col items-center gap-1">
         Total <span className="font-medium">${total.toFixed(2)}</span>

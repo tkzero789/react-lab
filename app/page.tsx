@@ -51,8 +51,8 @@ function getHref(title: string, fallbackHref: string, host: string) {
   return `https://${subdomain}.${rootDomain}`;
 }
 
-export default function Page() {
-  const host = headers().get("host") || "localhost";
+export default async function Page() {
+  const host = (await headers()).get("host") || "localhost";
 
   return (
     <div className="flex h-dvh w-full flex-col items-center justify-center gap-16">

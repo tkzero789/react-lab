@@ -26,9 +26,17 @@ const apps = [
     title: "Grocery",
     href: "/apps/grocery",
   },
+  {
+    title: "Workout",
+    href: "/apps/workout",
+  },
 ];
 
-export default function AppsPage() {
+export default async function AppsPage() {
+  const resolvedApps = await Promise.all(
+    apps.map(async (app) => ({ ...app, href: await pathServer(app.href) }))
+  );
+
   return (
     <>
       <DashboardBreadcrumb
@@ -39,9 +47,9 @@ export default function AppsPage() {
         ]}
       />
       <DashboardContainer className="grid grid-cols-1 gap-4 lg:grid-cols-3">
-        {apps.map((app) => (
+        {resolvedApps.map((app) => (
           <Button key={app.title} asChild variant="muted">
-            <Link href={pathServer(app.href)}>{app.title}</Link>
+            <Link href={app.href}>{app.title}</Link>
           </Button>
         ))}
       </DashboardContainer>

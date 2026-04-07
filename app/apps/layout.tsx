@@ -2,8 +2,9 @@ import { AppSidebar } from "@/components/sidebar/app-sidebar";
 import { ThemeProvider } from "@/components/theme/theme-provider";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import React from "react";
+import QueryProvider from "../components/query-provider";
 
-export default function layout({ children }: { children: React.ReactNode }) {
+export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <ThemeProvider
       attribute="class"
@@ -12,7 +13,9 @@ export default function layout({ children }: { children: React.ReactNode }) {
     >
       <SidebarProvider>
         <AppSidebar />
-        <SidebarInset>{children}</SidebarInset>
+        <SidebarInset>
+          <QueryProvider>{children}</QueryProvider>
+        </SidebarInset>
       </SidebarProvider>
     </ThemeProvider>
   );

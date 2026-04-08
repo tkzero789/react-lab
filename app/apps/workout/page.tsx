@@ -21,6 +21,7 @@ import {
 } from "@/components/ui/empty";
 import {
   Dialog,
+  DialogBody,
   DialogContent,
   DialogHeader,
   DialogTitle,
@@ -168,7 +169,9 @@ export default function WorkoutPage() {
                       <DialogHeader>
                         <DialogTitle>Add Exercise</DialogTitle>
                       </DialogHeader>
-                      <AddExerciseForm onSubmit={handleAddExercise} />
+                      <DialogBody>
+                        <AddExerciseForm onSubmit={handleAddExercise} />
+                      </DialogBody>
                     </DialogContent>
                   </Dialog>
                 </div>

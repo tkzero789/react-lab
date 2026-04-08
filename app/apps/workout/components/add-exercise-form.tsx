@@ -55,7 +55,11 @@ export default function AddExerciseForm({
   }
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-3">
+    <form
+      id="addExercise"
+      onSubmit={handleSubmit}
+      className="flex flex-col gap-3"
+    >
       <div>
         <label className="mb-1 block text-sm font-medium">Exercise Name</label>
         <Input
@@ -95,13 +99,15 @@ export default function AddExerciseForm({
           onChange={(e) => setPersonalBest(e.target.value)}
         />
       </div>
-      <Button
-        type="submit"
-        disabled={!name.trim() || selectedMuscles.length === 0}
-      >
-        <Plus className="mr-1 h-4 w-4" />
-        {submitLabel}
-      </Button>
+      <div className="border-t p-4">
+        <Button
+          type="submit"
+          disabled={!name.trim() || selectedMuscles.length === 0}
+        >
+          <Plus />
+          {submitLabel}
+        </Button>
+      </div>
     </form>
   );
 }

@@ -76,7 +76,7 @@ export default function LogExerciseForm({
 
   return (
     <form
-      id="addExercise"
+      id="logWorkout"
       onSubmit={handleSubmit}
       className="flex flex-col gap-4"
     >

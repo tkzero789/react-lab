@@ -157,7 +157,7 @@ export default function WorkoutLogger({
                   />
                 </DialogBody>
                 <DialogFooter>
-                  <Button form="addExercise" type="submit">
+                  <Button form="logWorkout" type="submit">
                     Save Workout
                   </Button>
                 </DialogFooter>
@@ -187,7 +187,7 @@ export default function WorkoutLogger({
 
                 <DrawerFooter>
                   <DrawerClose asChild>
-                    <Button form="addExercise" type="submit">
+                    <Button form="logWorkout" type="submit">
                       Save Workout
                     </Button>
                   </DrawerClose>

@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import {
   Dialog,
+  DialogBody,
   DialogContent,
   DialogHeader,
   DialogTitle,
@@ -79,18 +80,20 @@ export default function ExerciseList({ exercises, onUpdate, onRemove }: Props) {
                   <DialogHeader>
                     <DialogTitle>Edit Exercise</DialogTitle>
                   </DialogHeader>
-                  <AddExerciseForm
-                    initial={{
-                      name: exercise.name,
-                      muscleGroups: exercise.muscleGroups,
-                      personalBest: exercise.personalBest,
-                    }}
-                    submitLabel="Save Changes"
-                    onSubmit={(data) => {
-                      onUpdate(exercise._id, data);
-                      setEditId(null);
-                    }}
-                  />
+                  <DialogBody>
+                    <AddExerciseForm
+                      initial={{
+                        name: exercise.name,
+                        muscleGroups: exercise.muscleGroups,
+                        personalBest: exercise.personalBest,
+                      }}
+                      submitLabel="Save Changes"
+                      onSubmit={(data) => {
+                        onUpdate(exercise._id, data);
+                        setEditId(null);
+                      }}
+                    />
+                  </DialogBody>
                 </DialogContent>
               </Dialog>
               <Button

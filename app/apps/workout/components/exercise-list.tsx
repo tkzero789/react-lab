@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/dialog";
 import { Pencil, Trash2, Trophy } from "lucide-react";
 import { Id } from "@/convex/_generated/dataModel";
-import ExerciseForm from "./exercise-form";
+import AddExerciseForm from "./add-exercise-form";
 
 type Exercise = {
   _id: Id<"exercises">;
@@ -79,7 +79,7 @@ export default function ExerciseList({ exercises, onUpdate, onRemove }: Props) {
                   <DialogHeader>
                     <DialogTitle>Edit Exercise</DialogTitle>
                   </DialogHeader>
-                  <ExerciseForm
+                  <AddExerciseForm
                     initial={{
                       name: exercise.name,
                       muscleGroups: exercise.muscleGroups,

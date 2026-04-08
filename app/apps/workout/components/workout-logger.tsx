@@ -2,7 +2,6 @@
 
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Calendar } from "@/components/ui/calendar";
@@ -16,24 +15,20 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import {
-  Plus,
-  Trash2,
-  ArrowUp,
-  ArrowDown,
-  Minus,
-  Dumbbell,
-  X,
-} from "lucide-react";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+  Drawer,
+  DrawerBody,
+  DrawerClose,
+  DrawerContent,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/components/ui/drawer";
+import { Trash2, ArrowUp, ArrowDown, Minus } from "lucide-react";
 import { Id } from "@/convex/_generated/dataModel";
 import { format, startOfWeek, endOfWeek, isWithinInterval } from "date-fns";
+import { useIsMobile } from "@/hooks/use-mobile";
+import LogExerciseForm from "./log-exercise-form";
 
 type Exercise = {
   _id: Id<"exercises">;
@@ -66,15 +61,10 @@ export default function WorkoutLogger({
   onAdd,
   onRemove,
 }: Props) {
+  const isMobile = useIsMobile();
+
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [selectedExercise, setSelectedExercise] = useState<
-    Id<"exercises"> | ""
-  >("");
-  const [sets, setSets] = useState<{ reps: string; weight: string }[]>([
-    { reps: "", weight: "" },
-  ]);
-
   const dateStr = format(selectedDate, "yyyy-MM-dd");
   const dayLogs = logs.filter((l) => l.date === dateStr);
 
@@ -92,35 +82,6 @@ export default function WorkoutLogger({
   const dayTotalSets = dayLogs.reduce((sum, l) => sum + l.sets.length, 0);
   const weekTotalSets = weekLogs.reduce((sum, l) => sum + l.sets.length, 0);
 
-  function addSet() {
-    setSets([...sets, { reps: "", weight: "" }]);
-  }
-
-  function removeSet(index: number) {
-    if (sets.length <= 1) return;
-    setSets(sets.filter((_, i) => i !== index));
-  }
-
-  function updateSet(index: number, field: "reps" | "weight", value: string) {
-    setSets(sets.map((s, i) => (i === index ? { ...s, [field]: value } : s)));
-  }
-
-  function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    if (!selectedExercise) return;
-    const parsedSets = sets
-      .filter((s) => s.reps && s.weight)
-      .map((s) => ({
-        reps: parseInt(s.reps),
-        weight: parseFloat(s.weight),
-      }));
-    if (parsedSets.length === 0) return;
-    onAdd(dateStr, selectedExercise, parsedSets);
-    setDialogOpen(false);
-    setSelectedExercise("");
-    setSets([{ reps: "", weight: "" }]);
-  }
-
   function getExercise(id: Id<"exercises">) {
     return exercises.find((e) => e._id === id);
   }
@@ -131,9 +92,9 @@ export default function WorkoutLogger({
     const diff = weight - exercise.personalBest;
     if (diff > 0)
       return (
-        <span className="flex items-center gap-0.5 text-xs font-medium text-green-600">
-          <ArrowUp className="h-3 w-3" />
-          New PR! +{diff} lbs
+        <span className="flex items-center gap-1 text-sm font-medium text-green-600">
+          <ArrowUp className="size-4" />
+          New PR +{diff} lbs
         </span>
       );
     if (diff < 0)
@@ -144,8 +105,8 @@ export default function WorkoutLogger({
         </span>
       );
     return (
-      <span className="flex items-center gap-0.5 text-xs text-blue-600">
-        <Minus className="h-3 w-3" />
+      <span className="flex items-center gap-1 text-sm font-medium text-blue-600">
+        <Minus className="size-4" />
         At PB
       </span>
     );
@@ -165,129 +126,76 @@ export default function WorkoutLogger({
             }}
           />
           <div className="flex w-full gap-2 text-center text-sm">
-            <div className="flex-1 rounded-md bg-muted/50 p-2">
+            <div className="flex-1 rounded-xl bg-muted p-2">
               <p className="text-lg font-semibold">{dayTotalSets}</p>
               <p className="text-xs text-muted-foreground">Sets Today</p>
             </div>
-            <div className="flex-1 rounded-md bg-muted/50 p-2">
+            <div className="flex-1 rounded-xl bg-muted p-2">
               <p className="text-lg font-semibold">{weekTotalSets}</p>
               <p className="text-xs text-muted-foreground">Sets This Week</p>
             </div>
           </div>
-          <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-            <DialogTrigger asChild>
-              <Button className="w-full" disabled={exercises.length === 0}>
-                <Plus className="mr-1 h-4 w-4" />
-                Log Exercise
-              </Button>
-            </DialogTrigger>
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle>
-                  Log Exercise — {format(selectedDate, "MMM d, yyyy")}
-                </DialogTitle>
-              </DialogHeader>
-              <DialogBody>
-                <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-                  <div>
-                    <label className="mb-1 block text-sm font-medium">
-                      Exercise
-                    </label>
-                    <Select
-                      value={selectedExercise || undefined}
-                      onValueChange={(value) =>
-                        setSelectedExercise(value as Id<"exercises">)
-                      }
-                    >
-                      <SelectTrigger className="w-full">
-                        <SelectValue placeholder="Select an exercise" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectGroup>
-                          {exercises.map((ex) => (
-                            <SelectItem key={ex._id} value={ex._id}>
-                              {ex.name}{" "}
-                              {ex.personalBest > 0
-                                ? `(PB: ${ex.personalBest} lbs)`
-                                : ""}
-                            </SelectItem>
-                          ))}
-                        </SelectGroup>
-                      </SelectContent>
-                    </Select>
-                  </div>
-
-                  <div>
-                    <label className="mb-1 block text-sm font-medium">
-                      Sets
-                    </label>
-                    <div className="flex flex-col gap-2">
-                      {sets.map((set, i) => (
-                        <div key={i} className="flex items-center gap-2">
-                          <span className="w-8 shrink-0 text-center text-xs text-muted-foreground">
-                            #{i + 1}
-                          </span>
-                          <Input
-                            type="number"
-                            placeholder="Reps"
-                            min="1"
-                            value={set.reps}
-                            onChange={(e) =>
-                              updateSet(i, "reps", e.target.value)
-                            }
-                            className="flex-1"
-                          />
-                          <Input
-                            type="number"
-                            placeholder="Weight (lbs)"
-                            min="0"
-                            step="0.5"
-                            value={set.weight}
-                            onChange={(e) =>
-                              updateSet(i, "weight", e.target.value)
-                            }
-                            className="flex-1"
-                          />
-                          {sets.length > 1 && (
-                            <Button
-                              type="button"
-                              variant="ghost"
-                              size="icon"
-                              className="h-8 w-8 shrink-0"
-                              onClick={() => removeSet(i)}
-                            >
-                              <X className="h-3.5 w-3.5" />
-                            </Button>
-                          )}
-                        </div>
-                      ))}
-                    </div>
-                    <Button
-                      type="button"
-                      variant="outline"
-                      size="sm"
-                      className="mt-2"
-                      onClick={addSet}
-                    >
-                      <Plus className="mr-1 h-3 w-3" />
-                      Add Set
-                    </Button>
-                  </div>
-                </form>
-              </DialogBody>
-              <DialogFooter>
-                <Button
-                  type="submit"
-                  disabled={
-                    !selectedExercise || !sets.some((s) => s.reps && s.weight)
-                  }
-                >
-                  <Dumbbell className="mr-1 h-4 w-4" />
-                  Save Workout
+          {!isMobile ? (
+            <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+              <DialogTrigger asChild>
+                <Button className="w-full" disabled={exercises.length === 0}>
+                  Log Exercise
                 </Button>
-              </DialogFooter>
-            </DialogContent>
-          </Dialog>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>
+                    Log Exercise - {format(selectedDate, "MMM d, yyyy")}
+                  </DialogTitle>
+                </DialogHeader>
+                <DialogBody>
+                  <LogExerciseForm
+                    exercises={exercises}
+                    dateStr={dateStr}
+                    onAdd={onAdd}
+                    onClose={() => setDialogOpen(false)}
+                  />
+                </DialogBody>
+                <DialogFooter>
+                  <Button form="addExercise" type="submit">
+                    Save Workout
+                  </Button>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
+          ) : (
+            <Drawer open={dialogOpen} onOpenChange={setDialogOpen}>
+              <DrawerTrigger asChild>
+                <Button className="w-full" disabled={exercises.length === 0}>
+                  Log Exercise
+                </Button>
+              </DrawerTrigger>
+              <DrawerContent>
+                <DrawerHeader>
+                  <DrawerTitle>
+                    Log Exercise - {format(selectedDate, "MMM d, yyyy")}
+                  </DrawerTitle>
+                </DrawerHeader>
+                <DrawerBody>
+                  <LogExerciseForm
+                    exercises={exercises}
+                    dateStr={dateStr}
+                    onAdd={onAdd}
+                    onClose={() => setDialogOpen(false)}
+                  />
+                </DrawerBody>
+
+                <DrawerFooter>
+                  <DrawerClose asChild>
+                    <Button form="addExercise" type="submit">
+                      Save Workout
+                    </Button>
+                  </DrawerClose>
+                </DrawerFooter>
+              </DrawerContent>
+            </Drawer>
+          )}
+
           {exercises.length === 0 && (
             <p className="text-center text-xs text-muted-foreground">
               Add exercises in the Exercises tab first.
@@ -332,13 +240,16 @@ export default function WorkoutLogger({
                         <Trash2 className="text-destructive" />
                       </Button>
                     </div>
-                    <div className="flex flex-wrap gap-2">
-                      {log.sets.map((set, i) => (
-                        <Badge key={i} variant="secondary">
-                          Set {i + 1}: {set.reps} reps × {set.weight} lbs
-                        </Badge>
+                    <ul className="flex flex-col gap-2">
+                      {log.sets.map((set, index) => (
+                        <li
+                          key={index}
+                          className="rounded-xl bg-muted px-2 py-1 text-sm"
+                        >
+                          Set {index + 1}: {set.reps} reps × {set.weight} lbs
+                        </li>
                       ))}
-                    </div>
+                    </ul>
                   </div>
                 );
               })}

@@ -18,7 +18,7 @@ type Props = {
   submitLabel?: string;
 };
 
-export default function ExerciseForm({
+export default function AddExerciseForm({
   onSubmit,
   initial,
   submitLabel = "Add Exercise",

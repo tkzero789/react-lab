@@ -26,10 +26,11 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import ExerciseForm from "./components/exercise-form";
+
 import ExerciseList from "./components/exercise-list";
 import BodyWeightTracker from "./components/body-weight-tracker";
 import WorkoutLogger from "./components/workout-logger";
+import AddExerciseForm from "./components/add-exercise-form";
 
 export default function WorkoutPage() {
   const isMobile = useIsMobile();
@@ -167,7 +168,7 @@ export default function WorkoutPage() {
                       <DialogHeader>
                         <DialogTitle>Add Exercise</DialogTitle>
                       </DialogHeader>
-                      <ExerciseForm onSubmit={handleAddExercise} />
+                      <AddExerciseForm onSubmit={handleAddExercise} />
                     </DialogContent>
                   </Dialog>
                 </div>

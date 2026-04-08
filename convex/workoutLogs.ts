@@ -45,15 +45,6 @@ export const add = mutation({
 
     const logId = await ctx.db.insert("workoutLogs", { ...args, userId });
 
-    // Auto-update personal best if any set weight exceeds it
-    const exercise = await ctx.db.get(args.exerciseId);
-    if (exercise) {
-      const maxWeight = Math.max(...args.sets.map((s) => s.weight));
-      if (maxWeight > exercise.personalBest) {
-        await ctx.db.patch(args.exerciseId, { personalBest: maxWeight });
-      }
-    }
-
     return logId;
   },
 });

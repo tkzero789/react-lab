@@ -21,6 +21,7 @@ const TabsList = React.forwardRef<
     width: 0,
     height: 0,
   });
+  const [ready, setReady] = React.useState(false);
 
   const tabsListRef = React.useRef<HTMLDivElement | null>(null);
 
@@ -42,6 +43,7 @@ const TabsList = React.forwardRef<
         width: activeRect.width,
         height: activeRect.height,
       });
+      requestAnimationFrame(() => setReady(true));
     });
   }, []);
 
@@ -79,7 +81,7 @@ const TabsList = React.forwardRef<
         {...props}
       />
       <div
-        className="absolute rounded-xl border border-transparent bg-background shadow-sm transition-all duration-300 ease-in-out"
+        className={cn("absolute rounded-xl border border-transparent bg-background shadow-sm", ready && "transition-all duration-300 ease-in-out")}
         style={indicatorStyle}
       />
     </div>

@@ -72,8 +72,8 @@ export default function ExerciseList({ exercises, onUpdate, onRemove }: Props) {
                 onOpenChange={(open) => setEditId(open ? exercise._id : null)}
               >
                 <DialogTrigger asChild>
-                  <Button variant="ghost" size="icon">
-                    <Pencil className="h-4 w-4" />
+                  <Button variant="ghost" size="icon-sm">
+                    <Pencil />
                   </Button>
                 </DialogTrigger>
                 <DialogContent>
@@ -97,11 +97,11 @@ export default function ExerciseList({ exercises, onUpdate, onRemove }: Props) {
                 </DialogContent>
               </Dialog>
               <Button
-                variant="ghost"
-                size="icon"
+                variant="ghost-destructive"
+                size="icon-sm"
                 onClick={() => onRemove(exercise._id)}
               >
-                <Trash2 className="text-destructive" />
+                <Trash2 />
               </Button>
             </div>
           </CardContent>

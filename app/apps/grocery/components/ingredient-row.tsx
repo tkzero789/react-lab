@@ -178,7 +178,7 @@ export default function IngredientRow({
 
         <Drawer>
           <DrawerTrigger asChild>
-            <Button variant="ghost" size="icon-sm">
+            <Button variant="ghost-destructive" size="icon-sm">
               <Trash2 />
             </Button>
           </DrawerTrigger>

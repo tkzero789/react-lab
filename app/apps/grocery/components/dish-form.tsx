@@ -16,7 +16,6 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import { Id } from "@/convex/_generated/dataModel";
 import { Dish } from "@/types/grocery";
 
-
 function normalize(str: string) {
   return str.replace(/\s+/g, "").toLowerCase();
 }
@@ -86,7 +85,7 @@ export default function DishForm({ dishes, onAdd, onRemove }: Props) {
 
               <Drawer>
                 <DrawerTrigger asChild>
-                  <Button variant="ghost" size="icon-sm">
+                  <Button variant="ghost-destructive" size="icon-sm">
                     <Trash2 />
                   </Button>
                 </DrawerTrigger>

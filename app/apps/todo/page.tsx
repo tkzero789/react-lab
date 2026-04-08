@@ -90,7 +90,7 @@ export default function TodoPage() {
                     onClick={() => handleDelete(index)}
                     className="size-8"
                   >
-                    <Trash2 className="h-5 w-5" />
+                    <Trash2 />
                   </Button>
                 </li>
               ))}

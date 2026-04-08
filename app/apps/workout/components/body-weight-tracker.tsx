@@ -122,12 +122,11 @@ export default function BodyWeightTracker({
                     {getTrend(i)}
                   </div>
                   <Button
-                    variant="ghost"
+                    variant="ghost-destructive"
                     size="icon"
-                    className="h-7 w-7"
                     onClick={() => onRemove(entry._id)}
                   >
-                    <Trash2 className="h-3.5 w-3.5 text-destructive" />
+                    <Trash2  />
                   </Button>
                 </div>
               ))}

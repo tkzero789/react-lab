@@ -233,11 +233,11 @@ export default function WorkoutLogger({
                         {getWeightComparison(log.exerciseId, maxWeight)}
                       </div>
                       <Button
-                        variant="ghost"
+                        variant="ghost-destructive"
                         size="icon-sm"
                         onClick={() => onRemove(log._id)}
                       >
-                        <Trash2 className="text-destructive" />
+                        <Trash2 />
                       </Button>
                     </div>
                     <ul className="flex flex-col gap-2">

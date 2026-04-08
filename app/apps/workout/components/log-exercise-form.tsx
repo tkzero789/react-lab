@@ -148,7 +148,6 @@ export default function LogExerciseForm({
         <Button
           type="button"
           variant="muted"
-          size="sm"
           className="w-full"
           onClick={addSet}
         >

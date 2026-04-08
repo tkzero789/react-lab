@@ -21,6 +21,7 @@ import {
 import GroceryDrawer from "./components/grocery-drawer";
 import GroceryStats from "./components/grocery-stats";
 import IngredientList from "./components/ingredient-list";
+import { Skeleton } from "@/components/ui/skeleton";
 
 function normalize(str: string) {
   return str.replace(/\s+/g, "").toLowerCase();
@@ -28,11 +29,15 @@ function normalize(str: string) {
 
 export default function GroceryPage() {
   const isMobile = useIsMobile();
-  const { data: session } = authClient.useSession();
-  const isAuthenticated = !!session?.user;
+  const { data, isPending } = authClient.useSession();
+  const isAuthenticated = !!data?.user;
+
   const ingredients =
     useQuery(api.ingredients.list, isAuthenticated ? {} : "skip") ?? [];
   const dishes = useQuery(api.dishes.list, isAuthenticated ? {} : "skip") ?? [];
+
+  const isDataLoading =
+    isAuthenticated && (ingredients === undefined || dishes === undefined);
 
   const addIngredient = useMutation(api.ingredients.add);
   const updateIngredient = useMutation(api.ingredients.update);
@@ -91,7 +96,20 @@ export default function GroceryPage() {
         breadcrumbs={[{ title: "Apps", href: "/apps" }, { title: "Grocery" }]}
       />
       <DashboardContainer className="max-w-3xl flex-1">
-        {!isAuthenticated ? (
+        {/* Initial load */}
+        {isPending && (
+          <div className="flex flex-col gap-4">
+            <Skeleton className="h-20" />
+            <div className="flex flex-col gap-2">
+              <Skeleton className="h-14" />
+              <Skeleton className="h-14" />
+              <Skeleton className="h-14" />
+              <Skeleton className="h-14" />
+            </div>
+          </div>
+        )}
+        {/* Loading and not logged in */}
+        {!isAuthenticated && !isPending && (
           <Empty>
             <EmptyHeader>
               <EmptyMedia variant="icon">
@@ -114,7 +132,9 @@ export default function GroceryPage() {
               Sign in with Google
             </Button>
           </Empty>
-        ) : (
+        )}
+        {/* Done loading and logged in */}
+        {isAuthenticated && !isDataLoading && (
           <div className="flex flex-col gap-4">
             <GroceryDrawer
               ingredients={ingredients}

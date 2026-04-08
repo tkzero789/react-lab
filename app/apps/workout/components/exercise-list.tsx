@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -33,7 +33,7 @@ type Props = {
 };
 
 export default function ExerciseList({ exercises, onUpdate, onRemove }: Props) {
-  const [editId, setEditId] = useState<Id<"exercises"> | null>(null);
+  const [editId, setEditId] = React.useState<Id<"exercises"> | null>(null);
 
   if (exercises.length === 0) {
     return (
@@ -101,7 +101,7 @@ export default function ExerciseList({ exercises, onUpdate, onRemove }: Props) {
                 size="icon"
                 onClick={() => onRemove(exercise._id)}
               >
-                <Trash2 className="h-4 w-4 text-destructive" />
+                <Trash2 className="text-destructive" />
               </Button>
             </div>
           </CardContent>

@@ -11,7 +11,7 @@
   margin-right: calc((2.6rem - 1.4rem) / 2 * -1);
 }
 .carousel__dot {
-  -webkit-tap-highlight-color: rgba(var(230, 230, 230), 0.5);
+  -webkit-tap-highlight-color: rgba(230, 230, 230, 0.5);
   -webkit-appearance: none;
   appearance: none;
   background-color: transparent;

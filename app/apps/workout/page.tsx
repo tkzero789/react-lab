@@ -131,10 +131,9 @@ export default function WorkoutPage() {
             </Button>
           </Empty>
         ) : (
-          <Tabs defaultValue="workout" className="w-full">
+          <Tabs defaultValue="workout">
             <TabsList className="w-full">
               <TabsTrigger value="workout" className="flex-1">
-                <Dumbbell className="mr-1.5 h-4 w-4" />
                 Workout
               </TabsTrigger>
               <TabsTrigger value="exercises" className="flex-1">

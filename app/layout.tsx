@@ -5,7 +5,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { ConvexClientProvider } from "@/app/convex-client-provider";
 import "./css/globals.css";
 
-const roboto = Roboto({ subsets: ["latin"], weight: ["400", "500"] });
+const roboto = Roboto({ subsets: ["latin"], weight: ["400", "500", "600"] });
 
 export const metadata: Metadata = {
   title: "React Lab",
@@ -20,9 +20,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${roboto.className} antialiased`}>
-        <ConvexClientProvider>
-          {children}
-        </ConvexClientProvider>
+        <ConvexClientProvider>{children}</ConvexClientProvider>
         <Toaster
           toastOptions={{
             className: "flex gap-2 items-center dark:bg-background",

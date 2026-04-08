@@ -8,7 +8,9 @@ import { Badge } from "@/components/ui/badge";
 import { Calendar } from "@/components/ui/calendar";
 import {
   Dialog,
+  DialogBody,
   DialogContent,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -185,88 +187,95 @@ export default function WorkoutLogger({
                   Log Exercise — {format(selectedDate, "MMM d, yyyy")}
                 </DialogTitle>
               </DialogHeader>
-              <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-                <div>
-                  <label className="mb-1 block text-sm font-medium">
-                    Exercise
-                  </label>
-                  <Select
-                    value={selectedExercise || undefined}
-                    onValueChange={(value) =>
-                      setSelectedExercise(value as Id<"exercises">)
-                    }
-                  >
-                    <SelectTrigger className="w-full">
-                      <SelectValue placeholder="Select an exercise" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectGroup>
-                        {exercises.map((ex) => (
-                          <SelectItem key={ex._id} value={ex._id}>
-                            {ex.name}{" "}
-                            {ex.personalBest > 0
-                              ? `(PB: ${ex.personalBest} lbs)`
-                              : ""}
-                          </SelectItem>
-                        ))}
-                      </SelectGroup>
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <div>
-                  <label className="mb-1 block text-sm font-medium">Sets</label>
-                  <div className="flex flex-col gap-2">
-                    {sets.map((set, i) => (
-                      <div key={i} className="flex items-center gap-2">
-                        <span className="w-8 shrink-0 text-center text-xs text-muted-foreground">
-                          #{i + 1}
-                        </span>
-                        <Input
-                          type="number"
-                          placeholder="Reps"
-                          min="1"
-                          value={set.reps}
-                          onChange={(e) => updateSet(i, "reps", e.target.value)}
-                          className="flex-1"
-                        />
-                        <Input
-                          type="number"
-                          placeholder="Weight (lbs)"
-                          min="0"
-                          step="0.5"
-                          value={set.weight}
-                          onChange={(e) =>
-                            updateSet(i, "weight", e.target.value)
-                          }
-                          className="flex-1"
-                        />
-                        {sets.length > 1 && (
-                          <Button
-                            type="button"
-                            variant="ghost"
-                            size="icon"
-                            className="h-8 w-8 shrink-0"
-                            onClick={() => removeSet(i)}
-                          >
-                            <X className="h-3.5 w-3.5" />
-                          </Button>
-                        )}
-                      </div>
-                    ))}
+              <DialogBody>
+                <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+                  <div>
+                    <label className="mb-1 block text-sm font-medium">
+                      Exercise
+                    </label>
+                    <Select
+                      value={selectedExercise || undefined}
+                      onValueChange={(value) =>
+                        setSelectedExercise(value as Id<"exercises">)
+                      }
+                    >
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder="Select an exercise" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectGroup>
+                          {exercises.map((ex) => (
+                            <SelectItem key={ex._id} value={ex._id}>
+                              {ex.name}{" "}
+                              {ex.personalBest > 0
+                                ? `(PB: ${ex.personalBest} lbs)`
+                                : ""}
+                            </SelectItem>
+                          ))}
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select>
                   </div>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    className="mt-2"
-                    onClick={addSet}
-                  >
-                    <Plus className="mr-1 h-3 w-3" />
-                    Add Set
-                  </Button>
-                </div>
 
+                  <div>
+                    <label className="mb-1 block text-sm font-medium">
+                      Sets
+                    </label>
+                    <div className="flex flex-col gap-2">
+                      {sets.map((set, i) => (
+                        <div key={i} className="flex items-center gap-2">
+                          <span className="w-8 shrink-0 text-center text-xs text-muted-foreground">
+                            #{i + 1}
+                          </span>
+                          <Input
+                            type="number"
+                            placeholder="Reps"
+                            min="1"
+                            value={set.reps}
+                            onChange={(e) =>
+                              updateSet(i, "reps", e.target.value)
+                            }
+                            className="flex-1"
+                          />
+                          <Input
+                            type="number"
+                            placeholder="Weight (lbs)"
+                            min="0"
+                            step="0.5"
+                            value={set.weight}
+                            onChange={(e) =>
+                              updateSet(i, "weight", e.target.value)
+                            }
+                            className="flex-1"
+                          />
+                          {sets.length > 1 && (
+                            <Button
+                              type="button"
+                              variant="ghost"
+                              size="icon"
+                              className="h-8 w-8 shrink-0"
+                              onClick={() => removeSet(i)}
+                            >
+                              <X className="h-3.5 w-3.5" />
+                            </Button>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      className="mt-2"
+                      onClick={addSet}
+                    >
+                      <Plus className="mr-1 h-3 w-3" />
+                      Add Set
+                    </Button>
+                  </div>
+                </form>
+              </DialogBody>
+              <DialogFooter>
                 <Button
                   type="submit"
                   disabled={
@@ -276,7 +285,7 @@ export default function WorkoutLogger({
                   <Dumbbell className="mr-1 h-4 w-4" />
                   Save Workout
                 </Button>
-              </form>
+              </DialogFooter>
             </DialogContent>
           </Dialog>
           {exercises.length === 0 && (

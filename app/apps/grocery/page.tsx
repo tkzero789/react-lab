@@ -1,6 +1,5 @@
 "use client";
 
-import React from "react";
 import { toast } from "sonner";
 import DashboardBreadcrumb from "../components/dashboard-breadcrumb";
 import DashboardContainer from "@/components/layout/dashboard-container";
@@ -9,19 +8,11 @@ import { useQuery, useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
 import { authClient } from "@/lib/auth-client";
-import { LogIn } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import {
-  Empty,
-  EmptyHeader,
-  EmptyMedia,
-  EmptyTitle,
-  EmptyDescription,
-} from "@/components/ui/empty";
 import GroceryDrawer from "./components/grocery-drawer";
 import GroceryStats from "./components/grocery-stats";
 import IngredientList from "./components/ingredient-list";
 import { Skeleton } from "@/components/ui/skeleton";
+import SignInPrompt from "../components/sign-in-prompt";
 
 function normalize(str: string) {
   return str.replace(/\s+/g, "").toLowerCase();
@@ -110,28 +101,7 @@ export default function GroceryPage() {
         )}
         {/* Loading and not logged in */}
         {!isAuthenticated && !isPending && (
-          <Empty>
-            <EmptyHeader>
-              <EmptyMedia variant="icon">
-                <LogIn />
-              </EmptyMedia>
-              <EmptyTitle>Sign in to get started</EmptyTitle>
-              <EmptyDescription>
-                Log in to add ingredients and dishes to your grocery list.
-              </EmptyDescription>
-            </EmptyHeader>
-            <Button
-              variant="outline"
-              onClick={() =>
-                authClient.signIn.social({
-                  provider: "google",
-                  callbackURL: window.location.href,
-                })
-              }
-            >
-              Sign in with Google
-            </Button>
-          </Empty>
+          <SignInPrompt description="Sign in to add ingredients and dishes to your grocery list." />
         )}
         {/* Done loading and logged in */}
         {isAuthenticated && !isDataLoading && (

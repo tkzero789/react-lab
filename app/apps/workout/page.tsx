@@ -9,16 +9,8 @@ import { useQuery, useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
 import { authClient } from "@/lib/auth-client";
-import { LogIn, Dumbbell } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import {
-  Empty,
-  EmptyHeader,
-  EmptyMedia,
-  EmptyTitle,
-  EmptyDescription,
-} from "@/components/ui/empty";
 import {
   Dialog,
   DialogBody,
@@ -32,6 +24,7 @@ import ExerciseList from "./components/exercise-list";
 import BodyWeightTracker from "./components/body-weight-tracker";
 import WorkoutLogger from "./components/workout-logger";
 import AddExerciseForm from "./components/add-exercise-form";
+import SignInPrompt from "../components/sign-in-prompt";
 
 export default function WorkoutPage() {
   const isMobile = useIsMobile();
@@ -110,28 +103,7 @@ export default function WorkoutPage() {
       />
       <DashboardContainer className="max-w-4xl flex-1">
         {!isAuthenticated ? (
-          <Empty>
-            <EmptyHeader>
-              <EmptyMedia variant="icon">
-                <LogIn />
-              </EmptyMedia>
-              <EmptyTitle>Sign in to get started</EmptyTitle>
-              <EmptyDescription>
-                Log in to track your exercises, body weight, and workouts.
-              </EmptyDescription>
-            </EmptyHeader>
-            <Button
-              variant="outline"
-              onClick={() =>
-                authClient.signIn.social({
-                  provider: "google",
-                  callbackURL: window.location.href,
-                })
-              }
-            >
-              Sign in with Google
-            </Button>
-          </Empty>
+          <SignInPrompt description="Sign in to track your exercises, body weight, and workouts." />
         ) : (
           <Tabs defaultValue="workout">
             <TabsList className="w-full">

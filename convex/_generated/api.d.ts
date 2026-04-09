@@ -14,6 +14,7 @@ import type * as dishes from "../dishes.js";
 import type * as exercises from "../exercises.js";
 import type * as http from "../http.js";
 import type * as ingredients from "../ingredients.js";
+import type * as todos from "../todos.js";
 import type * as users from "../users.js";
 import type * as workoutLogs from "../workoutLogs.js";
 
@@ -30,6 +31,7 @@ declare const fullApi: ApiFromModules<{
   exercises: typeof exercises;
   http: typeof http;
   ingredients: typeof ingredients;
+  todos: typeof todos;
   users: typeof users;
   workoutLogs: typeof workoutLogs;
 }>;

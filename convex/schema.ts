@@ -11,6 +11,14 @@ export default defineSchema({
   })
     .index("by_authId", ["authId"])
     .index("by_email", ["email"]),
+
+  // Todo
+  todos: defineTable({
+    name: v.string(),
+    userId: v.id("users"),
+  }).index("by_userId", ["userId"]),
+
+  // Grocery
   dishes: defineTable({
     name: v.string(),
     userId: v.id("users"),
@@ -24,7 +32,7 @@ export default defineSchema({
     userId: v.id("users"),
   }).index("by_userId", ["userId"]),
 
-  // Workout app
+  // Workout
   exercises: defineTable({
     name: v.string(),
     muscleGroups: v.array(v.string()),
@@ -32,14 +40,14 @@ export default defineSchema({
     userId: v.id("users"),
   }).index("by_userId", ["userId"]),
   bodyWeights: defineTable({
-    date: v.string(), // YYYY-MM-DD
+    date: v.string(),
     weight: v.number(),
     userId: v.id("users"),
   })
     .index("by_userId", ["userId"])
     .index("by_userId_date", ["userId", "date"]),
   workoutLogs: defineTable({
-    date: v.string(), // YYYY-MM-DD
+    date: v.string(),
     exerciseId: v.id("exercises"),
     sets: v.array(
       v.object({

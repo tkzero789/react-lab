@@ -31,6 +31,7 @@ const sidebarItems = {
       url: "/apps/todo",
       icon: ListChecks,
     },
+
     {
       name: "Weather",
       url: "/apps/weather",

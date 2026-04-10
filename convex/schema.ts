@@ -3,20 +3,17 @@ import { v } from "convex/values";
 
 export default defineSchema({
   users: defineTable({
-    authId: v.string(),
+    tokenIdentifier: v.string(),
     name: v.string(),
     email: v.string(),
-    image: v.optional(v.string()),
     createdAt: v.number(),
-  })
-    .index("by_authId", ["authId"])
-    .index("by_email", ["email"]),
+  }).index("by_token", ["tokenIdentifier"]),
 
   // Todo
   todos: defineTable({
-    name: v.string(),
+    text: v.optional(v.string()),
     userId: v.id("users"),
-  }).index("by_userId", ["userId"]),
+  }),
 
   // Grocery
   dishes: defineTable({

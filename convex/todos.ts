@@ -1,17 +1,22 @@
-import { v } from "convex/values";
+import { ConvexError, v } from "convex/values";
 import { mutation, query } from "./_generated/server";
-import { getCurrentUserId } from "./users";
 
 export const list = query({
   handler: async (ctx) => {
-    const userId = await getCurrentUserId(ctx);
-    if (!userId) {
-      return [];
+    const identity = await ctx.auth.getUserIdentity();
+    if (identity === null) {
+      throw new ConvexError("Not authenticated");
     }
-    return await ctx.db
-      .query("todos")
-      .withIndex("by_userId", (q) => q.eq("userId", userId))
-      .collect();
+    const user = await ctx.db
+      .query("users")
+      .withIndex("by_token", (q) =>
+        q.eq("tokenIdentifier", identity.tokenIdentifier),
+      )
+      .unique();
+    if (!user) {
+      throw new ConvexError("User not found");
+    }
+    return await ctx.db.query("todos").collect();
   },
 });
 
@@ -20,13 +25,27 @@ export const add = mutation({
     name: v.string(),
   },
   handler: async (ctx, args) => {
-    const userId = await getCurrentUserId(ctx);
-    if (!userId) {
-      throw new Error("Not authenticated");
+    const identity = await ctx.auth.getUserIdentity();
+    if (identity === null) {
+      throw new ConvexError("Not authenticated");
     }
+
+    const user = await ctx.db
+      .query("users")
+      .withIndex("by_token", (q) =>
+        q.eq("tokenIdentifier", identity.tokenIdentifier),
+      )
+      .unique();
+
+    if (!user) {
+      throw new ConvexError("User not found");
+    }
+
+    console.log(user);
+
     return await ctx.db.insert("todos", {
-      name: args.name,
-      userId,
+      text: args.name,
+      userId: user._id,
     });
   },
 });

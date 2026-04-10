@@ -1,15 +1,23 @@
-import { preloadAuthQuery } from "@/lib/auth-server";
+"use client";
+
 import TodoForm from "./todo-form";
 import TodoList from "./todo-list";
-import { api } from "@/convex/_generated/api";
+import SignInPrompt from "../../components/sign-in-prompt";
+import { Authenticated, Unauthenticated } from "convex/react";
 
-export default async function TodoContent() {
-  const preloadTodos = await preloadAuthQuery(api.todos.list);
-
+export default function TodoContent() {
   return (
-    <div className="flex flex-col gap-4">
-      <TodoForm />
-      <TodoList preloadedTodos={preloadTodos} />
-    </div>
+    <>
+      <Unauthenticated>
+        <SignInPrompt description="Add and manage your todos in one place" />
+      </Unauthenticated>
+
+      <Authenticated>
+        <div className="flex flex-col gap-4">
+          <TodoForm />
+          <TodoList />
+        </div>
+      </Authenticated>
+    </>
   );
 }

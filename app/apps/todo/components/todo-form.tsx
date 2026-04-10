@@ -21,8 +21,8 @@ export default function TodoForm() {
     if (!todo.trim()) {
       return;
     }
+    // setTodo("");
     await addTodo({ name: todo });
-    setTodo("");
   }
 
   return (

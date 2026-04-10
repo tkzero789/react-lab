@@ -5,10 +5,9 @@ import { toast } from "sonner";
 import DashboardBreadcrumb from "../components/dashboard-breadcrumb";
 import DashboardContainer from "@/components/layout/dashboard-container";
 import { useIsMobile } from "@/hooks/use-mobile";
-import { useQuery, useMutation } from "convex/react";
+import { useQuery, useMutation, useConvexAuth } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
-import { authClient } from "@/lib/auth-client";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
@@ -25,11 +24,11 @@ import BodyWeightTracker from "./components/body-weight-tracker";
 import WorkoutLogger from "./components/workout-logger";
 import AddExerciseForm from "./components/add-exercise-form";
 import SignInPrompt from "../components/sign-in-prompt";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function WorkoutPage() {
   const isMobile = useIsMobile();
-  const { data: session } = authClient.useSession();
-  const isAuthenticated = !!session?.user;
+  const { isLoading, isAuthenticated } = useConvexAuth();
 
   const exercises =
     useQuery(api.exercises.list, isAuthenticated ? {} : "skip") ?? [];
@@ -102,9 +101,16 @@ export default function WorkoutPage() {
         breadcrumbs={[{ title: "Apps", href: "/apps" }, { title: "Workout" }]}
       />
       <DashboardContainer className="max-w-4xl flex-1">
-        {!isAuthenticated ? (
+        {isLoading && (
+          <div className="flex flex-col gap-4">
+            <Skeleton className="h-10" />
+            <Skeleton className="h-64" />
+          </div>
+        )}
+        {!isAuthenticated && !isLoading && (
           <SignInPrompt description="Sign in to track your exercises, body weight, and workouts." />
-        ) : (
+        )}
+        {isAuthenticated && (
           <Tabs defaultValue="workout">
             <TabsList className="w-full">
               <TabsTrigger value="workout" className="flex-1">

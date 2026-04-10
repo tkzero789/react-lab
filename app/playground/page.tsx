@@ -1,7 +1,6 @@
 import Container from "@/components/layout/container";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import React from "react";
 
 export default function PlaygroundPage() {
   return (

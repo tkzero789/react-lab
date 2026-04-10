@@ -1,5 +1,5 @@
 import { createClient, type GenericCtx } from "@convex-dev/better-auth";
-import { convex, crossDomain } from "@convex-dev/better-auth/plugins";
+import { convex } from "@convex-dev/better-auth/plugins";
 import { components } from "./_generated/api";
 import { DataModel } from "./_generated/dataModel";
 import { query } from "./_generated/server";
@@ -31,7 +31,6 @@ export const createAuth = (ctx: GenericCtx<DataModel>) => {
     },
     plugins: [
       // The Convex plugin is required for Convex compatibility
-      crossDomain({ siteUrl }),
       convex({ authConfig }),
     ],
   });
@@ -40,12 +39,14 @@ export const createAuth = (ctx: GenericCtx<DataModel>) => {
 export const getCurrentUser = query({
   args: {},
   handler: async (ctx) => {
-    const authUser = await authComponent.getAuthUser(ctx);
-    if (!authUser) return null;
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) return null;
 
     return await ctx.db
       .query("users")
-      .withIndex("by_authId", (q) => q.eq("authId", authUser._id))
+      .withIndex("by_token", (q) =>
+        q.eq("tokenIdentifier", identity.tokenIdentifier),
+      )
       .unique();
   },
 });

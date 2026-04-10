@@ -5,7 +5,6 @@ import TodoForm from "./components/todo-form";
 import { isAuthenticated, preloadAuthQuery } from "@/lib/auth-server";
 import TodoList from "./components/todo-list";
 import SignInPrompt from "../components/sign-in-prompt";
-import { Suspense } from "react";
 import { api } from "@/convex/_generated/api";
 
 export default async function TodoPage() {
@@ -27,15 +26,18 @@ export default async function TodoPage() {
       />
 
       <DashboardContainer className="max-w-2xl">
-        <Suspense fallback={<div>Loading...</div>}>
-          <div className="flex flex-col gap-4">
-            {!user && (
-              <SignInPrompt description="Add and manage your todos in one place" />
-            )}
-            {user && <TodoForm />}
-            {user && preloadTodos && <TodoList preloadedTodos={preloadTodos} />}
-          </div>
-        </Suspense>
+        <div className="flex flex-col gap-4">
+          {!user && (
+            <SignInPrompt description="Add and manage your todos in one place" />
+          )}
+
+          {user && preloadTodos && (
+            <>
+              <TodoForm />
+              <TodoList preloadedTodos={preloadTodos} />
+            </>
+          )}
+        </div>
       </DashboardContainer>
     </>
   );

@@ -4,26 +4,20 @@ import { Input } from "@/components/ui/input";
 import { Plus } from "lucide-react";
 import { toast } from "sonner";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { useMutation, useQuery } from "convex/react";
+import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
-import { Dish, Ingredient } from "@/types/grocery";
 
 function normalize(str: string) {
   return str.replace(/\s+/g, "").toLowerCase();
 }
 
-type Props = {
-  ingredients: Ingredient[];
-  dishes: Dish[];
-  onAdd: (args: {
-    name: string;
-    quantity: string;
-    price: number;
-    dishIds: Id<"dishes">[];
-  }) => void;
-};
-
-export default function IngredientForm({ ingredients, dishes, onAdd }: Props) {
+export default function IngredientForm() {
   const isMobile = useIsMobile();
+  const ingredients = useQuery(api.ingredients.list) ?? [];
+  const dishes = useQuery(api.dishes.list) ?? [];
+  const addIngredient = useMutation(api.ingredients.add);
+
   const [name, setName] = React.useState("");
   const [qty, setQty] = React.useState("");
   const [price, setPrice] = React.useState("");
@@ -31,7 +25,7 @@ export default function IngredientForm({ ingredients, dishes, onAdd }: Props) {
     [],
   );
 
-  function handleSubmit(e: React.FormEvent) {
+  function handleSubmit(e: React.SubmitEvent<HTMLFormElement>) {
     e.preventDefault();
     if (!name.trim()) {
       toast.error("Item name is required", {
@@ -48,7 +42,7 @@ export default function IngredientForm({ ingredients, dishes, onAdd }: Props) {
       });
       return;
     }
-    onAdd({
+    addIngredient({
       name: name.trim(),
       quantity: qty.trim() || "1",
       price: Number(price) || 0,

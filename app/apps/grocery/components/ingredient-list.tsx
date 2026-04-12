@@ -1,14 +1,38 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Id } from "@/convex/_generated/dataModel";
-import IngredientRow from "./ingredient-row";
-import { Dish, Ingredient } from "@/types/grocery";
+"use client";
 
-type Props = {
-  ingredients: Ingredient[];
-  dishes: Dish[];
-  onToggle: (id: Id<"ingredients">) => void;
-  onRemove: (id: Id<"ingredients">) => void;
-  onEdit: (
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { toast } from "sonner";
+import { useIsMobile } from "@/hooks/use-mobile";
+import { useMutation, useQuery } from "convex/react";
+import { api } from "@/convex/_generated/api";
+import { Id } from "@/convex/_generated/dataModel";
+import IngredientItem from "./ingredient-item";
+
+function normalize(str: string) {
+  return str.replace(/\s+/g, "").toLowerCase();
+}
+
+export default function IngredientList() {
+  const isMobile = useIsMobile();
+  const ingredients = useQuery(api.ingredients.list) ?? [];
+  const dishes = useQuery(api.dishes.list) ?? [];
+
+  const toggleIngredient = useMutation(api.ingredients.toggleChecked);
+  const removeIngredient = useMutation(api.ingredients.remove);
+  const updateIngredient = useMutation(api.ingredients.update);
+
+  function handleToggle(id: Id<"ingredients">) {
+    toggleIngredient({ id });
+  }
+
+  function handleRemove(id: Id<"ingredients">) {
+    removeIngredient({ id });
+    toast.info("Ingredient deleted", {
+      position: isMobile ? "top-center" : "bottom-right",
+    });
+  }
+
+  function handleEdit(
     id: Id<"ingredients">,
     updates: {
       name: string;
@@ -16,16 +40,23 @@ type Props = {
       price: number;
       dishIds: Id<"dishes">[];
     },
-  ) => boolean;
-};
+  ) {
+    const isDuplicate = ingredients.some(
+      (i) => i._id !== id && normalize(i.name) === normalize(updates.name),
+    );
+    if (isDuplicate) {
+      toast.error(`"${updates.name}" already exists in your list`, {
+        position: isMobile ? "top-center" : "bottom-right",
+      });
+      return false;
+    }
+    updateIngredient({ id, ...updates });
+    toast.success("Ingredient updated", {
+      position: isMobile ? "top-center" : "bottom-right",
+    });
+    return true;
+  }
 
-export default function IngredientList({
-  ingredients,
-  dishes,
-  onToggle,
-  onRemove,
-  onEdit,
-}: Props) {
   const standalone = ingredients.filter((i) => i.dishIds.length === 0);
   const dishGroups = dishes.map((dish) => ({
     dish,
@@ -42,14 +73,14 @@ export default function IngredientList({
             </div>
           )}
           {standalone.map((item) => (
-            <IngredientRow
+            <IngredientItem
               key={item._id}
               item={item}
               allDishes={dishes}
               otherDishes={[]}
-              onToggle={onToggle}
-              onRemove={onRemove}
-              onEdit={onEdit}
+              onToggle={handleToggle}
+              onRemove={handleRemove}
+              onEdit={handleEdit}
             />
           ))}
         </div>
@@ -64,16 +95,16 @@ export default function IngredientList({
               </CardHeader>
               <CardContent className="flex flex-col gap-2">
                 {items.map((item) => (
-                  <IngredientRow
+                  <IngredientItem
                     key={`${dish._id}-${item._id}`}
                     item={item}
                     allDishes={dishes}
                     otherDishes={dishes.filter(
                       (d) => d._id !== dish._id && item.dishIds.includes(d._id),
                     )}
-                    onToggle={onToggle}
-                    onRemove={onRemove}
-                    onEdit={onEdit}
+                    onToggle={handleToggle}
+                    onRemove={handleRemove}
+                    onEdit={handleEdit}
                   />
                 ))}
               </CardContent>

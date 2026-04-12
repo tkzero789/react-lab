@@ -34,7 +34,7 @@ type Props = {
   ) => boolean;
 };
 
-export default function IngredientRow({
+export default function IngredientItem({
   item,
   allDishes,
   otherDishes,

@@ -1,7 +1,12 @@
+"use client";
+
 import DashboardBreadcrumb from "../components/dashboard-breadcrumb";
 import DashboardContainer from "@/components/layout/dashboard-container";
 import { pathClient } from "@/lib/path-client";
-import TodoContent from "./components/todo-content";
+import { Authenticated, Unauthenticated } from "convex/react";
+import SignInPrompt from "../components/sign-in-prompt";
+import TodoForm from "./components/todo-form";
+import TodoList from "./components/todo-list";
 
 export default function TodoPage() {
   return (
@@ -18,7 +23,15 @@ export default function TodoPage() {
         ]}
       />
       <DashboardContainer className="max-w-2xl">
-        <TodoContent />
+        <Unauthenticated>
+          <SignInPrompt description="Add and manage your todos in one place" />
+        </Unauthenticated>
+        <Authenticated>
+          <div className="flex flex-col gap-4">
+            <TodoForm />
+            <TodoList />
+          </div>
+        </Authenticated>
       </DashboardContainer>
     </>
   );

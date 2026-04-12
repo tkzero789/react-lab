@@ -1,10 +1,11 @@
-import { Ingredient } from "@/types/grocery";
+"use client";
 
-type Props = {
-  ingredients: Ingredient[];
-};
+import { useQuery } from "convex/react";
+import { api } from "@/convex/_generated/api";
 
-export default function GroceryStats({ ingredients }: Props) {
+export default function GroceryStats() {
+  const ingredients = useQuery(api.ingredients.list) ?? [];
+
   const total = ingredients.reduce((sum, i) => sum + i.price, 0);
   const checkedTotal = ingredients
     .filter((i) => i.checked)

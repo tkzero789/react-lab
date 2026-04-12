@@ -5,11 +5,9 @@ import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
 import { useMutation, useQuery } from "convex/react";
 import { Trash2 } from "lucide-react";
-import React from "react";
 
 export default function TodoList() {
   const todos = useQuery(api.todos.list);
-
   const removeTodo = useMutation(api.todos.remove);
 
   async function handleRemoveTodo(todoId: Id<"todos">) {

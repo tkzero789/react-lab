@@ -3,60 +3,47 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Plus, RotateCcw } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import {
-  Drawer,
-  DrawerContent,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
-} from "@/components/ui/drawer";
-import { Id } from "@/convex/_generated/dataModel";
+  Dialog,
+  DialogTrigger,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogBody,
+} from "@/components/ui/dialog";
+import { toast } from "sonner";
+import { useIsMobile } from "@/hooks/use-mobile";
+import { useMutation } from "convex/react";
+import { api } from "@/convex/_generated/api";
 import IngredientForm from "./ingredient-form";
 import DishForm from "./dish-form";
-import { Dish, Ingredient } from "@/types/grocery";
 
 type Tab = "ingredient" | "dish";
 
-type Props = {
-  ingredients: Ingredient[];
-  dishes: Dish[];
-  onAddIngredient: (args: {
-    name: string;
-    quantity: string;
-    price: number;
-    dishIds: Id<"dishes">[];
-  }) => void;
-  onAddDish: (args: { name: string }) => void;
-  onRemoveDish: (id: Id<"dishes">) => void;
-  onReset: () => void;
-};
-
-export default function GroceryDrawer({
-  ingredients,
-  dishes,
-  onAddIngredient,
-  onAddDish,
-  onRemoveDish,
-  onReset,
-}: Props) {
+export default function GroceryDialog() {
+  const isMobile = useIsMobile();
   const [tab, setTab] = React.useState<Tab>("ingredient");
+  const removeAll = useMutation(api.ingredients.removeAll);
+
+  function handleReset() {
+    removeAll();
+    toast.info("Grocery list cleared", {
+      position: isMobile ? "top-center" : "bottom-right",
+    });
+  }
 
   return (
-    <Drawer>
-      <DrawerTrigger asChild className="fixed bottom-8 right-8">
+    <Dialog>
+      <DialogTrigger asChild className="fixed bottom-8 right-8">
         <Button>
           <Plus /> Add
         </Button>
-      </DrawerTrigger>
-
-      <DrawerContent className="mx-auto max-w-2xl">
-        <VisuallyHidden>
-          <DrawerHeader>
-            <DrawerTitle>Add item</DrawerTitle>
-          </DrawerHeader>
-        </VisuallyHidden>
-        <div className="p-4">
+      </DialogTrigger>
+      <DialogContent className="mx-auto max-w-2xl">
+        <DialogHeader>
+          <DialogTitle>Add item</DialogTitle>
+        </DialogHeader>
+        <DialogBody>
           <Card>
             <CardHeader className="flex flex-row items-center justify-between">
               <div className="flex h-10 w-fit items-center gap-1 rounded-xl bg-muted p-1">
@@ -85,29 +72,17 @@ export default function GroceryDrawer({
                   Dish
                 </Button>
               </div>
-              <Button variant="ghost" size="sm" onClick={onReset}>
+              <Button variant="ghost" size="sm" onClick={handleReset}>
                 <RotateCcw />
                 Reset
               </Button>
             </CardHeader>
             <CardContent className="flex flex-col gap-3">
-              {tab === "ingredient" ? (
-                <IngredientForm
-                  ingredients={ingredients}
-                  dishes={dishes}
-                  onAdd={onAddIngredient}
-                />
-              ) : (
-                <DishForm
-                  dishes={dishes}
-                  onAdd={onAddDish}
-                  onRemove={onRemoveDish}
-                />
-              )}
+              {tab === "ingredient" ? <IngredientForm /> : <DishForm />}
             </CardContent>
           </Card>
-        </div>
-      </DrawerContent>
-    </Drawer>
+        </DialogBody>
+      </DialogContent>
+    </Dialog>
   );
 }

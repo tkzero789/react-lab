@@ -13,21 +13,20 @@ import {
   DrawerTrigger,
 } from "@/components/ui/drawer";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { useMutation, useQuery } from "convex/react";
+import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
-import { Dish } from "@/types/grocery";
 
 function normalize(str: string) {
   return str.replace(/\s+/g, "").toLowerCase();
 }
 
-type Props = {
-  dishes: Dish[];
-  onAdd: (args: { name: string }) => void;
-  onRemove: (id: Id<"dishes">) => void;
-};
-
-export default function DishForm({ dishes, onAdd, onRemove }: Props) {
+export default function DishForm() {
   const isMobile = useIsMobile();
+  const dishes = useQuery(api.dishes.list) ?? [];
+  const addDish = useMutation(api.dishes.add);
+  const removeDish = useMutation(api.dishes.remove);
+
   const [dishName, setDishName] = React.useState("");
 
   function handleSubmit(e: React.FormEvent) {
@@ -47,7 +46,7 @@ export default function DishForm({ dishes, onAdd, onRemove }: Props) {
       });
       return;
     }
-    onAdd({ name: dishName.trim() });
+    addDish({ name: dishName.trim() });
     toast.success(`Added dish "${dishName.trim()}"`, {
       position: isMobile ? "top-center" : "bottom-right",
     });
@@ -55,7 +54,7 @@ export default function DishForm({ dishes, onAdd, onRemove }: Props) {
   }
 
   function handleRemove(dishId: Id<"dishes">) {
-    onRemove(dishId);
+    removeDish({ id: dishId });
     toast.info("Dish deleted", {
       position: isMobile ? "top-center" : "bottom-right",
     });

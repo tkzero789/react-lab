@@ -6,10 +6,7 @@ export const list = query({
   handler: async (ctx) => {
     const userId = await getCurrentUserId(ctx);
     if (!userId) return [];
-    return await ctx.db
-      .query("ingredients")
-      .withIndex("by_userId", (q) => q.eq("userId", userId))
-      .collect();
+    return await ctx.db.query("ingredients").collect();
   },
 });
 
@@ -82,17 +79,11 @@ export const removeAll = mutation({
   handler: async (ctx) => {
     const userId = await getCurrentUserId(ctx);
     if (!userId) throw new Error("Not authenticated");
-    const ingredients = await ctx.db
-      .query("ingredients")
-      .withIndex("by_userId", (q) => q.eq("userId", userId))
-      .collect();
+    const ingredients = await ctx.db.query("ingredients").collect();
     for (const ingredient of ingredients) {
       await ctx.db.delete(ingredient._id);
     }
-    const dishes = await ctx.db
-      .query("dishes")
-      .withIndex("by_userId", (q) => q.eq("userId", userId))
-      .collect();
+    const dishes = await ctx.db.query("dishes").collect();
     for (const dish of dishes) {
       await ctx.db.delete(dish._id);
     }

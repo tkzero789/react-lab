@@ -20,7 +20,6 @@ import {
 } from "@/components/ui/dialog";
 
 import ExerciseList from "./components/exercise-list";
-import BodyWeightTracker from "./components/body-weight-tracker";
 import WorkoutLogger from "./components/workout-logger";
 import AddExerciseForm from "./components/add-exercise-form";
 import SignInPrompt from "../components/sign-in-prompt";
@@ -32,16 +31,12 @@ export default function WorkoutPage() {
 
   const exercises =
     useQuery(api.exercises.list, isAuthenticated ? {} : "skip") ?? [];
-  const bodyWeights =
-    useQuery(api.bodyWeights.list, isAuthenticated ? {} : "skip") ?? [];
   const workoutLogs =
     useQuery(api.workoutLogs.list, isAuthenticated ? {} : "skip") ?? [];
 
   const addExercise = useMutation(api.exercises.add);
   const updateExercise = useMutation(api.exercises.update);
   const removeExercise = useMutation(api.exercises.remove);
-  const upsertBodyWeight = useMutation(api.bodyWeights.upsert);
-  const removeBodyWeight = useMutation(api.bodyWeights.remove);
   const addWorkoutLog = useMutation(api.workoutLogs.add);
   const removeWorkoutLog = useMutation(api.workoutLogs.remove);
 
@@ -71,16 +66,6 @@ export default function WorkoutPage() {
     toast.info("Exercise deleted", { position: toastPos });
   }
 
-  function handleUpsertWeight(date: string, weight: number) {
-    upsertBodyWeight({ date, weight });
-    toast.success("Weight logged", { position: toastPos });
-  }
-
-  function handleRemoveWeight(id: Id<"bodyWeights">) {
-    removeBodyWeight({ id });
-    toast.info("Entry deleted", { position: toastPos });
-  }
-
   function handleAddWorkout(
     date: string,
     exerciseId: Id<"exercises">,
@@ -100,7 +85,7 @@ export default function WorkoutPage() {
       <DashboardBreadcrumb
         breadcrumbs={[{ title: "Apps", href: "/apps" }, { title: "Workout" }]}
       />
-      <DashboardContainer className="max-w-4xl flex-1">
+      <DashboardContainer className="max-w-3xl flex-1">
         {isLoading && (
           <div className="flex flex-col gap-4">
             <Skeleton className="h-10" />
@@ -118,9 +103,6 @@ export default function WorkoutPage() {
               </TabsTrigger>
               <TabsTrigger value="exercises" className="flex-1">
                 Exercises
-              </TabsTrigger>
-              <TabsTrigger value="weight" className="flex-1">
-                Body Weight
               </TabsTrigger>
             </TabsList>
 
@@ -159,14 +141,6 @@ export default function WorkoutPage() {
                   onRemove={handleRemoveExercise}
                 />
               </div>
-            </TabsContent>
-
-            <TabsContent value="weight">
-              <BodyWeightTracker
-                entries={bodyWeights}
-                onUpsert={handleUpsertWeight}
-                onRemove={handleRemoveWeight}
-              />
             </TabsContent>
           </Tabs>
         )}

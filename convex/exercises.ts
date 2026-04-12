@@ -7,10 +7,7 @@ export const list = query({
   handler: async (ctx) => {
     const userId = await getCurrentUserId(ctx);
     if (!userId) return [];
-    return await ctx.db
-      .query("exercises")
-      .withIndex("by_userId", (q) => q.eq("userId", userId))
-      .collect();
+    return await ctx.db.query("exercises").collect();
   },
 });
 
@@ -53,10 +50,7 @@ export const remove = mutation({
     if (!exercise || exercise.userId !== userId)
       throw new Error("Not authorized");
     // Also remove related workout logs
-    const logs = await ctx.db
-      .query("workoutLogs")
-      .withIndex("by_userId", (q) => q.eq("userId", userId))
-      .collect();
+    const logs = await ctx.db.query("workoutLogs").collect();
     for (const log of logs) {
       if (log.exerciseId === id) {
         await ctx.db.delete(log._id);

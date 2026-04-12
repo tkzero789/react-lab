@@ -3,7 +3,9 @@ import { v } from "convex/values";
 
 export default defineSchema({
   users: defineTable({
-    tokenIdentifier: v.string(),
+    tokenIdentifier: v.optional(v.string()),
+    authId: v.optional(v.string()),
+    image: v.optional(v.string()),
     name: v.string(),
     email: v.string(),
     createdAt: v.number(),
@@ -19,7 +21,7 @@ export default defineSchema({
   dishes: defineTable({
     name: v.string(),
     userId: v.id("users"),
-  }).index("by_userId", ["userId"]),
+  }),
   ingredients: defineTable({
     name: v.string(),
     quantity: v.string(),
@@ -27,7 +29,7 @@ export default defineSchema({
     checked: v.boolean(),
     dishIds: v.array(v.id("dishes")),
     userId: v.id("users"),
-  }).index("by_userId", ["userId"]),
+  }),
 
   // Workout
   exercises: defineTable({
@@ -35,14 +37,8 @@ export default defineSchema({
     muscleGroups: v.array(v.string()),
     personalBest: v.number(),
     userId: v.id("users"),
-  }).index("by_userId", ["userId"]),
-  bodyWeights: defineTable({
-    date: v.string(),
-    weight: v.number(),
-    userId: v.id("users"),
-  })
-    .index("by_userId", ["userId"])
-    .index("by_userId_date", ["userId", "date"]),
+  }),
+
   workoutLogs: defineTable({
     date: v.string(),
     exerciseId: v.id("exercises"),
@@ -53,7 +49,5 @@ export default defineSchema({
       }),
     ),
     userId: v.id("users"),
-  })
-    .index("by_userId", ["userId"])
-    .index("by_userId_date", ["userId", "date"]),
+  }),
 });

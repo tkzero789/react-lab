@@ -6,10 +6,7 @@ export const list = query({
   handler: async (ctx) => {
     const userId = await getCurrentUserId(ctx);
     if (!userId) return [];
-    return await ctx.db
-      .query("dishes")
-      .withIndex("by_userId", (q) => q.eq("userId", userId))
-      .collect();
+    return await ctx.db.query("dishes").collect();
   },
 });
 
@@ -30,10 +27,7 @@ export const remove = mutation({
     const dish = await ctx.db.get(args.id);
     if (!dish || dish.userId !== userId) return;
 
-    const ingredients = await ctx.db
-      .query("ingredients")
-      .withIndex("by_userId", (q) => q.eq("userId", userId))
-      .collect();
+    const ingredients = await ctx.db.query("ingredients").collect();
     for (const ingredient of ingredients) {
       if (ingredient.dishIds.includes(args.id)) {
         await ctx.db.patch(ingredient._id, {

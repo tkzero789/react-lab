@@ -1,14 +1,17 @@
-// import { mutation } from "./_generated/server";
+import { Migrations } from "@convex-dev/migrations";
+import { components, internal } from "./_generated/api";
+import { DataModel } from "./_generated/dataModel";
 
-// export const renameTodoNameToText = mutation({
-//   handler: async (ctx) => {
-//     const todos = await ctx.db.query("todos").collect();
-//     for (const todo of todos) {
-//       await ctx.db.patch(todo._id, {
-//         text: todo.name,
-//         name: undefined, // removes the field
-//       });
-//     }
-//     return `Migrated ${todos.length} todos`;
+export const migrations = new Migrations<DataModel>(components.migrations);
+export const run = migrations.runner();
+
+// export const setNameUnset = migrations.define({
+//   table: "todos",
+//   migrateOne: async (ctx, todo) => {
+//     await ctx.db.patch(todo._id, { name: undefined });
 //   },
 // });
+
+// export const runSetNameUnset = migrations.runner(
+//   internal.migrations.setNameUnset,
+// );

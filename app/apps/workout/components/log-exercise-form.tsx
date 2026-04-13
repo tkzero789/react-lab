@@ -145,14 +145,8 @@ export default function LogExerciseForm({
             </div>
           ))}
         </div>
-        <Button
-          type="button"
-          variant="muted"
-          className="w-full"
-          onClick={addSet}
-        >
+        <Button type="button" variant="outline" size="icon" onClick={addSet}>
           <Plus />
-          Add Set
         </Button>
       </div>
     </form>

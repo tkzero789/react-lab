@@ -15,11 +15,11 @@ export default function TodoList() {
   }
 
   return (
-    <ul className="flex flex-col gap-2">
+    <ul className="flex flex-1 flex-col gap-2 px-4 pt-4">
       {todos?.map((todo) => (
         <li
           key={todo._id}
-          className="flex items-center justify-between gap-4 rounded-xl border px-4 py-2 shadow"
+          className="flex items-center justify-between gap-4 rounded-xl border bg-card px-4 py-2"
         >
           {todo.text}
           <Button

@@ -8,6 +8,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  useSidebar,
 } from "@/components/ui/sidebar";
 
 import Link from "next/link";
@@ -25,6 +26,8 @@ type Props = {
 };
 
 export function NavProjects({ projects }: Props) {
+  const { setOpenMobile } = useSidebar();
+
   return (
     <SidebarGroup className="group-data-[collapsible=icon]:hidden">
       <SidebarGroupLabel>Projects</SidebarGroupLabel>
@@ -32,7 +35,7 @@ export function NavProjects({ projects }: Props) {
         {projects.map((project: ProjectSidebar) => (
           <SidebarMenuItem key={project.name}>
             <SidebarMenuButton asChild isActive={project.isActive}>
-              <Link href={pathClient(project.url)}>
+              <Link href={pathClient(project.url)} onClick={() => setOpenMobile(false)}>
                 <project.icon />
                 <span>{project.name}</span>
               </Link>

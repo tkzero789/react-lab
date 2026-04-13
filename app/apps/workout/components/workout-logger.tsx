@@ -14,17 +14,8 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import {
-  Drawer,
-  DrawerBody,
-  DrawerClose,
-  DrawerContent,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
-} from "@/components/ui/drawer";
-import { Trash2, ArrowUp, ArrowDown, Minus } from "lucide-react";
+
+import { Trash2, ArrowUp, ArrowDown } from "lucide-react";
 import { Id } from "@/convex/_generated/dataModel";
 import { format, startOfWeek, endOfWeek, isWithinInterval } from "date-fns";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -61,8 +52,6 @@ export default function WorkoutLogger({
   onAdd,
   onRemove,
 }: Props) {
-  const isMobile = useIsMobile();
-
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [dialogOpen, setDialogOpen] = useState(false);
   const dateStr = format(selectedDate, "yyyy-MM-dd");
@@ -105,8 +94,7 @@ export default function WorkoutLogger({
         </span>
       );
     return (
-      <span className="flex items-center gap-1 text-sm font-medium text-blue-600">
-        <Minus className="size-4" />
+      <span className="flex items-center gap-1 text-sm font-medium text-primary">
         At PB
       </span>
     );
@@ -122,7 +110,7 @@ export default function WorkoutLogger({
             onSelect={(d) => d && setSelectedDate(d)}
             modifiers={{ logged: datesWithLogs }}
             modifiersClassNames={{
-              logged: "bg-muted rounded-xl",
+              logged: "bg-muted rounded-xl ",
             }}
           />
           <div className="flex w-full gap-2 text-center text-sm">
@@ -135,66 +123,33 @@ export default function WorkoutLogger({
               <p className="text-xs text-muted-foreground">Sets This Week</p>
             </div>
           </div>
-          {!isMobile ? (
-            <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-              <DialogTrigger asChild>
-                <Button className="w-full" disabled={exercises.length === 0}>
-                  Log Exercise
+          <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+            <DialogTrigger asChild>
+              <Button className="w-full" disabled={exercises.length === 0}>
+                Log Exercise
+              </Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>
+                  Log Exercise - {format(selectedDate, "MMM d, yyyy")}
+                </DialogTitle>
+              </DialogHeader>
+              <DialogBody>
+                <LogExerciseForm
+                  exercises={exercises}
+                  dateStr={dateStr}
+                  onAdd={onAdd}
+                  onClose={() => setDialogOpen(false)}
+                />
+              </DialogBody>
+              <DialogFooter>
+                <Button form="logWorkout" type="submit">
+                  Save Workout
                 </Button>
-              </DialogTrigger>
-              <DialogContent>
-                <DialogHeader>
-                  <DialogTitle>
-                    Log Exercise - {format(selectedDate, "MMM d, yyyy")}
-                  </DialogTitle>
-                </DialogHeader>
-                <DialogBody>
-                  <LogExerciseForm
-                    exercises={exercises}
-                    dateStr={dateStr}
-                    onAdd={onAdd}
-                    onClose={() => setDialogOpen(false)}
-                  />
-                </DialogBody>
-                <DialogFooter>
-                  <Button form="logWorkout" type="submit">
-                    Save Workout
-                  </Button>
-                </DialogFooter>
-              </DialogContent>
-            </Dialog>
-          ) : (
-            <Drawer open={dialogOpen} onOpenChange={setDialogOpen}>
-              <DrawerTrigger asChild>
-                <Button className="w-full" disabled={exercises.length === 0}>
-                  Log Exercise
-                </Button>
-              </DrawerTrigger>
-              <DrawerContent>
-                <DrawerHeader>
-                  <DrawerTitle>
-                    Log Exercise - {format(selectedDate, "MMM d, yyyy")}
-                  </DrawerTitle>
-                </DrawerHeader>
-                <DrawerBody>
-                  <LogExerciseForm
-                    exercises={exercises}
-                    dateStr={dateStr}
-                    onAdd={onAdd}
-                    onClose={() => setDialogOpen(false)}
-                  />
-                </DrawerBody>
-
-                <DrawerFooter>
-                  <DrawerClose asChild>
-                    <Button form="logWorkout" type="submit">
-                      Save Workout
-                    </Button>
-                  </DrawerClose>
-                </DrawerFooter>
-              </DrawerContent>
-            </Drawer>
-          )}
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
 
           {exercises.length === 0 && (
             <p className="text-center text-xs text-muted-foreground">

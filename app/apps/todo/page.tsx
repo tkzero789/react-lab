@@ -22,15 +22,13 @@ export default function TodoPage() {
           },
         ]}
       />
-      <DashboardContainer className="max-w-2xl">
+      <DashboardContainer className="flex max-w-xl flex-1 flex-col p-0">
         <Unauthenticated>
           <SignInPrompt description="Add and manage your todos in one place" />
         </Unauthenticated>
         <Authenticated>
-          <div className="flex flex-col gap-4">
-            <TodoForm />
-            <TodoList />
-          </div>
+          <TodoList />
+          <TodoForm />
         </Authenticated>
       </DashboardContainer>
     </>

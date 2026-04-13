@@ -14,7 +14,8 @@ import {
 } from "@/components/ui/dialog";
 import { Pencil, Trash2, Trophy } from "lucide-react";
 import { Id } from "@/convex/_generated/dataModel";
-import AddExerciseForm from "./add-exercise-form";
+
+import ExerciseForm from "./exercise-form";
 
 type Exercise = {
   _id: Id<"exercises">;
@@ -44,7 +45,7 @@ export default function ExerciseList({ exercises, onUpdate, onRemove }: Props) {
   }
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-1 flex-col gap-2 px-4">
       {exercises.map((exercise) => (
         <Card key={exercise._id}>
           <CardContent className="flex items-center justify-between gap-3">
@@ -81,7 +82,7 @@ export default function ExerciseList({ exercises, onUpdate, onRemove }: Props) {
                     <DialogTitle>Edit Exercise</DialogTitle>
                   </DialogHeader>
                   <DialogBody>
-                    <AddExerciseForm
+                    <ExerciseForm
                       initial={{
                         name: exercise.name,
                         muscleGroups: exercise.muscleGroups,

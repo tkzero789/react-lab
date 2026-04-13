@@ -21,9 +21,10 @@ import {
 
 import ExerciseList from "./components/exercise-list";
 import WorkoutLogger from "./components/workout-logger";
-import AddExerciseForm from "./components/add-exercise-form";
 import SignInPrompt from "../components/sign-in-prompt";
 import { Skeleton } from "@/components/ui/skeleton";
+import Dock from "../components/dock";
+import ExerciseForm from "./components/exercise-form";
 
 export default function WorkoutPage() {
   const isMobile = useIsMobile();
@@ -85,7 +86,7 @@ export default function WorkoutPage() {
       <DashboardBreadcrumb
         breadcrumbs={[{ title: "Apps", href: "/apps" }, { title: "Workout" }]}
       />
-      <DashboardContainer className="max-w-3xl flex-1">
+      <DashboardContainer className="flex max-w-3xl flex-1 flex-col p-0">
         {isLoading && (
           <div className="flex flex-col gap-4">
             <Skeleton className="h-10" />
@@ -96,8 +97,8 @@ export default function WorkoutPage() {
           <SignInPrompt description="Sign in to track your exercises, body weight, and workouts." />
         )}
         {isAuthenticated && (
-          <Tabs defaultValue="workout">
-            <TabsList className="w-full">
+          <Tabs defaultValue="workout" className="flex-1">
+            <TabsList className="w-full" wrapperClassName="px-4 pt-4">
               <TabsTrigger value="workout" className="flex-1">
                 Workout
               </TabsTrigger>
@@ -115,32 +116,32 @@ export default function WorkoutPage() {
               />
             </TabsContent>
 
-            <TabsContent value="exercises">
-              <div className="flex flex-col gap-4">
-                <div className="flex justify-end">
-                  <Dialog
-                    open={exerciseDialogOpen}
-                    onOpenChange={setExerciseDialogOpen}
-                  >
-                    <DialogTrigger asChild>
-                      <Button>Add Exercise</Button>
-                    </DialogTrigger>
-                    <DialogContent>
-                      <DialogHeader>
-                        <DialogTitle>Add Exercise</DialogTitle>
-                      </DialogHeader>
-                      <DialogBody>
-                        <AddExerciseForm onSubmit={handleAddExercise} />
-                      </DialogBody>
-                    </DialogContent>
-                  </Dialog>
-                </div>
-                <ExerciseList
-                  exercises={exercises}
-                  onUpdate={handleUpdateExercise}
-                  onRemove={handleRemoveExercise}
-                />
-              </div>
+            <TabsContent value="exercises" className="flex flex-1 flex-col">
+              <ExerciseList
+                exercises={exercises}
+                onUpdate={handleUpdateExercise}
+                onRemove={handleRemoveExercise}
+              />
+              <Dock>
+                <Dialog
+                  open={exerciseDialogOpen}
+                  onOpenChange={setExerciseDialogOpen}
+                >
+                  <DialogTrigger asChild>
+                    <div className="bg-background p-4">
+                      <Button className="w-full">Add Exercise</Button>
+                    </div>
+                  </DialogTrigger>
+                  <DialogContent>
+                    <DialogHeader>
+                      <DialogTitle>Add Exercise</DialogTitle>
+                    </DialogHeader>
+                    <DialogBody className="flex flex-1 flex-col p-0">
+                      <ExerciseForm onSubmit={handleAddExercise} />
+                    </DialogBody>
+                  </DialogContent>
+                </Dialog>
+              </Dock>
             </TabsContent>
           </Tabs>
         )}

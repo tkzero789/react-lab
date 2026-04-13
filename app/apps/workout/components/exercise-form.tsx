@@ -18,7 +18,7 @@ type Props = {
   submitLabel?: string;
 };
 
-export default function AddExerciseForm({
+export default function ExerciseForm({
   onSubmit,
   initial,
   submitLabel = "Add Exercise",
@@ -58,51 +58,61 @@ export default function AddExerciseForm({
     <form
       id="addExercise"
       onSubmit={handleSubmit}
-      className="flex flex-col gap-3"
+      className="flex flex-1 flex-col"
     >
-      <div>
-        <label className="mb-1 block text-sm font-medium">Exercise Name</label>
-        <Input
-          placeholder="e.g. Bench Press"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        />
-      </div>
-      <div>
-        <label className="mb-1 block text-sm font-medium">Muscle Groups</label>
-        <div className="flex flex-wrap gap-1.5">
-          {MUSCLE_GROUPS.map((muscle) => (
-            <Badge
-              key={muscle}
-              variant={selectedMuscles.includes(muscle) ? "default" : "outline"}
-              className="cursor-pointer select-none"
-              onClick={() => toggleMuscle(muscle)}
-            >
-              {selectedMuscles.includes(muscle) && (
-                <X className="mr-0.5 h-3 w-3" />
-              )}
-              {muscle}
-            </Badge>
-          ))}
+      <div className="flex flex-col gap-4 p-4">
+        <div>
+          <label className="mb-1 block text-sm font-medium">
+            Exercise Name
+          </label>
+          <Input
+            placeholder="e.g. Bench Press"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
+        </div>
+        <div>
+          <label className="mb-1 block text-sm font-medium">
+            Muscle Groups
+          </label>
+          <div className="flex flex-wrap gap-1.5">
+            {MUSCLE_GROUPS.map((muscle) => (
+              <Badge
+                key={muscle}
+                variant={
+                  selectedMuscles.includes(muscle) ? "default" : "outline"
+                }
+                className="cursor-pointer select-none"
+                onClick={() => toggleMuscle(muscle)}
+              >
+                {selectedMuscles.includes(muscle) && (
+                  <X className="mr-0.5 h-3 w-3" />
+                )}
+                {muscle}
+              </Badge>
+            ))}
+          </div>
+        </div>
+
+        <div>
+          <label className="mb-1 block text-sm font-medium">
+            Personal Best (lbs)
+          </label>
+          <Input
+            type="number"
+            placeholder="0"
+            min="0"
+            step="0.5"
+            value={personalBest}
+            onChange={(e) => setPersonalBest(e.target.value)}
+          />
         </div>
       </div>
-      <div>
-        <label className="mb-1 block text-sm font-medium">
-          Personal Best (lbs)
-        </label>
-        <Input
-          type="number"
-          placeholder="0"
-          min="0"
-          step="0.5"
-          value={personalBest}
-          onChange={(e) => setPersonalBest(e.target.value)}
-        />
-      </div>
-      <div className="border-t p-4">
+      <div className="mt-auto border-t p-4">
         <Button
           type="submit"
           disabled={!name.trim() || selectedMuscles.length === 0}
+          className="w-full"
         >
           <Plus />
           {submitLabel}

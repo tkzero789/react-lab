@@ -8,13 +8,20 @@ function Tabs({
   className,
   ...props
 }: React.ComponentProps<typeof TabsPrimitive.Root>) {
-  return <TabsPrimitive.Root className={cn(className)} {...props} />;
+  return (
+    <TabsPrimitive.Root
+      className={cn("flex flex-col gap-4", className)}
+      {...props}
+    />
+  );
 }
 
 const TabsList = React.forwardRef<
   React.ElementRef<typeof TabsPrimitive.List>,
-  React.ComponentPropsWithoutRef<typeof TabsPrimitive.List>
->(({ className, ...props }, ref) => {
+  React.ComponentPropsWithoutRef<typeof TabsPrimitive.List> & {
+    wrapperClassName?: string;
+  }
+>(({ className, wrapperClassName, ...props }, ref) => {
   const [indicatorStyle, setIndicatorStyle] = React.useState({
     left: 0,
     top: 0,
@@ -71,7 +78,7 @@ const TabsList = React.forwardRef<
   }, [updateIndicator]);
 
   return (
-    <div className="relative" ref={tabsListRef}>
+    <div className={cn("relative", wrapperClassName)} ref={tabsListRef}>
       <TabsPrimitive.List
         ref={ref}
         className={cn(
@@ -81,7 +88,10 @@ const TabsList = React.forwardRef<
         {...props}
       />
       <div
-        className={cn("absolute rounded-xl border border-transparent bg-background shadow-sm", ready && "transition-all duration-300 ease-in-out")}
+        className={cn(
+          "absolute rounded-xl border border-transparent bg-background shadow-sm",
+          ready && "transition-all duration-300 ease-in-out",
+        )}
         style={indicatorStyle}
       />
     </div>
@@ -111,7 +121,7 @@ const TabsContent = React.forwardRef<
   <TabsPrimitive.Content
     ref={ref}
     className={cn(
-      "mt-2 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
+      "ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
       className,
     )}
     {...props}

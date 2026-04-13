@@ -29,7 +29,7 @@ function Calendar({
     <DayPicker
       showOutsideDays={showOutsideDays}
       className={cn(
-        "group/calendar rounded-xl bg-white p-3 [--cell-size:2rem] [[data-slot=card-content]_&]:bg-transparent [[data-slot=popover-content]_&]:bg-transparent",
+        "group/calendar rounded-xl bg-background p-3 [--cell-size:2rem] [[data-slot=card-content]_&]:bg-transparent [[data-slot=popover-content]_&]:bg-transparent",
         String.raw`rtl:**:[.rdp-button\_next>svg]:rotate-180`,
         String.raw`rtl:**:[.rdp-button\_previous>svg]:rotate-180`,
         className,
@@ -113,7 +113,7 @@ function Calendar({
           defaultClassNames.range_end,
         ),
         today: cn(
-          "bg-accent text-accent-foreground rounded-xl data-[selected=true]:rounded-xl data-[selected=true]:bg-primary data-[selected=true]:text-primary-foreground",
+          "bg-accent text-accent-foreground rounded-xl data-[selected=true]:rounded-xl data-[selected=true]:bg-primary data-[selected=true]:text-primay-foreground",
           defaultClassNames.today,
         ),
         outside: cn(
@@ -204,7 +204,7 @@ function CalendarDayButton({
       data-range-end={modifiers.range_end}
       data-range-middle={modifiers.range_middle}
       className={cn(
-        "flex aspect-square h-auto w-full min-w-[--cell-size] flex-col gap-1 font-normal leading-none data-[range-end=true]:rounded-md data-[range-middle=true]:rounded-none data-[range-start=true]:rounded-md data-[range-end=true]:bg-gray-900 data-[range-middle=true]:bg-muted data-[range-start=true]:bg-secondary data-[selected-single=true]:bg-primary data-[range-end=true]:text-gray-50 data-[range-middle=true]:text-gray-900 data-[range-start=true]:text-gray-50 data-[selected-single=true]:text-gray-50 group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 dark:data-[range-end=true]:bg-gray-50 dark:data-[range-middle=true]:bg-gray-800 dark:data-[range-start=true]:bg-gray-50 dark:data-[selected-single=true]:bg-gray-50 dark:data-[range-end=true]:text-gray-900 dark:data-[range-middle=true]:text-gray-50 dark:data-[range-start=true]:text-gray-900 dark:data-[selected-single=true]:text-gray-900 dark:group-data-[focused=true]/day:border-gray-300 [&>span]:text-xs [&>span]:opacity-70",
+        "flex aspect-square h-auto w-full min-w-[--cell-size] flex-col gap-1 font-normal leading-none data-[range-end=true]:rounded-md data-[range-middle=true]:rounded-none data-[range-start=true]:rounded-md data-[range-end=true]:bg-muted data-[range-middle=true]:bg-muted data-[range-start=true]:bg-secondary data-[selected-single=true]:bg-primary data-[range-end=true]:text-muted data-[range-middle=true]:text-muted data-[range-start=true]:text-muted data-[selected-single=true]:text-primary-foreground hover:data-[selected-single=true]:text-primary-foreground group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 [&>span]:text-xs [&>span]:opacity-70",
         defaultClassNames.day,
         className,
       )}

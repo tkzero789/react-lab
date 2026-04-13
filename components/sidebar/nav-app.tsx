@@ -8,6 +8,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  useSidebar,
 } from "@/components/ui/sidebar";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
@@ -26,6 +27,7 @@ type Props = {
 
 export function NavApps({ apps }: Props) {
   const pathName = usePathname();
+  const { setOpenMobile } = useSidebar();
 
   const activeAppSidebar = apps.map((app, i) => ({
     ...app,
@@ -40,7 +42,7 @@ export function NavApps({ apps }: Props) {
         {activeAppSidebar.map((app: AppSidebar) => (
           <SidebarMenuItem key={app.name}>
             <SidebarMenuButton asChild isActive={app.isActive}>
-              <Link href={pathClient(app.url)}>
+              <Link href={pathClient(app.url)} onClick={() => setOpenMobile(false)}>
                 <app.icon />
                 <span>{app.name}</span>
               </Link>

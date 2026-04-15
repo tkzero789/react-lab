@@ -13,28 +13,36 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Pencil, Trash2, Trophy } from "lucide-react";
+import { toast } from "sonner";
+import { useIsMobile } from "@/hooks/use-mobile";
+import { useMutation, useQuery } from "convex/react";
+import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
 
 import ExerciseForm from "./exercise-form";
 
-type Exercise = {
-  _id: Id<"exercises">;
-  name: string;
-  muscleGroups: string[];
-  personalBest: number;
-};
+export default function ExerciseList() {
+  const isMobile = useIsMobile();
+  const exercises = useQuery(api.exercises.list) ?? [];
+  const updateExercise = useMutation(api.exercises.update);
+  const removeExercise = useMutation(api.exercises.remove);
 
-type Props = {
-  exercises: Exercise[];
-  onUpdate: (
+  const [editId, setEditId] = React.useState<Id<"exercises"> | null>(null);
+  const toastPos = isMobile ? "top-center" : ("bottom-right" as const);
+
+  function handleUpdate(
     id: Id<"exercises">,
     data: { name: string; muscleGroups: string[]; personalBest: number },
-  ) => void;
-  onRemove: (id: Id<"exercises">) => void;
-};
+  ) {
+    updateExercise({ id, ...data });
+    setEditId(null);
+    toast.success("Exercise updated", { position: toastPos });
+  }
 
-export default function ExerciseList({ exercises, onUpdate, onRemove }: Props) {
-  const [editId, setEditId] = React.useState<Id<"exercises"> | null>(null);
+  function handleRemove(id: Id<"exercises">) {
+    removeExercise({ id });
+    toast.info("Exercise deleted", { position: toastPos });
+  }
 
   if (exercises.length === 0) {
     return (
@@ -89,10 +97,7 @@ export default function ExerciseList({ exercises, onUpdate, onRemove }: Props) {
                         personalBest: exercise.personalBest,
                       }}
                       submitLabel="Save Changes"
-                      onSubmit={(data) => {
-                        onUpdate(exercise._id, data);
-                        setEditId(null);
-                      }}
+                      onSubmit={(data) => handleUpdate(exercise._id, data)}
                     />
                   </DialogBody>
                 </DialogContent>
@@ -100,7 +105,7 @@ export default function ExerciseList({ exercises, onUpdate, onRemove }: Props) {
               <Button
                 variant="ghost-destructive"
                 size="icon-sm"
-                onClick={() => onRemove(exercise._id)}
+                onClick={() => handleRemove(exercise._id)}
               >
                 <Trash2 />
               </Button>

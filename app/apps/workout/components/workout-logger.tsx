@@ -3,7 +3,6 @@
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Calendar } from "@/components/ui/calendar";
 import {
   Dialog,
@@ -17,43 +16,24 @@ import {
 
 import { Trash2, ArrowUp, ArrowDown } from "lucide-react";
 import { Id } from "@/convex/_generated/dataModel";
+import { api } from "@/convex/_generated/api";
+import { useMutation, useQuery } from "convex/react";
 import { format, startOfWeek, endOfWeek, isWithinInterval } from "date-fns";
+import { toast } from "sonner";
 import { useIsMobile } from "@/hooks/use-mobile";
 import LogExerciseForm from "./log-exercise-form";
 
-type Exercise = {
-  _id: Id<"exercises">;
-  name: string;
-  muscleGroups: string[];
-  personalBest: number;
-};
+export default function WorkoutLogger() {
+  const isMobile = useIsMobile();
+  const exercises = useQuery(api.exercises.list) ?? [];
+  const logs = useQuery(api.workoutLogs.list) ?? [];
+  const addWorkoutLog = useMutation(api.workoutLogs.add);
+  const removeWorkoutLog = useMutation(api.workoutLogs.remove);
 
-type WorkoutLog = {
-  _id: Id<"workoutLogs">;
-  date: string;
-  exerciseId: Id<"exercises">;
-  sets: { reps: number; weight: number }[];
-};
-
-type Props = {
-  exercises: Exercise[];
-  logs: WorkoutLog[];
-  onAdd: (
-    date: string,
-    exerciseId: Id<"exercises">,
-    sets: { reps: number; weight: number }[],
-  ) => void;
-  onRemove: (id: Id<"workoutLogs">) => void;
-};
-
-export default function WorkoutLogger({
-  exercises,
-  logs,
-  onAdd,
-  onRemove,
-}: Props) {
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [dialogOpen, setDialogOpen] = useState(false);
+  const toastPos = isMobile ? "top-center" : ("bottom-right" as const);
+
   const dateStr = format(selectedDate, "yyyy-MM-dd");
   const dayLogs = logs.filter((l) => l.date === dateStr);
 
@@ -73,6 +53,20 @@ export default function WorkoutLogger({
 
   function getExercise(id: Id<"exercises">) {
     return exercises.find((e) => e._id === id);
+  }
+
+  function handleAdd(
+    date: string,
+    exerciseId: Id<"exercises">,
+    sets: { reps: number; weight: number }[],
+  ) {
+    addWorkoutLog({ date, exerciseId, sets });
+    toast.success("Workout logged", { position: toastPos });
+  }
+
+  function handleRemove(id: Id<"workoutLogs">) {
+    removeWorkoutLog({ id });
+    toast.info("Workout entry deleted", { position: toastPos });
   }
 
   function getWeightComparison(exerciseId: Id<"exercises">, weight: number) {
@@ -139,7 +133,7 @@ export default function WorkoutLogger({
                 <LogExerciseForm
                   exercises={exercises}
                   dateStr={dateStr}
-                  onAdd={onAdd}
+                  onAdd={handleAdd}
                   onClose={() => setDialogOpen(false)}
                 />
               </DialogBody>
@@ -190,7 +184,7 @@ export default function WorkoutLogger({
                       <Button
                         variant="ghost-destructive"
                         size="icon-sm"
-                        onClick={() => onRemove(log._id)}
+                        onClick={() => handleRemove(log._id)}
                       >
                         <Trash2 />
                       </Button>

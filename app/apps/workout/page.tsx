@@ -25,7 +25,7 @@ export default function WorkoutPage() {
         </Unauthenticated>
         <Authenticated>
           <Tabs defaultValue="workout" className="flex-1">
-            <TabsList className="w-full" wrapperClassName="lg:px-0 px-4 pt-4">
+            <TabsList className="w-full" wrapperClassName="px-4 pt-4">
               <TabsTrigger value="workout" className="flex-1">
                 Workout
               </TabsTrigger>

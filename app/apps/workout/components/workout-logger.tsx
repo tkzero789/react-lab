@@ -95,7 +95,7 @@ export default function WorkoutLogger() {
   }
 
   return (
-    <div className="flex flex-col gap-4 md:flex-row">
+    <div className="flex flex-col gap-4 px-4 md:flex-row">
       <Card className="shrink-0">
         <CardContent className="flex flex-col items-center gap-3 pt-4">
           <Calendar

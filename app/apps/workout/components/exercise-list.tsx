@@ -5,14 +5,6 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import {
-  Dialog,
-  DialogBody,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import {
   InputGroup,
   InputGroupAddon,
   InputGroupInput,
@@ -25,41 +17,34 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Pencil, Search, Trash2, Trophy } from "lucide-react";
-import { toast } from "sonner";
-import { useIsMobile } from "@/hooks/use-mobile";
+import { Ellipsis, Search } from "lucide-react";
 import { useMutation, useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
 import { MUSCLE_GROUPS } from "@/types/workout";
-
-import ExerciseForm from "./exercise-form";
+import UpdateExercise from "./update-exercise";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const ALL = "all";
 
 export default function ExerciseList() {
-  const isMobile = useIsMobile();
   const exercises = useQuery(api.exercises.list) ?? [];
-  const updateExercise = useMutation(api.exercises.update);
   const removeExercise = useMutation(api.exercises.remove);
 
-  const [editId, setEditId] = React.useState<Id<"exercises"> | null>(null);
   const [search, setSearch] = React.useState("");
   const [muscle, setMuscle] = React.useState<string>(ALL);
-  const toastPos = isMobile ? "top-center" : ("bottom-right" as const);
-
-  function handleUpdate(
-    id: Id<"exercises">,
-    data: { name: string; muscleGroups: string[]; personalBest: number },
-  ) {
-    updateExercise({ id, ...data });
-    setEditId(null);
-    toast.success("Exercise updated", { position: toastPos });
-  }
+  const [editingId, setEditingId] = React.useState<Id<"exercises"> | null>(
+    null,
+  );
 
   function handleRemove(id: Id<"exercises">) {
     removeExercise({ id });
-    toast.info("Exercise deleted", { position: toastPos });
   }
 
   const query = search.trim().toLowerCase();
@@ -109,64 +94,74 @@ export default function ExerciseList() {
           No exercises match your filters.
         </p>
       ) : (
-        <div className="flex flex-col gap-2">
+        <div className="grid gap-2 lg:grid-cols-3">
           {filtered.map((exercise) => (
             <Card key={exercise._id}>
-              <CardContent className="flex items-center justify-between gap-3">
-                <div className="min-w-0 flex-1">
-                  <div className="flex items-center gap-2">
-                    <span className="font-medium">{exercise.name}</span>
+              <CardContent className="p-0">
+                {/* Details */}
+                <div className="flex justify-between px-4 pb-2 pt-4">
+                  <div className="flex flex-1 justify-between gap-2">
+                    <div className="flex flex-col gap-1">
+                      {/* Name */}
+                      <div className="font-medium">{exercise.name}</div>
+                      {/* Target muscles */}
+                      <div className="flex flex-wrap items-center gap-2">
+                        {exercise.muscleGroups.map((mg) => (
+                          <Badge key={mg} variant="secondary" className="w-fit">
+                            {mg}
+                          </Badge>
+                        ))}
+                      </div>
+                    </div>
+                    {/* PB */}
                     {exercise.personalBest > 0 && (
-                      <span className="flex items-center gap-1 text-xs text-muted-foreground">
-                        <Trophy className="h-3 w-3" />
-                        {exercise.personalBest} lbs
-                      </span>
+                      <div className="flex flex-col items-end">
+                        <div className="text-xl font-bold tracking-tighter">
+                          {exercise.personalBest}
+                        </div>{" "}
+                        <span className="inline-block text-sm text-muted-foreground">
+                          LBS
+                        </span>
+                      </div>
                     )}
                   </div>
-                  <div className="mt-1 flex flex-wrap gap-1">
-                    {exercise.muscleGroups.map((mg) => (
-                      <Badge key={mg} variant="secondary" className="text-xs">
-                        {mg}
-                      </Badge>
-                    ))}
-                  </div>
                 </div>
-                <div className="flex shrink-0 gap-1">
-                  <Dialog
-                    open={editId === exercise._id}
-                    onOpenChange={(open) =>
-                      setEditId(open ? exercise._id : null)
-                    }
-                  >
-                    <DialogTrigger asChild>
+                {/* Actions */}
+                <div className="flex justify-end gap-1 border-t px-4 pb-4 pt-2">
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
                       <Button variant="ghost" size="icon-sm">
-                        <Pencil />
+                        <Ellipsis />
                       </Button>
-                    </DialogTrigger>
-                    <DialogContent>
-                      <DialogHeader>
-                        <DialogTitle>Edit Exercise</DialogTitle>
-                      </DialogHeader>
-                      <DialogBody className="flex flex-1 flex-col p-0">
-                        <ExerciseForm
-                          initial={{
-                            name: exercise.name,
-                            muscleGroups: exercise.muscleGroups,
-                            personalBest: exercise.personalBest,
-                          }}
-                          submitLabel="Save Changes"
-                          onSubmit={(data) => handleUpdate(exercise._id, data)}
-                        />
-                      </DialogBody>
-                    </DialogContent>
-                  </Dialog>
-                  <Button
-                    variant="ghost-destructive"
-                    size="icon-sm"
-                    onClick={() => handleRemove(exercise._id)}
-                  >
-                    <Trash2 />
-                  </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                      <DropdownMenuGroup>
+                        <DropdownMenuItem
+                          onSelect={() =>
+                            setTimeout(() => {
+                              setEditingId(exercise._id);
+                            }, 0)
+                          }
+                        >
+                          Edit
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                          className="text-destructive hover:bg-destructive focus:text-destructive"
+                          onSelect={() => handleRemove(exercise._id)}
+                        >
+                          Delete
+                        </DropdownMenuItem>
+                      </DropdownMenuGroup>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+
+                  <UpdateExercise
+                    exercise={exercise}
+                    open={editingId === exercise._id}
+                    onOpenChange={(open) =>
+                      setEditingId(open ? exercise._id : null)
+                    }
+                  />
                 </div>
               </CardContent>
             </Card>

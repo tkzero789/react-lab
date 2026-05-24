@@ -130,11 +130,11 @@ export default function MovieBannerCarousel() {
         </Carousel>
         <CarouselPrev
           onClick={onPrevButtonClick}
-          className="hidden h-12 w-12 rounded-full bg-secondary/20 text-background hover:bg-secondary/40 dark:bg-muted/20 dark:text-foreground dark:hover:bg-muted/40 lg:flex [&_svg]:size-10"
+          className="absolute left-6 top-1/2 hidden h-12 w-12 -translate-y-1/2 rounded-full bg-secondary/20 text-background hover:bg-secondary/40 dark:bg-muted/20 dark:text-foreground dark:hover:bg-muted/40 lg:flex [&_svg]:size-10"
         />
         <CarouselNext
           onClick={onNextButtonClick}
-          className="hidden h-12 w-12 rounded-full bg-secondary/20 text-background hover:bg-secondary/40 dark:bg-muted/20 dark:text-foreground dark:hover:bg-muted/40 lg:flex [&_svg]:size-10"
+          className="absolute right-6 top-1/2 hidden h-12 w-12 -translate-y-1/2 rounded-full bg-secondary/20 text-background hover:bg-secondary/40 dark:bg-muted/20 dark:text-foreground dark:hover:bg-muted/40 lg:flex [&_svg]:size-10"
         />
       </div>
     </Container>

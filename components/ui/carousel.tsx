@@ -3,10 +3,10 @@
 import React, { ComponentPropsWithRef } from "react";
 
 import { cn } from "@/lib/utils";
-import "@/app/css/carousel.css";
 import { EmblaCarouselType } from "embla-carousel";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "./button";
+import "@/app/css/carousel.css";
 
 const Carousel = React.forwardRef<
   HTMLDivElement,
@@ -86,7 +86,7 @@ const CarouselPrev: React.FC<PropType> = (props) => {
     <Button
       variant={variant}
       size={size}
-      className={cn("absolute left-6 top-1/2 -translate-y-1/2", className)}
+      className={cn(className)}
       {...restProps}
     >
       <ChevronLeft />
@@ -102,7 +102,7 @@ const CarouselNext: React.FC<PropType> = (props) => {
     <Button
       variant={variant}
       size={size}
-      className={cn("absolute right-6 top-1/2 -translate-y-1/2", className)}
+      className={cn(className)}
       {...restProps}
     >
       <ChevronRight />

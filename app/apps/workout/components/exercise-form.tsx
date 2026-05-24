@@ -5,30 +5,32 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 
-import { Plus, X } from "lucide-react";
+import { X } from "lucide-react";
 import { MUSCLE_GROUPS, MuscleGroup } from "@/types/workout";
 
+export type ExerciseFormValues = {
+  name: string;
+  muscleGroups: string[];
+  personalBest: number;
+};
+
 type Props = {
-  onSubmit: (data: {
-    name: string;
-    muscleGroups: string[];
-    personalBest: number;
-  }) => void;
-  initial?: { name: string; muscleGroups: string[]; personalBest: number };
+  onSubmit: (data: ExerciseFormValues) => void;
+  defaultValues?: ExerciseFormValues;
   submitLabel?: string;
 };
 
 export default function ExerciseForm({
   onSubmit,
-  initial,
-  submitLabel = "Add Exercise",
+  defaultValues,
+  submitLabel,
 }: Props) {
-  const [name, setName] = useState(initial?.name ?? "");
-  const [personalBest, setPersonalBest] = useState(
-    initial?.personalBest?.toString() ?? "",
-  );
+  const [name, setName] = useState(defaultValues?.name ?? "");
   const [selectedMuscles, setSelectedMuscles] = useState<MuscleGroup[]>(
-    (initial?.muscleGroups as MuscleGroup[]) ?? [],
+    (defaultValues?.muscleGroups as MuscleGroup[]) ?? [],
+  );
+  const [personalBest, setPersonalBest] = useState(
+    defaultValues?.personalBest?.toString() ?? "",
   );
 
   function toggleMuscle(muscle: MuscleGroup) {
@@ -39,7 +41,7 @@ export default function ExerciseForm({
     );
   }
 
-  function handleSubmit(e: React.FormEvent) {
+  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (!name.trim() || selectedMuscles.length === 0) return;
     onSubmit({
@@ -47,19 +49,10 @@ export default function ExerciseForm({
       muscleGroups: selectedMuscles,
       personalBest: parseFloat(personalBest) || 0,
     });
-    if (!initial) {
-      setName("");
-      setPersonalBest("");
-      setSelectedMuscles([]);
-    }
   }
 
   return (
-    <form
-      id="addExercise"
-      onSubmit={handleSubmit}
-      className="flex flex-1 flex-col"
-    >
+    <form onSubmit={handleSubmit} className="flex flex-1 flex-col">
       <div className="flex flex-col gap-4 p-4">
         <div>
           <label className="mb-1 block text-sm font-medium">
@@ -114,7 +107,6 @@ export default function ExerciseForm({
           disabled={!name.trim() || selectedMuscles.length === 0}
           className="w-full"
         >
-          <Plus />
           {submitLabel}
         </Button>
       </div>

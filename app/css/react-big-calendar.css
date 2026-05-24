@@ -1,0 +1,48 @@
+.rbc-month-view {
+  @apply overflow-hidden rounded-xl !border-border;
+}
+
+.rbc-header {
+  @apply !border-b-border;
+}
+
+.rbc-header + .rbc-header {
+  @apply !border-l-border;
+}
+
+.rbc-month-row + .rbc-month-row {
+  @apply !border-t-border;
+}
+
+.rbc-row-bg {
+  @apply !right-0;
+}
+
+.rbc-day-bg + .rbc-day-bg {
+  @apply !border-l-border transition-all;
+}
+
+.rbc-off-range-bg {
+  @apply !bg-muted/20;
+}
+
+.rbc-today {
+  @apply !bg-muted;
+}
+
+.rbc-event,
+.rbc-day-slot .rbc-background-event {
+  @apply !bg-primary !px-1 !py-0;
+}
+
+.rbc-row-content {
+  @apply flex flex-col gap-1;
+}
+
+.rbc-row-segment {
+  @apply flex justify-center !px-2 !py-0;
+}
+
+.rbc-show-more {
+  @apply !bg-transparent !text-primary-foreground;
+}

@@ -12,15 +12,13 @@ import {
   usePrevNextButtons,
 } from "@/components/ui/carousel";
 import useEmblaCarousel from "embla-carousel-react";
-import {
-  ButtonGroup,
-  ButtonGroupSeparator,
-} from "@/components/ui/button-group";
+import { ButtonGroup } from "@/components/ui/button-group";
 import Container from "@/components/layout/container";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import MovieCard from "./movie-card";
 import { cn } from "@/lib/utils";
-import styles from "./movie.module.css";
+import { Button } from "@/components/ui/button";
+import { ChevronLeft, Home } from "lucide-react";
 
 type Movie = {
   _id: string;
@@ -103,29 +101,22 @@ export default function MovieCarousel({ title, type_list }: Props) {
       <Card>
         <CardHeader className="flex items-center justify-between">
           <CardTitle>{title}</CardTitle>
-          <ButtonGroup className="group shadow">
-            <CarouselPrev
+          <ButtonGroup className="shadow">
+            <Button
               variant="outline"
               size="icon-sm"
               disabled={prevBtnDisabled}
               onClick={onPrevButtonClick}
-              className={cn(
-                "static -translate-y-0 border-r-0 shadow-none",
-                styles.carouselPrev,
-              )}
-            />
-            <ButtonGroupSeparator
-              className={cn("transition-colors", styles.buttonGroupSeparator)}
-            />
+              className="shadow-none disabled:bg-transparent disabled:opacity-100"
+            >
+              <ChevronLeft />
+            </Button>
             <CarouselNext
               variant="outline"
               size="icon-sm"
               disabled={nextBtnDisabled}
               onClick={onNextButtonClick}
-              className={cn(
-                "static -translate-y-0 shadow-none",
-                styles.carouselNext,
-              )}
+              className="shadow-none disabled:bg-transparent disabled:opacity-100"
             />
           </ButtonGroup>
         </CardHeader>

@@ -1,12 +1,11 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   ButtonGroup,
   ButtonGroupSeparator,
 } from "@/components/ui/button-group";
-import { Card, CardContent } from "@/components/ui/card";
 import {
   Dialog,
   DialogBody,
@@ -36,8 +35,6 @@ import {
   isWithinInterval,
 } from "date-fns";
 import { enUS } from "date-fns/locale";
-import { toast } from "sonner";
-import { useIsMobile } from "@/hooks/use-mobile";
 import LogExerciseForm from "./log-exercise-form";
 import {
   Calendar as BigCalendar,
@@ -98,7 +95,6 @@ function CalendarNavigation({
 }
 
 export default function WorkoutLogger() {
-  const isMobile = useIsMobile();
   const exercises = useQuery(api.exercises.list) ?? [];
   const logs = useQuery(api.workoutLogs.list) ?? [];
   const addWorkoutLog = useMutation(api.workoutLogs.add);
@@ -107,7 +103,6 @@ export default function WorkoutLogger() {
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [dayDialogOpen, setDayDialogOpen] = useState(false);
   const [logDialogOpen, setLogDialogOpen] = useState(false);
-  const toastPos = isMobile ? "top-center" : ("bottom-right" as const);
 
   const dateStr = format(selectedDate, "yyyy-MM-dd");
   const dayLogs = logs.filter((l) => l.date === dateStr);
@@ -122,21 +117,19 @@ export default function WorkoutLogger() {
   const dayTotalSets = dayLogs.reduce((sum, l) => sum + l.sets.length, 0);
   const weekTotalSets = weekLogs.reduce((sum, l) => sum + l.sets.length, 0);
 
-  const events = useMemo<WorkoutEvent[]>(() => {
-    return logs.map((l) => {
-      const exercise = exercises.find((e) => e._id === l.exerciseId);
-      const d = new Date(l.date + "T00:00:00");
-      return {
-        logId: l._id,
-        exerciseId: l.exerciseId,
-        dateStr: l.date,
-        title: exercise?.name ?? "Unknown",
-        start: d,
-        end: d,
-        allDay: true,
-      };
-    });
-  }, [logs, exercises]);
+  const events: WorkoutEvent[] = logs.map((l) => {
+    const exercise = exercises.find((e) => e._id === l.exerciseId);
+    const d = new Date(l.date + "T00:00:00");
+    return {
+      logId: l._id,
+      exerciseId: l.exerciseId,
+      dateStr: l.date,
+      title: exercise?.name ?? "Unknown",
+      start: d,
+      end: d,
+      allDay: true,
+    };
+  });
 
   function getExercise(id: Id<"exercises">) {
     return exercises.find((e) => e._id === id);
@@ -148,12 +141,10 @@ export default function WorkoutLogger() {
     sets: { reps: number; weight: number }[],
   ) {
     addWorkoutLog({ date, exerciseId, sets });
-    toast.success("Workout logged", { position: toastPos });
   }
 
   function handleRemove(id: Id<"workoutLogs">) {
     removeWorkoutLog({ id });
-    toast.info("Workout entry deleted", { position: toastPos });
   }
 
   function openDayDialog(date: Date) {
@@ -255,13 +246,33 @@ export default function WorkoutLogger() {
                           </span>
                           {getWeightComparison(log.exerciseId, maxWeight)}
                         </div>
-                        <Button
-                          variant="ghost-destructive"
-                          size="icon-sm"
-                          onClick={() => handleRemove(log._id)}
-                        >
-                          <Trash2 />
-                        </Button>
+                        <Dialog>
+                          <DialogTrigger asChild>
+                            <Button variant="ghost-destructive" size="icon-sm">
+                              <Trash2 />
+                            </Button>
+                          </DialogTrigger>
+                          <DialogContent>
+                            <DialogHeader>
+                              <DialogTitle>Delete workout</DialogTitle>
+                            </DialogHeader>
+                            <DialogBody>
+                              Remove{" "}
+                              <span className="font-medium">
+                                {exercise?.name}
+                              </span>{" "}
+                              from {format(selectedDate, "EEEE, MMM d, yyyy")}
+                            </DialogBody>
+                            <DialogFooter>
+                              <Button
+                                variant="destructive"
+                                onClick={() => handleRemove(log._id)}
+                              >
+                                Delete
+                              </Button>
+                            </DialogFooter>
+                          </DialogContent>
+                        </Dialog>
                       </div>
                       <ul className="flex flex-col gap-2">
                         {log.sets.map((set, index) => (

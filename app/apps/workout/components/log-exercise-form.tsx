@@ -1,15 +1,16 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+  Combobox,
+  ComboboxContent,
+  ComboboxEmpty,
+  ComboboxInput,
+  ComboboxItem,
+  ComboboxList,
+  useComboboxAnchor,
+} from "@/components/ui/combobox";
+import { Input } from "@/components/ui/input";
 import { Id } from "@/convex/_generated/dataModel";
 import { Plus, X } from "lucide-react";
 import React, { useState } from "react";
@@ -38,12 +39,13 @@ export default function LogExerciseForm({
   onAdd,
   onClose,
 }: Props) {
-  const [selectedExercise, setSelectedExercise] = useState<
-    Id<"exercises"> | ""
-  >("");
+  const [selectedExercise, setSelectedExercise] = useState<Exercise | null>(
+    null,
+  );
   const [sets, setSets] = useState<{ reps: string; weight: string }[]>([
     { reps: "", weight: "" },
   ]);
+  const anchor = useComboboxAnchor();
 
   function addSet() {
     setSets([...sets, { reps: "", weight: "" }]);
@@ -68,9 +70,9 @@ export default function LogExerciseForm({
         weight: parseFloat(s.weight),
       }));
     if (parsedSets.length === 0) return;
-    onAdd(dateStr, selectedExercise, parsedSets);
+    onAdd(dateStr, selectedExercise._id, parsedSets);
     onClose();
-    setSelectedExercise("");
+    setSelectedExercise(null);
     setSets([{ reps: "", weight: "" }]);
   }
 
@@ -83,26 +85,37 @@ export default function LogExerciseForm({
       {/* Exercises */}
       <div className="flex flex-col gap-2">
         <label className="block text-sm font-medium">Exercise</label>
-        <Select
-          value={selectedExercise || undefined}
+        <Combobox
+          items={exercises}
+          value={selectedExercise}
           onValueChange={(value) =>
-            setSelectedExercise(value as Id<"exercises">)
+            setSelectedExercise(value as Exercise | null)
           }
+          itemToStringLabel={(ex: Exercise) => ex.name}
+          itemToStringValue={(ex: Exercise) => ex._id}
         >
-          <SelectTrigger className="w-full">
-            <SelectValue placeholder="Select an exercise" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectGroup>
-              {exercises.map((ex) => (
-                <SelectItem key={ex._id} value={ex._id}>
-                  {ex.name}{" "}
-                  {ex.personalBest > 0 ? `(PB: ${ex.personalBest} lbs)` : ""}
-                </SelectItem>
-              ))}
-            </SelectGroup>
-          </SelectContent>
-        </Select>
+          <ComboboxInput placeholder="Search exercises" />
+          <ComboboxContent
+            anchor={anchor}
+            className="pointer-events-auto w-[var(--anchor-width)]"
+          >
+            <ComboboxEmpty>No exercises found.</ComboboxEmpty>
+            <ComboboxList>
+              {(ex: Exercise) => (
+                <ComboboxItem
+                  key={ex._id}
+                  value={ex}
+                  className="flex items-center justify-between"
+                >
+                  {ex.name}
+                  <span>
+                    {ex.personalBest > 0 ? ` (PB: ${ex.personalBest} lbs)` : ""}
+                  </span>
+                </ComboboxItem>
+              )}
+            </ComboboxList>
+          </ComboboxContent>
+        </Combobox>
       </div>
 
       {/* Sets */}

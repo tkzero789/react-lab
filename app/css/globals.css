@@ -50,6 +50,7 @@ body {
     --sidebar-accent-foreground: 203.8863 88.2845% 53.1373%;
     --sidebar-border: 205 25% 90.5882%;
     --sidebar-ring: 202.8169 89.1213% 53.1373%;
+    --spacing: 0.25rem;
   }
   .dark {
     --background: 228 9.8039% 8%;
@@ -84,6 +85,7 @@ body {
     --sidebar-accent-foreground: 203.7736 87.6033% 78.549%;
     --sidebar-border: 205.7143 15.7895% 26.0784%;
     --sidebar-ring: 202.8169 89.1213% 53.1373%;
+    --spacing: 0.25rem;
   }
 }
 

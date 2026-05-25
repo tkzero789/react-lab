@@ -87,6 +87,22 @@ body {
     --sidebar-ring: 202.8169 89.1213% 53.1373%;
     --spacing: 0.25rem;
   }
+  .theme-workout {
+    --background: 0 0% 100%;
+    --foreground: 210 25% 7.8431%;
+    --card: 180 6.6667% 97.0588%;
+    --card-foreground: 210 25% 7.8431%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 210 25% 7.8431%;
+    --primary: 51 100% 49%;
+    --primary-foreground: 0 0% 10%;
+    --secondary: 210 25% 7.8431%;
+    --secondary-foreground: 0 0% 100%;
+    --muted: 240 1.9608% 92%;
+    --muted-foreground: 240 1.9608% 35%;
+    --accent: 211.5789 51.3514% 92.7451%;
+    --accent-foreground: 203.8863 88.2845% 53.1373%;
+  }
 }
 
 @layer base {

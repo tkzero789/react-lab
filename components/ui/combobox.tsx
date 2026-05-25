@@ -116,7 +116,7 @@ function ComboboxContent({
           data-slot="combobox-content"
           data-chips={!!anchor}
           className={cn(
-            "group/combobox-content w-(--anchor-width) max-w-(--available-width) origin-(--transform-origin) data-[chips=true]:min-w-(--anchor-width) data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95 relative max-h-96 min-w-[calc(var(--anchor-width)+1.75rem)] overflow-hidden rounded-xl  shadow-md ring-1 ring-border bg-background duration-100 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 data-[slot=input-group]:*:m-1 data-[slot=input-group]:*:mb-0 data-[slot=input-group]:*:h-8 data-[slot=input-group]:*:border data-[slot=input-group]:*:bg-muted data-[slot=input-group]:*:shadow-none",
+            "group/combobox-content w-[calc(var(--anchor-width)+1.75rem)] max-w-(--available-width) origin-(--transform-origin) data-[chips=true]:min-w-(--anchor-width) data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95 relative max-h-96 min-w-[calc(var(--anchor-width)+1.75rem)] overflow-hidden rounded-xl  shadow-md ring-1 ring-border bg-background duration-100 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 data-[slot=input-group]:*:m-1 data-[slot=input-group]:*:mb-0 data-[slot=input-group]:*:h-8 data-[slot=input-group]:*:border data-[slot=input-group]:*:bg-muted data-[slot=input-group]:*:shadow-none",
             className,
           )}
           {...props}

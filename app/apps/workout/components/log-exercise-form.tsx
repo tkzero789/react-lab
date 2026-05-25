@@ -97,7 +97,8 @@ export default function LogExerciseForm({
           <ComboboxInput placeholder="Search exercises" />
           <ComboboxContent
             anchor={anchor}
-            className="pointer-events-auto w-(--anchor-width)"
+            className="pointer-events-auto"
+          
           >
             <ComboboxEmpty>No exercises found.</ComboboxEmpty>
             <ComboboxList>

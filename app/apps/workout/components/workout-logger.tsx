@@ -211,7 +211,14 @@ export default function WorkoutLogger() {
         components={{
           toolbar: CalendarNavigation,
           event: ({ event }) => (
-            <span className="truncate text-xs">{event.title}</span>
+            <div className="">
+              <span className="hidden truncate text-xs lg:block">
+                {event.title}
+              </span>
+              <span className="read-only invisible truncate text-xs opacity-0 lg:hidden">
+                Exercise item
+              </span>
+            </div>
           ),
         }}
       />

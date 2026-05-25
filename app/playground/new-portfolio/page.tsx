@@ -1,9 +1,5 @@
 import Container from "@/components/layout/container";
-import { Button } from "@/components/ui/button";
-import { Contact } from "lucide-react";
 import Image from "next/image";
-import Link from "next/link";
-import React from "react";
 import Avatar from "@/public/images/playground/my-avatar.webp";
 
 function Intro() {

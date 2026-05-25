@@ -43,6 +43,26 @@
   @apply flex justify-center !px-2 !py-0;
 }
 
+.rbc-date-cell {
+  @apply flex justify-end;
+}
+
+.rbc-date-cell > .rbc-button-link {
+  @apply !ml-1 !mt-1 flex size-6 items-center justify-center rounded-full text-sm transition hover:bg-primary hover:text-primary-foreground;
+}
+
 .rbc-show-more {
-  @apply !bg-transparent !text-primary-foreground;
+  @apply w-fit !bg-transparent !text-xs !font-normal !text-foreground hover:underline;
+}
+
+.rbc-overlay {
+  @apply rounded-xl;
+}
+
+.rbc-overlay-header {
+  @apply text-xs font-medium;
+}
+
+.rbc-overlay > .rbc-event {
+  @apply mt-0 [&:not(:last-child)]:mb-1;
 }

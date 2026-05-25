@@ -8,7 +8,6 @@ import {
   CarouselContainer,
   CarouselItem,
   CarouselNext,
-  CarouselPrev,
   usePrevNextButtons,
 } from "@/components/ui/carousel";
 import useEmblaCarousel from "embla-carousel-react";
@@ -18,7 +17,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import MovieCard from "./movie-card";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { ChevronLeft, Home } from "lucide-react";
+import { ChevronLeft } from "lucide-react";
 
 type Movie = {
   _id: string;

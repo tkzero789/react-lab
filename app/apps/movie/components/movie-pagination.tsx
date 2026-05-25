@@ -66,7 +66,7 @@ export default function MoviePagination({
           <PopoverContent
             side="top"
             align="end"
-            className="h-10 w-[var(--radix-popover-trigger-width)] p-0"
+            className="h-10 w-(--radix-popover-trigger-width) p-0"
           >
             <form onSubmit={submitPageChange} className="h-full">
               <Input

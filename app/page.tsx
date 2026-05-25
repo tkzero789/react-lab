@@ -13,21 +13,21 @@ const SUBDOMAIN_MAP: Record<string, string> = {
 const cardItems = [
   {
     icon: Threejs,
-    iconBackground: "bg-gradient-to-b from-yellow-300/70  to-yellow-600/80",
+    iconBackground: "bg-linear-to-b from-yellow-300/70  to-yellow-600/80",
     title: "Three.js",
     href: "/threejs",
     hoverBackground: "hover:bg-yellow-400/40",
   },
   {
     icon: Replicas,
-    iconBackground: "bg-gradient-to-b from-green-300/70 to-green-500",
+    iconBackground: "bg-linear-to-b from-green-300/70 to-green-500",
     title: "Replicas",
     href: "/replicas",
     hoverBackground: "hover:bg-green-400/40",
   },
   {
     icon: Nextjs,
-    iconBackground: "bg-gradient-to-b from-slate-400/50 to-slate-700/90",
+    iconBackground: "bg-linear-to-b from-slate-400/50 to-slate-700/90",
     title: "Apps",
     href: "/apps",
     hoverBackground: "hover:bg-slate-400/40",

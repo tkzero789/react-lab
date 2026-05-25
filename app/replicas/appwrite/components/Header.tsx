@@ -8,8 +8,8 @@ const navLink = ["Products", "Docs", "Pricing"];
 
 export default function AppwriteHeader() {
   return (
-    <header className="relative z-50 min-h-[4.5625rem] border-b-[0.0625rem] border-[#ffffff1a] px-16">
-      <nav className="mx-auto flex w-full max-w-[108rem] justify-between py-[15px]">
+    <header className="relative z-50 min-h-18.25 border-b-[0.0625rem] border-[#ffffff1a] px-16">
+      <nav className="mx-auto flex w-full max-w-432 justify-between py-[15px]">
         <div className="flex items-center gap-8">
           <Link href="/">
             <Image

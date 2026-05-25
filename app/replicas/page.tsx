@@ -46,7 +46,7 @@ export default function ReplicasPage() {
   return (
     <div className="flex w-full flex-col items-center justify-center gap-16 py-16">
       <div className="flex flex-col items-center gap-6">
-        <div className="flex w-fit items-center justify-center rounded-xl bg-gradient-to-b from-green-300/70 to-green-500 p-4 transition-all duration-300 group-hover:scale-105">
+        <div className="flex w-fit items-center justify-center rounded-xl bg-linear-to-b from-green-300/70 to-green-500 p-4 transition-all duration-300 group-hover:scale-105">
           <Replicas />
         </div>
         <h1 className="text-4xl font-bold">Replicas</h1>
@@ -58,7 +58,7 @@ export default function ReplicasPage() {
             key={item.title}
             className="group flex flex-col rounded-xl bg-neutral-100 p-2"
           >
-            <div className="overflow-hidden rounded-xl border shadow-sm group-hover:shadow">
+            <div className="overflow-hidden rounded-xl border shadow-xs group-hover:shadow-sm">
               <div className="overflow-hidden">
                 <Image
                   src={item.img}
@@ -68,7 +68,7 @@ export default function ReplicasPage() {
                   className="h-full w-full rounded-t-xl transition-all duration-300 group-hover:scale-105"
                 />
               </div>
-              <div className="bg-white p-4 shadow-sm group-hover:shadow">
+              <div className="bg-white p-4 shadow-xs group-hover:shadow-sm">
                 <h2 className="text-lg font-semibold group-hover:underline">
                   {item.title}
                 </h2>

@@ -1,38 +1,40 @@
+@reference "./globals.css";
+
 .rbc-month-view {
-  @apply overflow-hidden rounded-xl !border-border;
+  @apply overflow-hidden rounded-xl border-border!;
 }
 
 .rbc-header {
-  @apply !border-b-border;
+  @apply border-b-border!;
 }
 
 .rbc-header + .rbc-header {
-  @apply !border-l-border;
+  @apply border-l-border!;
 }
 
 .rbc-month-row + .rbc-month-row {
-  @apply !border-t-border;
+  @apply border-t-border!;
 }
 
 .rbc-row-bg {
-  @apply !right-0;
+  @apply right-0!;
 }
 
 .rbc-day-bg + .rbc-day-bg {
-  @apply !border-l-border transition-all;
+  @apply border-l-border! transition-all;
 }
 
 .rbc-off-range-bg {
-  @apply !bg-muted/20;
+  @apply bg-muted/20!;
 }
 
 .rbc-today {
-  @apply !bg-muted;
+  @apply bg-muted!;
 }
 
 .rbc-event,
 .rbc-day-slot .rbc-background-event {
-  @apply !bg-primary !px-1 !py-0;
+  @apply bg-primary! px-1! py-0!;
 }
 
 .rbc-row-content {
@@ -40,7 +42,7 @@
 }
 
 .rbc-row-segment {
-  @apply flex justify-center !px-2 !py-0;
+  @apply flex justify-center px-2! py-0!;
 }
 
 .rbc-date-cell {
@@ -48,11 +50,11 @@
 }
 
 .rbc-date-cell > .rbc-button-link {
-  @apply !ml-1 !mt-1 flex size-6 items-center justify-center rounded-full text-sm transition hover:bg-primary hover:text-primary-foreground;
+  @apply ml-1! mt-1! flex size-6 items-center justify-center rounded-full text-sm transition hover:bg-primary hover:text-primary-foreground;
 }
 
 .rbc-show-more {
-  @apply w-fit !bg-transparent !text-xs !font-normal !text-foreground hover:underline;
+  @apply w-fit bg-transparent! text-xs! font-normal! text-foreground! hover:underline;
 }
 
 .rbc-overlay {

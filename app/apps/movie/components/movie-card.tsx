@@ -39,7 +39,7 @@ export default function MovieCard({ movie }: Props) {
       href={pathClient(`/apps/movie/${movie.type === "tvshows" ? "tv-shows" : movie.type}/${movie.slug}`)}
       className="group"
     >
-      <div className="relative h-[16rem] overflow-hidden rounded-xl min-[425px]:h-[20rem] sm:h-[18rem] lg:h-[22rem]">
+      <div className="relative h-64 overflow-hidden rounded-xl min-[425px]:h-80 sm:h-72 lg:h-88">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={`https://phimapi.com/image.php?url=https://phimimg.com/${movie.poster_url}`}
@@ -48,7 +48,7 @@ export default function MovieCard({ movie }: Props) {
           height={900}
           className="h-full w-full rounded-xl object-cover transition-transform duration-500 will-change-transform group-hover:scale-105"
         />
-        <div className="absolute bottom-2 left-2 right-2 flex flex-col gap-1 rounded-xl bg-secondary/50 p-2 text-secondary-foreground backdrop-blur-sm dark:bg-muted/50 dark:text-foreground">
+        <div className="absolute bottom-2 left-2 right-2 flex flex-col gap-1 rounded-xl bg-secondary/50 p-2 text-secondary-foreground backdrop-blur-xs dark:bg-muted/50 dark:text-foreground">
           {/* Name */}
           <div className="truncate text-sm font-medium lg:text-lg">
             {movie.name}
@@ -56,7 +56,7 @@ export default function MovieCard({ movie }: Props) {
           {/* Additional details */}
           <div className="flex items-center gap-2">
             <div className="text-sm lg:text-base">{movie.quality}</div>
-            <div className="translate-y-[-1px]">|</div>
+            <div className="-translate-y-px">|</div>
             {movie.episode_current !== "Full" && (
               <div className="text-sm lg:text-base">
                 {getTotalEpisodes(movie.episode_current)} tập

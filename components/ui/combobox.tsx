@@ -116,7 +116,7 @@ function ComboboxContent({
           data-slot="combobox-content"
           data-chips={!!anchor}
           className={cn(
-            "group/combobox-content w-(--anchor-width) max-w-(--available-width) origin-(--transform-origin) data-[chips=true]:min-w-(--anchor-width) data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95 relative max-h-96 min-w-[calc(var(--anchor-width)+1.75rem)] overflow-hidden rounded-xl bg-white text-gray-950 shadow-md ring-1 ring-gray-950/10 duration-100 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 *:data-[slot=input-group]:m-1 *:data-[slot=input-group]:mb-0 *:data-[slot=input-group]:h-8 *:data-[slot=input-group]:border-gray-200/30 *:data-[slot=input-group]:bg-gray-200/30 *:data-[slot=input-group]:shadow-none dark:bg-gray-950 dark:text-gray-50 dark:ring-gray-50/10 dark:*:data-[slot=input-group]:border-gray-800/30 dark:*:data-[slot=input-group]:bg-gray-800/30",
+            "group/combobox-content w-(--anchor-width) max-w-(--available-width) origin-(--transform-origin) data-[chips=true]:min-w-(--anchor-width) data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95 relative max-h-96 min-w-[calc(var(--anchor-width)+1.75rem)] overflow-hidden rounded-xl bg-white text-gray-950 shadow-md ring-1 ring-gray-950/10 duration-100 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 data-[slot=input-group]:*:m-1 data-[slot=input-group]:*:mb-0 data-[slot=input-group]:*:h-8 data-[slot=input-group]:*:border-gray-200/30 data-[slot=input-group]:*:bg-gray-200/30 data-[slot=input-group]:*:shadow-none dark:bg-gray-950 dark:text-gray-50 dark:ring-gray-50/10 dark:data-[slot=input-group]:*:border-gray-800/30 dark:data-[slot=input-group]:*:bg-gray-800/30",
             className,
           )}
           {...props}
@@ -131,7 +131,7 @@ function ComboboxList({ className, ...props }: ComboboxPrimitive.List.Props) {
     <ComboboxPrimitive.List
       data-slot="combobox-list"
       className={cn(
-        "data-empty:p-0 max-h-[min(calc(--spacing(96)---spacing(9)),calc(var(--available-height)---spacing(9)))] scroll-py-1 overflow-y-auto p-1",
+        "data-empty:p-0 max-h-[min(calc(--spacing(96)-(--spacing(9))),calc(var(--available-height)-(--spacing(9))))] scroll-py-1 overflow-y-auto p-1",
         className,
       )}
       {...props}
@@ -148,7 +148,7 @@ function ComboboxItem({
     <ComboboxPrimitive.Item
       data-slot="combobox-item"
       className={cn(
-        "outline-hidden data-highlighted:bg-gray-100 data-highlighted:text-gray-900 dark:data-highlighted:bg-gray-800 dark:data-highlighted:text-gray-50 relative flex w-full cursor-default select-none items-center gap-2 rounded-xl py-1.5 pl-2 pr-8 text-sm hover:bg-accent data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0",
+        "outline-hidden data-highlighted:bg-gray-100 data-highlighted:text-gray-900 dark:data-highlighted:bg-gray-800 dark:data-highlighted:text-gray-50 relative flex w-full cursor-default select-none items-center gap-2 rounded-xl py-1.5 pl-2 pr-8 text-sm hover:bg-accent data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0",
         className,
       )}
       {...props}
@@ -233,7 +233,7 @@ function ComboboxChips({
     <ComboboxPrimitive.Chips
       data-slot="combobox-chips"
       className={cn(
-        "shadow-xs has-aria-invalid:border-red-500 has-aria-invalid:ring-[3px] has-aria-invalid:ring-red-500/20 has-data-[slot=combobox-chip]:px-1.5 dark:has-aria-invalid:border-red-500/50 dark:has-aria-invalid:ring-red-500/40 dark:has-aria-invalid:border-red-900 dark:has-aria-invalid:ring-red-900/20 dark:dark:has-aria-invalid:border-red-900/50 dark:dark:has-aria-invalid:ring-red-900/40 flex min-h-9 flex-wrap items-center gap-1.5 rounded-md border border-gray-200 bg-transparent bg-clip-padding px-2.5 py-1.5 text-sm transition-[color,box-shadow] focus-within:border-gray-950 focus-within:ring-[3px] focus-within:ring-gray-950/50 dark:border-gray-800 dark:bg-gray-200/30 dark:dark:bg-gray-800/30 dark:focus-within:border-gray-300 dark:focus-within:ring-gray-300/50",
+        "shadow-2xs has-aria-invalid:border-red-500 has-aria-invalid:ring-[3px] has-aria-invalid:ring-red-500/20 has-data-[slot=combobox-chip]:px-1.5 dark:has-aria-invalid:border-red-500/50 dark:has-aria-invalid:ring-red-500/40 dark:has-aria-invalid:border-red-900 dark:has-aria-invalid:ring-red-900/20 dark:dark:has-aria-invalid:border-red-900/50 dark:dark:has-aria-invalid:ring-red-900/40 flex min-h-9 flex-wrap items-center gap-1.5 rounded-md border border-gray-200 bg-transparent bg-clip-padding px-2.5 py-1.5 text-sm transition-[color,box-shadow] focus-within:border-gray-950 focus-within:ring-[3px] focus-within:ring-gray-950/50 dark:border-gray-800 dark:bg-gray-200/30 dark:dark:bg-gray-800/30 dark:focus-within:border-gray-300 dark:focus-within:ring-gray-300/50",
         className,
       )}
       {...props}
@@ -280,7 +280,7 @@ function ComboboxChipsInput({
   return (
     <ComboboxPrimitive.Input
       data-slot="combobox-chip-input"
-      className={cn("min-w-16 flex-1 outline-none", className)}
+      className={cn("min-w-16 flex-1 outline-hidden", className)}
       {...props}
     />
   );

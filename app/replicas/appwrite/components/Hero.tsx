@@ -5,8 +5,8 @@ import styles from "../scss/hero.module.scss";
 
 export default function AppWriteHero() {
   return (
-    <div className="my-12 lg:my-[7.5rem]">
-      <div className="mx-auto box-content max-w-[75rem] px-5">
+    <div className="my-12 lg:my-30">
+      <div className="mx-auto box-content max-w-300 px-5">
         {/* New button */}
         <Link
           href="/"
@@ -18,7 +18,7 @@ export default function AppWriteHero() {
               New
             </span>
           </div>
-          <div className="mx-1 h-4 w-[1px] self-center bg-[#ffffff1a]"></div>
+          <div className="mx-1 h-4 w-px self-center bg-[#ffffff1a]"></div>
           <div className="flex items-center gap-1">
             <span className={`text-sm font-medium ${styles.newButtonText}`}>
               New compute options available
@@ -29,7 +29,7 @@ export default function AppWriteHero() {
         {/* Text */}
         <div className="relative flex">
           <h1 className={`flex-[1.3] ${styles.heroText}`}>
-            <span className="block bg-[linear-gradient(6deg,_#f8a1ba,_#fff_35%)] bg-clip-text text-transparent">
+            <span className="block bg-[linear-gradient(6deg,#f8a1ba,#fff_35%)] bg-clip-text text-transparent">
               Build like a team of hundreds
               <span className="text-[#ca2b58]">_</span>
             </span>

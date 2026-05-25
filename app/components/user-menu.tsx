@@ -86,7 +86,7 @@ export default function UserMenu({ type = "default" }: Props) {
           </>
         ) : (
           <>
-            <div className="flex size-8 items-center justify-center rounded-full border bg-background shadow dark:bg-muted">
+            <div className="flex size-8 items-center justify-center rounded-full border bg-background shadow-sm dark:bg-muted">
               <User className="size-4" />
             </div>
 

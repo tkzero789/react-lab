@@ -153,7 +153,7 @@ export default function MovieTypePage() {
             ? Array.from({ length: 10 }).map((_, index) => (
                 <Skeleton
                   key={index}
-                  className="h-[16rem] overflow-hidden rounded-xl min-[425px]:h-[20rem] sm:h-[18rem] lg:h-[22rem]"
+                  className="h-64 overflow-hidden rounded-xl min-[425px]:h-80 sm:h-72 lg:h-88"
                 ></Skeleton>
               ))
             : movies.items.map((movie) => (

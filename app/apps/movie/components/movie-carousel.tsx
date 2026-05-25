@@ -87,7 +87,7 @@ export default function MovieCarousel({ title, type_list }: Props) {
           {Array.from({ length: 5 }).map((_, index) => (
             <Skeleton
               key={index}
-              className="h-[16rem] min-[425px]:h-[20rem] sm:h-[18rem] lg:h-[22rem]"
+              className="h-64 min-[425px]:h-80 sm:h-72 lg:h-88"
             />
           ))}
         </div>
@@ -100,7 +100,7 @@ export default function MovieCarousel({ title, type_list }: Props) {
       <Card>
         <CardHeader className="flex items-center justify-between">
           <CardTitle>{title}</CardTitle>
-          <ButtonGroup className="shadow">
+          <ButtonGroup className="shadow-sm">
             <Button
               variant="outline"
               size="icon-sm"

@@ -73,7 +73,7 @@ export default function ExerciseForm({
               <Badge
                 key={muscle}
                 variant={
-                  selectedMuscles.includes(muscle) ? "default" : "outline"
+                  selectedMuscles.includes(muscle) ? "default" : "outline-solid"
                 }
                 className="cursor-pointer select-none"
                 onClick={() => toggleMuscle(muscle)}

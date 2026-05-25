@@ -120,7 +120,7 @@ export default function MovieDetailPage() {
                 height={600}
                 className="aspect-video h-full w-full rounded-xl object-cover"
               />
-              <div className="absolute bottom-2 left-2 right-2 flex flex-col gap-1 rounded-xl bg-secondary/50 p-2 text-secondary-foreground backdrop-blur-sm dark:bg-muted/50 dark:text-foreground lg:bottom-6 lg:left-6 lg:right-6 lg:gap-4 lg:p-6">
+              <div className="absolute bottom-2 left-2 right-2 flex flex-col gap-1 rounded-xl bg-secondary/50 p-2 text-secondary-foreground backdrop-blur-xs dark:bg-muted/50 dark:text-foreground lg:bottom-6 lg:left-6 lg:right-6 lg:gap-4 lg:p-6">
                 {/* Name */}
                 <div className="text-lg font-medium lg:text-2xl">
                   {movie.name}
@@ -128,16 +128,16 @@ export default function MovieDetailPage() {
                 {/* Additional details */}
                 <div className="flex items-center gap-2">
                   <div className="text-sm lg:text-lg">{movie.quality}</div>
-                  <div className="translate-y-[-1px]">|</div>
+                  <div className="-translate-y-px">|</div>
                   <div className="text-sm lg:text-lg">{movie.year}</div>
-                  <div className="translate-y-[-1px]">|</div>
+                  <div className="-translate-y-px">|</div>
                   {movie.episode_current !== "Full" && (
                     <div className="text-sm lg:text-lg">
                       {getTotalEpisodes(movie.episode_current)} tập
                     </div>
                   )}
                   {movie.episode_current !== "Full" && (
-                    <div className="translate-y-[-1px]">|</div>
+                    <div className="-translate-y-px">|</div>
                   )}
                   <div className="text-sm lg:text-lg">{movie.time}</div>
                 </div>

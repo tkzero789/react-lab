@@ -12,7 +12,7 @@ export default function AppwritePage() {
           alt="Top page dark blob"
           width={1500}
           height={500}
-          className="h-[804px] w-[1466px] rotate-[150deg] opacity-65 blur-[127px]"
+          className="h-[804px] w-[1466px] rotate-150 opacity-65 blur-[127px]"
         />
       </div>
       <AppwriteHeader />

@@ -1,8 +1,8 @@
-import { AppSidebar } from "@/components/sidebar/app-sidebar";
-import { ThemeProvider } from "@/components/theme/theme-provider";
-import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
-import React from "react";
-import QueryProvider from "../components/query-provider";
+import { AppSidebar } from "@/components/sidebar/app-sidebar"
+import { ThemeProvider } from "@/components/theme/theme-provider"
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
+import React from "react"
+import QueryProvider from "../components/query-provider"
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
@@ -18,5 +18,5 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         </SidebarInset>
       </SidebarProvider>
     </ThemeProvider>
-  );
+  )
 }

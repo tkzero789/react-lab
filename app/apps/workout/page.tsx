@@ -1,20 +1,20 @@
-"use client";
+"use client"
 
-import DashboardBreadcrumb from "../components/dashboard-breadcrumb";
-import DashboardContainer from "@/components/layout/dashboard-container";
-import { pathClient } from "@/lib/path-client";
-import { Authenticated, Unauthenticated } from "convex/react";
+import DashboardBreadcrumb from "../components/dashboard-breadcrumb"
+import DashboardContainer from "@/components/layout/dashboard-container"
+import { pathClient } from "@/lib/path-client"
+import { Authenticated, AuthLoading, Unauthenticated } from "convex/react"
 import {
   Tabs,
   TabsContent,
   TabsList,
   TabsListWrapper,
   TabsTrigger,
-} from "@/components/ui/tabs";
-import SignInPrompt from "../components/sign-in-prompt";
-import ExerciseList from "./components/exercise-list";
-import AddExercise from "./components/add-exercise";
-import WorkoutLogger from "./components/workout-logger";
+} from "@/components/ui/tabs"
+import SignInPrompt from "../components/sign-in-prompt"
+import ExerciseList from "./components/exercise-list"
+import AddExercise from "./components/add-exercise"
+import WorkoutLogger from "./components/workout-logger"
 
 export default function WorkoutPage() {
   return (
@@ -52,5 +52,5 @@ export default function WorkoutPage() {
         </Authenticated>
       </DashboardContainer>
     </>
-  );
+  )
 }

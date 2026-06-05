@@ -66,7 +66,7 @@ function CalendarNavigation({
       <span className="text-base font-semibold">{label}</span>
       <ButtonGroup>
         <Button
-          variant="muted"
+          variant="secondary"
           size="icon-sm"
           onClick={() => onNavigate("PREV")}
           aria-label="Previous"
@@ -74,12 +74,16 @@ function CalendarNavigation({
           <ChevronLeft />
         </Button>
         <ButtonGroupSeparator />
-        <Button variant="muted" size="sm" onClick={() => onNavigate("TODAY")}>
+        <Button
+          variant="secondary"
+          size="sm"
+          onClick={() => onNavigate("TODAY")}
+        >
           Today
         </Button>
         <ButtonGroupSeparator />
         <Button
-          variant="muted"
+          variant="secondary"
           size="icon-sm"
           onClick={() => onNavigate("NEXT")}
           aria-label="Next"
@@ -253,10 +257,7 @@ export default function WorkoutLogger() {
                         <Dialog>
                           <DialogTrigger
                             render={
-                              <Button
-                                variant="ghost-destructive"
-                                size="icon-sm"
-                              >
+                              <Button variant="ghost" size="icon-sm">
                                 <Trash2 />
                               </Button>
                             }

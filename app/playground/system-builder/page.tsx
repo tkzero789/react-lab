@@ -1,5 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
-import React from "react";
+import React from "react"
 import {
   Sheet,
   SheetClose,
@@ -7,10 +7,9 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from "@/components/ui/sheet";
-import { Button } from "@/components/ui/button";
-import { ChevronLeft, ExternalLink, FileText, X } from "lucide-react";
-import Link from "next/link";
+} from "@/components/ui/sheet"
+import { Button } from "@/components/ui/button"
+import { ChevronLeft, ExternalLink, FileText, X } from "lucide-react"
 
 const products = [
   {
@@ -111,7 +110,7 @@ const products = [
     original_lineset_price: "220.00",
     sale_lineset_price: "187.00",
   },
-];
+]
 
 export default function SystemBuilderPage() {
   return (
@@ -198,13 +197,13 @@ export default function SystemBuilderPage() {
           <SheetContent className="min-w-full overflow-y-auto p-0 lg:min-w-[640px]">
             <SheetHeader className="flex flex-row items-center gap-4 border-b border-neutral-300 p-4">
               <SheetClose asChild>
-                <Button variant="muted" size="icon-sm">
+                <Button variant="secondary" size="icon-sm">
                   <ChevronLeft />
                 </Button>
               </SheetClose>
               <SheetTitle>Select Unit</SheetTitle>
               <SheetClose asChild className="ml-auto">
-                <Button variant="muted" size="icon-sm">
+                <Button variant="secondary" size="icon-sm">
                   <X />
                 </Button>
               </SheetClose>
@@ -266,24 +265,12 @@ export default function SystemBuilderPage() {
                   </div>
                   {/* Links */}
                   <div className="grid grid-cols-2 gap-4">
-                    <Button
-                      asChild
-                      variant="outline"
-                      className="border-neutral-300 shadow-none"
-                    >
-                      <Link href="">
-                        Details <ExternalLink />
-                      </Link>
-                    </Button>
-                    <Button
-                      asChild
-                      variant="outline"
-                      className="border-neutral-300 shadow-none"
-                    >
-                      <Link href="">
-                        Submittals <ExternalLink />
-                      </Link>
-                    </Button>
+                    <a href="" className="border-neutral-300 shadow-none">
+                      Details <ExternalLink />
+                    </a>
+                    <a href="" className="border-neutral-300 shadow-none">
+                      Submittals <ExternalLink />
+                    </a>
                   </div>
                 </div>
               ))}
@@ -299,13 +286,13 @@ export default function SystemBuilderPage() {
           <SheetContent className="min-w-full overflow-y-auto p-0 lg:min-w-[640px]">
             <SheetHeader className="flex flex-row items-center gap-4 border-b border-neutral-300 p-4">
               <SheetClose asChild>
-                <Button variant="muted" size="icon-sm">
+                <Button variant="secondary" size="icon-sm">
                   <ChevronLeft />
                 </Button>
               </SheetClose>
               <SheetTitle>Select Unit</SheetTitle>
               <SheetClose asChild className="ml-auto">
-                <Button variant="muted" size="icon-sm">
+                <Button variant="secondary" size="icon-sm">
                   <X />
                 </Button>
               </SheetClose>
@@ -367,24 +354,18 @@ export default function SystemBuilderPage() {
                   </div>
                   {/* Links */}
                   <div className="grid grid-cols-2 gap-4 border-t border-neutral-300">
-                    <Button
-                      asChild
-                      variant="link"
+                    <a
+                      href=""
                       className="rounded-none border-r border-neutral-300 font-normal underline shadow-none hover:text-[#245ee1]"
                     >
-                      <Link href="">
-                        <ExternalLink /> Details
-                      </Link>
-                    </Button>
-                    <Button
-                      asChild
-                      variant="link"
+                      <ExternalLink /> Details
+                    </a>
+                    <a
+                      href=""
                       className="rounded-none border-r border-neutral-300 font-normal underline shadow-none hover:text-[#245ee1]"
                     >
-                      <Link href="">
-                        <FileText /> Submittals
-                      </Link>
-                    </Button>
+                      <FileText /> Submittals
+                    </a>
                   </div>
                 </div>
               ))}
@@ -393,5 +374,5 @@ export default function SystemBuilderPage() {
         </Sheet>
       </div>
     </div>
-  );
+  )
 }

@@ -1,65 +1,65 @@
-import { Button } from "@/components/ui/button";
-import { ChevronLeft, ChevronRight } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button"
+import { ChevronLeft, ChevronRight } from "lucide-react"
+import { useRouter } from "next/navigation"
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover";
-import { Input } from "@/components/ui/input";
-import React from "react";
+} from "@/components/ui/popover"
+import { Input } from "@/components/ui/input"
+import React from "react"
 
 type Props = {
-  path: string;
-  currentPage: number;
-  totalPages: number;
-};
+  path: string
+  currentPage: number
+  totalPages: number
+}
 
 export default function MoviePagination({
   path,
   currentPage,
   totalPages,
 }: Props) {
-  const router = useRouter();
-  const [pageNumber, setPageNumber] = React.useState<string>("");
-  const [isOpen, setIsOpen] = React.useState<boolean>(false);
+  const router = useRouter()
+  const [pageNumber, setPageNumber] = React.useState<string>("")
+  const [isOpen, setIsOpen] = React.useState<boolean>(false)
   const handlePageChange = (action: string, currentPage: number) => {
     if (currentPage === 2 && action === "prev") {
-      router.push(`${path}`);
-      return;
+      router.push(`${path}`)
+      return
     }
 
     if (currentPage > 1 && action === "next") {
-      currentPage = currentPage + 1;
-      router.push(`${path}?page=${currentPage}`);
+      currentPage = currentPage + 1
+      router.push(`${path}?page=${currentPage}`)
     } else if (currentPage > 1 && action === "prev") {
-      currentPage = currentPage - 1;
-      router.push(`${path}?page=${currentPage}`);
+      currentPage = currentPage - 1
+      router.push(`${path}?page=${currentPage}`)
     }
 
     if (!currentPage && action === "next") {
-      currentPage = currentPage + 2;
-      router.push(`${path}?page=${currentPage}`);
+      currentPage = currentPage + 2
+      router.push(`${path}?page=${currentPage}`)
     }
-  };
+  }
 
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPageNumber(e.target.value);
-  };
+    setPageNumber(e.target.value)
+  }
 
   const submitPageChange = (e: React.FormEvent) => {
-    e.preventDefault();
-    router.push(`${path}?page=${pageNumber}`);
-    setIsOpen(false);
-    setPageNumber("");
-  };
+    e.preventDefault()
+    router.push(`${path}?page=${pageNumber}`)
+    setIsOpen(false)
+    setPageNumber("")
+  }
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 bg-background p-4 md:static md:px-0">
+    <div className="fixed right-0 bottom-0 left-0 bg-background p-4 md:static md:px-0">
       <div className="flex items-center justify-center gap-2">
         <Popover open={isOpen} onOpenChange={setIsOpen}>
           <PopoverTrigger asChild>
-            <Button variant="muted">
+            <Button variant="secondary">
               Page {currentPage === 0 ? "1" : currentPage} of {totalPages}
             </Button>
           </PopoverTrigger>
@@ -81,7 +81,7 @@ export default function MoviePagination({
           </PopoverContent>
         </Popover>
         <Button
-          variant="muted"
+          variant="secondary"
           size="icon"
           disabled={!currentPage}
           onClick={() => handlePageChange("prev", currentPage)}
@@ -90,7 +90,7 @@ export default function MoviePagination({
           <ChevronLeft />
         </Button>
         <Button
-          variant="muted"
+          variant="secondary"
           size="icon"
           onClick={() => handlePageChange("next", currentPage)}
         >
@@ -98,5 +98,5 @@ export default function MoviePagination({
         </Button>
       </div>
     </div>
-  );
+  )
 }

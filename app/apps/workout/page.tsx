@@ -3,7 +3,7 @@
 import DashboardBreadcrumb from "../components/dashboard-breadcrumb"
 import DashboardContainer from "@/components/layout/dashboard-container"
 import { pathClient } from "@/lib/path-client"
-import { Authenticated, AuthLoading, Unauthenticated } from "convex/react"
+import { Authenticated, Unauthenticated } from "convex/react"
 import {
   Tabs,
   TabsContent,

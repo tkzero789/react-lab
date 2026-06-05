@@ -1,9 +1,9 @@
-import React from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Check, Pencil, Trash2, X } from "lucide-react";
-import { toast } from "sonner";
-import { cn } from "@/lib/utils";
+import React from "react"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Check, Pencil, Trash2, X } from "lucide-react"
+import { toast } from "sonner"
+import { cn } from "@/lib/utils"
 import {
   Drawer,
   DrawerClose,
@@ -12,27 +12,27 @@ import {
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
-} from "@/components/ui/drawer";
-import { useIsMobile } from "@/hooks/use-mobile";
-import { Id } from "@/convex/_generated/dataModel";
-import { Dish, Ingredient } from "@/types/grocery";
+} from "@/components/ui/drawer"
+import { useIsMobile } from "@/hooks/use-mobile"
+import { Id } from "@/convex/_generated/dataModel"
+import { Dish, Ingredient } from "@/types/grocery"
 
 type Props = {
-  item: Ingredient;
-  allDishes: Dish[];
-  otherDishes: Dish[];
-  onToggle: (id: Id<"ingredients">) => void;
-  onRemove: (id: Id<"ingredients">) => void;
+  item: Ingredient
+  allDishes: Dish[]
+  otherDishes: Dish[]
+  onToggle: (id: Id<"ingredients">) => void
+  onRemove: (id: Id<"ingredients">) => void
   onEdit: (
     id: Id<"ingredients">,
     updates: {
-      name: string;
-      quantity: string;
-      price: number;
-      dishIds: Id<"dishes">[];
-    },
-  ) => boolean;
-};
+      name: string
+      quantity: string
+      price: number
+      dishIds: Id<"dishes">[]
+    }
+  ) => boolean
+}
 
 export default function IngredientItem({
   item,
@@ -42,45 +42,45 @@ export default function IngredientItem({
   onRemove,
   onEdit,
 }: Props) {
-  const isMobile = useIsMobile();
-  const [editing, setEditing] = React.useState(false);
-  const [editName, setEditName] = React.useState(item.name);
-  const [editQty, setEditQty] = React.useState(item.quantity);
-  const [editPrice, setEditPrice] = React.useState(String(item.price));
+  const isMobile = useIsMobile()
+  const [editing, setEditing] = React.useState(false)
+  const [editName, setEditName] = React.useState(item.name)
+  const [editQty, setEditQty] = React.useState(item.quantity)
+  const [editPrice, setEditPrice] = React.useState(String(item.price))
   const [editDishIds, setEditDishIds] = React.useState<Id<"dishes">[]>(
-    item.dishIds,
-  );
+    item.dishIds
+  )
 
   function handleSave() {
     if (!editName.trim()) {
       toast.error("Item name is required", {
         position: isMobile ? "top-center" : "bottom-right",
-      });
-      return;
+      })
+      return
     }
     const success = onEdit(item._id, {
       name: editName.trim(),
       quantity: editQty.trim() || "1",
       price: Number(editPrice) || 0,
       dishIds: editDishIds,
-    });
-    if (success) setEditing(false);
+    })
+    if (success) setEditing(false)
   }
 
   function handleCancel() {
-    setEditName(item.name);
-    setEditQty(item.quantity);
-    setEditPrice(String(item.price));
-    setEditDishIds(item.dishIds);
-    setEditing(false);
+    setEditName(item.name)
+    setEditQty(item.quantity)
+    setEditPrice(String(item.price))
+    setEditDishIds(item.dishIds)
+    setEditing(false)
   }
 
   function toggleEditDish(dishId: Id<"dishes">) {
     setEditDishIds((prev) =>
       prev.includes(dishId)
         ? prev.filter((id) => id !== dishId)
-        : [...prev, dishId],
-    );
+        : [...prev, dishId]
+    )
   }
 
   if (editing) {
@@ -119,7 +119,9 @@ export default function IngredientItem({
                 <Button
                   key={dish._id}
                   type="button"
-                  variant={editDishIds.includes(dish._id) ? "primary" : "muted"}
+                  variant={
+                    editDishIds.includes(dish._id) ? "default" : "secondary"
+                  }
                   size="sm"
                   onClick={() => toggleEditDish(dish._id)}
                 >
@@ -140,7 +142,7 @@ export default function IngredientItem({
           </Button>
         </div>
       </div>
-    );
+    )
   }
 
   return (
@@ -154,7 +156,7 @@ export default function IngredientItem({
       <div
         className={cn(
           "flex flex-1 items-center justify-between",
-          item.checked && "text-muted-foreground line-through",
+          item.checked && "text-muted-foreground line-through"
         )}
       >
         <div className="flex flex-col">
@@ -178,7 +180,7 @@ export default function IngredientItem({
 
         <Drawer>
           <DrawerTrigger asChild>
-            <Button variant="ghost-destructive" size="icon-sm">
+            <Button variant="ghost" size="icon-sm">
               <Trash2 />
             </Button>
           </DrawerTrigger>
@@ -200,5 +202,5 @@ export default function IngredientItem({
         </Drawer>
       </div>
     </div>
-  );
+  )
 }

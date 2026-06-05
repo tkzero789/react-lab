@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -6,7 +6,7 @@ import {
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+} from "@/components/ui/dropdown-menu"
 import {
   Drawer,
   DrawerContent,
@@ -14,74 +14,71 @@ import {
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
-} from "@/components/ui/drawer";
-import {
-  NativeSelect,
-  NativeSelectOption,
-} from "@/components/ui/native-select";
-import { cn } from "@/lib/utils";
-import { Filter } from "lucide-react";
-import React from "react";
-import { useIsMobile } from "@/hooks/use-mobile";
+} from "@/components/ui/drawer"
+import { NativeSelect, NativeSelectOption } from "@/components/ui/native-select"
+import { cn } from "@/lib/utils"
+import { Filter } from "lucide-react"
+import React from "react"
+import { useIsMobile } from "@/hooks/use-mobile"
 
 type MovieFilter = {
-  _id: string;
-  name: string;
-  slug: string;
-};
+  _id: string
+  name: string
+  slug: string
+}
 
 export default function MovieFilter() {
-  const isMobile = useIsMobile();
+  const isMobile = useIsMobile()
 
-  const [isOpen, setIsOpen] = React.useState<boolean>(false);
+  const [isOpen, setIsOpen] = React.useState<boolean>(false)
   const [filter, setFilter] = React.useState<{
-    category: MovieFilter[];
-    country: MovieFilter[];
-  }>();
+    category: MovieFilter[]
+    country: MovieFilter[]
+  }>()
   const [selectedFilter, setSelectedFilter] = React.useState<{
-    category: MovieFilter | null;
-    country: MovieFilter | null;
+    category: MovieFilter | null
+    country: MovieFilter | null
   }>({
     category: null,
     country: null,
-  });
+  })
 
   React.useEffect(() => {
     const getFilterData = async () => {
       try {
-        const categoryResponse = await fetch("https://phimapi.com/the-loai");
-        const categoryData = await categoryResponse.json();
+        const categoryResponse = await fetch("https://phimapi.com/the-loai")
+        const categoryData = await categoryResponse.json()
 
-        const countryResponse = await fetch("https://phimapi.com/quoc-gia");
-        const countryData = await countryResponse.json();
+        const countryResponse = await fetch("https://phimapi.com/quoc-gia")
+        const countryData = await countryResponse.json()
 
         setFilter({
           category: categoryData,
           country: countryData,
-        });
+        })
       } catch (error) {
-        console.error(error);
+        console.error(error)
       }
-    };
+    }
 
-    getFilterData();
-  }, []);
+    getFilterData()
+  }, [])
 
   const handleSelectFilter = (
     filterType: string,
-    filterObject: MovieFilter,
+    filterObject: MovieFilter
   ) => {
     setSelectedFilter((prev) => ({
       ...prev,
       [filterType]: filterObject,
-    }));
-  };
+    }))
+  }
 
   if (isMobile) {
     return (
       <Drawer>
         <DrawerTrigger asChild>
-          <Button variant="muted">
+          <Button variant="secondary">
             <Filter />
           </Button>
         </DrawerTrigger>
@@ -96,13 +93,13 @@ export default function MovieFilter() {
                   key={item._id}
                   value={item.name}
                   onSelect={(e) => {
-                    e.preventDefault();
-                    handleSelectFilter("category", item);
+                    e.preventDefault()
+                    handleSelectFilter("category", item)
                   }}
                   className={cn(
                     "pl-2",
                     selectedFilter.category?.slug === item.slug &&
-                      "bg-primary text-primary-foreground focus:bg-primary focus:text-primary-foreground",
+                      "bg-primary text-primary-foreground focus:bg-primary focus:text-primary-foreground"
                   )}
                 >
                   {item.name}
@@ -115,13 +112,13 @@ export default function MovieFilter() {
                   key={item._id}
                   value={item.name}
                   onSelect={(e) => {
-                    e.preventDefault();
-                    handleSelectFilter("category", item);
+                    e.preventDefault()
+                    handleSelectFilter("category", item)
                   }}
                   className={cn(
                     "pl-2",
                     selectedFilter.country?.slug === item.slug &&
-                      "bg-primary text-primary-foreground focus:bg-primary focus:text-primary-foreground",
+                      "bg-primary text-primary-foreground focus:bg-primary focus:text-primary-foreground"
                   )}
                 >
                   {item.name}
@@ -134,12 +131,12 @@ export default function MovieFilter() {
           </DrawerFooter>
         </DrawerContent>
       </Drawer>
-    );
+    )
   } else {
     return (
       <DropdownMenu modal={false} open={isOpen} onOpenChange={setIsOpen}>
         <DropdownMenuTrigger asChild>
-          <Button variant="muted">
+          <Button variant="secondary">
             <Filter />
             Filter
           </Button>
@@ -155,13 +152,13 @@ export default function MovieFilter() {
                   key={item._id}
                   value={item.name}
                   onSelect={(e) => {
-                    e.preventDefault();
-                    handleSelectFilter("category", item);
+                    e.preventDefault()
+                    handleSelectFilter("category", item)
                   }}
                   className={cn(
                     "pl-2",
                     selectedFilter.category?.slug === item.slug &&
-                      "bg-primary text-primary-foreground focus:bg-primary focus:text-primary-foreground",
+                      "bg-primary text-primary-foreground focus:bg-primary focus:text-primary-foreground"
                   )}
                 >
                   {item.name}
@@ -179,13 +176,13 @@ export default function MovieFilter() {
                   key={item._id}
                   value={item.name}
                   onSelect={(e) => {
-                    e.preventDefault();
-                    handleSelectFilter("country", item);
+                    e.preventDefault()
+                    handleSelectFilter("country", item)
                   }}
                   className={cn(
                     "pl-2",
                     selectedFilter.country?.slug === item.slug &&
-                      "bg-primary text-primary-foreground focus:bg-primary focus:text-primary-foreground",
+                      "bg-primary text-primary-foreground focus:bg-primary focus:text-primary-foreground"
                   )}
                 >
                   {item.name}
@@ -195,6 +192,6 @@ export default function MovieFilter() {
           </div>
         </DropdownMenuContent>
       </DropdownMenu>
-    );
+    )
   }
 }

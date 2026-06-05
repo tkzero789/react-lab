@@ -1,17 +1,17 @@
-"use client";
+"use client"
 
-import { Button } from "@/components/ui/button";
-import { api } from "@/convex/_generated/api";
-import { Id } from "@/convex/_generated/dataModel";
-import { useMutation, useQuery } from "convex/react";
-import { Trash2 } from "lucide-react";
+import { Button } from "@/components/ui/button"
+import { api } from "@/convex/_generated/api"
+import { Id } from "@/convex/_generated/dataModel"
+import { useMutation, useQuery } from "convex/react"
+import { Trash2 } from "lucide-react"
 
 export default function TodoList() {
-  const todos = useQuery(api.todos.list);
-  const removeTodo = useMutation(api.todos.remove);
+  const todos = useQuery(api.todos.list)
+  const removeTodo = useMutation(api.todos.remove)
 
   async function handleRemoveTodo(todoId: Id<"todos">) {
-    await removeTodo({ id: todoId });
+    await removeTodo({ id: todoId })
   }
 
   return (
@@ -23,7 +23,7 @@ export default function TodoList() {
         >
           {todo.text}
           <Button
-            variant="ghost-destructive"
+            variant="ghost"
             size="icon-sm"
             onClick={() => handleRemoveTodo(todo._id)}
           >
@@ -32,5 +32,5 @@ export default function TodoList() {
         </li>
       ))}
     </ul>
-  );
+  )
 }

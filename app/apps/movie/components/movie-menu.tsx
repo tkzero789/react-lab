@@ -1,28 +1,28 @@
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button"
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+} from "@/components/ui/dropdown-menu"
 import {
   Drawer,
   DrawerContent,
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
-} from "@/components/ui/drawer";
-import { cn } from "@/lib/utils";
-import { Menu } from "lucide-react";
-import Link from "next/link";
-import { useIsMobile } from "@/hooks/use-mobile";
-import { pathClient } from "@/lib/path-client";
+} from "@/components/ui/drawer"
+import { cn } from "@/lib/utils"
+import { Menu } from "lucide-react"
+import Link from "next/link"
+import { useIsMobile } from "@/hooks/use-mobile"
+import { pathClient } from "@/lib/path-client"
 
 type MovieType = {
-  title: string;
-  params?: "movie" | "series" | "hoathinh" | "tv-shows";
-  typeList?: "phim-le" | "phim-bo" | "hoat-hinh" | "tv-shows";
-};
+  title: string
+  params?: "movie" | "series" | "hoathinh" | "tv-shows"
+  typeList?: "phim-le" | "phim-bo" | "hoat-hinh" | "tv-shows"
+}
 
 const movieTypes: MovieType[] = [
   { title: "Home" },
@@ -46,20 +46,20 @@ const movieTypes: MovieType[] = [
     params: "tv-shows",
     typeList: "tv-shows",
   },
-];
+]
 
 type Props = {
-  paramsType: string;
-};
+  paramsType: string
+}
 
 export default function MovieMenu({ paramsType }: Props) {
-  const isMobile = useIsMobile();
+  const isMobile = useIsMobile()
 
   if (isMobile) {
     return (
       <Drawer>
         <DrawerTrigger asChild>
-          <Button variant="muted">
+          <Button variant="secondary">
             <Menu />
             Menu
           </Button>
@@ -70,29 +70,29 @@ export default function MovieMenu({ paramsType }: Props) {
           </DrawerHeader>
           <div className="grid grid-cols-2 gap-2 px-4 pb-4">
             {movieTypes.map((type) => (
-              <Button
+              <a
                 key={type.title}
-                asChild
-                variant="muted"
                 className={cn(
+                  buttonVariants({ variant: "default" }),
                   type.params === paramsType &&
-                    "bg-primary text-primary-foreground",
+                    "bg-primary text-primary-foreground"
+                )}
+                href={pathClient(
+                  type?.params ? `/apps/movie/${type?.params}` : `/apps/movie`
                 )}
               >
-                <Link href={pathClient(type?.params ? `/apps/movie/${type?.params}` : `/apps/movie`)}>
-                  {type.title}
-                </Link>
-              </Button>
+                {type.title}
+              </a>
             ))}
           </div>
         </DrawerContent>
       </Drawer>
-    );
+    )
   } else {
     return (
       <DropdownMenu>
         <DropdownMenuTrigger asChild className="lg:hidden">
-          <Button variant="muted">
+          <Button variant="secondary">
             <Menu /> Menu
           </Button>
         </DropdownMenuTrigger>
@@ -103,13 +103,17 @@ export default function MovieMenu({ paramsType }: Props) {
               asChild
               className={cn(type.params === paramsType && "bg-muted")}
             >
-              <Link href={pathClient(type?.params ? `/apps/movie/${type?.params}` : `/apps/movie`)}>
+              <Link
+                href={pathClient(
+                  type?.params ? `/apps/movie/${type?.params}` : `/apps/movie`
+                )}
+              >
                 {type.title}
               </Link>
             </DropdownMenuItem>
           ))}
         </DropdownMenuContent>
       </DropdownMenu>
-    );
+    )
   }
 }

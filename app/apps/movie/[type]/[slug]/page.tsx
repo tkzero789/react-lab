@@ -1,87 +1,88 @@
-"use client";
+"use client"
 
-import React from "react";
-import DashboardContainer from "@/components/layout/dashboard-container";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { useParams } from "next/navigation";
-import Link from "next/link";
-import DashboardBreadcrumb from "@/app/apps/components/dashboard-breadcrumb";
-import { Skeleton } from "@/components/ui/skeleton";
-import { pathClient } from "@/lib/path-client";
+import React from "react"
+import DashboardContainer from "@/components/layout/dashboard-container"
+import { Badge } from "@/components/ui/badge"
+import { buttonVariants } from "@/components/ui/button"
+import { useParams } from "next/navigation"
+
+import DashboardBreadcrumb from "@/app/apps/components/dashboard-breadcrumb"
+import { Skeleton } from "@/components/ui/skeleton"
+import { pathClient } from "@/lib/path-client"
+import { cn } from "@/lib/utils"
 
 type MovieDetail = {
-  name: string;
-  type: string;
-  slug: string;
-  content: string;
-  thumb_url: string;
-  poster_url: string;
-  episode_current: string;
-  time: string;
-  episode_total: string;
-  quality: string;
-  year: number;
-  actor: string[];
+  name: string
+  type: string
+  slug: string
+  content: string
+  thumb_url: string
+  poster_url: string
+  episode_current: string
+  time: string
+  episode_total: string
+  quality: string
+  year: number
+  actor: string[]
   category: {
-    id: string;
-    name: string;
-    slug: string;
-  }[];
-};
+    id: string
+    name: string
+    slug: string
+  }[]
+}
 
 type MovieEpisode = {
-  name: string;
-  slug: string;
-  filename: string;
-  link_embed: string;
-};
+  name: string
+  slug: string
+  filename: string
+  link_embed: string
+}
 
 export default function MovieDetailPage() {
-  const params = useParams();
-  const [movie, setMovie] = React.useState<MovieDetail>();
-  const [episodes, setEpisodes] = React.useState<MovieEpisode[]>();
+  const params = useParams()
+  const [movie, setMovie] = React.useState<MovieDetail>()
+  const [episodes, setEpisodes] = React.useState<MovieEpisode[]>()
 
   React.useEffect(() => {
     const getData = async () => {
       try {
-        const response = await fetch(`https://phimapi.com/phim/${params.slug}`);
-        const data = await response.json();
-        console.log(data);
-        setMovie(data.movie);
-        setEpisodes(data.episodes[0].server_data);
+        const response = await fetch(`https://phimapi.com/phim/${params.slug}`)
+        const data = await response.json()
+        console.log(data)
+        setMovie(data.movie)
+        setEpisodes(data.episodes[0].server_data)
       } catch (error) {
-        console.error(error);
+        console.error(error)
       }
-    };
-    getData();
-  }, [params.slug, params.episode]);
+    }
+    getData()
+  }, [params.slug, params.episode])
 
-  let typeTitle: string = "";
+  let typeTitle: string = ""
   switch (movie?.type as string) {
     case "single":
-      typeTitle = "Single";
-      break;
+      typeTitle = "Single"
+      break
     case "series":
-      typeTitle = "Series";
-      break;
+      typeTitle = "Series"
+      break
     case "hoathinh":
-      typeTitle = "Animation";
-      break;
+      typeTitle = "Animation"
+      break
     case "tvshows":
-      typeTitle = "TV Shows";
-      break;
+      typeTitle = "TV Shows"
+      break
   }
 
   const getTotalEpisodes = (currentEpisode: string) => {
     if (currentEpisode.startsWith("Tập")) {
-      return currentEpisode.split(" ")[1];
+      return currentEpisode.split(" ")[1]
     } else {
-      return currentEpisode?.split("/")[1]?.split(")")[0];
+      return currentEpisode?.split("/")[1]?.split(")")[0]
     }
-  };
+  }
 
-  console.log(movie?.type);
+  console.log(movie?.type)
 
   return (
     <>
@@ -98,7 +99,7 @@ export default function MovieDetailPage() {
           {
             title: typeTitle,
             href: pathClient(
-              `/apps/movie/${movie?.type === "tvshows" ? "tv-shows" : movie?.type}`,
+              `/apps/movie/${movie?.type === "tvshows" ? "tv-shows" : movie?.type}`
             ),
           },
           {
@@ -120,7 +121,7 @@ export default function MovieDetailPage() {
                 height={600}
                 className="aspect-video h-full w-full rounded-xl object-cover"
               />
-              <div className="absolute bottom-2 left-2 right-2 flex flex-col gap-1 rounded-xl bg-secondary/50 p-2 text-secondary-foreground backdrop-blur-xs dark:bg-muted/50 dark:text-foreground lg:bottom-6 lg:left-6 lg:right-6 lg:gap-4 lg:p-6">
+              <div className="absolute right-2 bottom-2 left-2 flex flex-col gap-1 rounded-xl bg-secondary/50 p-2 text-secondary-foreground backdrop-blur-xs lg:right-6 lg:bottom-6 lg:left-6 lg:gap-4 lg:p-6 dark:bg-muted/50 dark:text-foreground">
                 {/* Name */}
                 <div className="text-lg font-medium lg:text-2xl">
                   {movie.name}
@@ -187,22 +188,19 @@ export default function MovieDetailPage() {
                 <div className="font-semibold">Episodes:</div>
                 <div className="flex flex-wrap gap-1">
                   {episodes?.map((episode) => (
-                    <Button
+                    <a
                       key={episode.link_embed}
-                      asChild
-                      variant="muted"
-                      size="sm"
+                      href={pathClient(
+                        `/apps/movie/${movie.type}/${movie.slug}/${episode.slug}`
+                      )}
+                      className={cn(
+                        buttonVariants({ variant: "secondary", size: "sm" })
+                      )}
                     >
-                      <Link
-                        href={pathClient(
-                          `/apps/movie/${movie.type}/${movie.slug}/${episode.slug}`,
-                        )}
-                      >
-                        {episode.slug === "full"
-                          ? "Full"
-                          : `Tập ${episode.name.split(" ")[1]}`}
-                      </Link>
-                    </Button>
+                      {episode.slug === "full"
+                        ? "Full"
+                        : `Tập ${episode.name.split(" ")[1]}`}
+                    </a>
                   ))}
                 </div>
               </div>
@@ -211,5 +209,5 @@ export default function MovieDetailPage() {
         </div>
       </DashboardContainer>
     </>
-  );
+  )
 }

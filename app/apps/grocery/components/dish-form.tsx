@@ -1,8 +1,8 @@
-import React from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Plus, Trash2 } from "lucide-react";
-import { toast } from "sonner";
+import React from "react"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Plus, Trash2 } from "lucide-react"
+import { toast } from "sonner"
 import {
   Drawer,
   DrawerClose,
@@ -11,53 +11,53 @@ import {
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
-} from "@/components/ui/drawer";
-import { useIsMobile } from "@/hooks/use-mobile";
-import { useMutation, useQuery } from "convex/react";
-import { api } from "@/convex/_generated/api";
-import { Id } from "@/convex/_generated/dataModel";
+} from "@/components/ui/drawer"
+import { useIsMobile } from "@/hooks/use-mobile"
+import { useMutation, useQuery } from "convex/react"
+import { api } from "@/convex/_generated/api"
+import { Id } from "@/convex/_generated/dataModel"
 
 function normalize(str: string) {
-  return str.replace(/\s+/g, "").toLowerCase();
+  return str.replace(/\s+/g, "").toLowerCase()
 }
 
 export default function DishForm() {
-  const isMobile = useIsMobile();
-  const dishes = useQuery(api.dishes.list) ?? [];
-  const addDish = useMutation(api.dishes.add);
-  const removeDish = useMutation(api.dishes.remove);
+  const isMobile = useIsMobile()
+  const dishes = useQuery(api.dishes.list) ?? []
+  const addDish = useMutation(api.dishes.add)
+  const removeDish = useMutation(api.dishes.remove)
 
-  const [dishName, setDishName] = React.useState("");
+  const [dishName, setDishName] = React.useState("")
 
   function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
+    e.preventDefault()
     if (!dishName.trim()) {
       toast.error("Dish name is required", {
         position: isMobile ? "top-center" : "bottom-right",
-      });
-      return;
+      })
+      return
     }
     const isDuplicate = dishes.some(
-      (d) => normalize(d.name) === normalize(dishName),
-    );
+      (d) => normalize(d.name) === normalize(dishName)
+    )
     if (isDuplicate) {
       toast.error(`"${dishName}" already exists`, {
         position: isMobile ? "top-center" : "bottom-right",
-      });
-      return;
+      })
+      return
     }
-    addDish({ name: dishName.trim() });
+    addDish({ name: dishName.trim() })
     toast.success(`Added dish "${dishName.trim()}"`, {
       position: isMobile ? "top-center" : "bottom-right",
-    });
-    setDishName("");
+    })
+    setDishName("")
   }
 
   function handleRemove(dishId: Id<"dishes">) {
-    removeDish({ id: dishId });
+    removeDish({ id: dishId })
     toast.info("Dish deleted", {
       position: isMobile ? "top-center" : "bottom-right",
-    });
+    })
   }
 
   return (
@@ -84,7 +84,7 @@ export default function DishForm() {
 
               <Drawer>
                 <DrawerTrigger asChild>
-                  <Button variant="ghost-destructive" size="icon-sm">
+                  <Button variant="ghost" size="icon-sm">
                     <Trash2 />
                   </Button>
                 </DrawerTrigger>
@@ -112,5 +112,5 @@ export default function DishForm() {
         </div>
       )}
     </>
-  );
+  )
 }

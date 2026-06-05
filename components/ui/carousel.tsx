@@ -1,12 +1,12 @@
-"use client";
+"use client"
 
-import React, { ComponentPropsWithRef } from "react";
+import React, { ComponentPropsWithRef } from "react"
 
-import { cn } from "@/lib/utils";
-import { EmblaCarouselType } from "embla-carousel";
-import { ChevronLeft, ChevronRight } from "lucide-react";
-import { Button } from "./button";
-import "@/app/css/carousel.css";
+import { cn } from "@/lib/utils"
+import { EmblaCarouselType } from "embla-carousel"
+import { ChevronLeft, ChevronRight } from "lucide-react"
+import { Button } from "./button"
+import "@/app/css/carousel.css"
 
 const Carousel = React.forwardRef<
   HTMLDivElement,
@@ -18,69 +18,69 @@ const Carousel = React.forwardRef<
         {children}
       </div>
     </div>
-  );
-});
+  )
+})
 
 function CarouselContainer({
   className,
   ...props
 }: React.ComponentProps<"div">) {
-  return <div className={cn("carousel__container", className)} {...props} />;
+  return <div className={cn("carousel__container", className)} {...props} />
 }
 
 function CarouselItem({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div className={cn("min-w-0 flex-none basis-full", className)} {...props} />
-  );
+  )
 }
 
 type UsePrevNextButtonsType = {
-  prevBtnDisabled: boolean;
-  nextBtnDisabled: boolean;
-  onPrevButtonClick: () => void;
-  onNextButtonClick: () => void;
-};
+  prevBtnDisabled: boolean
+  nextBtnDisabled: boolean
+  onPrevButtonClick: () => void
+  onNextButtonClick: () => void
+}
 
 const usePrevNextButtons = (
-  emblaApi: EmblaCarouselType | undefined,
+  emblaApi: EmblaCarouselType | undefined
 ): UsePrevNextButtonsType => {
-  const [prevBtnDisabled, setPrevBtnDisabled] = React.useState(true);
-  const [nextBtnDisabled, setNextBtnDisabled] = React.useState(true);
+  const [prevBtnDisabled, setPrevBtnDisabled] = React.useState(true)
+  const [nextBtnDisabled, setNextBtnDisabled] = React.useState(true)
 
   const onPrevButtonClick = React.useCallback(() => {
-    if (!emblaApi) return;
-    emblaApi.scrollPrev();
-  }, [emblaApi]);
+    if (!emblaApi) return
+    emblaApi.scrollPrev()
+  }, [emblaApi])
 
   const onNextButtonClick = React.useCallback(() => {
-    if (!emblaApi) return;
-    emblaApi.scrollNext();
-  }, [emblaApi]);
+    if (!emblaApi) return
+    emblaApi.scrollNext()
+  }, [emblaApi])
 
   const onSelect = React.useCallback((emblaApi: EmblaCarouselType) => {
-    setPrevBtnDisabled(!emblaApi.canScrollPrev());
-    setNextBtnDisabled(!emblaApi.canScrollNext());
-  }, []);
+    setPrevBtnDisabled(!emblaApi.canScrollPrev())
+    setNextBtnDisabled(!emblaApi.canScrollNext())
+  }, [])
 
   React.useEffect(() => {
-    if (!emblaApi) return;
+    if (!emblaApi) return
 
-    onSelect(emblaApi);
-    emblaApi.on("reInit", onSelect).on("select", onSelect);
-  }, [emblaApi, onSelect]);
+    onSelect(emblaApi)
+    emblaApi.on("reInit", onSelect).on("select", onSelect)
+  }, [emblaApi, onSelect])
 
   return {
     prevBtnDisabled,
     nextBtnDisabled,
     onPrevButtonClick,
     onNextButtonClick,
-  };
-};
+  }
+}
 
-type PropType = ComponentPropsWithRef<typeof Button>;
+type PropType = ComponentPropsWithRef<typeof Button>
 
 const CarouselPrev: React.FC<PropType> = (props) => {
-  const { variant, size, className, children, ...restProps } = props;
+  const { variant, size, className, children, ...restProps } = props
 
   return (
     <Button
@@ -92,11 +92,11 @@ const CarouselPrev: React.FC<PropType> = (props) => {
       <ChevronLeft />
       {children}
     </Button>
-  );
-};
+  )
+}
 
 const CarouselNext: React.FC<PropType> = (props) => {
-  const { variant, size, className, children, ...restProps } = props;
+  const { variant, size, className, children, ...restProps } = props
 
   return (
     <Button
@@ -108,61 +108,61 @@ const CarouselNext: React.FC<PropType> = (props) => {
       <ChevronRight />
       {children}
     </Button>
-  );
-};
+  )
+}
 
 type UseDotButtonType = {
-  selectedIndex: number;
-  scrollSnaps: number[];
-  onDotButtonClick: (index: number) => void;
-};
+  selectedIndex: number
+  scrollSnaps: number[]
+  onDotButtonClick: (index: number) => void
+}
 
 const useDotButton = (
-  emblaApi: EmblaCarouselType | undefined,
+  emblaApi: EmblaCarouselType | undefined
 ): UseDotButtonType => {
-  const [selectedIndex, setSelectedIndex] = React.useState(0);
-  const [scrollSnaps, setScrollSnaps] = React.useState<number[]>([]);
+  const [selectedIndex, setSelectedIndex] = React.useState(0)
+  const [scrollSnaps, setScrollSnaps] = React.useState<number[]>([])
 
   const onDotButtonClick = React.useCallback(
     (index: number) => {
-      if (!emblaApi) return;
-      emblaApi.scrollTo(index);
+      if (!emblaApi) return
+      emblaApi.scrollTo(index)
     },
-    [emblaApi],
-  );
+    [emblaApi]
+  )
 
   const onInit = React.useCallback((emblaApi: EmblaCarouselType) => {
-    setScrollSnaps(emblaApi.scrollSnapList());
-  }, []);
+    setScrollSnaps(emblaApi.scrollSnapList())
+  }, [])
 
   const onSelect = React.useCallback((emblaApi: EmblaCarouselType) => {
-    setSelectedIndex(emblaApi.selectedScrollSnap());
-  }, []);
+    setSelectedIndex(emblaApi.selectedScrollSnap())
+  }, [])
 
   React.useEffect(() => {
-    if (!emblaApi) return;
+    if (!emblaApi) return
 
-    onInit(emblaApi);
-    onSelect(emblaApi);
-    emblaApi.on("reInit", onInit).on("reInit", onSelect).on("select", onSelect);
-  }, [emblaApi, onInit, onSelect]);
+    onInit(emblaApi)
+    onSelect(emblaApi)
+    emblaApi.on("reInit", onInit).on("reInit", onSelect).on("select", onSelect)
+  }, [emblaApi, onInit, onSelect])
 
   return {
     selectedIndex,
     scrollSnaps,
     onDotButtonClick,
-  };
-};
+  }
+}
 
-const DotButton: React.FC<PropType> = (props) => {
-  const { children, ...restProps } = props;
+const DotButton: React.FC<React.ComponentProps<"button">> = (props) => {
+  const { children, ...restProps } = props
 
   return (
     <button type="button" {...restProps}>
       {children}
     </button>
-  );
-};
+  )
+}
 
 export {
   Carousel,
@@ -173,4 +173,4 @@ export {
   CarouselNext,
   useDotButton,
   DotButton,
-};
+}

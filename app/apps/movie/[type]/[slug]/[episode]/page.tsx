@@ -1,86 +1,87 @@
-"use client";
+"use client"
 
-import { useParams } from "next/navigation";
-import React from "react";
-import DashboardBreadcrumb from "@/app/apps/components/dashboard-breadcrumb";
-import DashboardContainer from "@/components/layout/dashboard-container";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
-import MovieVideo from "../../../components/movie-video";
-import { pathClient } from "@/lib/path-client";
+import { useParams } from "next/navigation"
+import React from "react"
+import DashboardBreadcrumb from "@/app/apps/components/dashboard-breadcrumb"
+import DashboardContainer from "@/components/layout/dashboard-container"
+import { Button, buttonVariants } from "@/components/ui/button"
+import Link from "next/link"
+import MovieVideo from "../../../components/movie-video"
+import { pathClient } from "@/lib/path-client"
+import { cn } from "@/lib/utils"
 
 type MovieDetail = {
-  name: string;
-  type: string;
-  slug: string;
-  content: string;
-  thumb_url: string;
-  poster_url: string;
-  time: string;
-  episode_total: string;
-  quality: string;
-  year: number;
-  actor: string[];
+  name: string
+  type: string
+  slug: string
+  content: string
+  thumb_url: string
+  poster_url: string
+  time: string
+  episode_total: string
+  quality: string
+  year: number
+  actor: string[]
   category: {
-    id: string;
-    name: string;
-    slug: string;
-  }[];
-};
+    id: string
+    name: string
+    slug: string
+  }[]
+}
 
 type MovieEpisode = {
-  name: string;
-  slug: string;
-  filename: string;
-  link_embed: string;
-};
+  name: string
+  slug: string
+  filename: string
+  link_embed: string
+}
 
 export default function EpisodePage() {
-  const params = useParams();
-  const [movie, setMovie] = React.useState<MovieDetail>();
-  const [episodes, setEpisodes] = React.useState<MovieEpisode[]>();
-  const [source, setSource] = React.useState<string>("");
+  const params = useParams()
+  const [movie, setMovie] = React.useState<MovieDetail>()
+  const [episodes, setEpisodes] = React.useState<MovieEpisode[]>()
+  const [source, setSource] = React.useState<string>("")
 
   React.useEffect(() => {
     const getData = async () => {
       try {
-        const response = await fetch(`https://phimapi.com/phim/${params.slug}`);
-        const data = await response.json();
-        setMovie(data.movie);
-        const episodes = data.episodes[0].server_data;
-        setEpisodes(episodes);
+        const response = await fetch(`https://phimapi.com/phim/${params.slug}`)
+        const data = await response.json()
+        setMovie(data.movie)
+        const episodes = data.episodes[0].server_data
+        setEpisodes(episodes)
         episodes.find((item: MovieEpisode) => {
           if (item.slug === params.episode) {
-            setSource(item.link_embed);
+            setSource(item.link_embed)
           }
-        });
+        })
       } catch (error) {
-        console.error(error);
+        console.error(error)
       }
-    };
-    getData();
-  }, [params.slug, params.episode]);
+    }
+    getData()
+  }, [params.slug, params.episode])
 
-  let typeTitle: string = "";
+  let typeTitle: string = ""
   switch (movie?.type as string) {
     case "single":
-      typeTitle = "Single";
-      break;
+      typeTitle = "Single"
+      break
     case "series":
-      typeTitle = "Series";
-      break;
+      typeTitle = "Series"
+      break
     case "hoathinh":
-      typeTitle = "Animation";
-      break;
+      typeTitle = "Animation"
+      break
     case "tvshows":
-      typeTitle = "TV Shows";
-      break;
+      typeTitle = "TV Shows"
+      break
   }
 
   const episodeNumber =
     typeof params.episode === "string"
       ? params.episode.split("-").pop()
-      : params.episode?.[0];
+      : params.episode?.[0]
 
   return (
     <>
@@ -96,7 +97,9 @@ export default function EpisodePage() {
           },
           {
             title: typeTitle,
-            href: pathClient(`/apps/movie/${movie?.type === "tvshows" ? "tv-shows" : movie?.type}`),
+            href: pathClient(
+              `/apps/movie/${movie?.type === "tvshows" ? "tv-shows" : movie?.type}`
+            ),
           },
           {
             title: movie?.name ?? "",
@@ -111,24 +114,27 @@ export default function EpisodePage() {
           <div className="font-semibold">Episodes:</div>
           <div className="flex flex-wrap gap-1">
             {episodes?.map((episode) => (
-              <Button
+              <a
                 key={episode.name}
-                asChild
-                variant={episode.slug === params.episode ? "primary" : "muted"}
-                size="sm"
+                href={pathClient(
+                  `/apps/movie/${movie?.type}/${movie?.slug}/${episode.slug}`
+                )}
+                className={cn(
+                  buttonVariants({
+                    variant:
+                      episode.slug === params.episode ? "default" : "secondary",
+                    size: "sm",
+                  })
+                )}
               >
-                <Link
-                  href={pathClient(`/apps/movie/${movie?.type}/${movie?.slug}/${episode.slug}`)}
-                >
-                  {episode.slug === "full"
-                    ? "Full"
-                    : `Tập ${episode.name.split(" ")[1]}`}
-                </Link>
-              </Button>
+                {episode.slug === "full"
+                  ? "Full"
+                  : `Tập ${episode.name.split(" ")[1]}`}
+              </a>
             ))}
           </div>
         </div>
       </DashboardContainer>
     </>
-  );
+  )
 }

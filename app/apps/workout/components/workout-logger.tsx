@@ -1,11 +1,8 @@
-"use client";
+"use client"
 
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import {
-  ButtonGroup,
-  ButtonGroupSeparator,
-} from "@/components/ui/button-group";
+import { useState } from "react"
+import { Button } from "@/components/ui/button"
+import { ButtonGroup, ButtonGroupSeparator } from "@/components/ui/button-group"
 import {
   Dialog,
   DialogBody,
@@ -14,7 +11,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
+} from "@/components/ui/dialog"
 
 import {
   Trash2,
@@ -22,10 +19,10 @@ import {
   ArrowDown,
   ChevronLeft,
   ChevronRight,
-} from "lucide-react";
-import { Id } from "@/convex/_generated/dataModel";
-import { api } from "@/convex/_generated/api";
-import { useMutation, useQuery } from "convex/react";
+} from "lucide-react"
+import { Id } from "@/convex/_generated/dataModel"
+import { api } from "@/convex/_generated/api"
+import { useMutation, useQuery } from "convex/react"
 import {
   format,
   parse,
@@ -33,32 +30,32 @@ import {
   endOfWeek,
   getDay,
   isWithinInterval,
-} from "date-fns";
-import { enUS } from "date-fns/locale";
-import LogExerciseForm from "./log-exercise-form";
+} from "date-fns"
+import { enUS } from "date-fns/locale"
+import LogExerciseForm from "./log-exercise-form"
 import {
   Calendar as BigCalendar,
   dateFnsLocalizer,
   Views,
   type Event,
   type ToolbarProps,
-} from "react-big-calendar";
-import "react-big-calendar/lib/css/react-big-calendar.css";
+} from "react-big-calendar"
+import "react-big-calendar/lib/css/react-big-calendar.css"
 
-const locales = { "en-US": enUS };
+const locales = { "en-US": enUS }
 const localizer = dateFnsLocalizer({
   format,
   parse,
   startOfWeek: (date: Date) => startOfWeek(date, { weekStartsOn: 1 }),
   getDay,
   locales,
-});
+})
 
 type WorkoutEvent = Event & {
-  logId: Id<"workoutLogs">;
-  exerciseId: Id<"exercises">;
-  dateStr: string;
-};
+  logId: Id<"workoutLogs">
+  exerciseId: Id<"exercises">
+  dateStr: string
+}
 
 function CalendarNavigation({
   label,
@@ -91,35 +88,35 @@ function CalendarNavigation({
         </Button>
       </ButtonGroup>
     </div>
-  );
+  )
 }
 
 export default function WorkoutLogger() {
-  const exercises = useQuery(api.exercises.list) ?? [];
-  const logs = useQuery(api.workoutLogs.list) ?? [];
-  const addWorkoutLog = useMutation(api.workoutLogs.add);
-  const removeWorkoutLog = useMutation(api.workoutLogs.remove);
+  const exercises = useQuery(api.exercises.list) ?? []
+  const logs = useQuery(api.workoutLogs.list) ?? []
+  const addWorkoutLog = useMutation(api.workoutLogs.add)
+  const removeWorkoutLog = useMutation(api.workoutLogs.remove)
 
-  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
-  const [dayDialogOpen, setDayDialogOpen] = useState(false);
-  const [logDialogOpen, setLogDialogOpen] = useState(false);
+  const [selectedDate, setSelectedDate] = useState<Date>(new Date())
+  const [dayDialogOpen, setDayDialogOpen] = useState(false)
+  const [logDialogOpen, setLogDialogOpen] = useState(false)
 
-  const dateStr = format(selectedDate, "yyyy-MM-dd");
-  const dayLogs = logs.filter((l) => l.date === dateStr);
+  const dateStr = format(selectedDate, "yyyy-MM-dd")
+  const dayLogs = logs.filter((l) => l.date === dateStr)
 
-  const weekStart = startOfWeek(selectedDate, { weekStartsOn: 1 });
-  const weekEnd = endOfWeek(selectedDate, { weekStartsOn: 1 });
+  const weekStart = startOfWeek(selectedDate, { weekStartsOn: 1 })
+  const weekEnd = endOfWeek(selectedDate, { weekStartsOn: 1 })
   const weekLogs = logs.filter((l) => {
-    const d = new Date(l.date + "T00:00:00");
-    return isWithinInterval(d, { start: weekStart, end: weekEnd });
-  });
+    const d = new Date(l.date + "T00:00:00")
+    return isWithinInterval(d, { start: weekStart, end: weekEnd })
+  })
 
-  const dayTotalSets = dayLogs.reduce((sum, l) => sum + l.sets.length, 0);
-  const weekTotalSets = weekLogs.reduce((sum, l) => sum + l.sets.length, 0);
+  const dayTotalSets = dayLogs.reduce((sum, l) => sum + l.sets.length, 0)
+  const weekTotalSets = weekLogs.reduce((sum, l) => sum + l.sets.length, 0)
 
   const events: WorkoutEvent[] = logs.map((l) => {
-    const exercise = exercises.find((e) => e._id === l.exerciseId);
-    const d = new Date(l.date + "T00:00:00");
+    const exercise = exercises.find((e) => e._id === l.exerciseId)
+    const d = new Date(l.date + "T00:00:00")
     return {
       logId: l._id,
       exerciseId: l.exerciseId,
@@ -128,53 +125,53 @@ export default function WorkoutLogger() {
       start: d,
       end: d,
       allDay: true,
-    };
-  });
+    }
+  })
 
   function getExercise(id: Id<"exercises">) {
-    return exercises.find((e) => e._id === id);
+    return exercises.find((e) => e._id === id)
   }
 
   function handleAdd(
     date: string,
     exerciseId: Id<"exercises">,
-    sets: { reps: number; weight: number }[],
+    sets: { reps: number; weight: number }[]
   ) {
-    addWorkoutLog({ date, exerciseId, sets });
+    addWorkoutLog({ date, exerciseId, sets })
   }
 
   function handleRemove(id: Id<"workoutLogs">) {
-    removeWorkoutLog({ id });
+    removeWorkoutLog({ id })
   }
 
   function openDayDialog(date: Date) {
-    setSelectedDate(date);
-    setDayDialogOpen(true);
+    setSelectedDate(date)
+    setDayDialogOpen(true)
   }
 
   function getWeightComparison(exerciseId: Id<"exercises">, weight: number) {
-    const exercise = getExercise(exerciseId);
-    if (!exercise || exercise.personalBest === 0) return null;
-    const diff = weight - exercise.personalBest;
+    const exercise = getExercise(exerciseId)
+    if (!exercise || exercise.personalBest === 0) return null
+    const diff = weight - exercise.personalBest
     if (diff > 0)
       return (
         <span className="flex items-center gap-1 text-sm font-medium text-green-600">
           <ArrowUp className="size-4" />
           New PR +{diff} lbs
         </span>
-      );
+      )
     if (diff < 0)
       return (
         <span className="flex items-center gap-1 text-sm font-medium text-muted-foreground">
           <ArrowDown className="size-4" />
           {diff} lbs from PB
         </span>
-      );
+      )
     return (
       <span className="flex items-center gap-1 text-sm font-medium text-primary">
         At PB
       </span>
-    );
+    )
   }
 
   return (
@@ -202,8 +199,8 @@ export default function WorkoutLogger() {
         selectable
         onSelectSlot={(slot) => openDayDialog(slot.start as Date)}
         onSelectEvent={(event) => {
-          const d = (event.start as Date) ?? new Date();
-          openDayDialog(d);
+          const d = (event.start as Date) ?? new Date()
+          openDayDialog(d)
         }}
         onDrillDown={(d) => openDayDialog(d)}
         popup
@@ -239,8 +236,8 @@ export default function WorkoutLogger() {
             ) : (
               <div className="flex flex-col gap-3">
                 {dayLogs.map((log) => {
-                  const exercise = getExercise(log.exerciseId);
-                  const maxWeight = Math.max(...log.sets.map((s) => s.weight));
+                  const exercise = getExercise(log.exerciseId)
+                  const maxWeight = Math.max(...log.sets.map((s) => s.weight))
                   return (
                     <div
                       key={log._id}
@@ -254,11 +251,16 @@ export default function WorkoutLogger() {
                           {getWeightComparison(log.exerciseId, maxWeight)}
                         </div>
                         <Dialog>
-                          <DialogTrigger asChild>
-                            <Button variant="ghost-destructive" size="icon-sm">
-                              <Trash2 />
-                            </Button>
-                          </DialogTrigger>
+                          <DialogTrigger
+                            render={
+                              <Button
+                                variant="ghost-destructive"
+                                size="icon-sm"
+                              >
+                                <Trash2 />
+                              </Button>
+                            }
+                          ></DialogTrigger>
                           <DialogContent>
                             <DialogHeader>
                               <DialogTitle>Delete workout</DialogTitle>
@@ -292,16 +294,20 @@ export default function WorkoutLogger() {
                         ))}
                       </ul>
                     </div>
-                  );
+                  )
                 })}
               </div>
             )}
           </DialogBody>
           <DialogFooter>
             <Dialog open={logDialogOpen} onOpenChange={setLogDialogOpen}>
-              <DialogTrigger asChild>
-                <Button disabled={exercises.length === 0}>Log Exercise</Button>
-              </DialogTrigger>
+              <DialogTrigger
+                render={
+                  <Button disabled={exercises.length === 0}>
+                    Log Exercise
+                  </Button>
+                }
+              ></DialogTrigger>
               <DialogContent>
                 <DialogHeader>
                   <DialogTitle>
@@ -327,5 +333,5 @@ export default function WorkoutLogger() {
         </DialogContent>
       </Dialog>
     </div>
-  );
+  )
 }

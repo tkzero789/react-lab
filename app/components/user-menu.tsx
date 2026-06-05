@@ -1,8 +1,8 @@
-"use client";
+"use client"
 
-import { authClient } from "@/lib/auth-client";
-import { useRouter } from "next/navigation";
-import React from "react";
+import { authClient } from "@/lib/auth-client"
+import { useRouter } from "next/navigation"
+import React from "react"
 import {
   Dialog,
   DialogBody,
@@ -11,32 +11,32 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { LogOut, User } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import GoogleIcon from "@/components/icons/google-icon";
+} from "@/components/ui/dialog"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { LogOut, User } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import GoogleIcon from "@/components/icons/google-icon"
 
 type Props = {
-  type?: "default" | "sidebar";
-};
+  type?: "default" | "sidebar"
+}
 
 export default function UserMenu({ type = "default" }: Props) {
-  const { data: session } = authClient.useSession();
-  const [open, setOpen] = React.useState(false);
-  const router = useRouter();
+  const { data: session } = authClient.useSession()
+  const [open, setOpen] = React.useState(false)
+  const router = useRouter()
 
   function handleGoogleSignIn() {
     authClient.signIn.social({
       provider: "google",
       callbackURL: window.location.href,
-    });
+    })
   }
 
   async function handleSignOut() {
-    await authClient.signOut();
-    setOpen(false);
-    router.refresh();
+    await authClient.signOut()
+    setOpen(false)
+    router.refresh()
   }
   function renderDefaultTrigger() {
     return (
@@ -63,7 +63,7 @@ export default function UserMenu({ type = "default" }: Props) {
           </>
         )}
       </Button>
-    );
+    )
   }
 
   function renderSidebarTrigger() {
@@ -99,14 +99,17 @@ export default function UserMenu({ type = "default" }: Props) {
           </>
         )}
       </div>
-    );
+    )
   }
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        {type === "default" ? renderDefaultTrigger() : renderSidebarTrigger()}
-      </DialogTrigger>
+      <DialogTrigger
+        nativeButton={type === "default"}
+        render={
+          type === "default" ? renderDefaultTrigger() : renderSidebarTrigger()
+        }
+      ></DialogTrigger>
       <DialogContent className="sm:max-w-sm">
         {session?.user ? (
           <>
@@ -132,7 +135,6 @@ export default function UserMenu({ type = "default" }: Props) {
             <DialogFooter>
               <Button
                 variant="outline"
-                size="sm"
                 onClick={handleSignOut}
                 className="w-full"
               >
@@ -160,5 +162,5 @@ export default function UserMenu({ type = "default" }: Props) {
         )}
       </DialogContent>
     </Dialog>
-  );
+  )
 }

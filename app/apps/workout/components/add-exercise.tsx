@@ -1,9 +1,9 @@
-"use client";
+"use client"
 
-import React from "react";
-import { useMutation } from "convex/react";
-import { api } from "@/convex/_generated/api";
-import { Button } from "@/components/ui/button";
+import React from "react"
+import { useMutation } from "convex/react"
+import { api } from "@/convex/_generated/api"
+import { Button } from "@/components/ui/button"
 import {
   Dialog,
   DialogBody,
@@ -11,27 +11,29 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
-import { Plus } from "lucide-react";
-import ExerciseForm, { ExerciseFormValues } from "./exercise-form";
+} from "@/components/ui/dialog"
+import { Plus } from "lucide-react"
+import ExerciseForm, { ExerciseFormValues } from "./exercise-form"
 
 export default function AddExercise() {
-  const addExercise = useMutation(api.exercises.add);
-  const [open, setOpen] = React.useState(false);
+  const addExercise = useMutation(api.exercises.add)
+  const [open, setOpen] = React.useState(false)
 
   function handleAdd(data: ExerciseFormValues) {
-    addExercise(data);
-    setOpen(false);
+    addExercise(data)
+    setOpen(false)
   }
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Button>
-          <Plus />
-          Add Exercise
-        </Button>
-      </DialogTrigger>
+      <DialogTrigger
+        render={
+          <Button>
+            <Plus />
+            Add Exercise
+          </Button>
+        }
+      ></DialogTrigger>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Add Exercise</DialogTitle>
@@ -41,5 +43,5 @@ export default function AddExercise() {
         </DialogBody>
       </DialogContent>
     </Dialog>
-  );
+  )
 }

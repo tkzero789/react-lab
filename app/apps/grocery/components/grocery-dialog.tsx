@@ -1,8 +1,8 @@
-import React from "react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { Plus, RotateCcw } from "lucide-react";
-import { cn } from "@/lib/utils";
+import React from "react"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardHeader } from "@/components/ui/card"
+import { Plus, RotateCcw } from "lucide-react"
+import { cn } from "@/lib/utils"
 import {
   Dialog,
   DialogTrigger,
@@ -10,35 +10,38 @@ import {
   DialogHeader,
   DialogTitle,
   DialogBody,
-} from "@/components/ui/dialog";
-import { toast } from "sonner";
-import { useIsMobile } from "@/hooks/use-mobile";
-import { useMutation } from "convex/react";
-import { api } from "@/convex/_generated/api";
-import IngredientForm from "./ingredient-form";
-import DishForm from "./dish-form";
+} from "@/components/ui/dialog"
+import { toast } from "sonner"
+import { useIsMobile } from "@/hooks/use-mobile"
+import { useMutation } from "convex/react"
+import { api } from "@/convex/_generated/api"
+import IngredientForm from "./ingredient-form"
+import DishForm from "./dish-form"
 
-type Tab = "ingredient" | "dish";
+type Tab = "ingredient" | "dish"
 
 export default function GroceryDialog() {
-  const isMobile = useIsMobile();
-  const [tab, setTab] = React.useState<Tab>("ingredient");
-  const removeAll = useMutation(api.ingredients.removeAll);
+  const isMobile = useIsMobile()
+  const [tab, setTab] = React.useState<Tab>("ingredient")
+  const removeAll = useMutation(api.ingredients.removeAll)
 
   function handleReset() {
-    removeAll();
+    removeAll()
     toast.info("Grocery list cleared", {
       position: isMobile ? "top-center" : "bottom-right",
-    });
+    })
   }
 
   return (
     <Dialog>
-      <DialogTrigger asChild className="fixed bottom-8 right-8">
-        <Button>
-          <Plus /> Add
-        </Button>
-      </DialogTrigger>
+      <DialogTrigger
+        className="fixed right-8 bottom-8"
+        render={
+          <Button>
+            <Plus /> Add
+          </Button>
+        }
+      ></DialogTrigger>
       <DialogContent className="mx-auto max-w-2xl">
         <DialogHeader>
           <DialogTitle>Add item</DialogTitle>
@@ -53,7 +56,7 @@ export default function GroceryDialog() {
                   className={cn(
                     "hover:bg-background hover:text-foreground dark:hover:bg-foreground dark:hover:text-background",
                     tab === "ingredient" &&
-                      "bg-background dark:bg-foreground dark:text-secondary-foreground",
+                      "bg-background dark:bg-foreground dark:text-secondary-foreground"
                   )}
                   onClick={() => setTab("ingredient")}
                 >
@@ -65,7 +68,7 @@ export default function GroceryDialog() {
                   className={cn(
                     "hover:bg-background hover:text-foreground dark:hover:bg-foreground dark:hover:text-background",
                     tab === "dish" &&
-                      "bg-background dark:bg-foreground dark:text-secondary-foreground",
+                      "bg-background dark:bg-foreground dark:text-secondary-foreground"
                   )}
                   onClick={() => setTab("dish")}
                 >
@@ -84,5 +87,5 @@ export default function GroceryDialog() {
         </DialogBody>
       </DialogContent>
     </Dialog>
-  );
+  )
 }

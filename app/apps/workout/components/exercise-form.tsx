@@ -1,54 +1,54 @@
-"use client";
+"use client"
 
-import React, { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
+import React, { useState } from "react"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Badge } from "@/components/ui/badge"
 
-import { X } from "lucide-react";
-import { MUSCLE_GROUPS, MuscleGroup } from "@/types/workout";
+import { X } from "lucide-react"
+import { MUSCLE_GROUPS, MuscleGroup } from "@/types/workout"
 
 export type ExerciseFormValues = {
-  name: string;
-  muscleGroups: string[];
-  personalBest: number;
-};
+  name: string
+  muscleGroups: string[]
+  personalBest: number
+}
 
 type Props = {
-  onSubmit: (data: ExerciseFormValues) => void;
-  defaultValues?: ExerciseFormValues;
-  submitLabel?: string;
-};
+  onSubmit: (data: ExerciseFormValues) => void
+  defaultValues?: ExerciseFormValues
+  submitLabel?: string
+}
 
 export default function ExerciseForm({
   onSubmit,
   defaultValues,
   submitLabel,
 }: Props) {
-  const [name, setName] = useState(defaultValues?.name ?? "");
+  const [name, setName] = useState(defaultValues?.name ?? "")
   const [selectedMuscles, setSelectedMuscles] = useState<MuscleGroup[]>(
-    (defaultValues?.muscleGroups as MuscleGroup[]) ?? [],
-  );
+    (defaultValues?.muscleGroups as MuscleGroup[]) ?? []
+  )
   const [personalBest, setPersonalBest] = useState(
-    defaultValues?.personalBest?.toString() ?? "",
-  );
+    defaultValues?.personalBest?.toString() ?? ""
+  )
 
   function toggleMuscle(muscle: MuscleGroup) {
     setSelectedMuscles((prev) =>
       prev.includes(muscle)
         ? prev.filter((m) => m !== muscle)
-        : [...prev, muscle],
-    );
+        : [...prev, muscle]
+    )
   }
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    if (!name.trim() || selectedMuscles.length === 0) return;
+    e.preventDefault()
+    if (!name.trim() || selectedMuscles.length === 0) return
     onSubmit({
       name: name.trim(),
       muscleGroups: selectedMuscles,
       personalBest: parseFloat(personalBest) || 0,
-    });
+    })
   }
 
   return (
@@ -73,7 +73,7 @@ export default function ExerciseForm({
               <Badge
                 key={muscle}
                 variant={
-                  selectedMuscles.includes(muscle) ? "default" : "outline-solid"
+                  selectedMuscles.includes(muscle) ? "default" : "outline"
                 }
                 className="cursor-pointer select-none"
                 onClick={() => toggleMuscle(muscle)}
@@ -111,5 +111,5 @@ export default function ExerciseForm({
         </Button>
       </div>
     </form>
-  );
+  )
 }

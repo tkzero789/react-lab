@@ -1,33 +1,33 @@
-"use client";
+"use client"
 
-import { useMutation } from "convex/react";
-import { api } from "@/convex/_generated/api";
-import { Doc } from "@/convex/_generated/dataModel";
+import { useMutation } from "convex/react"
+import { api } from "@/convex/_generated/api"
+import { Doc } from "@/convex/_generated/dataModel"
 import {
   Dialog,
   DialogBody,
   DialogContent,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import ExerciseForm, { ExerciseFormValues } from "./exercise-form";
+} from "@/components/ui/dialog"
+import ExerciseForm, { ExerciseFormValues } from "./exercise-form"
 
 type Props = {
-  exercise: Doc<"exercises">;
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-};
+  exercise: Doc<"exercises">
+  open: boolean
+  onOpenChange: (open: boolean) => void
+}
 
 export default function UpdateExercise({
   exercise,
   open,
   onOpenChange,
 }: Props) {
-  const updateExercise = useMutation(api.exercises.update);
+  const updateExercise = useMutation(api.exercises.update)
 
   function handleUpdate(data: ExerciseFormValues) {
-    updateExercise({ id: exercise._id, ...data });
-    onOpenChange(false);
+    updateExercise({ id: exercise._id, ...data })
+    onOpenChange(false)
   }
 
   return (
@@ -49,5 +49,5 @@ export default function UpdateExercise({
         </DialogBody>
       </DialogContent>
     </Dialog>
-  );
+  )
 }

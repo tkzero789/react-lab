@@ -1,14 +1,14 @@
-"use client";
+"use client"
 
-import React from "react";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import React from "react"
+import { Badge } from "@/components/ui/badge"
+import { Button, buttonVariants } from "@/components/ui/button"
+import { Card, CardContent } from "@/components/ui/card"
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupInput,
-} from "@/components/ui/input-group";
+} from "@/components/ui/input-group"
 import {
   Select,
   SelectContent,
@@ -16,44 +16,43 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Ellipsis, Search } from "lucide-react";
-import { useMutation, useQuery } from "convex/react";
-import { api } from "@/convex/_generated/api";
-import { Id } from "@/convex/_generated/dataModel";
-import { MUSCLE_GROUPS } from "@/types/workout";
-import UpdateExercise from "./update-exercise";
+} from "@/components/ui/select"
+import { Ellipsis, Search } from "lucide-react"
+import { useMutation, useQuery } from "convex/react"
+import { api } from "@/convex/_generated/api"
+import { Id } from "@/convex/_generated/dataModel"
+import { MUSCLE_GROUPS } from "@/types/workout"
+import UpdateExercise from "./update-exercise"
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+} from "@/components/ui/dropdown-menu"
+import { cn } from "@/lib/utils"
 
-const ALL = "all";
+const ALL = "all"
 
 export default function ExerciseList() {
-  const exercises = useQuery(api.exercises.list) ?? [];
-  const removeExercise = useMutation(api.exercises.remove);
+  const exercises = useQuery(api.exercises.list) ?? []
+  const removeExercise = useMutation(api.exercises.remove)
 
-  const [search, setSearch] = React.useState("");
-  const [muscle, setMuscle] = React.useState<string>(ALL);
-  const [editingId, setEditingId] = React.useState<Id<"exercises"> | null>(
-    null,
-  );
+  const [search, setSearch] = React.useState("")
+  const [muscle, setMuscle] = React.useState<string>(ALL)
+  const [editingId, setEditingId] = React.useState<Id<"exercises"> | null>(null)
 
   function handleRemove(id: Id<"exercises">) {
-    removeExercise({ id });
+    removeExercise({ id })
   }
 
-  const query = search.trim().toLowerCase();
+  const query = search.trim().toLowerCase()
   const filtered = exercises.filter((e) => {
-    const matchesName = query ? e.name.toLowerCase().includes(query) : true;
+    const matchesName = query ? e.name.toLowerCase().includes(query) : true
     const matchesMuscle =
-      muscle === ALL ? true : e.muscleGroups.includes(muscle);
-    return matchesName && matchesMuscle;
-  });
+      muscle === ALL ? true : e.muscleGroups.includes(muscle)
+    return matchesName && matchesMuscle
+  })
 
   return (
     <div className="flex flex-1 flex-col gap-3 px-4">
@@ -99,7 +98,7 @@ export default function ExerciseList() {
             <Card key={exercise._id}>
               <CardContent className="p-0">
                 {/* Details */}
-                <div className="flex justify-between px-4 pb-2 pt-4">
+                <div className="flex justify-between px-4 pt-4 pb-2">
                   <div className="flex flex-1 justify-between gap-2">
                     <div className="flex flex-col gap-1">
                       {/* Name */}
@@ -127,7 +126,7 @@ export default function ExerciseList() {
                   </div>
                 </div>
                 {/* Actions */}
-                <div className="flex justify-end gap-1 border-t px-4 pb-4 pt-2">
+                <div className="flex justify-end gap-1 border-t px-4 pt-2 pb-4">
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                       <Button variant="ghost" size="icon-sm">
@@ -139,14 +138,14 @@ export default function ExerciseList() {
                         <DropdownMenuItem
                           onSelect={() =>
                             setTimeout(() => {
-                              setEditingId(exercise._id);
+                              setEditingId(exercise._id)
                             }, 0)
                           }
                         >
                           Edit
                         </DropdownMenuItem>
                         <DropdownMenuItem
-                          className="text-destructive hover:bg-destructive focus:text-destructive"
+                          className="text-destructive focus:bg-destructive/10 focus:text-destructive"
                           onSelect={() => handleRemove(exercise._id)}
                         >
                           Delete
@@ -169,5 +168,5 @@ export default function ExerciseList() {
         </div>
       )}
     </div>
-  );
+  )
 }

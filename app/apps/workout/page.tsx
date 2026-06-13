@@ -15,6 +15,7 @@ import SignInPrompt from "../components/sign-in-prompt"
 import ExerciseList from "./components/exercise-list"
 import AddExercise from "./components/add-exercise"
 import WorkoutLogger from "./components/workout-logger"
+import { Button } from "@/components/ui/button"
 
 export default function WorkoutPage() {
   return (

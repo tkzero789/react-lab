@@ -38,8 +38,14 @@ function getHref(title: string, fallbackHref: string, host: string) {
   const subdomain = SUBDOMAIN_MAP[title];
   if (!subdomain) return fallbackHref;
 
-  // Use path-based routing for localhost
-  const isLocalhost = host.includes("localhost") || host.includes("127.0.0.1");
+  // Use path-based routing for localhost and LAN/private-network IPs
+  const hostname = host.split(":")[0];
+  const isLocalhost =
+    hostname === "localhost" ||
+    hostname === "127.0.0.1" ||
+    /^192\.168\./.test(hostname) ||
+    /^10\./.test(hostname) ||
+    /^172\.(1[6-9]|2\d|3[01])\./.test(hostname);
   if (isLocalhost) {
     return `/${subdomain}`;
   }

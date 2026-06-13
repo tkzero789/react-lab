@@ -1,10 +1,10 @@
-"use client";
+"use client"
 
-import * as React from "react";
-import * as TabsPrimitive from "@radix-ui/react-tabs";
-import { cn } from "@/lib/utils";
+import * as React from "react"
+import * as TabsPrimitive from "@radix-ui/react-tabs"
+import { cn } from "@/lib/utils"
 
-const TabsValueContext = React.createContext<string | undefined>(undefined);
+const TabsValueContext = React.createContext<string | undefined>(undefined)
 
 function Tabs({
   className,
@@ -14,12 +14,12 @@ function Tabs({
   ...props
 }: React.ComponentProps<typeof TabsPrimitive.Root>) {
   const [current, setCurrent] = React.useState<string | undefined>(
-    value ?? defaultValue,
-  );
+    value ?? defaultValue
+  )
 
   React.useEffect(() => {
-    if (value !== undefined) setCurrent(value);
-  }, [value]);
+    if (value !== undefined) setCurrent(value)
+  }, [value])
 
   return (
     <TabsValueContext.Provider value={current}>
@@ -27,20 +27,20 @@ function Tabs({
         value={value}
         defaultValue={defaultValue}
         onValueChange={(next) => {
-          setCurrent(next);
-          onValueChange?.(next);
+          setCurrent(next)
+          onValueChange?.(next)
         }}
         className={cn("flex flex-col gap-4", className)}
         {...props}
       />
     </TabsValueContext.Provider>
-  );
+  )
 }
 
 const TabsList = React.forwardRef<
   React.ElementRef<typeof TabsPrimitive.List>,
   Omit<React.ComponentPropsWithoutRef<typeof TabsPrimitive.List>, "title"> & {
-    title?: React.ReactNode;
+    title?: React.ReactNode
   }
 >(({ className, title, ...props }, ref) => {
   const [indicatorStyle, setIndicatorStyle] = React.useState({
@@ -48,21 +48,21 @@ const TabsList = React.forwardRef<
     top: 0,
     width: 0,
     height: 0,
-  });
-  const [ready, setReady] = React.useState(false);
+  })
+  const [ready, setReady] = React.useState(false)
 
-  const tabsListRef = React.useRef<HTMLDivElement | null>(null);
+  const tabsListRef = React.useRef<HTMLDivElement | null>(null)
 
   const updateIndicator = React.useCallback(() => {
-    if (!tabsListRef.current) return;
+    if (!tabsListRef.current) return
 
     const activeTab = tabsListRef.current.querySelector<HTMLElement>(
-      '[data-state="active"]',
-    );
-    if (!activeTab) return;
+      '[data-state="active"]'
+    )
+    if (!activeTab) return
 
-    const activeRect = activeTab.getBoundingClientRect();
-    const tabsRect = tabsListRef.current.getBoundingClientRect();
+    const activeRect = activeTab.getBoundingClientRect()
+    const tabsRect = tabsListRef.current.getBoundingClientRect()
 
     requestAnimationFrame(() => {
       setIndicatorStyle({
@@ -70,33 +70,33 @@ const TabsList = React.forwardRef<
         top: activeRect.top - tabsRect.top,
         width: activeRect.width,
         height: activeRect.height,
-      });
-      requestAnimationFrame(() => setReady(true));
-    });
-  }, []);
+      })
+      requestAnimationFrame(() => setReady(true))
+    })
+  }, [])
 
   React.useEffect(() => {
     // Initial update
-    const timeoutId = setTimeout(updateIndicator, 0);
+    const timeoutId = setTimeout(updateIndicator, 0)
 
     // Event listeners
-    window.addEventListener("resize", updateIndicator);
-    const observer = new MutationObserver(updateIndicator);
+    window.addEventListener("resize", updateIndicator)
+    const observer = new MutationObserver(updateIndicator)
 
     if (tabsListRef.current) {
       observer.observe(tabsListRef.current, {
         attributes: true,
         childList: true,
         subtree: true,
-      });
+      })
     }
 
     return () => {
-      clearTimeout(timeoutId);
-      window.removeEventListener("resize", updateIndicator);
-      observer.disconnect();
-    };
-  }, [updateIndicator]);
+      clearTimeout(timeoutId)
+      window.removeEventListener("resize", updateIndicator)
+      observer.disconnect()
+    }
+  }, [updateIndicator])
 
   return (
     <div className="relative" ref={tabsListRef}>
@@ -105,21 +105,21 @@ const TabsList = React.forwardRef<
         ref={ref}
         className={cn(
           "relative inline-flex h-10 items-center justify-center rounded-xl bg-muted p-1",
-          className,
+          className
         )}
         {...props}
       />
       <div
         className={cn(
-          "absolute rounded-xl border border-transparent bg-background shadow-xs",
-          ready && "transition-all duration-300 ease-in-out",
+          "absolute rounded-xl border border-transparent bg-background shadow-xs dark:bg-primary",
+          ready && "transition-all duration-300 ease-in-out"
         )}
         style={indicatorStyle}
       />
     </div>
-  );
-});
-TabsList.displayName = TabsPrimitive.List.displayName;
+  )
+})
+TabsList.displayName = TabsPrimitive.List.displayName
 
 const TabsTrigger = React.forwardRef<
   React.ElementRef<typeof TabsPrimitive.Trigger>,
@@ -128,13 +128,13 @@ const TabsTrigger = React.forwardRef<
   <TabsPrimitive.Trigger
     ref={ref}
     className={cn(
-      "z-10 inline-flex items-center justify-center whitespace-nowrap rounded-xl px-3 py-1.5 text-sm font-medium transition-all focus-visible:outline-hidden focus-visible:ring-1 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 dark:data-[state=active]:bg-white dark:data-[state=active]:text-background",
-      className,
+      "z-10 inline-flex items-center justify-center rounded-xl px-3 py-1.5 text-sm font-medium whitespace-nowrap transition-all focus-visible:ring-1 focus-visible:ring-offset-2 focus-visible:outline-hidden disabled:pointer-events-none disabled:opacity-50 dark:data-[state=active]:bg-white dark:data-[state=active]:text-background",
+      className
     )}
     {...props}
   />
-));
-TabsTrigger.displayName = TabsPrimitive.Trigger.displayName;
+))
+TabsTrigger.displayName = TabsPrimitive.Trigger.displayName
 
 const TabsContent = React.forwardRef<
   React.ElementRef<typeof TabsPrimitive.Content>,
@@ -143,16 +143,16 @@ const TabsContent = React.forwardRef<
   <TabsPrimitive.Content
     ref={ref}
     className={cn(
-      "ring-offset-background focus-visible:outline-hidden focus-visible:ring-1 focus-visible:ring-offset-2",
-      className,
+      "ring-offset-background focus-visible:ring-1 focus-visible:ring-offset-2 focus-visible:outline-hidden",
+      className
     )}
     {...props}
   />
-));
-TabsContent.displayName = TabsPrimitive.Content.displayName;
+))
+TabsContent.displayName = TabsPrimitive.Content.displayName
 
 function TabsListWrapper({ className, ...props }: React.ComponentProps<"div">) {
-  return <div className={cn("flex items-center", className)} {...props} />;
+  return <div className={cn("flex items-center", className)} {...props} />
 }
 
-export { Tabs, TabsList, TabsTrigger, TabsContent, TabsListWrapper };
+export { Tabs, TabsList, TabsTrigger, TabsContent, TabsListWrapper }

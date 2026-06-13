@@ -58,15 +58,17 @@ export default function MoviePagination({
     <div className="fixed right-0 bottom-0 left-0 bg-background p-4 md:static md:px-0">
       <div className="flex items-center justify-center gap-2">
         <Popover open={isOpen} onOpenChange={setIsOpen}>
-          <PopoverTrigger asChild>
-            <Button variant="secondary">
-              Page {currentPage === 0 ? "1" : currentPage} of {totalPages}
-            </Button>
-          </PopoverTrigger>
+          <PopoverTrigger
+            render={
+              <Button variant="muted">
+                Page {currentPage === 0 ? "1" : currentPage} of {totalPages}
+              </Button>
+            }
+          ></PopoverTrigger>
           <PopoverContent
             side="top"
             align="end"
-            className="h-10 w-(--radix-popover-trigger-width) p-0"
+            className="h-10 w-(--anchor-width)! p-0"
           >
             <form onSubmit={submitPageChange} className="h-full">
               <Input
@@ -81,7 +83,7 @@ export default function MoviePagination({
           </PopoverContent>
         </Popover>
         <Button
-          variant="secondary"
+          variant="muted"
           size="icon"
           disabled={!currentPage}
           onClick={() => handlePageChange("prev", currentPage)}
@@ -90,7 +92,7 @@ export default function MoviePagination({
           <ChevronLeft />
         </Button>
         <Button
-          variant="secondary"
+          variant="muted"
           size="icon"
           onClick={() => handlePageChange("next", currentPage)}
         >

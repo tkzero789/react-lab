@@ -197,13 +197,13 @@ export default function SystemBuilderPage() {
           <SheetContent className="min-w-full overflow-y-auto p-0 lg:min-w-[640px]">
             <SheetHeader className="flex flex-row items-center gap-4 border-b border-neutral-300 p-4">
               <SheetClose asChild>
-                <Button variant="secondary" size="icon-sm">
+                <Button variant="muted" size="icon-sm">
                   <ChevronLeft />
                 </Button>
               </SheetClose>
               <SheetTitle>Select Unit</SheetTitle>
               <SheetClose asChild className="ml-auto">
-                <Button variant="secondary" size="icon-sm">
+                <Button variant="muted" size="icon-sm">
                   <X />
                 </Button>
               </SheetClose>
@@ -286,13 +286,13 @@ export default function SystemBuilderPage() {
           <SheetContent className="min-w-full overflow-y-auto p-0 lg:min-w-[640px]">
             <SheetHeader className="flex flex-row items-center gap-4 border-b border-neutral-300 p-4">
               <SheetClose asChild>
-                <Button variant="secondary" size="icon-sm">
+                <Button variant="muted" size="icon-sm">
                   <ChevronLeft />
                 </Button>
               </SheetClose>
               <SheetTitle>Select Unit</SheetTitle>
               <SheetClose asChild className="ml-auto">
-                <Button variant="secondary" size="icon-sm">
+                <Button variant="muted" size="icon-sm">
                   <X />
                 </Button>
               </SheetClose>

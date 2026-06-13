@@ -66,24 +66,18 @@ function CalendarNavigation({
       <span className="text-base font-semibold">{label}</span>
       <ButtonGroup>
         <Button
-          variant="secondary"
+          variant="muted"
           size="icon-sm"
           onClick={() => onNavigate("PREV")}
           aria-label="Previous"
         >
           <ChevronLeft />
         </Button>
-        <ButtonGroupSeparator />
-        <Button
-          variant="secondary"
-          size="sm"
-          onClick={() => onNavigate("TODAY")}
-        >
+        <Button variant="muted" size="sm" onClick={() => onNavigate("TODAY")}>
           Today
         </Button>
-        <ButtonGroupSeparator />
         <Button
-          variant="secondary"
+          variant="muted"
           size="icon-sm"
           onClick={() => onNavigate("NEXT")}
           aria-label="Next"
@@ -213,7 +207,7 @@ export default function WorkoutLogger() {
           toolbar: CalendarNavigation,
           event: ({ event }) => (
             <div className="">
-              <span className="hidden truncate text-xs lg:block">
+              <span className="hidden truncate text-xs lg:block dark:text-primary-foreground">
                 {event.title}
               </span>
               <span className="read-only invisible truncate text-xs opacity-0 lg:hidden">
@@ -304,7 +298,7 @@ export default function WorkoutLogger() {
             <Dialog open={logDialogOpen} onOpenChange={setLogDialogOpen}>
               <DialogTrigger
                 render={
-                  <Button disabled={exercises.length === 0}>
+                  <Button disabled={exercises.length === 0} className="w-full">
                     Log Exercise
                   </Button>
                 }
@@ -324,7 +318,7 @@ export default function WorkoutLogger() {
                   />
                 </DialogBody>
                 <DialogFooter>
-                  <Button form="logWorkout" type="submit">
+                  <Button form="logWorkout" type="submit" className="w-full">
                     Save Workout
                   </Button>
                 </DialogFooter>

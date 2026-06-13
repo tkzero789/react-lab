@@ -16,6 +16,16 @@ import {
 import { useIsMobile } from "@/hooks/use-mobile"
 import { Id } from "@/convex/_generated/dataModel"
 import { Dish, Ingredient } from "@/types/grocery"
+import {
+  Dialog,
+  DialogBody,
+  DialogClose,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
 
 type Props = {
   item: Ingredient
@@ -178,28 +188,58 @@ export default function IngredientItem({
           <Pencil />
         </Button>
 
-        <Drawer>
-          <DrawerTrigger asChild>
-            <Button variant="ghost" size="icon-sm">
-              <Trash2 />
-            </Button>
-          </DrawerTrigger>
-          <DrawerContent className="mx-auto max-w-2xl">
-            <DrawerHeader>
-              <DrawerTitle>{item.name}</DrawerTitle>
-            </DrawerHeader>
-            <DrawerFooter>
-              <Button variant="destructive" onClick={() => onRemove(item._id)}>
+        {isMobile && (
+          <Drawer>
+            <DrawerTrigger asChild>
+              <Button variant="ghost-destructive" size="icon-sm">
+                <Trash2 />
+              </Button>
+            </DrawerTrigger>
+            <DrawerContent className="mx-auto max-w-2xl">
+              <DrawerHeader>
+                <DrawerTitle>{item.name}</DrawerTitle>
+              </DrawerHeader>
+              <DrawerFooter>
+                <Button
+                  variant="destructive"
+                  onClick={() => onRemove(item._id)}
+                >
+                  Delete
+                </Button>
+                <DrawerClose asChild>
+                  <Button variant="outline" className="w-full">
+                    Cancel
+                  </Button>
+                </DrawerClose>
+              </DrawerFooter>
+            </DrawerContent>
+          </Drawer>
+        )}
+
+        <Dialog>
+          <DialogTrigger
+            render={
+              <Button variant="ghost-destructive" size="icon-sm">
+                <Trash2 />
+              </Button>
+            }
+          />
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Delete item</DialogTitle>
+            </DialogHeader>
+            <DialogBody>{item.name}</DialogBody>
+            <DialogFooter>
+              <Button
+                variant="destructive"
+                className="w-full"
+                onClick={() => onRemove(item._id)}
+              >
                 Delete
               </Button>
-              <DrawerClose>
-                <Button variant="outline" className="w-full">
-                  Cancel
-                </Button>
-              </DrawerClose>
-            </DrawerFooter>
-          </DrawerContent>
-        </Drawer>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       </div>
     </div>
   )

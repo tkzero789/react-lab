@@ -59,7 +59,7 @@ export default function MovieMenu({ paramsType }: Props) {
     return (
       <Drawer>
         <DrawerTrigger asChild>
-          <Button variant="secondary">
+          <Button variant="muted">
             <Menu />
             Menu
           </Button>
@@ -92,7 +92,7 @@ export default function MovieMenu({ paramsType }: Props) {
     return (
       <DropdownMenu>
         <DropdownMenuTrigger asChild className="lg:hidden">
-          <Button variant="secondary">
+          <Button variant="muted">
             <Menu /> Menu
           </Button>
         </DropdownMenuTrigger>

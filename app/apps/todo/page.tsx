@@ -1,12 +1,30 @@
-"use client";
+"use client"
 
-import DashboardBreadcrumb from "../components/dashboard-breadcrumb";
-import DashboardContainer from "@/components/layout/dashboard-container";
-import { pathClient } from "@/lib/path-client";
-import { Authenticated, Unauthenticated } from "convex/react";
-import SignInPrompt from "../components/sign-in-prompt";
-import TodoForm from "./components/todo-form";
-import TodoList from "./components/todo-list";
+import DashboardBreadcrumb from "../components/dashboard-breadcrumb"
+import DashboardContainer from "@/components/layout/dashboard-container"
+import { pathClient } from "@/lib/path-client"
+import { Authenticated, Unauthenticated } from "convex/react"
+import SignInPrompt from "../components/sign-in-prompt"
+import TodoForm from "./components/todo-form"
+import TodoList from "./components/todo-list"
+import Container from "@/components/layout/container"
+import {
+  Dialog,
+  DialogBody,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupButton,
+  InputGroupInput,
+} from "@/components/ui/input-group"
+import { PlusIcon } from "lucide-react"
+import { Button } from "@/components/ui/button"
 
 export default function TodoPage() {
   return (
@@ -27,10 +45,39 @@ export default function TodoPage() {
           <SignInPrompt description="Add and manage your todos in one place" />
         </Unauthenticated>
         <Authenticated>
-          <TodoList />
-          <TodoForm />
+          <Container className="flex flex-col gap-4 py-4">
+            <Dialog>
+              <DialogTrigger
+                nativeButton={false}
+                render={
+                  <InputGroup>
+                    <InputGroupInput placeholder="Enter todo" />
+                    <InputGroupAddon align="inline-end">
+                      <InputGroupButton size="icon-sm">
+                        <PlusIcon />
+                      </InputGroupButton>
+                    </InputGroupAddon>
+                  </InputGroup>
+                }
+              ></DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Add todo</DialogTitle>
+                </DialogHeader>
+                <DialogBody>
+                  <TodoForm />
+                </DialogBody>
+                <DialogFooter>
+                  <Button form="todoForm" type="submit" className="w-full">
+                    Add
+                  </Button>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
+            <TodoList />
+          </Container>
         </Authenticated>
       </DashboardContainer>
     </>
-  );
+  )
 }

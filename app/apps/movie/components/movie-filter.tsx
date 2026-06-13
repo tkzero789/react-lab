@@ -78,7 +78,7 @@ export default function MovieFilter() {
     return (
       <Drawer>
         <DrawerTrigger asChild>
-          <Button variant="secondary">
+          <Button variant="muted">
             <Filter />
           </Button>
         </DrawerTrigger>
@@ -136,7 +136,7 @@ export default function MovieFilter() {
     return (
       <DropdownMenu modal={false} open={isOpen} onOpenChange={setIsOpen}>
         <DropdownMenuTrigger asChild>
-          <Button variant="secondary">
+          <Button variant="muted">
             <Filter />
             Filter
           </Button>

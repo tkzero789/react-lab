@@ -1,6 +1,6 @@
-"use client";
+"use client"
 
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/button"
 import {
   Combobox,
   ComboboxContent,
@@ -9,29 +9,29 @@ import {
   ComboboxItem,
   ComboboxList,
   useComboboxAnchor,
-} from "@/components/ui/combobox";
-import { Input } from "@/components/ui/input";
-import { Id } from "@/convex/_generated/dataModel";
-import { Plus, X } from "lucide-react";
-import React, { useState } from "react";
+} from "@/components/ui/combobox"
+import { Input } from "@/components/ui/input"
+import { Id } from "@/convex/_generated/dataModel"
+import { MinusCircleIcon, Plus, X } from "lucide-react"
+import React, { useState } from "react"
 
 type Exercise = {
-  _id: Id<"exercises">;
-  name: string;
-  muscleGroups: string[];
-  personalBest: number;
-};
+  _id: Id<"exercises">
+  name: string
+  muscleGroups: string[]
+  personalBest: number
+}
 
 type Props = {
-  exercises: Exercise[];
-  dateStr: string;
+  exercises: Exercise[]
+  dateStr: string
   onAdd: (
     date: string,
     exerciseId: Id<"exercises">,
-    sets: { reps: number; weight: number }[],
-  ) => void;
-  onClose: () => void;
-};
+    sets: { reps: number; weight: number }[]
+  ) => void
+  onClose: () => void
+}
 
 export default function LogExerciseForm({
   exercises,
@@ -40,40 +40,40 @@ export default function LogExerciseForm({
   onClose,
 }: Props) {
   const [selectedExercise, setSelectedExercise] = useState<Exercise | null>(
-    null,
-  );
+    null
+  )
   const [sets, setSets] = useState<{ reps: string; weight: string }[]>([
     { reps: "", weight: "" },
-  ]);
-  const anchor = useComboboxAnchor();
+  ])
+  const anchor = useComboboxAnchor()
 
   function addSet() {
-    setSets([...sets, { reps: "", weight: "" }]);
+    setSets([...sets, { reps: "", weight: "" }])
   }
 
   function removeSet(index: number) {
-    if (sets.length <= 1) return;
-    setSets(sets.filter((_, i) => i !== index));
+    if (sets.length <= 1) return
+    setSets(sets.filter((_, i) => i !== index))
   }
 
   function updateSet(index: number, field: "reps" | "weight", value: string) {
-    setSets(sets.map((s, i) => (i === index ? { ...s, [field]: value } : s)));
+    setSets(sets.map((s, i) => (i === index ? { ...s, [field]: value } : s)))
   }
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    if (!selectedExercise) return;
+    e.preventDefault()
+    if (!selectedExercise) return
     const parsedSets = sets
       .filter((s) => s.reps && s.weight)
       .map((s) => ({
         reps: parseInt(s.reps),
         weight: parseFloat(s.weight),
-      }));
-    if (parsedSets.length === 0) return;
-    onAdd(dateStr, selectedExercise._id, parsedSets);
-    onClose();
-    setSelectedExercise(null);
-    setSets([{ reps: "", weight: "" }]);
+      }))
+    if (parsedSets.length === 0) return
+    onAdd(dateStr, selectedExercise._id, parsedSets)
+    onClose()
+    setSelectedExercise(null)
+    setSets([{ reps: "", weight: "" }])
   }
 
   return (
@@ -95,11 +95,7 @@ export default function LogExerciseForm({
           itemToStringValue={(ex: Exercise) => ex._id}
         >
           <ComboboxInput placeholder="Search exercises" />
-          <ComboboxContent
-            anchor={anchor}
-            className="pointer-events-auto"
-          
-          >
+          <ComboboxContent anchor={anchor} className="pointer-events-auto">
             <ComboboxEmpty>No exercises found.</ComboboxEmpty>
             <ComboboxList>
               {(ex: Exercise) => (
@@ -148,12 +144,11 @@ export default function LogExerciseForm({
               {sets.length > 1 && (
                 <Button
                   type="button"
-                  variant="ghost"
+                  variant="ghost-destructive"
                   size="icon-sm"
-                  className="h-8 w-8 shrink-0"
                   onClick={() => removeSet(i)}
                 >
-                  <X />
+                  <MinusCircleIcon />
                 </Button>
               )}
             </div>
@@ -164,5 +159,5 @@ export default function LogExerciseForm({
         </Button>
       </div>
     </form>
-  );
+  )
 }

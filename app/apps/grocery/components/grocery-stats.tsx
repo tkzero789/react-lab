@@ -1,18 +1,18 @@
-"use client";
+"use client"
 
-import { useQuery } from "convex/react";
-import { api } from "@/convex/_generated/api";
+import { useQuery } from "convex/react"
+import { api } from "@/convex/_generated/api"
 
 export default function GroceryStats() {
-  const ingredients = useQuery(api.ingredients.list) ?? [];
+  const ingredients = useQuery(api.ingredients.list) ?? []
 
-  const total = ingredients.reduce((sum, i) => sum + i.price, 0);
+  const total = ingredients.reduce((sum, i) => sum + i.price, 0)
   const checkedTotal = ingredients
     .filter((i) => i.checked)
-    .reduce((sum, i) => sum + i.price, 0);
+    .reduce((sum, i) => sum + i.price, 0)
 
   return (
-    <div className="grid flex-1 grid-cols-3 rounded-xl bg-secondary p-4 text-secondary-foreground">
+    <div className="grid flex-1 grid-cols-3 rounded-xl bg-muted p-4 text-secondary-foreground">
       <div className="flex flex-col items-center gap-1">
         List
         <span className="font-medium">
@@ -27,5 +27,5 @@ export default function GroceryStats() {
         Total <span className="font-medium">${total.toFixed(2)}</span>
       </div>
     </div>
-  );
+  )
 }

@@ -12,16 +12,24 @@ export const list = query({
   handler: async (ctx) => {
     const userId = await getCurrentUserId(ctx);
     if (!userId) return [];
-    return await ctx.db.query("workoutLogs").collect();
+    return await ctx.db
+      .query("workoutLogs")
+      .withIndex("by_user_and_date", (q) => q.eq("userId", userId))
+      .collect();
   },
 });
 
 export const listByDate = query({
   args: { date: v.string() },
-  handler: async (ctx) => {
+  handler: async (ctx, { date }) => {
     const userId = await getCurrentUserId(ctx);
     if (!userId) return [];
-    return await ctx.db.query("workoutLogs").collect();
+    return await ctx.db
+      .query("workoutLogs")
+      .withIndex("by_user_and_date", (q) =>
+        q.eq("userId", userId).eq("date", date),
+      )
+      .collect();
   },
 });
 

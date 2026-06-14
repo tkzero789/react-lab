@@ -24,8 +24,11 @@ import {
 import Link from "next/link"
 import TodoForm from "./todo-form"
 import { format } from "date-fns"
+import React from "react"
 
 export default function TodoList() {
+  const [isOpen, setIsOpen] = React.useState<boolean>(false)
+
   const todos = useQuery(api.todos.list)
   const removeTodo = useMutation(api.todos.remove)
 
@@ -45,7 +48,7 @@ export default function TodoList() {
             <div className="flex items-center justify-between gap-4">
               <div className="text-sm font-medium">{todo.text}</div>
               <div className="flex items-center">
-                <Dialog>
+                <Dialog open={isOpen} onOpenChange={setIsOpen}>
                   <DialogTrigger
                     render={
                       <Button
@@ -62,10 +65,17 @@ export default function TodoList() {
                       <DialogTitle>Edit todo</DialogTitle>
                     </DialogHeader>
                     <DialogBody>
-                      <TodoForm todo={todo} />
+                      <TodoForm
+                        todo={todo}
+                        onSuccess={() => setIsOpen(false)}
+                      />
                     </DialogBody>
                     <DialogFooter>
-                      <Button form="todoForm" type="submit" className="w-full">
+                      <Button
+                        form="updateTodo"
+                        type="submit"
+                        className="w-full"
+                      >
                         Save changes
                       </Button>
                     </DialogFooter>
@@ -81,12 +91,12 @@ export default function TodoList() {
               </div>
             </div>
             {/* Date */}
-            {todo.date && (
+            {todo.date !== 0 ? (
               <div className="flex items-center gap-4 text-sm">
                 <CalendarIcon className="size-4" />{" "}
                 {format(new Date(todo.date), "EEE, MMM d, yyyy")}
               </div>
-            )}
+            ) : null}
             {/* Location */}
             {todo.location && (
               <div className="flex items-center gap-4 text-sm">

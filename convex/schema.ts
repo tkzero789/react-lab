@@ -14,7 +14,7 @@ export default defineSchema({
     userId: v.id("users"),
     status: v.union(v.literal("todo"), v.literal("completed")),
     text: v.string(),
-    date: v.optional(v.number()),
+    date: v.number(),
     location: v.string(),
     url: v.string(),
   }).index("by_user", ["userId"]),

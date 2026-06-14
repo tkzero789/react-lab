@@ -132,8 +132,6 @@ export default function TodoForm({ todo, onSuccess }: Props) {
       return
     }
 
-    console.log(form)
-
     if (isEditing) {
       await updateTodo({
         id: todo._id,
@@ -150,11 +148,13 @@ export default function TodoForm({ todo, onSuccess }: Props) {
         url: form.url,
       })
     }
+
+    onSuccess?.()
   }
 
   return (
     <form
-      id="todoForm"
+      id={isEditing ? "updateTodo" : "addTodo"}
       onSubmit={handleSubmit}
       className="flex w-full flex-col items-center gap-2"
     >

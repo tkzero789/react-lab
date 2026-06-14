@@ -25,8 +25,10 @@ import {
 } from "@/components/ui/input-group"
 import { PlusIcon } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import React from "react"
 
 export default function TodoPage() {
+  const [isOpen, setIsOpen] = React.useState<boolean>(false)
   return (
     <>
       <DashboardBreadcrumb
@@ -46,7 +48,7 @@ export default function TodoPage() {
         </Unauthenticated>
         <Authenticated>
           <Container className="flex flex-col gap-4 py-4">
-            <Dialog>
+            <Dialog open={isOpen} onOpenChange={setIsOpen}>
               <DialogTrigger
                 nativeButton={false}
                 render={
@@ -65,10 +67,10 @@ export default function TodoPage() {
                   <DialogTitle>Add todo</DialogTitle>
                 </DialogHeader>
                 <DialogBody>
-                  <TodoForm />
+                  <TodoForm onSuccess={() => setIsOpen(false)} />
                 </DialogBody>
                 <DialogFooter>
-                  <Button form="todoForm" type="submit" className="w-full">
+                  <Button form="addTodo" type="submit" className="w-full">
                     Add
                   </Button>
                 </DialogFooter>

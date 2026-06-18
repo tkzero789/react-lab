@@ -283,12 +283,13 @@ export default function TodoForm({ id, todo, onSubmit }: Props) {
           </InputGroup>
         )}
         {option.isImage && (
-          <div className="grid w-full grid-cols-4 gap-2 rounded-xl bg-input p-2 md:grid-cols-5">
+          <div className="grid w-full grid-cols-4 gap-2 md:grid-cols-5">
             <FileUpload
               maxFiles={10}
               onFilesChange={setImages}
               icon={ImageIcon}
               initialFiles={initialFiles}
+              className="w-full"
             />
           </div>
         )}

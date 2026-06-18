@@ -60,7 +60,7 @@ function TodoItem({
             return image?.url ? (
               <div
                 key={image.storageId}
-                className={cn("w-full max-w-16", index > 3 && "hidden")}
+                className={cn("w-full", index > 3 && "hidden")}
               >
                 <AspectRatio
                   ratio={1 / 1}
@@ -77,7 +77,7 @@ function TodoItem({
             ) : null
           })}
           {todo.imageObject.length > 4 && (
-            <div className="w-full max-w-16">
+            <div className="w-full">
               <AspectRatio
                 ratio={1 / 1}
                 className="flex items-center justify-center overflow-hidden rounded-xl border bg-muted"

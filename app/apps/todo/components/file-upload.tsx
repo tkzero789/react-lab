@@ -57,7 +57,12 @@ export default function FileUpload({
     <>
       {files.map((file) => (
         <div key={file.id} className="group relative">
-          <div className="size-16 overflow-hidden rounded-xl border border-solid bg-background">
+          <div
+            className={cn(
+              "aspect-square w-16 overflow-hidden rounded-xl border border-solid bg-background",
+              className
+            )}
+          >
             {file.preview ? (
               <Image
                 src={file.preview}
@@ -81,10 +86,11 @@ export default function FileUpload({
       {canAddMore && (
         <div
           className={cn(
-            "flex size-16 cursor-pointer items-center justify-center rounded-xl border border-dashed bg-background transition-colors hover:bg-muted",
+            "flex aspect-square w-16 cursor-pointer items-center justify-center rounded-xl border border-dashed bg-background transition-colors hover:bg-muted",
             isDragging
               ? "border-primary bg-primary/5"
-              : "border-muted-foreground/25 hover:border-muted-foreground/20"
+              : "border-muted-foreground/25 hover:border-muted-foreground/20",
+            className
           )}
           onDragEnter={handleDragEnter}
           onDragLeave={handleDragLeave}

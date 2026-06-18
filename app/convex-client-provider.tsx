@@ -6,7 +6,9 @@ import { authClient } from "@/lib/auth-client";
 import { ConvexBetterAuthProvider } from "@convex-dev/better-auth/react";
 import { api } from "@/convex/_generated/api";
 
-const convex = new ConvexReactClient(process.env.NEXT_PUBLIC_CONVEX_URL!);
+export const convex = new ConvexReactClient(
+  process.env.NEXT_PUBLIC_CONVEX_URL!,
+);
 
 function EnsureUser() {
   const { data: session } = authClient.useSession();

@@ -135,12 +135,14 @@ export default function MovieFilter() {
   } else {
     return (
       <DropdownMenu modal={false} open={isOpen} onOpenChange={setIsOpen}>
-        <DropdownMenuTrigger asChild>
-          <Button variant="muted">
-            <Filter />
-            Filter
-          </Button>
-        </DropdownMenuTrigger>
+        <DropdownMenuTrigger
+          render={
+            <Button variant="muted">
+              <Filter />
+              Filter
+            </Button>
+          }
+        ></DropdownMenuTrigger>
         <DropdownMenuContent className="grid grid-cols-2 p-0" align="end">
           <div>
             <DropdownMenuLabel className="bg-muted text-center">

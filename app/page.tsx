@@ -1,14 +1,14 @@
-import Nextjs from "@/components/icons/nextjs-icon";
-import Replicas from "@/components/icons/replicas-icon";
-import Threejs from "@/components/icons/threejs-icon";
-import { headers } from "next/headers";
-import Link from "next/link";
-import UserMenu from "./components/user-menu";
+import Nextjs from "@/components/icons/nextjs-icon"
+import Replicas from "@/components/icons/replicas-icon"
+import Threejs from "@/components/icons/threejs-icon"
+import { headers } from "next/headers"
+import Link from "next/link"
+import UserMenu from "./apps/components/user-menu"
 
 const SUBDOMAIN_MAP: Record<string, string> = {
   Apps: "apps",
   Replicas: "replicas",
-};
+}
 
 const cardItems = [
   {
@@ -32,33 +32,33 @@ const cardItems = [
     href: "/apps",
     hoverBackground: "hover:bg-slate-400/40",
   },
-];
+]
 
 function getHref(title: string, fallbackHref: string, host: string) {
-  const subdomain = SUBDOMAIN_MAP[title];
-  if (!subdomain) return fallbackHref;
+  const subdomain = SUBDOMAIN_MAP[title]
+  if (!subdomain) return fallbackHref
 
   // Use path-based routing for localhost and LAN/private-network IPs
-  const hostname = host.split(":")[0];
+  const hostname = host.split(":")[0]
   const isLocalhost =
     hostname === "localhost" ||
     hostname === "127.0.0.1" ||
     /^192\.168\./.test(hostname) ||
     /^10\./.test(hostname) ||
-    /^172\.(1[6-9]|2\d|3[01])\./.test(hostname);
+    /^172\.(1[6-9]|2\d|3[01])\./.test(hostname)
   if (isLocalhost) {
-    return `/${subdomain}`;
+    return `/${subdomain}`
   }
 
   // Use subdomain routing in production
   // e.g. lab.thinhtran.dev → apps.thinhtran.dev
-  const parts = host.replace(/^www\./, "").split(".");
-  const rootDomain = parts.slice(-2).join(".");
-  return `https://${subdomain}.${rootDomain}`;
+  const parts = host.replace(/^www\./, "").split(".")
+  const rootDomain = parts.slice(-2).join(".")
+  return `https://${subdomain}.${rootDomain}`
 }
 
 export default async function Page() {
-  const host = (await headers()).get("host") || "localhost";
+  const host = (await headers()).get("host") || "localhost"
 
   return (
     <div className="flex h-dvh w-full flex-col items-center justify-center gap-16">
@@ -86,5 +86,5 @@ export default async function Page() {
         ))}
       </div>
     </div>
-  );
+  )
 }

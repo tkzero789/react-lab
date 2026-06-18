@@ -1,7 +1,6 @@
 "use client"
 
 import { api } from "@/convex/_generated/api"
-import { useMutation } from "convex/react"
 import React from "react"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
@@ -14,7 +13,6 @@ import {
   MinusCircleIcon,
 } from "lucide-react"
 import { cn } from "@/lib/utils"
-import { Id } from "@/convex/_generated/dataModel"
 import type { FunctionReturnType } from "convex/server"
 import {
   InputGroup,
@@ -34,9 +32,22 @@ import { FileMetadata, FileWithPreview } from "@/app/hooks/use-file-upload"
 
 type TodoDoc = FunctionReturnType<typeof api.todos.list>[number]
 
+// The values the form collects. Newly picked files are handed up raw (the caller
+// owns uploading them); `imageIds` are existing storage ids to keep. The final
+// image set the caller persists is `imageIds` + the ids of the uploaded `files`.
+export type TodoFormValues = {
+  text: string
+  date: number
+  location: string
+  url: string
+  files: File[]
+  imageIds: string[]
+}
+
 type Props = {
+  id: string
   todo?: TodoDoc
-  onSuccess?: () => void
+  onSubmit: (values: TodoFormValues) => void
 }
 
 type Todo = {
@@ -44,8 +55,6 @@ type Todo = {
   date: number | undefined
   location: string
   url: string
-  image: string
-  imageObject?: FileWithPreview
 }
 
 function OptionButton({
@@ -70,33 +79,37 @@ function OptionButton({
   )
 }
 
-export default function TodoForm({ todo, onSuccess }: Props) {
-  const isEditing = todo != null
-
-  const initialFile: FileMetadata | undefined = todo?.imageObject?.url
-    ? {
-        id: todo.imageObject.storageId,
-        url: todo.imageObject.url,
-        name: "image",
-        size: todo.imageObject.size,
-        type: todo.imageObject.contentType ?? "",
-      }
-    : undefined
-
-  const generateUploadUrl = useMutation(api.files.generateUploadUrl)
+export default function TodoForm({ id, todo, onSubmit }: Props) {
+  // Seed FileUpload with the existing stored images. Their `id` is the storage
+  // id, which is how we tell kept-existing images apart from fresh picks.
+  const initialFiles: FileMetadata[] =
+    todo?.imageObject.flatMap((item) =>
+      item
+        ? [
+            {
+              id: item.storageId,
+              url: item.url ?? "",
+              name: "image",
+              size: item.size,
+              type: item.contentType ?? "",
+            },
+          ]
+        : []
+    ) ?? []
 
   const [date, setDate] = React.useState<Date | undefined>(
     todo?.date ? new Date(todo.date) : undefined
   )
 
-  const [image, setImage] = React.useState<FileWithPreview | null>(null)
+  const [images, setImages] = React.useState<FileWithPreview[]>(() =>
+    initialFiles.map((file) => ({ file, id: file.id, preview: file.url }))
+  )
 
   const [form, setForm] = React.useState<Todo>({
     text: todo?.text ?? "",
     date: todo?.date ?? date?.getTime(),
     location: todo?.location ?? "",
     url: todo?.url ?? "",
-    image: todo?.image ?? "",
   })
 
   const [option, setOption] = React.useState<{
@@ -108,11 +121,8 @@ export default function TodoForm({ todo, onSuccess }: Props) {
     isDate: !!todo?.date,
     isLocation: !!todo?.location,
     isUrl: !!todo?.url,
-    isImage: !!todo?.image,
+    isImage: !!todo?.image?.length,
   })
-
-  const addTodo = useMutation(api.todos.add)
-  const updateTodo = useMutation(api.todos.update)
 
   function handleOnChange(key: keyof Todo, value: string) {
     setForm((prev) => ({
@@ -137,7 +147,7 @@ export default function TodoForm({ todo, onSuccess }: Props) {
     } else if (option === "isUrl") {
       value = "url"
     } else {
-      value === "image"
+      value = "image"
     }
 
     setOption((prev) => ({
@@ -151,157 +161,139 @@ export default function TodoForm({ todo, onSuccess }: Props) {
     }))
   }
 
-  async function uploadFile(file: File) {
-    const postUrl = await generateUploadUrl()
-    const result = await fetch(postUrl, {
-      method: "POST",
-      headers: { "Content-Type": file.type },
-      body: file,
-    })
-    const { storageId } = (await result.json()) as {
-      storageId: Id<"_storage">
-    }
-    return storageId
-  }
-
-  async function handleSubmit(e: React.SubmitEvent<HTMLFormElement>) {
+  function handleSubmit(e: React.SubmitEvent<HTMLFormElement>) {
     e.preventDefault()
     if (!form.text.trim()) {
       return
     }
 
-    // A fresh pick has a real File; the seeded existing image is FileMetadata.
-    const pickedFile = image?.file instanceof File ? image.file : null
-
-    if (isEditing) {
-      // Upload only when a new File was picked; otherwise omit `image` so the
-      // mutation keeps the existing storageId.
-      const imageId = pickedFile ? await uploadFile(pickedFile) : undefined
-
-      await updateTodo({
-        id: todo._id,
-        text: form.text,
-        date: date?.getTime() || 0,
-        location: form.location,
-        url: form.url,
-        image: imageId,
-      })
-    } else {
-      const storageId = pickedFile ? await uploadFile(pickedFile) : undefined
-
-      await addTodo({
-        text: form.text,
-        date: date?.getTime() || 0,
-        location: form.location,
-        url: form.url,
-        image: storageId,
-      })
+    // Split the current set: fresh picks are real Files to upload; existing
+    // images are FileMetadata whose `id` is the storage id to keep.
+    const activeImages = option.isImage ? images : []
+    const files: File[] = []
+    const imageIds: string[] = []
+    for (const { file } of activeImages) {
+      if (file instanceof File) files.push(file)
+      else imageIds.push(file.id)
     }
 
-    onSuccess?.()
+    onSubmit({
+      text: form.text,
+      date: date?.getTime() || 0,
+      location: form.location,
+      url: form.url,
+      files,
+      imageIds,
+    })
   }
 
-  return (
-    <form
-      id={isEditing ? "updateTodo" : "addTodo"}
-      onSubmit={handleSubmit}
-      className="flex w-full flex-col items-center gap-2"
-    >
-      <Input
-        placeholder="Todo"
-        value={form.text}
-        onChange={(e) => handleOnChange("text", e.target.value)}
-      />
+  console.log(images)
 
-      {option.isDate && (
-        <InputGroup className="group">
-          <InputGroupAddon className="ml-0! pl-2">
-            <Popover>
-              <PopoverTrigger
-                render={
-                  <InputGroupButton size="icon-xs">
-                    <CalendarIcon />
-                  </InputGroupButton>
-                }
-              />
-              <PopoverContent align="start">
-                <Calendar
-                  required
-                  mode="single"
-                  selected={date}
-                  onSelect={handleDateSelect}
-                />
-              </PopoverContent>
-            </Popover>
-          </InputGroupAddon>
-          <InputGroupInput
-            readOnly
-            placeholder="Date"
-            value={date ? format(date, "EEE, MMM d, yyyy") : ""}
-            className="pl-2"
-          />
-          <InputGroupAddon align="inline-end">
-            <InputGroupButton
-              variant="ghost-destructive"
-              size="icon-xs"
-              onClick={() => handleRemoveOption("isDate")}
-            >
-              <MinusCircleIcon className="hidden group-hover:block" />
-            </InputGroupButton>
-          </InputGroupAddon>
-        </InputGroup>
-      )}
-      {option.isLocation && (
-        <InputGroup className="group">
-          <InputGroupAddon>
-            <MapPinIcon />
-          </InputGroupAddon>
-          <InputGroupInput
-            placeholder="Location"
-            value={form.location}
-            onChange={(e) => handleOnChange("location", e.target.value)}
-          />
-          <InputGroupAddon align="inline-end">
-            <InputGroupButton
-              variant="ghost-destructive"
-              size="icon-xs"
-              onClick={() => handleRemoveOption("isLocation")}
-            >
-              <MinusCircleIcon className="hidden group-hover:block" />
-            </InputGroupButton>
-          </InputGroupAddon>
-        </InputGroup>
-      )}
-      {option.isUrl && (
-        <InputGroup className="group">
-          <InputGroupAddon>
-            <Link2Icon />
-          </InputGroupAddon>
-          <InputGroupInput
-            placeholder="Url"
-            value={form.url}
-            onChange={(e) => handleOnChange("url", e.target.value)}
-          />
-          <InputGroupAddon align="inline-end">
-            <InputGroupButton
-              variant="ghost-destructive"
-              size="icon-xs"
-              className="text-destructive"
-              onClick={() => handleRemoveOption("isUrl")}
-            >
-              <MinusCircleIcon className="hidden group-hover:block" />
-            </InputGroupButton>
-          </InputGroupAddon>
-        </InputGroup>
-      )}
-      {option.isImage && (
-        <FileUpload
-          onFileChange={setImage}
-          icon={ImageIcon}
-          initialFile={initialFile}
+  return (
+    <>
+      <form
+        id={id}
+        onSubmit={handleSubmit}
+        className="flex flex-1 flex-col items-center gap-2 p-4"
+      >
+        <Input
+          placeholder="Todo"
+          value={form.text}
+          onChange={(e) => handleOnChange("text", e.target.value)}
         />
-      )}
-      <div className="flex items-center justify-center gap-1">
+        {option.isDate && (
+          <InputGroup className="group">
+            <InputGroupAddon className="ml-0! pl-2">
+              <Popover>
+                <PopoverTrigger
+                  render={
+                    <InputGroupButton size="icon-xs">
+                      <CalendarIcon />
+                    </InputGroupButton>
+                  }
+                />
+                <PopoverContent align="start">
+                  <Calendar
+                    required
+                    mode="single"
+                    selected={date}
+                    onSelect={handleDateSelect}
+                  />
+                </PopoverContent>
+              </Popover>
+            </InputGroupAddon>
+            <InputGroupInput
+              readOnly
+              placeholder="Date"
+              value={date ? format(date, "EEE, MMM d, yyyy") : ""}
+              className="pl-2"
+            />
+            <InputGroupAddon align="inline-end">
+              <InputGroupButton
+                variant="ghost-destructive"
+                size="icon-xs"
+                onClick={() => handleRemoveOption("isDate")}
+              >
+                <MinusCircleIcon className="hidden group-hover:block" />
+              </InputGroupButton>
+            </InputGroupAddon>
+          </InputGroup>
+        )}
+        {option.isLocation && (
+          <InputGroup className="group">
+            <InputGroupAddon>
+              <MapPinIcon />
+            </InputGroupAddon>
+            <InputGroupInput
+              placeholder="Location"
+              value={form.location}
+              onChange={(e) => handleOnChange("location", e.target.value)}
+            />
+            <InputGroupAddon align="inline-end">
+              <InputGroupButton
+                variant="ghost-destructive"
+                size="icon-xs"
+                onClick={() => handleRemoveOption("isLocation")}
+              >
+                <MinusCircleIcon className="hidden group-hover:block" />
+              </InputGroupButton>
+            </InputGroupAddon>
+          </InputGroup>
+        )}
+        {option.isUrl && (
+          <InputGroup className="group">
+            <InputGroupAddon>
+              <Link2Icon />
+            </InputGroupAddon>
+            <InputGroupInput
+              placeholder="Url"
+              value={form.url}
+              onChange={(e) => handleOnChange("url", e.target.value)}
+            />
+            <InputGroupAddon align="inline-end">
+              <InputGroupButton
+                variant="ghost-destructive"
+                size="icon-xs"
+                className="text-destructive"
+                onClick={() => handleRemoveOption("isUrl")}
+              >
+                <MinusCircleIcon className="hidden group-hover:block" />
+              </InputGroupButton>
+            </InputGroupAddon>
+          </InputGroup>
+        )}
+        {option.isImage && (
+          <div className="grid w-full grid-cols-4 gap-2 rounded-xl bg-input p-2 md:grid-cols-5">
+            <FileUpload
+              maxFiles={10}
+              onFilesChange={setImages}
+              icon={ImageIcon}
+              initialFiles={initialFiles}
+            />
+          </div>
+        )}
+      </form>
+      <div className="mt-auto flex w-full items-center justify-around border-t p-2">
         <OptionButton
           active={option.isDate}
           onToggle={() =>
@@ -343,6 +335,6 @@ export default function TodoForm({ todo, onSuccess }: Props) {
           icon={ImageIcon}
         />
       </div>
-    </form>
+    </>
   )
 }

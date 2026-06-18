@@ -30,6 +30,12 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import {
+  Dialog,
+  DialogBody,
+  DialogContent,
+  DialogHeader,
+} from "@/components/ui/dialog"
 
 const ALL = "all"
 
@@ -37,9 +43,13 @@ export default function ExerciseList() {
   const exercises = useQuery(api.exercises.list) ?? []
   const removeExercise = useMutation(api.exercises.remove)
 
-  const [search, setSearch] = React.useState("")
+  const [search, setSearch] = React.useState<string>("")
   const [muscle, setMuscle] = React.useState<string>(ALL)
   const [editingId, setEditingId] = React.useState<Id<"exercises"> | null>(null)
+  const [deleting, setDeleting] = React.useState<{
+    id: Id<"exercises">
+    name: string
+  } | null>(null)
 
   function handleRemove(id: Id<"exercises">) {
     removeExercise({ id })
@@ -137,7 +147,7 @@ export default function ExerciseList() {
                     <DropdownMenuContent align="end">
                       <DropdownMenuGroup>
                         <DropdownMenuItem
-                          onSelect={() =>
+                          onClick={() =>
                             setTimeout(() => {
                               setEditingId(exercise._id)
                             }, 0)
@@ -147,7 +157,12 @@ export default function ExerciseList() {
                         </DropdownMenuItem>
                         <DropdownMenuItem
                           variant="destructive"
-                          onSelect={() => handleRemove(exercise._id)}
+                          onClick={() =>
+                            setDeleting(() => ({
+                              id: exercise._id,
+                              name: exercise.name,
+                            }))
+                          }
                         >
                           Delete
                         </DropdownMenuItem>
@@ -168,6 +183,17 @@ export default function ExerciseList() {
           ))}
         </div>
       )}
+      <Dialog
+        open={deleting !== null}
+        onOpenChange={(open) => {
+          !open && setDeleting(null)
+        }}
+      >
+        <DialogContent>
+          <DialogHeader>Delete {deleting?.name}</DialogHeader>
+          <DialogBody>check</DialogBody>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }

@@ -91,16 +91,18 @@ export default function MovieMenu({ paramsType }: Props) {
   } else {
     return (
       <DropdownMenu>
-        <DropdownMenuTrigger asChild className="lg:hidden">
-          <Button variant="muted">
-            <Menu /> Menu
-          </Button>
-        </DropdownMenuTrigger>
+        <DropdownMenuTrigger
+          className="lg:hidden"
+          render={
+            <Button variant="muted">
+              <Menu /> Menu
+            </Button>
+          }
+        ></DropdownMenuTrigger>
         <DropdownMenuContent className="w-56" align="start">
           {movieTypes.map((type) => (
             <DropdownMenuItem
               key={type.title}
-              asChild
               className={cn(type.params === paramsType && "bg-muted")}
             >
               <Link

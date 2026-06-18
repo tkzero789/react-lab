@@ -191,22 +191,25 @@ export default function SystemBuilderPage() {
       <div className="mt-4 flex flex-col gap-4">
         {/* Sheet V2 */}
         <Sheet>
-          <SheetTrigger asChild>
-            <Button>Select Unit V2</Button>
-          </SheetTrigger>
+          <SheetTrigger render={<Button>Select Unit V2</Button>}></SheetTrigger>
           <SheetContent className="min-w-full overflow-y-auto p-0 lg:min-w-[640px]">
             <SheetHeader className="flex flex-row items-center gap-4 border-b border-neutral-300 p-4">
-              <SheetClose asChild>
-                <Button variant="muted" size="icon-sm">
-                  <ChevronLeft />
-                </Button>
-              </SheetClose>
+              <SheetClose
+                render={
+                  <Button variant="muted" size="icon-sm">
+                    <ChevronLeft />
+                  </Button>
+                }
+              ></SheetClose>
               <SheetTitle>Select Unit</SheetTitle>
-              <SheetClose asChild className="ml-auto">
-                <Button variant="muted" size="icon-sm">
-                  <X />
-                </Button>
-              </SheetClose>
+              <SheetClose
+                render={
+                  <Button variant="muted" size="icon-sm">
+                    <X />
+                  </Button>
+                }
+                className="ml-auto"
+              ></SheetClose>
             </SheetHeader>
             <div className="flex flex-col gap-4 p-4">
               {products.map((product) => (
@@ -280,22 +283,25 @@ export default function SystemBuilderPage() {
 
         {/* Sheet V3 */}
         <Sheet>
-          <SheetTrigger asChild>
-            <Button>Select Unit V3</Button>
-          </SheetTrigger>
+          <SheetTrigger render={<Button>Select Unit V3</Button>}></SheetTrigger>
           <SheetContent className="min-w-full overflow-y-auto p-0 lg:min-w-[640px]">
             <SheetHeader className="flex flex-row items-center gap-4 border-b border-neutral-300 p-4">
-              <SheetClose asChild>
-                <Button variant="muted" size="icon-sm">
-                  <ChevronLeft />
-                </Button>
-              </SheetClose>
+              <SheetClose
+                render={
+                  <Button variant="muted" size="icon-sm">
+                    <ChevronLeft />
+                  </Button>
+                }
+              ></SheetClose>
               <SheetTitle>Select Unit</SheetTitle>
-              <SheetClose asChild className="ml-auto">
-                <Button variant="muted" size="icon-sm">
-                  <X />
-                </Button>
-              </SheetClose>
+              <SheetClose
+                className="ml-auto"
+                render={
+                  <Button variant="muted" size="icon-sm">
+                    <X />
+                  </Button>
+                }
+              ></SheetClose>
             </SheetHeader>
             <div className="flex flex-col gap-4 p-4">
               {products.map((product) => (

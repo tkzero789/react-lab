@@ -5,18 +5,9 @@ import DashboardContainer from "@/components/layout/dashboard-container"
 import { pathClient } from "@/lib/path-client"
 import { Authenticated, AuthLoading, Unauthenticated } from "convex/react"
 import SignInPrompt from "../components/sign-in-prompt"
-import TodoForm from "./components/todo-form"
+import TodoDialog from "./components/todo-sheet"
 import TodoList from "./components/todo-list"
 import Container from "@/components/layout/container"
-import {
-  Dialog,
-  DialogBody,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog"
 import {
   InputGroup,
   InputGroupAddon,
@@ -24,9 +15,15 @@ import {
   InputGroupInput,
 } from "@/components/ui/input-group"
 import { PlusIcon } from "lucide-react"
-import { Button } from "@/components/ui/button"
 import React from "react"
 import Loader from "@/components/ui/loader"
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsListWrapper,
+  TabsTrigger,
+} from "@/components/ui/tabs"
 
 export default function TodoPage() {
   const [isOpen, setIsOpen] = React.useState<boolean>(false)
@@ -43,7 +40,7 @@ export default function TodoPage() {
           },
         ]}
       />
-      <DashboardContainer className="max-w-xl p-0">
+      <DashboardContainer className="p-0">
         <Unauthenticated>
           <SignInPrompt description="Add and manage your todos in one place" />
         </Unauthenticated>
@@ -51,38 +48,37 @@ export default function TodoPage() {
           <Loader />
         </AuthLoading>
         <Authenticated>
-          <Container className="flex flex-col gap-4 py-4">
-            <Dialog open={isOpen} onOpenChange={setIsOpen}>
-              <DialogTrigger
-                nativeButton={false}
-                render={
-                  <InputGroup>
-                    <InputGroupInput placeholder="Enter todo" />
-                    <InputGroupAddon align="inline-end">
-                      <InputGroupButton size="icon-sm">
-                        <PlusIcon />
-                      </InputGroupButton>
-                    </InputGroupAddon>
-                  </InputGroup>
-                }
-              ></DialogTrigger>
-              <DialogContent>
-                <DialogHeader>
-                  <DialogTitle>Add todo</DialogTitle>
-                </DialogHeader>
-                <DialogBody>
-                  <TodoForm onSuccess={() => setIsOpen(false)} />
-                </DialogBody>
-                <DialogFooter>
-                  <Button form="addTodo" type="submit" className="w-full">
-                    Add
-                  </Button>
-                </DialogFooter>
-              </DialogContent>
-            </Dialog>
-
-            <TodoList />
-          </Container>
+          <Tabs defaultValue="todo" className="flex-1">
+            <TabsListWrapper className="justify-between px-4 pt-4">
+              <TabsList>
+                <TabsTrigger value="todo" className="flex-1">
+                  Todo
+                </TabsTrigger>
+                <TabsTrigger value="completed" className="flex-1">
+                  Completed
+                </TabsTrigger>
+              </TabsList>
+              <InputGroup
+                onClick={() => setIsOpen(true)}
+                className="w-40 lg:w-60"
+              >
+                <InputGroupInput
+                  readOnly
+                  placeholder="Enter todo"
+                  className="cursor-pointer"
+                />
+                <InputGroupAddon align="inline-end">
+                  <InputGroupButton size="icon-sm">
+                    <PlusIcon />
+                  </InputGroupButton>
+                </InputGroupAddon>
+              </InputGroup>
+              <TodoDialog open={isOpen} onOpenChange={setIsOpen} />
+            </TabsListWrapper>
+            <TabsContent value="todo">
+              <TodoList />
+            </TabsContent>
+          </Tabs>
         </Authenticated>
       </DashboardContainer>
     </>

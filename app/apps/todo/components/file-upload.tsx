@@ -10,23 +10,23 @@ import Image from "next/image"
 import { toast } from "sonner"
 
 type Props = {
+  maxFiles?: number
   maxSize?: number
   className?: string
-  onFileChange?: (file: FileWithPreview | null) => void
-  defaultFile?: string
+  onFilesChange?: (files: FileWithPreview[]) => void
   icon?: LucideIcon
   accept?: string
-  initialFile?: FileMetadata
+  initialFiles?: FileMetadata[]
 }
 
 export default function FileUpload({
+  maxFiles = 1,
   maxSize = 2 * 1024 * 1024, // 2MB
   className,
-  onFileChange,
-  defaultFile,
+  onFilesChange,
   icon: Icon = PlusIcon,
   accept = "image/*",
-  initialFile,
+  initialFiles,
 }: Props) {
   const [
     { files, isDragging },
@@ -40,38 +40,51 @@ export default function FileUpload({
       getInputProps,
     },
   ] = useFileUpload({
-    maxFiles: 1,
+    maxFiles,
     maxSize,
     accept,
-    initialFiles: initialFile ? [initialFile] : undefined,
-    multiple: false,
-    onFilesChange: (files) => {
-      onFileChange?.(files[0] || null)
-    },
+    initialFiles,
+    multiple: true,
+    onFilesChange,
     onError: (errors) => {
       for (const error of errors) toast.error(error)
     },
   })
-  const currentFile = files[0]
-  const previewUrl = currentFile?.preview || defaultFile
-  const handleRemove = () => {
-    if (currentFile) {
-      removeFile(currentFile.id)
-    }
-  }
+
+  const canAddMore = files.length < maxFiles
 
   return (
     <>
-      {/* File preview */}
-      <div className="relative">
+      {files.map((file) => (
+        <div key={file.id} className="group relative">
+          <div className="size-16 overflow-hidden rounded-xl border border-solid bg-background">
+            {file.preview ? (
+              <Image
+                src={file.preview}
+                alt="Upload preview"
+                width={100}
+                height={100}
+                className="h-full w-full object-cover"
+              />
+            ) : null}
+            <Button
+              size="icon-xs"
+              variant="outline"
+              onClick={() => removeFile(file.id)}
+              className="absolute -top-1 -right-1 z-10 hidden lg:group-hover:flex"
+            >
+              <XIcon />
+            </Button>
+          </div>
+        </div>
+      ))}
+      {canAddMore && (
         <div
           className={cn(
-            "group/avatar relative size-16 cursor-pointer overflow-hidden rounded-full border border-dashed transition-colors hover:bg-muted",
+            "flex size-16 cursor-pointer items-center justify-center rounded-xl border border-dashed bg-background transition-colors hover:bg-muted",
             isDragging
               ? "border-primary bg-primary/5"
-              : "border-muted-foreground/25 hover:border-muted-foreground/20",
-            previewUrl && "border-solid",
-            className
+              : "border-muted-foreground/25 hover:border-muted-foreground/20"
           )}
           onDragEnter={handleDragEnter}
           onDragLeave={handleDragLeave}
@@ -80,32 +93,9 @@ export default function FileUpload({
           onClick={openFileDialog}
         >
           <input {...getInputProps()} className="sr-only" />
-          {previewUrl ? (
-            <Image
-              src={previewUrl}
-              alt="Avatar"
-              width={100}
-              height={100}
-              className="h-full w-full object-cover"
-            />
-          ) : (
-            <div className="flex h-full w-full items-center justify-center">
-              <Icon className="size-4 text-muted-foreground" />
-            </div>
-          )}
+          <Icon className="size-4 text-muted-foreground" />
         </div>
-        {/* Remove Button */}
-        {currentFile && (
-          <Button
-            size="icon"
-            variant="outline"
-            onClick={handleRemove}
-            className="absolute inset-e-0.5 top-0.5 z-10 size-6 rounded-full"
-          >
-            <XIcon className="size-3.5" />
-          </Button>
-        )}
-      </div>
+      )}
     </>
   )
 }

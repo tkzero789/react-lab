@@ -15,12 +15,16 @@ export const list = query({
       .collect()
 
     return await Promise.all(
-      todos.map(async (todo) => ({
-        ...todo,
-        imageObject: todo.image
-          ? await getFileObject(ctx, todo.image as Id<"_storage">)
-          : null,
-      }))
+      todos.map(async (todo) => {
+        const imageObject = await Promise.all(
+          todo.image.map((item) => getFileObject(ctx, item as Id<"_storage">))
+        )
+
+        return {
+          ...todo,
+          imageObject,
+        }
+      })
     )
   },
 })
@@ -31,7 +35,7 @@ export const add = mutation({
     date: v.number(),
     location: v.string(),
     url: v.string(),
-    image: v.optional(v.id("_storage")),
+    image: v.optional(v.array(v.id("_storage"))),
   },
   handler: async (ctx, args) => {
     const userId = await getCurrentUserId(ctx)
@@ -44,7 +48,7 @@ export const add = mutation({
       date: args.date,
       location: args.location,
       url: args.url,
-      image: args.image ? args.image : "",
+      image: args.image ? args.image : [],
     })
   },
 })
@@ -56,7 +60,7 @@ export const update = mutation({
     date: v.number(),
     location: v.string(),
     url: v.string(),
-    image: v.optional(v.id("_storage")),
+    image: v.optional(v.array(v.id("_storage"))),
   },
   handler: async (ctx, args) => {
     const userId = await getCurrentUserId(ctx)
@@ -72,7 +76,6 @@ export const update = mutation({
       date: args.date,
       location: args.location,
       url: args.url,
-      // Only overwrite the image when a new id is provided; omit to keep existing.
       ...(args.image !== undefined && { image: args.image }),
     })
   },

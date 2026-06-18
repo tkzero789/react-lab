@@ -24,7 +24,7 @@ export default defineSchema({
     date: v.number(),
     location: v.string(),
     url: v.string(),
-    image: v.string(),
+    image: v.array(v.string()),
   }).index("by_user", ["userId"]),
 
   // Grocery

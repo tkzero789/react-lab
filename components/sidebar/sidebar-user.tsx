@@ -1,13 +1,13 @@
-"use client";
+"use client"
 
-import * as React from "react";
+import * as React from "react"
 
 import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from "@/components/ui/sidebar";
-import UserMenu from "@/app/components/user-menu";
+} from "@/components/ui/sidebar"
+import UserMenu from "@/app/apps/components/user-menu"
 
 export function SidebarUser() {
   return (
@@ -21,5 +21,5 @@ export function SidebarUser() {
         </SidebarMenuButton>
       </SidebarMenuItem>
     </SidebarMenu>
-  );
+  )
 }

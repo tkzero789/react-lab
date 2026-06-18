@@ -11,6 +11,7 @@
 import type * as auth from "../auth.js";
 import type * as dishes from "../dishes.js";
 import type * as exercises from "../exercises.js";
+import type * as files from "../files.js";
 import type * as http from "../http.js";
 import type * as ingredients from "../ingredients.js";
 import type * as migrations from "../migrations.js";
@@ -28,6 +29,7 @@ declare const fullApi: ApiFromModules<{
   auth: typeof auth;
   dishes: typeof dishes;
   exercises: typeof exercises;
+  files: typeof files;
   http: typeof http;
   ingredients: typeof ingredients;
   migrations: typeof migrations;

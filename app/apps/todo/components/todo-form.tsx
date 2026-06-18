@@ -2,20 +2,20 @@
 
 import { api } from "@/convex/_generated/api"
 import { useMutation } from "convex/react"
-import React, { SetStateAction } from "react"
+import React from "react"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import {
   CalendarIcon,
-  DeleteIcon,
+  ImageIcon,
   Link2Icon,
   LucideIcon,
   MapPinIcon,
   MinusCircleIcon,
-  XIcon,
 } from "lucide-react"
 import { cn } from "@/lib/utils"
-import { Doc } from "@/convex/_generated/dataModel"
+import { Id } from "@/convex/_generated/dataModel"
+import type { FunctionReturnType } from "convex/server"
 import {
   InputGroup,
   InputGroupAddon,
@@ -29,9 +29,13 @@ import {
 } from "@/components/ui/popover"
 import { Calendar } from "@/components/ui/calendar"
 import { format } from "date-fns"
+import FileUpload from "./file-upload"
+import { FileMetadata, FileWithPreview } from "@/app/hooks/use-file-upload"
+
+type TodoDoc = FunctionReturnType<typeof api.todos.list>[number]
 
 type Props = {
-  todo?: Doc<"todos">
+  todo?: TodoDoc
   onSuccess?: () => void
 }
 
@@ -40,6 +44,8 @@ type Todo = {
   date: number | undefined
   location: string
   url: string
+  image: string
+  imageObject?: FileWithPreview
 }
 
 function OptionButton({
@@ -67,27 +73,42 @@ function OptionButton({
 export default function TodoForm({ todo, onSuccess }: Props) {
   const isEditing = todo != null
 
+  const initialFile: FileMetadata | undefined = todo?.imageObject?.url
+    ? {
+        id: todo.imageObject.storageId,
+        url: todo.imageObject.url,
+        name: "image",
+        size: todo.imageObject.size,
+        type: todo.imageObject.contentType ?? "",
+      }
+    : undefined
+
+  const generateUploadUrl = useMutation(api.files.generateUploadUrl)
+
   const [date, setDate] = React.useState<Date | undefined>(
     todo?.date ? new Date(todo.date) : undefined
   )
+
+  const [image, setImage] = React.useState<FileWithPreview | null>(null)
 
   const [form, setForm] = React.useState<Todo>({
     text: todo?.text ?? "",
     date: todo?.date ?? date?.getTime(),
     location: todo?.location ?? "",
     url: todo?.url ?? "",
+    image: todo?.image ?? "",
   })
-
-  console.log("date:", date)
 
   const [option, setOption] = React.useState<{
     isDate: boolean
     isLocation: boolean
     isUrl: boolean
+    isImage: boolean
   }>({
     isDate: !!todo?.date,
     isLocation: !!todo?.location,
     isUrl: !!todo?.url,
+    isImage: !!todo?.image,
   })
 
   const addTodo = useMutation(api.todos.add)
@@ -105,14 +126,18 @@ export default function TodoForm({ todo, onSuccess }: Props) {
     setForm((prev) => ({ ...prev, date: newDate.getTime() }))
   }
 
-  function handleRemoveOption(option: "isDate" | "isLocation" | "isUrl") {
+  function handleRemoveOption(
+    option: "isDate" | "isLocation" | "isUrl" | "isImage"
+  ) {
     let value = ""
     if (option === "isDate") {
       value = "date"
     } else if (option === "isLocation") {
       value = "location"
-    } else {
+    } else if (option === "isUrl") {
       value = "url"
+    } else {
+      value === "image"
     }
 
     setOption((prev) => ({
@@ -126,26 +151,50 @@ export default function TodoForm({ todo, onSuccess }: Props) {
     }))
   }
 
+  async function uploadFile(file: File) {
+    const postUrl = await generateUploadUrl()
+    const result = await fetch(postUrl, {
+      method: "POST",
+      headers: { "Content-Type": file.type },
+      body: file,
+    })
+    const { storageId } = (await result.json()) as {
+      storageId: Id<"_storage">
+    }
+    return storageId
+  }
+
   async function handleSubmit(e: React.SubmitEvent<HTMLFormElement>) {
     e.preventDefault()
     if (!form.text.trim()) {
       return
     }
 
+    // A fresh pick has a real File; the seeded existing image is FileMetadata.
+    const pickedFile = image?.file instanceof File ? image.file : null
+
     if (isEditing) {
+      // Upload only when a new File was picked; otherwise omit `image` so the
+      // mutation keeps the existing storageId.
+      const imageId = pickedFile ? await uploadFile(pickedFile) : undefined
+
       await updateTodo({
         id: todo._id,
         text: form.text,
         date: date?.getTime() || 0,
         location: form.location,
         url: form.url,
+        image: imageId,
       })
     } else {
+      const storageId = pickedFile ? await uploadFile(pickedFile) : undefined
+
       await addTodo({
         text: form.text,
         date: date?.getTime() || 0,
         location: form.location,
         url: form.url,
+        image: storageId,
       })
     }
 
@@ -245,6 +294,13 @@ export default function TodoForm({ todo, onSuccess }: Props) {
           </InputGroupAddon>
         </InputGroup>
       )}
+      {option.isImage && (
+        <FileUpload
+          onFileChange={setImage}
+          icon={ImageIcon}
+          initialFile={initialFile}
+        />
+      )}
       <div className="flex items-center justify-center gap-1">
         <OptionButton
           active={option.isDate}
@@ -275,6 +331,16 @@ export default function TodoForm({ todo, onSuccess }: Props) {
             }))
           }
           icon={Link2Icon}
+        />
+        <OptionButton
+          active={option.isImage}
+          onToggle={() =>
+            setOption((prev) => ({
+              ...prev,
+              isImage: !prev.isImage,
+            }))
+          }
+          icon={ImageIcon}
         />
       </div>
     </form>

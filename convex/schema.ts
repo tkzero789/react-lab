@@ -9,6 +9,13 @@ export default defineSchema({
     createdAt: v.number(),
   }).index("by_token", ["tokenIdentifier"]),
 
+  // File
+  files: defineTable({
+    body: v.string(),
+    author: v.string(),
+    format: v.string(),
+  }),
+
   // Todo
   todos: defineTable({
     userId: v.id("users"),
@@ -17,6 +24,7 @@ export default defineSchema({
     date: v.number(),
     location: v.string(),
     url: v.string(),
+    image: v.string(),
   }).index("by_user", ["userId"]),
 
   // Grocery

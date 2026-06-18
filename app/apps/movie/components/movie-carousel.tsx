@@ -106,7 +106,7 @@ export default function MovieCarousel({ title, type_list }: Props) {
               size="icon-sm"
               disabled={prevBtnDisabled}
               onClick={onPrevButtonClick}
-              className="shadow-none disabled:bg-transparent disabled:opacity-20"
+              className="shadow-none disabled:opacity-40"
             >
               <ChevronLeft />
             </Button>
@@ -115,7 +115,7 @@ export default function MovieCarousel({ title, type_list }: Props) {
               size="icon-sm"
               disabled={nextBtnDisabled}
               onClick={onNextButtonClick}
-              className="shadow-none disabled:bg-transparent disabled:opacity-20"
+              className="shadow-none disabled:opacity-40"
             />
           </ButtonGroup>
         </div>

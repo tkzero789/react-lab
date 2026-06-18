@@ -1,13 +1,14 @@
-"use client";
+"use client"
 
-import DashboardBreadcrumb from "../components/dashboard-breadcrumb";
-import DashboardContainer from "@/components/layout/dashboard-container";
-import { pathClient } from "@/lib/path-client";
-import { Authenticated, Unauthenticated } from "convex/react";
-import SignInPrompt from "../components/sign-in-prompt";
-import GroceryStats from "./components/grocery-stats";
-import IngredientList from "./components/ingredient-list";
-import GroceryDialog from "./components/grocery-dialog";
+import DashboardBreadcrumb from "../components/dashboard-breadcrumb"
+import DashboardContainer from "@/components/layout/dashboard-container"
+import { pathClient } from "@/lib/path-client"
+import { Authenticated, AuthLoading, Unauthenticated } from "convex/react"
+import SignInPrompt from "../components/sign-in-prompt"
+import GroceryStats from "./components/grocery-stats"
+import IngredientList from "./components/ingredient-list"
+import GroceryDialog from "./components/grocery-dialog"
+import Loader from "@/components/ui/loader"
 
 export default function GroceryPage() {
   return (
@@ -25,8 +26,11 @@ export default function GroceryPage() {
       />
       <DashboardContainer className="max-w-2xl">
         <Unauthenticated>
-          <SignInPrompt description="Sign in to add ingredients and dishes to your grocery list" />
+          <SignInPrompt description="Add ingredients and dishes to your grocery list" />
         </Unauthenticated>
+        <AuthLoading>
+          <Loader />
+        </AuthLoading>
         <Authenticated>
           <div className="flex flex-col gap-4">
             <GroceryDialog />
@@ -36,5 +40,5 @@ export default function GroceryPage() {
         </Authenticated>
       </DashboardContainer>
     </>
-  );
+  )
 }

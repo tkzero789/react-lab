@@ -1,16 +1,27 @@
 import { ConvexError, v } from "convex/values"
+import type { Id } from "./_generated/dataModel"
 import { mutation, query } from "./_generated/server"
 import { getCurrentUserId } from "./users"
+import { getFileObject } from "./files"
 
 export const list = query({
   handler: async (ctx) => {
     const userId = await getCurrentUserId(ctx)
     if (!userId) return []
 
-    return await ctx.db
+    const todos = await ctx.db
       .query("todos")
       .withIndex("by_user", (q) => q.eq("userId", userId))
       .collect()
+
+    return await Promise.all(
+      todos.map(async (todo) => ({
+        ...todo,
+        imageObject: todo.image
+          ? await getFileObject(ctx, todo.image as Id<"_storage">)
+          : null,
+      }))
+    )
   },
 })
 
@@ -20,6 +31,7 @@ export const add = mutation({
     date: v.number(),
     location: v.string(),
     url: v.string(),
+    image: v.optional(v.id("_storage")),
   },
   handler: async (ctx, args) => {
     const userId = await getCurrentUserId(ctx)
@@ -32,6 +44,7 @@ export const add = mutation({
       date: args.date,
       location: args.location,
       url: args.url,
+      image: args.image ? args.image : "",
     })
   },
 })
@@ -43,6 +56,7 @@ export const update = mutation({
     date: v.number(),
     location: v.string(),
     url: v.string(),
+    image: v.optional(v.id("_storage")),
   },
   handler: async (ctx, args) => {
     const userId = await getCurrentUserId(ctx)
@@ -58,6 +72,8 @@ export const update = mutation({
       date: args.date,
       location: args.location,
       url: args.url,
+      // Only overwrite the image when a new id is provided; omit to keep existing.
+      ...(args.image !== undefined && { image: args.image }),
     })
   },
 })

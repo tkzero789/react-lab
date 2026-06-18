@@ -3,7 +3,7 @@
 import DashboardBreadcrumb from "../components/dashboard-breadcrumb"
 import DashboardContainer from "@/components/layout/dashboard-container"
 import { pathClient } from "@/lib/path-client"
-import { Authenticated, Unauthenticated } from "convex/react"
+import { Authenticated, AuthLoading, Unauthenticated } from "convex/react"
 import {
   Tabs,
   TabsContent,
@@ -15,7 +15,7 @@ import SignInPrompt from "../components/sign-in-prompt"
 import ExerciseList from "./components/exercise-list"
 import AddExercise from "./components/add-exercise"
 import WorkoutLogger from "./components/workout-logger"
-import { Button } from "@/components/ui/button"
+import Loader from "@/components/ui/loader"
 
 export default function WorkoutPage() {
   return (
@@ -26,10 +26,13 @@ export default function WorkoutPage() {
           { title: "Workout" },
         ]}
       />
-      <DashboardContainer className="flex flex-1 flex-col p-0">
+      <DashboardContainer className="p-0">
         <Unauthenticated>
-          <SignInPrompt description="Sign in to track your exercises and workouts." />
+          <SignInPrompt description="Track your exercises and workouts" />
         </Unauthenticated>
+        <AuthLoading>
+          <Loader />
+        </AuthLoading>
         <Authenticated>
           <Tabs defaultValue="workout" className="flex-1">
             <TabsListWrapper className="justify-between px-4 pt-4">

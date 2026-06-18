@@ -1,8 +1,7 @@
 import type { Metadata } from "next"
 import DashboardBreadcrumb from "./components/dashboard-breadcrumb"
 import DashboardContainer from "@/components/layout/dashboard-container"
-import Link from "next/link"
-import { Button, buttonVariants } from "@/components/ui/button"
+import { buttonVariants } from "@/components/ui/button"
 import { pathServer } from "@/lib/path-server"
 import { cn } from "@/lib/utils"
 

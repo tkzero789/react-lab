@@ -1,22 +1,22 @@
-import React from "react";
-import type { Metadata } from "next";
-import { Roboto } from "next/font/google";
-import { Toaster } from "@/components/ui/sonner";
-import { ConvexClientProvider } from "@/app/convex-client-provider";
-import "./css/globals.css";
-import "./css/react-big-calendar.css";
+import React from "react"
+import type { Metadata } from "next"
+import { Roboto } from "next/font/google"
+import { Toaster } from "@/components/ui/sonner"
+import { ConvexClientProvider } from "@/app/convex-client-provider"
+import "./css/globals.css"
+import "./css/react-big-calendar.css"
 
-const roboto = Roboto({ subsets: ["latin"], weight: ["400", "500", "600"] });
+const roboto = Roboto({ subsets: ["latin"], weight: ["400", "500", "600"] })
 
 export const metadata: Metadata = {
   title: "React Lab",
   description: "Practice React",
-};
+}
 
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode;
+  children: React.ReactNode
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
@@ -26,8 +26,7 @@ export default function RootLayout({
           toastOptions={{
             className: "flex gap-2 items-center dark:bg-background",
             classNames: {
-              error:
-                "border-red-500 text-red-700 dark:border-border dark:text-red-500",
+              error: "border-destructive text-destructive ",
               success:
                 "border-green-500 text-green-700 dark:border-border dark:text-green-500",
               info: "border-blue-500 text-blue-700 dark:border-border dark:text-blue-500",
@@ -36,5 +35,5 @@ export default function RootLayout({
         />
       </body>
     </html>
-  );
+  )
 }

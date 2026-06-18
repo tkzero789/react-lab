@@ -1,22 +1,22 @@
-"use client";
+"use client"
 
-import GoogleIcon from "@/components/icons/google-icon";
-import { Button } from "@/components/ui/button";
+import GoogleIcon from "@/components/icons/google-icon"
+import { Button } from "@/components/ui/button"
 import {
   Empty,
   EmptyHeader,
   EmptyTitle,
   EmptyDescription,
-} from "@/components/ui/empty";
-import { authClient } from "@/lib/auth-client";
+} from "@/components/ui/empty"
+import { authClient } from "@/lib/auth-client"
 
 type Props = {
-  description: string;
-};
+  description: string
+}
 
 export default function SignInPrompt({ description }: Props) {
   return (
-    <Empty>
+    <Empty className="fadeIn absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
       <EmptyHeader>
         <EmptyTitle>Sign in to get started</EmptyTitle>
         <EmptyDescription>{description}</EmptyDescription>
@@ -34,5 +34,5 @@ export default function SignInPrompt({ description }: Props) {
         Continue with Google
       </Button>
     </Empty>
-  );
+  )
 }

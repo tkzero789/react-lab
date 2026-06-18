@@ -3,7 +3,7 @@
 import DashboardBreadcrumb from "../components/dashboard-breadcrumb"
 import DashboardContainer from "@/components/layout/dashboard-container"
 import { pathClient } from "@/lib/path-client"
-import { Authenticated, Unauthenticated } from "convex/react"
+import { Authenticated, AuthLoading, Unauthenticated } from "convex/react"
 import SignInPrompt from "../components/sign-in-prompt"
 import TodoForm from "./components/todo-form"
 import TodoList from "./components/todo-list"
@@ -26,6 +26,7 @@ import {
 import { PlusIcon } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import React from "react"
+import Loader from "@/components/ui/loader"
 
 export default function TodoPage() {
   const [isOpen, setIsOpen] = React.useState<boolean>(false)
@@ -42,10 +43,13 @@ export default function TodoPage() {
           },
         ]}
       />
-      <DashboardContainer className="flex max-w-xl flex-1 flex-col p-0">
+      <DashboardContainer className="max-w-xl p-0">
         <Unauthenticated>
           <SignInPrompt description="Add and manage your todos in one place" />
         </Unauthenticated>
+        <AuthLoading>
+          <Loader />
+        </AuthLoading>
         <Authenticated>
           <Container className="flex flex-col gap-4 py-4">
             <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -76,6 +80,7 @@ export default function TodoPage() {
                 </DialogFooter>
               </DialogContent>
             </Dialog>
+
             <TodoList />
           </Container>
         </Authenticated>

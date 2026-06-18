@@ -17,7 +17,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { Ellipsis, Search } from "lucide-react"
+import { EllipsisIcon, Search } from "lucide-react"
 import { useMutation, useQuery } from "convex/react"
 import { api } from "@/convex/_generated/api"
 import { Id } from "@/convex/_generated/dataModel"
@@ -30,7 +30,6 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { cn } from "@/lib/utils"
 
 const ALL = "all"
 
@@ -128,11 +127,13 @@ export default function ExerciseList() {
                 {/* Actions */}
                 <div className="flex justify-end gap-1 border-t px-4 pt-2 pb-4">
                   <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button variant="ghost" size="icon-sm">
-                        <Ellipsis />
-                      </Button>
-                    </DropdownMenuTrigger>
+                    <DropdownMenuTrigger
+                      render={
+                        <Button variant="ghost" size="icon-sm">
+                          <EllipsisIcon />
+                        </Button>
+                      }
+                    ></DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
                       <DropdownMenuGroup>
                         <DropdownMenuItem
@@ -145,7 +146,7 @@ export default function ExerciseList() {
                           Edit
                         </DropdownMenuItem>
                         <DropdownMenuItem
-                          className="text-destructive focus:bg-destructive/10 focus:text-destructive"
+                          variant="destructive"
                           onSelect={() => handleRemove(exercise._id)}
                         >
                           Delete

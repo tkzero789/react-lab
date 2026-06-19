@@ -28,7 +28,7 @@ function SheetOverlay({ className, ...props }: SheetPrimitive.Backdrop.Props) {
     <SheetPrimitive.Backdrop
       data-slot="sheet-overlay"
       className={cn(
-        "fixed inset-0 z-50 bg-black/10 transition-opacity duration-150 data-ending-style:opacity-0 data-starting-style:opacity-0",
+        "fixed inset-0 z-50 bg-black/10 transition-opacity duration-150 data-ending-style:opacity-0 data-starting-style:opacity-0 dark:bg-background/40",
         className
       )}
       {...props}
@@ -36,13 +36,12 @@ function SheetOverlay({ className, ...props }: SheetPrimitive.Backdrop.Props) {
   )
 }
 
-// Floating-panel overrides per side: inset the popup from the viewport edges and
-// round its corners. Keyed by side so only the active side's classes apply.
 const sheetFloatVariants = {
-  top: "data-[side=top]:inset-x-2 data-[side=top]:top-2",
+  top: "data-[side=top]:inset-x-2 data-[side=top]:top-2 data-[side=top]:h-full",
   right:
-    "data-[side=right]:inset-y-2 data-[side=right]:right-2 data-[side=right]:h-auto",
-  bottom: "data-[side=bottom]:inset-x-2 data-[side=bottom]:bottom-2",
+    "data-[side=right]:inset-y-2 data-[side=right]:right-2 data-[side=right]:w-[calc(100%-1rem)] data-[side=right]:h-auto",
+  bottom:
+    "data-[side=bottom]:inset-x-2 data-[side=bottom]:bottom-2 data-[side=bottom]:h-[calc(100%-1rem)]",
   left: "data-[side=left]:inset-y-2 data-[side=left]:left-2 data-[side=left]:h-auto",
 } as const
 
@@ -55,7 +54,9 @@ function SheetContent({
   ...props
 }: SheetPrimitive.Popup.Props & {
   side?: "top" | "right" | "bottom" | "left"
-  variant?: "default" | "float"
+  // `compact` is a floating panel sized to its content and docked to the
+  // closing edge — for short prompts/confirmations rather than full drawers.
+  variant?: "default" | "float" | "compact"
   showCloseButton?: boolean
 }) {
   return (
@@ -65,8 +66,13 @@ function SheetContent({
         data-slot="sheet-content"
         data-side={side}
         className={cn(
-          "fixed z-50 flex flex-col bg-popover bg-clip-padding text-sm text-popover-foreground shadow-lg transition duration-200 ease-in-out data-ending-style:opacity-0 data-starting-style:opacity-0 data-[side=bottom]:inset-x-0 data-[side=bottom]:bottom-0 data-[side=bottom]:h-auto data-[side=bottom]:border-t data-[side=bottom]:data-ending-style:translate-y-[2.5rem] data-[side=bottom]:data-starting-style:translate-y-[2.5rem] data-[side=left]:inset-y-0 data-[side=left]:left-0 data-[side=left]:h-full data-[side=left]:w-3/4 data-[side=left]:border-r data-[side=left]:data-ending-style:translate-x-[-2.5rem] data-[side=left]:data-starting-style:translate-x-[-2.5rem] data-[side=right]:inset-y-0 data-[side=right]:right-0 data-[side=right]:h-full data-[side=right]:w-11/12 data-[side=right]:border-l data-[side=right]:data-ending-style:translate-x-[2.5rem] data-[side=right]:data-starting-style:translate-x-[2.5rem] data-[side=top]:inset-x-0 data-[side=top]:top-0 data-[side=top]:h-auto data-[side=top]:border-b data-[side=top]:data-ending-style:translate-y-[-2.5rem] data-[side=top]:data-starting-style:translate-y-[-2.5rem] data-[side=left]:sm:max-w-sm data-[side=right]:sm:max-w-md",
+          "fixed z-50 flex flex-col bg-popover bg-clip-padding text-sm text-popover-foreground shadow-lg transition duration-200 ease-in-out data-ending-style:opacity-0 data-starting-style:opacity-0 data-[side=bottom]:inset-x-0 data-[side=bottom]:bottom-0 data-[side=bottom]:h-auto data-[side=bottom]:border-t data-[side=bottom]:data-ending-style:translate-y-[2.5rem] data-[side=bottom]:data-starting-style:translate-y-[2.5rem] data-[side=left]:inset-y-0 data-[side=left]:left-0 data-[side=left]:h-full data-[side=left]:w-3/4 data-[side=left]:border-r data-[side=left]:data-ending-style:translate-x-[-2.5rem] data-[side=left]:data-starting-style:translate-x-[-2.5rem] data-[side=right]:inset-y-0 data-[side=right]:right-0 data-[side=right]:h-full data-[side=right]:w-full data-[side=right]:border-l data-[side=right]:data-ending-style:translate-x-[2.5rem] data-[side=right]:data-starting-style:translate-x-[2.5rem] data-[side=top]:inset-x-0 data-[side=top]:top-0 data-[side=top]:h-auto data-[side=top]:border-b data-[side=top]:data-ending-style:translate-y-[-2.5rem] data-[side=top]:data-starting-style:translate-y-[-2.5rem] data-[side=left]:sm:max-w-sm data-[side=right]:sm:max-w-md",
           variant === "float" && ["rounded-xl", sheetFloatVariants[side]],
+          variant === "compact" && [
+            "rounded-xl",
+            sheetFloatVariants[side],
+            "data-[side=bottom]:h-auto data-[side=left]:top-auto data-[side=left]:h-fit data-[side=right]:top-auto data-[side=right]:h-fit data-[side=right]:border-t data-[side=right]:border-l-0 data-[side=top]:h-auto",
+          ],
           className
         )}
         {...props}
@@ -117,7 +123,7 @@ function SheetFooter({ className, ...props }: React.ComponentProps<"div">) {
     <div
       data-slot="sheet-footer"
       className={cn(
-        "mt-auto flex items-center justify-between border-t p-4",
+        "mt-auto flex items-center justify-end gap-2 border-t p-4",
         className
       )}
       {...props}
@@ -154,6 +160,7 @@ function SheetDescription({
 export {
   Sheet,
   SheetTrigger,
+  SheetOverlay,
   SheetClose,
   SheetContent,
   SheetHeader,

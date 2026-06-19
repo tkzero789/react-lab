@@ -6,16 +6,11 @@ import { CalendarIcon, Link2Icon, MapPinIcon } from "lucide-react"
 import Image from "next/image"
 import React from "react"
 import Loader from "@/components/ui/loader"
-import {
-  Empty,
-  EmptyDescription,
-  EmptyHeader,
-  EmptyTitle,
-} from "@/components/ui/empty"
 import { todoQueries } from "@/lib/query-options"
-import TodoSheet, { Todo } from "./todo-sheet"
+
 import { cn } from "@/lib/utils"
 import { AspectRatio } from "@/components/ui/aspect-ratio"
+import TodoSheet, { Todo } from "./todo-sheet"
 
 function TodoItem({
   todo,
@@ -95,6 +90,7 @@ function TodoItem({
 export default function TodoList() {
   const { data: todos, isPending } = useQuery(todoQueries.list())
   const [selected, setSelected] = React.useState<Todo | null>(null)
+  const [isDelete, setIsDelete] = React.useState<boolean>(false)
 
   if (isPending) {
     return <Loader />
@@ -118,6 +114,8 @@ export default function TodoList() {
         onOpenChange={(open) => {
           if (!open) setSelected(null)
         }}
+        isDelete={isDelete}
+        onDeleteChange={setIsDelete}
       />
     </>
   )

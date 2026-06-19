@@ -5,9 +5,9 @@ import DashboardContainer from "@/components/layout/dashboard-container"
 import { pathClient } from "@/lib/path-client"
 import { Authenticated, AuthLoading, Unauthenticated } from "convex/react"
 import SignInPrompt from "../components/sign-in-prompt"
-import TodoDialog from "./components/todo-sheet"
+
 import TodoList from "./components/todo-list"
-import Container from "@/components/layout/container"
+
 import {
   InputGroup,
   InputGroupAddon,
@@ -24,9 +24,11 @@ import {
   TabsListWrapper,
   TabsTrigger,
 } from "@/components/ui/tabs"
+import TodoSheet from "./components/todo-sheet"
 
 export default function TodoPage() {
   const [isOpen, setIsOpen] = React.useState<boolean>(false)
+
   return (
     <>
       <DashboardBreadcrumb
@@ -73,7 +75,7 @@ export default function TodoPage() {
                   </InputGroupButton>
                 </InputGroupAddon>
               </InputGroup>
-              <TodoDialog open={isOpen} onOpenChange={setIsOpen} />
+              <TodoSheet open={isOpen} onOpenChange={setIsOpen} />
             </TabsListWrapper>
             <TabsContent value="todo">
               <TodoList />

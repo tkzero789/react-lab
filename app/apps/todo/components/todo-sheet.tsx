@@ -9,26 +9,20 @@ import React from "react"
 import { toast } from "sonner"
 import { Button } from "@/components/ui/button"
 import { Spinner } from "@/components/ui/spinner"
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
 import TodoForm, { type TodoFormValues } from "./todo-form"
 import {
   Sheet,
   SheetBody,
+  SheetClose,
   SheetContent,
   SheetFooter,
   SheetHeader,
+  SheetOverlay,
   SheetTitle,
+  SheetTrigger,
 } from "@/components/ui/sheet"
+import { useIsMobile } from "@/hooks/use-mobile"
+import { Trash2Icon } from "lucide-react"
 
 export type Todo = FunctionReturnType<typeof api.todos.list>[number]
 
@@ -39,9 +33,17 @@ type Props = {
   todo?: Todo | null
   open: boolean
   onOpenChange: (open: boolean) => void
+  isDelete?: boolean
+  onDeleteChange?: (isDelete: boolean) => void
 }
 
-export default function TodoSheet({ todo, open, onOpenChange }: Props) {
+export default function TodoSheet({
+  todo,
+  open,
+  onOpenChange,
+  isDelete,
+  onDeleteChange,
+}: Props) {
   // Keep rendering the last todo through the close animation instead of
   // flickering to "Add" mode. Adjusting state during render (not a ref) is the
   // compiler-safe way to remember the previous prop.
@@ -50,6 +52,7 @@ export default function TodoSheet({ todo, open, onOpenChange }: Props) {
     setActiveTodo(todo)
   }
   const isEditing = activeTodo != null
+  const isMobile = useIsMobile()
 
   const generateUploadUrl = useConvexMutation(api.files.generateUploadUrl)
   const addTodo = useConvexMutation(api.todos.add)
@@ -101,13 +104,18 @@ export default function TodoSheet({ todo, open, onOpenChange }: Props) {
 
   const { mutate: removeTodo, isPending: isDeleting } = useMutation({
     mutationFn: useConvexMutation(api.todos.remove),
-    onSuccess: () => onOpenChange(false),
+    onSuccess: () => {
+      if (onDeleteChange) {
+        onDeleteChange(false)
+        onOpenChange(false)
+      }
+    },
     onError: (error) => toast.error(error.message),
   })
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent variant="float">
+      <SheetContent variant="float" side={isMobile ? "bottom" : "right"}>
         <SheetHeader>
           <SheetTitle>{isEditing ? "Edit todo" : "Add todo"}</SheetTitle>
         </SheetHeader>
@@ -121,43 +129,54 @@ export default function TodoSheet({ todo, open, onOpenChange }: Props) {
         </SheetBody>
         <SheetFooter>
           {isEditing && (
-            <AlertDialog>
-              <AlertDialogTrigger
+            <Sheet modal={false} open={isDelete} onOpenChange={onDeleteChange}>
+              <SheetTrigger
                 render={
-                  <Button variant="ghost-destructive" disabled={isDeleting}>
+                  <Button
+                    variant="destructive"
+                    size="icon"
+                    disabled={isDeleting}
+                  >
                     {isDeleting && <Spinner />}
-                    Delete
+                    <Trash2Icon />
                   </Button>
                 }
               />
-              <AlertDialogContent>
-                <AlertDialogHeader>
-                  <AlertDialogTitle>Delete this todo?</AlertDialogTitle>
-                  <AlertDialogDescription>
-                    This action cannot be undone.
-                  </AlertDialogDescription>
-                </AlertDialogHeader>
-                <AlertDialogFooter>
-                  <AlertDialogCancel>Cancel</AlertDialogCancel>
-                  <AlertDialogAction
+              <SheetOverlay forceRender />
+              <SheetContent
+                side={isMobile ? "bottom" : "right"}
+                variant="compact"
+                showCloseButton={false}
+              >
+                <SheetHeader>
+                  <SheetTitle>Delete todo</SheetTitle>
+                </SheetHeader>
+                <SheetFooter className="border-t-0">
+                  <SheetClose
+                    render={
+                      <Button variant="outline" className="flex-1">
+                        Cancel
+                      </Button>
+                    }
+                  ></SheetClose>
+                  <Button
                     variant="destructive"
                     onClick={() => removeTodo({ id: activeTodo._id })}
+                    className="flex-1"
                   >
                     Delete
-                  </AlertDialogAction>
-                </AlertDialogFooter>
-              </AlertDialogContent>
-            </AlertDialog>
+                  </Button>
+                </SheetFooter>
+              </SheetContent>
+            </Sheet>
           )}
-          <Button
-            form={FORM_ID}
-            type="submit"
-            disabled={isSaving}
-            className="sm:ml-auto"
-          >
-            {isSaving && <Spinner data-icon="inline-start" />}
-            {isEditing ? "Save changes" : "Add"}
-          </Button>
+          <div className="ml-auto flex items-center gap-2">
+            <Button variant="muted">Mark complete</Button>
+            <Button form={FORM_ID} type="submit" disabled={isSaving}>
+              {isSaving && <Spinner data-icon="inline-start" />}
+              {isEditing ? "Save changes" : "Add todo"}
+            </Button>
+          </div>
         </SheetFooter>
       </SheetContent>
     </Sheet>

@@ -13,16 +13,25 @@ import TodoForm, { type TodoFormValues } from "./todo-form"
 import {
   Sheet,
   SheetBody,
-  SheetClose,
   SheetContent,
   SheetFooter,
   SheetHeader,
-  SheetOverlay,
   SheetTitle,
-  SheetTrigger,
 } from "@/components/ui/sheet"
 import { useIsMobile } from "@/hooks/use-mobile"
 import { Trash2Icon } from "lucide-react"
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogOverlay,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
 
 export type Todo = FunctionReturnType<typeof api.todos.list>[number]
 
@@ -129,8 +138,8 @@ export default function TodoSheet({
         </SheetBody>
         <SheetFooter>
           {isEditing && (
-            <Sheet modal={false} open={isDelete} onOpenChange={onDeleteChange}>
-              <SheetTrigger
+            <AlertDialog open={isDelete} onOpenChange={onDeleteChange}>
+              <AlertDialogTrigger
                 render={
                   <Button
                     variant="destructive"
@@ -142,33 +151,27 @@ export default function TodoSheet({
                   </Button>
                 }
               />
-              <SheetOverlay forceRender />
-              <SheetContent
-                side={isMobile ? "bottom" : "right"}
-                variant="compact"
-                showCloseButton={false}
-              >
-                <SheetHeader>
-                  <SheetTitle>Delete todo</SheetTitle>
-                </SheetHeader>
-                <SheetFooter className="border-t-0">
-                  <SheetClose
-                    render={
-                      <Button variant="outline" className="flex-1">
-                        Cancel
-                      </Button>
-                    }
-                  ></SheetClose>
-                  <Button
+              <AlertDialogOverlay forceRender />
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Delete todo</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    Are you sure you want to delete this todo? This action
+                    cannot be undone.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+
+                  <AlertDialogAction
                     variant="destructive"
                     onClick={() => removeTodo({ id: activeTodo._id })}
-                    className="flex-1"
                   >
                     Delete
-                  </Button>
-                </SheetFooter>
-              </SheetContent>
-            </Sheet>
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
           )}
           <div className="ml-auto flex items-center gap-2">
             <Button variant="muted">Mark complete</Button>

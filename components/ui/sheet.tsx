@@ -54,8 +54,6 @@ function SheetContent({
   ...props
 }: SheetPrimitive.Popup.Props & {
   side?: "top" | "right" | "bottom" | "left"
-  // `compact` is a floating panel sized to its content and docked to the
-  // closing edge — for short prompts/confirmations rather than full drawers.
   variant?: "default" | "float" | "compact"
   showCloseButton?: boolean
 }) {

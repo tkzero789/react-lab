@@ -83,7 +83,7 @@ function SheetContent({
             data-slot="sheet-close"
             render={
               <Button
-                variant="ghost"
+                variant="muted"
                 className="absolute top-3 right-3"
                 size="icon-sm"
               >

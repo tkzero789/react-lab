@@ -27,7 +27,7 @@ function TodoItem({
         type="button"
         onClick={() => onSelect(todo)}
         className={cn(
-          "flex w-full flex-col gap-2 rounded-xl border bg-card p-4 text-left transition-colors hover:border-ring",
+          "flex w-full press flex-col gap-2 rounded-xl border bg-card p-4 text-left hover:border-ring",
           selected?._id === todo._id && "border-ring"
         )}
       >
@@ -91,6 +91,8 @@ export default function TodoList() {
   const { data: todos, isPending } = useQuery(todoQueries.list())
   const [selected, setSelected] = React.useState<Todo | null>(null)
   const [isDelete, setIsDelete] = React.useState<boolean>(false)
+
+  console.log(selected)
 
   if (isPending) {
     return <Loader />

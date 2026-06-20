@@ -38,7 +38,7 @@ export default function GroceryDialog() {
         className="fixed right-8 bottom-8"
         render={
           <Button>
-            <Plus /> Add
+            <Plus data-icon="inline-start" /> Add
           </Button>
         }
       ></DialogTrigger>

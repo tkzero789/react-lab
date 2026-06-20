@@ -32,9 +32,6 @@ import { FileMetadata, FileWithPreview } from "@/app/hooks/use-file-upload"
 
 type TodoDoc = FunctionReturnType<typeof api.todos.list>[number]
 
-// The values the form collects. Newly picked files are handed up raw (the caller
-// owns uploading them); `imageIds` are existing storage ids to keep. The final
-// image set the caller persists is `imageIds` + the ids of the uploaded `files`.
 export type TodoFormValues = {
   text: string
   date: number
@@ -57,31 +54,7 @@ type Todo = {
   url: string
 }
 
-function OptionButton({
-  active,
-  onToggle,
-  icon: Icon,
-}: {
-  active: boolean
-  onToggle: () => void
-  icon: LucideIcon
-}) {
-  return (
-    <Button
-      nativeButton={true}
-      variant="ghost"
-      size="icon-sm"
-      onClick={onToggle}
-      className={cn(active && "bg-muted-foreground/15")}
-    >
-      <Icon />
-    </Button>
-  )
-}
-
 export default function TodoForm({ id, todo, onSubmit }: Props) {
-  // Seed FileUpload with the existing stored images. Their `id` is the storage
-  // id, which is how we tell kept-existing images apart from fresh picks.
   const initialFiles: FileMetadata[] =
     todo?.imageObject.flatMap((item) =>
       item
@@ -130,8 +103,6 @@ export default function TodoForm({ id, todo, onSubmit }: Props) {
       return
     }
 
-    // Split the current set: fresh picks are real Files to upload; existing
-    // images are FileMetadata whose `id` is the storage id to keep.
     const activeImages = images[0] ? images : []
     const files: File[] = []
     const imageIds: string[] = []

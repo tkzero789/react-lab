@@ -38,7 +38,6 @@ export type Todo = FunctionReturnType<typeof api.todos.list>[number]
 const FORM_ID = "todoForm"
 
 type Props = {
-  // `null`/`undefined` => create mode; a todo => edit mode.
   todo?: Todo | null
   open: boolean
   onOpenChange: (open: boolean) => void
@@ -53,14 +52,22 @@ export default function TodoSheet({
   isDelete,
   onDeleteChange,
 }: Props) {
-  // Keep rendering the last todo through the close animation instead of
-  // flickering to "Add" mode. Adjusting state during render (not a ref) is the
-  // compiler-safe way to remember the previous prop.
   const [activeTodo, setActiveTodo] = React.useState(todo)
-  if (todo && todo._id !== activeTodo?._id) {
-    setActiveTodo(todo)
+  const [isEditing, setIsEditing] = React.useState<boolean>(false)
+
+  const [prevTodoId, setPrevTodoId] = React.useState(todo?._id)
+  if (todo?._id !== prevTodoId) {
+    setPrevTodoId(todo?._id)
+    if (todo) {
+      setActiveTodo(todo)
+    }
+    setIsEditing(false)
   }
-  const isEditing = activeTodo != null
+
+  console.log("activeTodo", activeTodo?._id)
+  console.log("prevTodoId", prevTodoId)
+
+  const isSelected = activeTodo != null
   const isMobile = useIsMobile()
 
   const generateUploadUrl = useConvexMutation(api.files.generateUploadUrl)
@@ -80,11 +87,8 @@ export default function TodoSheet({
     return storageId
   }
 
-  // One mutation covers the whole submit (optional upload + add/update), so a
-  // single `isSaving` drives the Save button.
   const { mutate: submitTodo, isPending: isSaving } = useMutation({
     mutationFn: async (values: TodoFormValues) => {
-      // Upload the fresh picks, then persist kept-existing ids plus the new ones.
       const uploadedIds = await Promise.all(values.files.map(uploadFile))
       const image = [...(values.imageIds as Id<"_storage">[]), ...uploadedIds]
 
@@ -126,7 +130,7 @@ export default function TodoSheet({
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent variant="float" side={isMobile ? "bottom" : "right"}>
         <SheetHeader>
-          <SheetTitle>{isEditing ? "Edit todo" : "Add todo"}</SheetTitle>
+          <SheetTitle>{isSelected ? "Edit todo" : "Add todo"}</SheetTitle>
         </SheetHeader>
         <SheetBody className="flex flex-1 flex-col p-0">
           <TodoForm
@@ -137,7 +141,7 @@ export default function TodoSheet({
           />
         </SheetBody>
         <SheetFooter>
-          {isEditing && (
+          {isSelected && (
             <AlertDialog open={isDelete} onOpenChange={onDeleteChange}>
               <AlertDialogTrigger
                 render={
@@ -174,11 +178,23 @@ export default function TodoSheet({
             </AlertDialog>
           )}
           <div className="ml-auto flex items-center gap-2">
-            <Button variant="muted">Mark complete</Button>
-            <Button form={FORM_ID} type="submit" disabled={isSaving}>
-              {isSaving && <Spinner data-icon="inline-start" />}
-              {isEditing ? "Save changes" : "Add todo"}
-            </Button>
+            {isSelected && !isEditing && (
+              <Button variant="muted" onClick={() => setIsEditing(true)}>
+                Edit
+              </Button>
+            )}
+            {isSelected && isEditing && (
+              <Button form={FORM_ID} type="submit" disabled={isSaving}>
+                {isSaving && <Spinner />}
+                Save changes
+              </Button>
+            )}
+            {!isSelected && !isEditing && (
+              <Button form={FORM_ID} type="submit" disabled={isSaving}>
+                {isSaving && <Spinner />}
+                Add todo
+              </Button>
+            )}
           </div>
         </SheetFooter>
       </SheetContent>

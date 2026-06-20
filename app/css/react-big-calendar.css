@@ -50,7 +50,7 @@
 }
 
 .rbc-date-cell > .rbc-button-link {
-  @apply ml-1! mt-1! flex size-6 items-center justify-center rounded-full text-sm transition hover:bg-primary hover:text-primary-foreground;
+  @apply mt-1! ml-1! flex size-6 items-center justify-center rounded-full text-sm transition hover:bg-primary hover:text-primary-foreground;
 }
 
 .rbc-show-more {
@@ -66,5 +66,5 @@
 }
 
 .rbc-overlay > .rbc-event {
-  @apply mt-0 [&:not(:last-child)]:mb-1;
+  @apply mt-0 not-last:mb-1;
 }

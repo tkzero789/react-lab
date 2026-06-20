@@ -25,6 +25,7 @@ import {
   TabsTrigger,
 } from "@/components/ui/tabs"
 import TodoSheet from "./components/todo-sheet"
+import { Button } from "@/components/ui/button"
 
 export default function TodoPage() {
   const [isOpen, setIsOpen] = React.useState<boolean>(false)
@@ -60,21 +61,13 @@ export default function TodoPage() {
                   Completed
                 </TabsTrigger>
               </TabsList>
-              <InputGroup
+              <Button
                 onClick={() => setIsOpen(true)}
-                className="w-40 lg:w-60"
+                className="active:scale-[0.95]"
               >
-                <InputGroupInput
-                  readOnly
-                  placeholder="Enter todo"
-                  className="cursor-pointer"
-                />
-                <InputGroupAddon align="inline-end">
-                  <InputGroupButton size="icon-sm">
-                    <PlusIcon />
-                  </InputGroupButton>
-                </InputGroupAddon>
-              </InputGroup>
+                <PlusIcon data-icon="inline-start" />
+                Add Todo
+              </Button>
               <TodoSheet open={isOpen} onOpenChange={setIsOpen} />
             </TabsListWrapper>
             <TabsContent value="todo">

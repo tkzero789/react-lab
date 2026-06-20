@@ -29,7 +29,7 @@ export default function AddExercise() {
       <DialogTrigger
         render={
           <Button>
-            <Plus />
+            <Plus data-icon="inline-start" />
             Add Exercise
           </Button>
         }

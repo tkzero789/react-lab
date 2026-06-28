@@ -32,8 +32,10 @@ import {
 } from "@/components/ui/dropdown-menu"
 import {
   Dialog,
-  DialogBody,
+  DialogClose,
   DialogContent,
+  DialogDescription,
+  DialogFooter,
   DialogHeader,
 } from "@/components/ui/dialog"
 
@@ -184,14 +186,29 @@ export default function ExerciseList() {
         </div>
       )}
       <Dialog
+        type="alert"
         open={deleting !== null}
         onOpenChange={(open) => {
           !open && setDeleting(null)
         }}
       >
-        <DialogContent>
-          <DialogHeader>Delete {deleting?.name}</DialogHeader>
-          <DialogBody>check</DialogBody>
+        <DialogContent showCloseButton={false}>
+          <DialogHeader>
+            <DialogDescription>Delete {deleting?.name}?</DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <DialogClose render={<Button variant="outline">Cancel</Button>} />
+            <Button
+              variant="destructive"
+              onClick={() => {
+                if (deleting) {
+                  handleRemove(deleting?.id)
+                }
+              }}
+            >
+              Delete
+            </Button>
+          </DialogFooter>
         </DialogContent>
       </Dialog>
     </div>

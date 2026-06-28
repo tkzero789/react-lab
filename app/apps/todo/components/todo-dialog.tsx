@@ -2,7 +2,6 @@
 
 import { api } from "@/convex/_generated/api"
 import { Id } from "@/convex/_generated/dataModel"
-import type { FunctionReturnType } from "convex/server"
 import { useConvexMutation } from "@convex-dev/react-query"
 import { useMutation } from "@tanstack/react-query"
 import React from "react"
@@ -10,30 +9,22 @@ import { toast } from "sonner"
 import { Button } from "@/components/ui/button"
 import { Spinner } from "@/components/ui/spinner"
 import TodoForm, { type TodoFormValues } from "./todo-form"
-import {
-  Sheet,
-  SheetBody,
-  SheetContent,
-  SheetFooter,
-  SheetHeader,
-  SheetTitle,
-} from "@/components/ui/sheet"
 import { useIsMobile } from "@/hooks/use-mobile"
 import { Trash2Icon } from "lucide-react"
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogOverlay,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
-
-export type Todo = FunctionReturnType<typeof api.todos.list>[number]
+  Dialog,
+  DialogBody,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogOverlay,
+  DialogPortal,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
+import { Todo } from "../page"
 
 const FORM_ID = "todoForm"
 
@@ -45,7 +36,7 @@ type Props = {
   onDeleteChange?: (isDelete: boolean) => void
 }
 
-export default function TodoSheet({
+export default function TodoDialog({
   todo,
   open,
   onOpenChange,
@@ -53,7 +44,6 @@ export default function TodoSheet({
   onDeleteChange,
 }: Props) {
   const [activeTodo, setActiveTodo] = React.useState(todo)
-  const [isEditing, setIsEditing] = React.useState<boolean>(false)
 
   const [prevTodoId, setPrevTodoId] = React.useState(todo?._id)
   if (todo?._id !== prevTodoId) {
@@ -61,14 +51,12 @@ export default function TodoSheet({
     if (todo) {
       setActiveTodo(todo)
     }
-    setIsEditing(false)
   }
 
   console.log("activeTodo", activeTodo?._id)
   console.log("prevTodoId", prevTodoId)
 
   const isSelected = activeTodo != null
-  const isMobile = useIsMobile()
 
   const generateUploadUrl = useConvexMutation(api.files.generateUploadUrl)
   const addTodo = useConvexMutation(api.todos.add)
@@ -127,23 +115,23 @@ export default function TodoSheet({
   })
 
   return (
-    <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent variant="float" side={isMobile ? "bottom" : "right"}>
-        <SheetHeader>
-          <SheetTitle>{isSelected ? "Edit todo" : "Add todo"}</SheetTitle>
-        </SheetHeader>
-        <SheetBody className="flex flex-1 flex-col p-0">
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>{isSelected ? "Edit todo" : "Add todo"}</DialogTitle>
+        </DialogHeader>
+        <DialogBody className="flex flex-1 flex-col p-0">
           <TodoForm
             key={activeTodo?._id ?? "new"}
             id={FORM_ID}
             todo={activeTodo ?? undefined}
             onSubmit={(values) => submitTodo(values)}
           />
-        </SheetBody>
-        <SheetFooter>
+        </DialogBody>
+        <DialogFooter>
           {isSelected && (
-            <AlertDialog open={isDelete} onOpenChange={onDeleteChange}>
-              <AlertDialogTrigger
+            <Dialog type="alert" open={isDelete} onOpenChange={onDeleteChange}>
+              <DialogTrigger
                 render={
                   <Button
                     variant="destructive"
@@ -155,49 +143,37 @@ export default function TodoSheet({
                   </Button>
                 }
               />
-              <AlertDialogOverlay forceRender />
-              <AlertDialogContent>
-                <AlertDialogHeader>
-                  <AlertDialogTitle>Delete todo</AlertDialogTitle>
-                  <AlertDialogDescription>
-                    Are you sure you want to delete this todo? This action
-                    cannot be undone.
-                  </AlertDialogDescription>
-                </AlertDialogHeader>
-                <AlertDialogFooter>
-                  <AlertDialogCancel>Cancel</AlertDialogCancel>
-
-                  <AlertDialogAction
-                    variant="destructive"
-                    onClick={() => removeTodo({ id: activeTodo._id })}
-                  >
-                    Delete
-                  </AlertDialogAction>
-                </AlertDialogFooter>
-              </AlertDialogContent>
-            </AlertDialog>
+              <DialogPortal>
+                <DialogOverlay forceRender />
+                <DialogContent showCloseButton={false}>
+                  <DialogHeader>
+                    <DialogDescription>
+                      Delete this todo from your list?
+                    </DialogDescription>
+                  </DialogHeader>
+                  <DialogFooter>
+                    <DialogClose
+                      render={<Button variant="outline">Cancel</Button>}
+                    />
+                    <Button
+                      variant="destructive"
+                      onClick={() => removeTodo({ id: activeTodo._id })}
+                    >
+                      Delete
+                    </Button>
+                  </DialogFooter>
+                </DialogContent>
+              </DialogPortal>
+            </Dialog>
           )}
           <div className="ml-auto flex items-center gap-2">
-            {isSelected && !isEditing && (
-              <Button variant="muted" onClick={() => setIsEditing(true)}>
-                Edit
-              </Button>
-            )}
-            {isSelected && isEditing && (
-              <Button form={FORM_ID} type="submit" disabled={isSaving}>
-                {isSaving && <Spinner />}
-                Save changes
-              </Button>
-            )}
-            {!isSelected && !isEditing && (
-              <Button form={FORM_ID} type="submit" disabled={isSaving}>
-                {isSaving && <Spinner />}
-                Add todo
-              </Button>
-            )}
+            <Button form={FORM_ID} type="submit" disabled={isSaving}>
+              {isSaving && <Spinner />}
+              {isSelected ? "Save changes" : "Add todo"}
+            </Button>
           </div>
-        </SheetFooter>
-      </SheetContent>
-    </Sheet>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   )
 }

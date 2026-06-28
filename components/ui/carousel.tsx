@@ -6,7 +6,6 @@ import { cn } from "@/lib/utils"
 import { EmblaCarouselType } from "embla-carousel"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 import { Button } from "./button"
-import "@/app/css/carousel.css"
 
 const Carousel = React.forwardRef<
   HTMLDivElement,

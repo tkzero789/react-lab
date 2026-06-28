@@ -5,15 +5,7 @@ import DashboardContainer from "@/components/layout/dashboard-container"
 import { pathClient } from "@/lib/path-client"
 import { Authenticated, AuthLoading, Unauthenticated } from "convex/react"
 import SignInPrompt from "../components/sign-in-prompt"
-
 import TodoList from "./components/todo-list"
-
-import {
-  InputGroup,
-  InputGroupAddon,
-  InputGroupButton,
-  InputGroupInput,
-} from "@/components/ui/input-group"
 import { PlusIcon } from "lucide-react"
 import React from "react"
 import Loader from "@/components/ui/loader"
@@ -24,8 +16,12 @@ import {
   TabsListWrapper,
   TabsTrigger,
 } from "@/components/ui/tabs"
-import TodoSheet from "./components/todo-sheet"
 import { Button } from "@/components/ui/button"
+import TodoDialog from "./components/todo-dialog"
+import { FunctionReturnType } from "convex/server"
+import { api } from "@/convex/_generated/api"
+
+export type Todo = FunctionReturnType<typeof api.todos.list>[number]
 
 export default function TodoPage() {
   const [isOpen, setIsOpen] = React.useState<boolean>(false)
@@ -68,7 +64,7 @@ export default function TodoPage() {
                 <PlusIcon data-icon="inline-start" />
                 Add Todo
               </Button>
-              <TodoSheet open={isOpen} onOpenChange={setIsOpen} />
+              <TodoDialog open={isOpen} onOpenChange={setIsOpen} />
             </TabsListWrapper>
             <TabsContent value="todo">
               <TodoList />

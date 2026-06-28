@@ -2,6 +2,10 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
+@import "./carousel.css";
+@import "./react-big-calendar.css";
+@import "./animation.css";
+
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
@@ -120,7 +124,6 @@
   --tracking-normal: 0em;
   --spacing: 0.25rem;
 
-  /* Active-press feedback scale. */
   --scale-pressed: 0.98;
 }
 
@@ -129,15 +132,15 @@
   --foreground: oklch(0.985 0 0);
   --card: oklch(0.205 0 0);
   --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.269 0 0);
+  --popover: oklch(0.22 0 0);
   --popover-foreground: oklch(0.985 0 0);
   --primary: oklch(0.922 0 0);
   --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
+  --secondary: oklch(0.32 0 0);
   --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
+  --muted: oklch(0.3 0 0);
   --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.371 0 0);
+  --accent: oklch(0.32 0 0);
   --accent-foreground: oklch(0.985 0 0);
   --destructive: oklch(0.7038 0.1878 22.07);
   --destructive-foreground: oklch(0.985 0 0);
@@ -215,43 +218,4 @@
   h3 {
     @apply text-lg;
   }
-
-  /* Loader */
-  .loader {
-    width: fit-content;
-    font-size: var(--text-6xl);
-    font-weight: var(--font-weight-semibold);
-    font-family: system-ui, sans-serif;
-    -webkit-text-stroke: 1px var(--foreground);
-    color: transparent;
-    -webkit-text-fill-color: transparent;
-    background: conic-gradient(var(--foreground) 0 0) 0 / 0% 100% no-repeat;
-    -webkit-background-clip: text;
-    background-clip: text;
-    letter-spacing: var(--tracking-wide);
-    animation: backgroundFill 1s linear infinite;
-  }
-  @keyframes backgroundFill {
-    to {
-      background-size: 120% 100%;
-    }
-  }
-
-  /* Animation */
-  .fadeIn {
-    animation: fadeIn 150ms ease-in-out;
-  }
-  @keyframes fadeIn {
-    0% {
-      opacity: 0.5;
-    }
-    100% {
-      opacity: 1;
-    }
-  }
-}
-
-/* Press feedback */
-@utility press {
-  @apply transition-transform will-change-transform active:scale-(--scale-pressed);
 }

@@ -4,7 +4,6 @@ import { Roboto } from "next/font/google"
 import { Toaster } from "@/components/ui/sonner"
 import { ConvexClientProvider } from "@/app/convex-client-provider"
 import "./css/globals.css"
-import "./css/react-big-calendar.css"
 
 const roboto = Roboto({ subsets: ["latin"], weight: ["400", "500", "600"] })
 

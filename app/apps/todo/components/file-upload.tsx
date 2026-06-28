@@ -86,7 +86,7 @@ export default function FileUpload({
       {canAddMore && (
         <div
           className={cn(
-            "flex aspect-square w-16 press cursor-pointer items-center justify-center rounded-xl border border-dashed bg-background transition-colors hover:bg-muted",
+            "flex aspect-square w-16 pressable cursor-pointer items-center justify-center rounded-xl border border-dashed bg-background transition-colors hover:bg-muted",
             isDragging
               ? "border-primary bg-primary/5"
               : "border-muted-foreground/25 hover:border-muted-foreground/20",

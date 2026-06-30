@@ -18,14 +18,14 @@ import { format } from "date-fns"
 import FileUpload from "./file-upload"
 import { FileMetadata, FileWithPreview } from "@/app/hooks/use-file-upload"
 import { Textarea } from "@/components/ui/textarea"
-import { Todo, type TodoForm } from "../types"
+import { Todo, TodoFormValues } from "../types"
 import { Button, buttonVariants } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 
 type Props = {
   id: string
   todo?: Todo
-  onSubmit: (values: TodoForm) => void
+  onSubmit: (values: TodoFormValues) => void
 }
 
 export default function TodoForm({ id, todo, onSubmit }: Props) {
@@ -53,27 +53,21 @@ export default function TodoForm({ id, todo, onSubmit }: Props) {
     initialFiles.map((file) => ({ file, id: file.id, preview: file.url }))
   )
 
-  const [form, setForm] = React.useState<TodoForm>({
+  const [form, setForm] = React.useState({
     text: todo?.text ?? "",
-    date: todo?.date ?? date?.getTime(),
     location: todo?.location ?? "",
   })
 
-  function handleOnChange(key: keyof Todo, value: string) {
+  function handleOnChange(key: "text" | "location", value: string) {
     setForm((prev) => ({
       ...prev,
       [key]: value,
     }))
   }
 
-  function handleDateSelect(newDate: Date) {
-    setDate(newDate)
-    setForm((prev) => ({ ...prev, date: newDate.getTime() }))
-  }
-
   function handleSubmit(e: React.SubmitEvent<HTMLFormElement>) {
     e.preventDefault()
-    if (!form.text.trim()) {
+    if (!form.text.trim() || !date) {
       return
     }
 
@@ -87,7 +81,7 @@ export default function TodoForm({ id, todo, onSubmit }: Props) {
 
     onSubmit({
       text: form.text,
-      date: date?.getTime() || 0,
+      date: date.getTime(),
       location: form.location,
       files,
       imageIds,
@@ -127,6 +121,10 @@ export default function TodoForm({ id, todo, onSubmit }: Props) {
                   }),
                   "absolute top-1/2 right-3 z-10 hidden -translate-y-1/2 border-0 group-hover:flex [&_svg]:text-destructive!"
                 )}
+                onClick={(e) => {
+                  e.stopPropagation()
+                  setDate(undefined)
+                }}
               >
                 <MinusCircleIcon />
               </div>
@@ -139,7 +137,7 @@ export default function TodoForm({ id, todo, onSubmit }: Props) {
             mode="single"
             selected={date}
             onSelect={(date) => {
-              handleDateSelect(date)
+              setDate(date)
               setIsDateOpen(false)
             }}
           />

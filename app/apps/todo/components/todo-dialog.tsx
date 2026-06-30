@@ -8,8 +8,8 @@ import React from "react"
 import { toast } from "sonner"
 import { Button } from "@/components/ui/button"
 import { Spinner } from "@/components/ui/spinner"
-import TodoForm, { type TodoFormValues } from "./todo-form"
-import { useIsMobile } from "@/hooks/use-mobile"
+import TodoForm from "./todo-form"
+
 import { Trash2Icon } from "lucide-react"
 import {
   Dialog,
@@ -24,7 +24,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
-import { Todo } from "../page"
+import { Todo, TodoFormValues } from "../types"
 
 const FORM_ID = "todoForm"
 
@@ -53,9 +53,6 @@ export default function TodoDialog({
     }
   }
 
-  console.log("activeTodo", activeTodo?._id)
-  console.log("prevTodoId", prevTodoId)
-
   const isSelected = activeTodo != null
 
   const generateUploadUrl = useConvexMutation(api.files.generateUploadUrl)
@@ -77,8 +74,11 @@ export default function TodoDialog({
 
   const { mutate: submitTodo, isPending: isSaving } = useMutation({
     mutationFn: async (values: TodoFormValues) => {
-      const uploadedIds = await Promise.all(values.files.map(uploadFile))
-      const image = [...(values.imageIds as Id<"_storage">[]), ...uploadedIds]
+      const uploadedIds = await Promise.all(values.files?.map(uploadFile) ?? [])
+      const image = [
+        ...(values.imageIds ?? []),
+        ...uploadedIds,
+      ] as Id<"_storage">[]
 
       if (activeTodo) {
         await updateTodo({
@@ -86,7 +86,6 @@ export default function TodoDialog({
           text: values.text,
           date: values.date,
           location: values.location,
-          url: values.url,
           image,
         })
       } else {
@@ -94,7 +93,6 @@ export default function TodoDialog({
           text: values.text,
           date: values.date,
           location: values.location,
-          url: values.url,
           image,
         })
       }

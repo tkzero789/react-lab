@@ -37,12 +37,6 @@ export default function TodoItem({
             <MapPinIcon className="size-4 shrink-0" /> {todo.location}
           </div>
         )}
-        {todo.url && (
-          <div className="flex items-center gap-4 text-sm">
-            <Link2Icon className="size-4 shrink-0" />{" "}
-            <div className="truncate">{todo.url}</div>
-          </div>
-        )}
         <div className="flex w-full items-center gap-2">
           {todo.imageObject.map((image, index) => {
             return image?.url ? (

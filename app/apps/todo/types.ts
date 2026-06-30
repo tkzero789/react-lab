@@ -3,9 +3,9 @@ import { FunctionReturnType } from "convex/server"
 
 export type Todo = FunctionReturnType<typeof api.todos.list>[number]
 
-export type TodoForm = {
+export type TodoFormValues = {
   text: string
-  date: number | undefined
+  date: number
   location: string
   files?: File[]
   imageIds?: string[]

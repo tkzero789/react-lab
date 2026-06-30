@@ -1,9 +1,9 @@
 import { CalendarIcon, Link2Icon, MapPinIcon } from "lucide-react"
-import { Todo } from "../page"
 import { format } from "date-fns"
 import { AspectRatio } from "@/components/ui/aspect-ratio"
 import Image from "next/image"
 import { cn } from "@/lib/utils"
+import { Todo } from "../types"
 
 export default function TodoItem({
   todo,

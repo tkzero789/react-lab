@@ -18,10 +18,6 @@ import {
 } from "@/components/ui/tabs"
 import { Button } from "@/components/ui/button"
 import TodoDialog from "./components/todo-dialog"
-import { FunctionReturnType } from "convex/server"
-import { api } from "@/convex/_generated/api"
-
-export type Todo = FunctionReturnType<typeof api.todos.list>[number]
 
 export default function TodoPage() {
   const [isOpen, setIsOpen] = React.useState<boolean>(false)

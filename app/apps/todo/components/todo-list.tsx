@@ -5,8 +5,8 @@ import React from "react"
 import Loader from "@/components/ui/loader"
 import { todoQueries } from "@/lib/query-options"
 import TodoDialog from "./todo-dialog"
-import { Todo } from "../page"
 import TodoItem from "./todo-item"
+import { Todo } from "../types"
 
 export default function TodoList() {
   const { data: todos, isPending } = useQuery(todoQueries.list())

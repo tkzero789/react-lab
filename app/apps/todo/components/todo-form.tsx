@@ -1,19 +1,7 @@
 "use client"
 
-import { api } from "@/convex/_generated/api"
 import React from "react"
-import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
-import {
-  CalendarIcon,
-  ImageIcon,
-  Link2Icon,
-  LucideIcon,
-  MapPinIcon,
-  MinusCircleIcon,
-} from "lucide-react"
-import { cn } from "@/lib/utils"
-import type { FunctionReturnType } from "convex/server"
+import { CalendarIcon, MapPinIcon, MinusCircleIcon } from "lucide-react"
 import {
   InputGroup,
   InputGroupAddon,
@@ -29,29 +17,15 @@ import { Calendar } from "@/components/ui/calendar"
 import { format } from "date-fns"
 import FileUpload from "./file-upload"
 import { FileMetadata, FileWithPreview } from "@/app/hooks/use-file-upload"
-
-type TodoDoc = FunctionReturnType<typeof api.todos.list>[number]
-
-export type TodoFormValues = {
-  text: string
-  date: number
-  location: string
-  url: string
-  files: File[]
-  imageIds: string[]
-}
+import { Textarea } from "@/components/ui/textarea"
+import { Todo, type TodoForm } from "../types"
+import { Button, buttonVariants } from "@/components/ui/button"
+import { cn } from "@/lib/utils"
 
 type Props = {
   id: string
-  todo?: TodoDoc
-  onSubmit: (values: TodoFormValues) => void
-}
-
-type Todo = {
-  text: string
-  date: number | undefined
-  location: string
-  url: string
+  todo?: Todo
+  onSubmit: (values: TodoForm) => void
 }
 
 export default function TodoForm({ id, todo, onSubmit }: Props) {
@@ -70,6 +44,7 @@ export default function TodoForm({ id, todo, onSubmit }: Props) {
         : []
     ) ?? []
 
+  const [isDateOpen, setIsDateOpen] = React.useState<boolean>(false)
   const [date, setDate] = React.useState<Date | undefined>(
     todo?.date ? new Date(todo.date) : undefined
   )
@@ -78,11 +53,10 @@ export default function TodoForm({ id, todo, onSubmit }: Props) {
     initialFiles.map((file) => ({ file, id: file.id, preview: file.url }))
   )
 
-  const [form, setForm] = React.useState<Todo>({
+  const [form, setForm] = React.useState<TodoForm>({
     text: todo?.text ?? "",
     date: todo?.date ?? date?.getTime(),
     location: todo?.location ?? "",
-    url: todo?.url ?? "",
   })
 
   function handleOnChange(key: keyof Todo, value: string) {
@@ -115,7 +89,6 @@ export default function TodoForm({ id, todo, onSubmit }: Props) {
       text: form.text,
       date: date?.getTime() || 0,
       location: form.location,
-      url: form.url,
       files,
       imageIds,
     })
@@ -127,54 +100,51 @@ export default function TodoForm({ id, todo, onSubmit }: Props) {
       onSubmit={handleSubmit}
       className="flex flex-col items-center gap-2 p-4"
     >
-      <Input
+      <Textarea
         placeholder="Todo"
         value={form.text}
         onChange={(e) => handleOnChange("text", e.target.value)}
+        className="resize-none"
       />
 
-      <InputGroup className="group">
-        <InputGroupAddon className="ml-0! pl-2">
-          <Popover>
-            <PopoverTrigger
-              render={
-                <InputGroupButton size="icon-xs">
-                  <CalendarIcon />
-                </InputGroupButton>
-              }
-            />
-            <PopoverContent align="start">
-              <Calendar
-                required
-                mode="single"
-                selected={date}
-                onSelect={handleDateSelect}
-              />
-            </PopoverContent>
-          </Popover>
-        </InputGroupAddon>
-        <InputGroupInput
-          readOnly
-          placeholder="Date"
-          value={date ? format(date, "EEE, MMM d, yyyy") : ""}
-          className="pl-2"
+      <Popover open={isDateOpen} onOpenChange={setIsDateOpen}>
+        <PopoverTrigger
+          render={
+            <Button
+              variant="input"
+              className={cn(
+                "group relative w-full",
+                isDateOpen && "ring ring-ring"
+              )}
+            >
+              <CalendarIcon data-icon="inline-start" />
+              {date ? format(date, "EEE, MMM d, yyyy") : "Date"}
+              <div
+                className={cn(
+                  buttonVariants({
+                    variant: "ghost-destructive",
+                    size: "icon-xs",
+                  }),
+                  "absolute top-1/2 right-3 z-10 hidden -translate-y-1/2 border-0 group-hover:flex [&_svg]:text-destructive!"
+                )}
+              >
+                <MinusCircleIcon />
+              </div>
+            </Button>
+          }
         />
-        <InputGroupAddon align="inline-end">
-          <InputGroupButton
-            variant="ghost-destructive"
-            size="icon-xs"
-            onClick={() => {
-              setForm((prev) => ({
-                ...prev,
-                date: undefined,
-              }))
-              setDate(undefined)
+        <PopoverContent align="start">
+          <Calendar
+            required
+            mode="single"
+            selected={date}
+            onSelect={(date) => {
+              handleDateSelect(date)
+              setIsDateOpen(false)
             }}
-          >
-            <MinusCircleIcon className="lg:hidden lg:group-hover:block" />
-          </InputGroupButton>
-        </InputGroupAddon>
-      </InputGroup>
+          />
+        </PopoverContent>
+      </Popover>
 
       <InputGroup className="group">
         <InputGroupAddon>
@@ -201,37 +171,10 @@ export default function TodoForm({ id, todo, onSubmit }: Props) {
         </InputGroupAddon>
       </InputGroup>
 
-      <InputGroup className="group">
-        <InputGroupAddon>
-          <Link2Icon />
-        </InputGroupAddon>
-        <InputGroupInput
-          placeholder="Url"
-          value={form.url}
-          onChange={(e) => handleOnChange("url", e.target.value)}
-        />
-        <InputGroupAddon align="inline-end">
-          <InputGroupButton
-            variant="ghost-destructive"
-            size="icon-xs"
-            className="text-destructive"
-            onClick={() =>
-              setForm((prev) => ({
-                ...prev,
-                url: "",
-              }))
-            }
-          >
-            <MinusCircleIcon className="lg:hidden lg:group-hover:block" />
-          </InputGroupButton>
-        </InputGroupAddon>
-      </InputGroup>
-
-      <div className="grid w-full grid-cols-4 gap-2 md:grid-cols-5">
+      <div className="flex w-full flex-col gap-2">
         <FileUpload
           maxFiles={10}
           onFilesChange={setImages}
-          icon={ImageIcon}
           initialFiles={initialFiles}
           className="w-full"
         />

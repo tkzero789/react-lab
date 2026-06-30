@@ -34,7 +34,6 @@ export const add = mutation({
     text: v.string(),
     date: v.number(),
     location: v.string(),
-    url: v.string(),
     image: v.optional(v.array(v.id("_storage"))),
   },
   handler: async (ctx, args) => {
@@ -47,7 +46,6 @@ export const add = mutation({
       status: "todo",
       date: args.date,
       location: args.location,
-      url: args.url,
       image: args.image ? args.image : [],
     })
   },
@@ -59,7 +57,6 @@ export const update = mutation({
     text: v.string(),
     date: v.number(),
     location: v.string(),
-    url: v.string(),
     image: v.optional(v.array(v.id("_storage"))),
   },
   handler: async (ctx, args) => {
@@ -75,7 +72,6 @@ export const update = mutation({
       text: args.text,
       date: args.date,
       location: args.location,
-      url: args.url,
       ...(args.image !== undefined && { image: args.image }),
     })
   },

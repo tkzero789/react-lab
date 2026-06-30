@@ -39,10 +39,12 @@ import {
   DialogHeader,
 } from "@/components/ui/dialog"
 
-const ALL = "all"
+const ALL = "All"
 
 export default function ExerciseList() {
   const exercises = useQuery(api.exercises.list) ?? []
+  const muscleGroups = exercises
+  console.log(muscleGroups)
   const removeExercise = useMutation(api.exercises.remove)
 
   const [search, setSearch] = React.useState<string>("")
@@ -65,6 +67,8 @@ export default function ExerciseList() {
     return matchesName && matchesMuscle
   })
 
+  console.log(muscle)
+
   return (
     <div className="flex flex-1 flex-col gap-3 px-4">
       <div className="flex flex-col gap-2 lg:flex-row">
@@ -78,7 +82,14 @@ export default function ExerciseList() {
             <Search />
           </InputGroupAddon>
         </InputGroup>
-        <Select value={muscle} onValueChange={setMuscle}>
+        <Select
+          value={muscle}
+          onValueChange={(e) => {
+            if (e) {
+              setMuscle(e)
+            }
+          }}
+        >
           <SelectTrigger className="w-full lg:w-1/5">
             <SelectValue placeholder="Muscle" />
           </SelectTrigger>

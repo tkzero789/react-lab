@@ -19,54 +19,40 @@ import { NativeSelect, NativeSelectOption } from "@/components/ui/native-select"
 import { cn } from "@/lib/utils"
 import { Filter } from "lucide-react"
 import React from "react"
+import { useQuery } from "@tanstack/react-query"
 import { useIsMobile } from "@/hooks/use-mobile"
-
-type MovieFilter = {
-  _id: string
-  name: string
-  slug: string
-}
+import { fetchCategories, fetchCountries } from "../movie"
+import type { MovieTaxonomyItem } from "../type"
 
 export default function MovieFilter() {
   const isMobile = useIsMobile()
 
   const [isOpen, setIsOpen] = React.useState<boolean>(false)
-  const [filter, setFilter] = React.useState<{
-    category: MovieFilter[]
-    country: MovieFilter[]
-  }>()
   const [selectedFilter, setSelectedFilter] = React.useState<{
-    category: MovieFilter | null
-    country: MovieFilter | null
+    category: MovieTaxonomyItem | null
+    country: MovieTaxonomyItem | null
   }>({
     category: null,
     country: null,
   })
 
-  React.useEffect(() => {
-    const getFilterData = async () => {
-      try {
-        const categoryResponse = await fetch("https://phimapi.com/the-loai")
-        const categoryData = await categoryResponse.json()
-
-        const countryResponse = await fetch("https://phimapi.com/quoc-gia")
-        const countryData = await countryResponse.json()
-
-        setFilter({
-          category: categoryData,
-          country: countryData,
-        })
-      } catch (error) {
-        console.error(error)
-      }
-    }
-
-    getFilterData()
-  }, [])
+  // The two lists are independent, so fetch them in parallel rather than
+  // awaiting one before starting the other.
+  const { data: filter } = useQuery({
+    queryKey: ["movie", "filters"],
+    queryFn: async ({ signal }) => {
+      const [category, country] = await Promise.all([
+        fetchCategories({ signal }),
+        fetchCountries({ signal }),
+      ])
+      return { category, country }
+    },
+    staleTime: 60 * 60 * 1000,
+  })
 
   const handleSelectFilter = (
-    filterType: string,
-    filterObject: MovieFilter
+    filterType: "category" | "country",
+    filterObject: MovieTaxonomyItem
   ) => {
     setSelectedFilter((prev) => ({
       ...prev,
@@ -113,7 +99,7 @@ export default function MovieFilter() {
                   value={item.name}
                   onSelect={(e) => {
                     e.preventDefault()
-                    handleSelectFilter("category", item)
+                    handleSelectFilter("country", item)
                   }}
                   className={cn(
                     "pl-2",

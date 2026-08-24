@@ -1,8 +1,7 @@
 "use client";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { toast } from "sonner";
-import { useIsMobile } from "@/hooks/use-mobile";
+import { toast } from "@/lib/toast";
 import { useMutation, useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
@@ -13,7 +12,6 @@ function normalize(str: string) {
 }
 
 export default function IngredientList() {
-  const isMobile = useIsMobile();
   const ingredients = useQuery(api.ingredients.list) ?? [];
   const dishes = useQuery(api.dishes.list) ?? [];
 
@@ -27,9 +25,7 @@ export default function IngredientList() {
 
   function handleRemove(id: Id<"ingredients">) {
     removeIngredient({ id });
-    toast.info("Ingredient deleted", {
-      position: isMobile ? "top-center" : "bottom-right",
-    });
+    toast.info("Ingredient deleted");
   }
 
   function handleEdit(
@@ -45,15 +41,11 @@ export default function IngredientList() {
       (i) => i._id !== id && normalize(i.name) === normalize(updates.name),
     );
     if (isDuplicate) {
-      toast.error(`"${updates.name}" already exists in your list`, {
-        position: isMobile ? "top-center" : "bottom-right",
-      });
+      toast.error(`"${updates.name}" already exists in your list`);
       return false;
     }
     updateIngredient({ id, ...updates });
-    toast.success("Ingredient updated", {
-      position: isMobile ? "top-center" : "bottom-right",
-    });
+    toast.success("Ingredient updated");
     return true;
   }
 

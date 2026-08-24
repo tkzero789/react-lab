@@ -5,6 +5,7 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
+// parseLinks
 export type ContentSegment =
   | { type: "text"; content: string }
   | { type: "link"; content: string; href: string }

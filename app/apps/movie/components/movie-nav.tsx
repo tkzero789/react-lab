@@ -9,36 +9,9 @@ import MovieFilter from "./movie-filter"
 import MovieMenu from "./movie-menu"
 import { pathClient } from "@/lib/path-client"
 import Link from "next/link"
+import { MOVIE_BROWSE } from "../movie"
 
-type MovieType = {
-  title: string
-  params?: "single" | "series" | "hoathinh" | "tv-shows"
-  typeList?: "phim-le" | "phim-bo" | "hoat-hinh" | "tv-shows"
-}
-
-const movieTypes: MovieType[] = [
-  { title: "Home" },
-  {
-    title: "Single",
-    params: "single",
-    typeList: "phim-le",
-  },
-  {
-    title: "Series",
-    params: "series",
-    typeList: "phim-bo",
-  },
-  {
-    title: "Animation",
-    params: "hoathinh",
-    typeList: "hoat-hinh",
-  },
-  {
-    title: "TV Shows",
-    params: "tv-shows",
-    typeList: "tv-shows",
-  },
-]
+const navTabs = [{ segment: undefined, title: "Home" }, ...MOVIE_BROWSE]
 
 export default function MovieNav() {
   const params = useParams()
@@ -47,20 +20,20 @@ export default function MovieNav() {
     <div className="sticky top-0 z-50 bg-background">
       <Container className="flex items-center justify-between py-4">
         <div className="hidden h-10 w-fit items-center rounded-xl bg-muted p-1 lg:flex">
-          {movieTypes.map((type) => (
+          {navTabs.map((tab) => (
             <Link
-              key={type.title}
+              key={tab.title}
               className={cn(
                 buttonVariants({ variant: "default" }),
                 "h-full border-0 bg-muted px-3 text-foreground hover:bg-transparent",
-                type.params === params.type &&
+                tab.segment === params.type &&
                   "bg-background text-foreground hover:bg-background hover:text-foreground"
               )}
               href={pathClient(
-                type?.params ? `/apps/movie/${type?.params}` : `/apps/movie`
+                tab.segment ? `/apps/movie/${tab.segment}` : `/apps/movie`
               )}
             >
-              {type.title}
+              {tab.title}
             </Link>
           ))}
         </div>

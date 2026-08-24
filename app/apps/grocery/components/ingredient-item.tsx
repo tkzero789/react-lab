@@ -2,7 +2,7 @@ import React from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Check, Pencil, Trash2, X } from "lucide-react"
-import { toast } from "sonner"
+import { toast } from "@/lib/toast"
 import { cn } from "@/lib/utils"
 import {
   Drawer,
@@ -63,9 +63,7 @@ export default function IngredientItem({
 
   function handleSave() {
     if (!editName.trim()) {
-      toast.error("Item name is required", {
-        position: isMobile ? "top-center" : "bottom-right",
-      })
+      toast.error("Item name is required")
       return
     }
     const success = onEdit(item._id, {

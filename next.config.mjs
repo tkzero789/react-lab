@@ -5,10 +5,13 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "phimimg.com",
-        port: "",
-        pathname: "/**",
-        search: "",
+        hostname: "vsmov.com",
+        pathname: "/storage/**",
+      },
+      {
+        protocol: "https",
+        hostname: "image.tmdb.org",
+        pathname: "/t/p/**",
       },
       {
         protocol: "https",

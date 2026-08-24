@@ -11,8 +11,7 @@ import {
   DialogTitle,
   DialogBody,
 } from "@/components/ui/dialog"
-import { toast } from "sonner"
-import { useIsMobile } from "@/hooks/use-mobile"
+import { toast } from "@/lib/toast"
 import { useMutation } from "convex/react"
 import { api } from "@/convex/_generated/api"
 import IngredientForm from "./ingredient-form"
@@ -21,15 +20,12 @@ import DishForm from "./dish-form"
 type Tab = "ingredient" | "dish"
 
 export default function GroceryDialog() {
-  const isMobile = useIsMobile()
   const [tab, setTab] = React.useState<Tab>("ingredient")
   const removeAll = useMutation(api.ingredients.removeAll)
 
   function handleReset() {
     removeAll()
-    toast.info("Grocery list cleared", {
-      position: isMobile ? "top-center" : "bottom-right",
-    })
+    toast.info("Grocery list cleared")
   }
 
   return (

@@ -1,87 +1,46 @@
 "use client"
 
 import { useParams } from "next/navigation"
-import React from "react"
+import { useQuery } from "@tanstack/react-query"
+import Link from "next/link"
+
 import DashboardBreadcrumb from "@/app/apps/components/dashboard-breadcrumb"
 import DashboardContainer from "@/components/layout/dashboard-container"
-import { Button, buttonVariants } from "@/components/ui/button"
-import Link from "next/link"
+import { buttonVariants } from "@/components/ui/button"
 import MovieVideo from "../../../components/movie-video"
 import { pathClient } from "@/lib/path-client"
 import { cn } from "@/lib/utils"
-
-type MovieDetail = {
-  name: string
-  type: string
-  slug: string
-  content: string
-  thumb_url: string
-  poster_url: string
-  time: string
-  episode_total: string
-  quality: string
-  year: number
-  actor: string[]
-  category: {
-    id: string
-    name: string
-    slug: string
-  }[]
-}
-
-type MovieEpisode = {
-  name: string
-  slug: string
-  filename: string
-  link_embed: string
-}
+import {
+  cleanServerName,
+  fetchMovieDetail,
+  getBrowseTab,
+  movieTypeSegment,
+} from "../../../movie"
 
 export default function EpisodePage() {
   const params = useParams()
-  const [movie, setMovie] = React.useState<MovieDetail>()
-  const [episodes, setEpisodes] = React.useState<MovieEpisode[]>()
-  const [source, setSource] = React.useState<string>("")
+  const slug = typeof params.slug === "string" ? params.slug : ""
+  const episodeSlug =
+    typeof params.episode === "string" ? params.episode : undefined
 
-  React.useEffect(() => {
-    const getData = async () => {
-      try {
-        const response = await fetch(`https://phimapi.com/phim/${params.slug}`)
-        const data = await response.json()
-        setMovie(data.movie)
-        const episodes = data.episodes[0].server_data
-        setEpisodes(episodes)
-        episodes.find((item: MovieEpisode) => {
-          if (item.slug === params.episode) {
-            setSource(item.link_embed)
-          }
-        })
-      } catch (error) {
-        console.error(error)
-      }
-    }
-    getData()
-  }, [params.slug, params.episode])
+  const { data } = useQuery({
+    queryKey: ["movie", "detail", slug],
+    queryFn: ({ signal }) => fetchMovieDetail(slug, { signal }),
+    enabled: Boolean(slug),
+    staleTime: 5 * 60 * 1000,
+  })
 
-  let typeTitle: string = ""
-  switch (movie?.type as string) {
-    case "single":
-      typeTitle = "Single"
-      break
-    case "series":
-      typeTitle = "Series"
-      break
-    case "hoathinh":
-      typeTitle = "Animation"
-      break
-    case "tvshows":
-      typeTitle = "TV Shows"
-      break
-  }
+  const movie = data?.movie
+  const segment = movieTypeSegment(movie?.type, movie?.tmdb)
+  const tab = getBrowseTab(segment)
 
-  const episodeNumber =
-    typeof params.episode === "string"
-      ? params.episode.split("-").pop()
-      : params.episode?.[0]
+  // The episode can live on any server, so search them all.
+  const current = data?.episodes
+    .flatMap((server) => server.server_data)
+    .find((episode) => episode.slug === episodeSlug)
+
+  const episodeLabel =
+    episodeSlug === "full" ? "Full" : `Tập ${current?.name ?? ""}`.trim()
 
   return (
     <>
@@ -96,44 +55,44 @@ export default function EpisodePage() {
             href: pathClient("/apps/movie"),
           },
           {
-            title: typeTitle,
-            href: pathClient(
-              `/apps/movie/${movie?.type === "tvshows" ? "tv-shows" : movie?.type}`
-            ),
+            title: tab?.title ?? "",
+            href: pathClient(`/apps/movie/${segment}`),
           },
           {
             title: movie?.name ?? "",
-            href: pathClient(`/apps/movie/${movie?.type}/${movie?.slug}`),
+            href: pathClient(`/apps/movie/${segment}/${slug}`),
           },
-          { title: `Tập ${episodeNumber}` },
+          { title: episodeLabel },
         ]}
       />
       <DashboardContainer className="flex flex-col gap-8">
-        <MovieVideo source={source} />
-        <div className="flex flex-col gap-2">
-          <div className="font-semibold">Episodes:</div>
-          <div className="flex flex-wrap gap-1">
-            {episodes?.map((episode) => (
-              <a
-                key={episode.name}
-                href={pathClient(
-                  `/apps/movie/${movie?.type}/${movie?.slug}/${episode.slug}`
-                )}
-                className={cn(
-                  buttonVariants({
-                    variant:
-                      episode.slug === params.episode ? "default" : "secondary",
-                    size: "sm",
-                  })
-                )}
-              >
-                {episode.slug === "full"
-                  ? "Full"
-                  : `Tập ${episode.name.split(" ")[1]}`}
-              </a>
-            ))}
+        <MovieVideo source={current?.link_embed ?? ""} />
+        {data?.episodes.map((server) => (
+          <div key={server.server_name} className="flex flex-col gap-2">
+            <div className="font-semibold">
+              {cleanServerName(server.server_name)}:
+            </div>
+            <div className="flex flex-wrap gap-1">
+              {server.server_data.map((episode) => (
+                <Link
+                  key={episode.slug}
+                  href={pathClient(
+                    `/apps/movie/${segment}/${slug}/${episode.slug}`
+                  )}
+                  className={cn(
+                    buttonVariants({
+                      variant:
+                        episode.slug === episodeSlug ? "default" : "secondary",
+                      size: "sm",
+                    })
+                  )}
+                >
+                  {episode.slug === "full" ? "Full" : `Tập ${episode.name}`}
+                </Link>
+              ))}
+            </div>
           </div>
-        </div>
+        ))}
       </DashboardContainer>
     </>
   )

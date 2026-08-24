@@ -77,6 +77,24 @@ export const update = mutation({
   },
 })
 
+export const setStatus = mutation({
+  args: {
+    id: v.id("todos"),
+    status: v.union(v.literal("todo"), v.literal("completed")),
+  },
+  handler: async (ctx, args) => {
+    const userId = await getCurrentUserId(ctx)
+    if (!userId) throw new ConvexError("Not authenticated")
+
+    const todo = await ctx.db.get(args.id)
+    if (!todo || todo.userId !== userId) {
+      throw new ConvexError("Todo not found")
+    }
+
+    return await ctx.db.patch(args.id, { status: args.status })
+  },
+})
+
 export const remove = mutation({
   args: { id: v.id("todos") },
   handler: async (ctx, args) => {

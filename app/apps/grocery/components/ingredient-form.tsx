@@ -2,8 +2,7 @@ import React from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Plus } from "lucide-react"
-import { toast } from "sonner"
-import { useIsMobile } from "@/hooks/use-mobile"
+import { toast } from "@/lib/toast"
 import { useMutation, useQuery } from "convex/react"
 import { api } from "@/convex/_generated/api"
 import { Id } from "@/convex/_generated/dataModel"
@@ -13,7 +12,6 @@ function normalize(str: string) {
 }
 
 export default function IngredientForm() {
-  const isMobile = useIsMobile()
   const ingredients = useQuery(api.ingredients.list) ?? []
   const dishes = useQuery(api.dishes.list) ?? []
   const addIngredient = useMutation(api.ingredients.add)
@@ -28,18 +26,14 @@ export default function IngredientForm() {
   function handleSubmit(e: React.SubmitEvent<HTMLFormElement>) {
     e.preventDefault()
     if (!name.trim()) {
-      toast.error("Item name is required", {
-        position: isMobile ? "top-center" : "bottom-right",
-      })
+      toast.error("Item name is required")
       return
     }
     const isDuplicate = ingredients.some(
       (i) => normalize(i.name) === normalize(name)
     )
     if (isDuplicate) {
-      toast.error(`"${name}" already exists in your list`, {
-        position: isMobile ? "top-center" : "bottom-right",
-      })
+      toast.error(`"${name}" already exists in your list`)
       return
     }
     addIngredient({
@@ -48,9 +42,7 @@ export default function IngredientForm() {
       price: Number(price) || 0,
       dishIds: selectedDishIds,
     })
-    toast.success(`Added "${name.trim()}"`, {
-      position: isMobile ? "top-center" : "bottom-right",
-    })
+    toast.success(`Added "${name.trim()}"`)
     setName("")
     setQty("")
     setPrice("")

@@ -2,7 +2,7 @@ import React from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Plus, Trash2 } from "lucide-react"
-import { toast } from "sonner"
+import { toast } from "@/lib/toast"
 import {
   Drawer,
   DrawerClose,
@@ -12,7 +12,6 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer"
-import { useIsMobile } from "@/hooks/use-mobile"
 import { useMutation, useQuery } from "convex/react"
 import { api } from "@/convex/_generated/api"
 import { Id } from "@/convex/_generated/dataModel"
@@ -22,7 +21,6 @@ function normalize(str: string) {
 }
 
 export default function DishForm() {
-  const isMobile = useIsMobile()
   const dishes = useQuery(api.dishes.list) ?? []
   const addDish = useMutation(api.dishes.add)
   const removeDish = useMutation(api.dishes.remove)
@@ -32,32 +30,24 @@ export default function DishForm() {
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     if (!dishName.trim()) {
-      toast.error("Dish name is required", {
-        position: isMobile ? "top-center" : "bottom-right",
-      })
+      toast.error("Dish name is required")
       return
     }
     const isDuplicate = dishes.some(
       (d) => normalize(d.name) === normalize(dishName)
     )
     if (isDuplicate) {
-      toast.error(`"${dishName}" already exists`, {
-        position: isMobile ? "top-center" : "bottom-right",
-      })
+      toast.error(`"${dishName}" already exists`)
       return
     }
     addDish({ name: dishName.trim() })
-    toast.success(`Added dish "${dishName.trim()}"`, {
-      position: isMobile ? "top-center" : "bottom-right",
-    })
+    toast.success(`Added dish "${dishName.trim()}"`)
     setDishName("")
   }
 
   function handleRemove(dishId: Id<"dishes">) {
     removeDish({ id: dishId })
-    toast.info("Dish deleted", {
-      position: isMobile ? "top-center" : "bottom-right",
-    })
+    toast.info("Dish deleted")
   }
 
   return (

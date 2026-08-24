@@ -4,6 +4,7 @@ import { pathServer } from "@/lib/path-server"
 import MovieBannerCarousel from "./components/movie-banner-carousel"
 import MovieNav from "./components/movie-nav"
 import MovieCarousel from "./components/movie-carousel"
+import { MOVIE_BROWSE } from "./movie"
 
 export default async function MoviePage() {
   const appsHref = await pathServer("/apps")
@@ -25,10 +26,9 @@ export default async function MoviePage() {
       <MovieNav />
       <div className="flex flex-col gap-12 pb-4 lg:pb-4">
         <MovieBannerCarousel />
-        <MovieCarousel title="Single" type_list="phim-le" />
-        <MovieCarousel title="Series" type_list="phim-bo" />
-        <MovieCarousel title="Animation" type_list="hoat-hinh" />
-        <MovieCarousel title="TV Shows" type_list="tv-shows" />
+        {MOVIE_BROWSE.map((tab) => (
+          <MovieCarousel key={tab.segment} segment={tab.segment} />
+        ))}
       </div>
     </>
   )

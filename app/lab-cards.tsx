@@ -3,6 +3,7 @@
 import Nextjs from "@/components/icons/nextjs-icon"
 import Replicas from "@/components/icons/replicas-icon"
 import Threejs from "@/components/icons/threejs-icon"
+import { cn } from "@/lib/utils"
 import Link from "next/link"
 import React from "react"
 
@@ -73,15 +74,18 @@ export default function LabCards() {
         <Link
           href={host ? getHref(item.title, item.href, host) : item.href}
           key={item.title}
-          className={`group size-40 rounded-xl bg-muted p-2 transition-all duration-300 lg:size-48 ${item.hoverBackground}`}
+          className={cn(
+            "group size-30 pressable rounded-xl bg-muted p-2 transition-all duration-300 lg:size-48",
+            item.hoverBackground
+          )}
         >
           <div className="flex h-full flex-col items-center justify-center gap-2 rounded-xl bg-background">
             <div
-              className={`flex size-14 items-center justify-center rounded-xl p-2 transition-all duration-300 group-hover:scale-105 ${item.iconBackground}`}
+              className={`flex size-10 items-center justify-center rounded-xl p-2 transition-all duration-300 group-hover:scale-105 lg:size-14 ${item.iconBackground}`}
             >
               <item.icon />
             </div>
-            <div className="flex items-center justify-center font-medium">
+            <div className="flex items-center justify-center text-sm font-medium lg:text-base">
               {item.title}
             </div>
           </div>

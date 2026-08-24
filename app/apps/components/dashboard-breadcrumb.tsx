@@ -5,19 +5,19 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
-import { Separator } from "@/components/ui/separator";
-import { SidebarTrigger } from "@/components/ui/sidebar";
-import React from "react";
+} from "@/components/ui/breadcrumb"
+import { Separator } from "@/components/ui/separator"
+import { SidebarTrigger } from "@/components/ui/sidebar"
+import React from "react"
 
 type BreadcrumbStep = {
-  title: string;
-  href?: string;
-};
+  title: string
+  href?: string
+}
 
 type Props = {
-  breadcrumbs: BreadcrumbStep[];
-};
+  breadcrumbs: BreadcrumbStep[]
+}
 
 export default function DashboardBreadcrumb({ breadcrumbs }: Props) {
   return (
@@ -41,18 +41,18 @@ export default function DashboardBreadcrumb({ breadcrumbs }: Props) {
                     </BreadcrumbItem>
                     <BreadcrumbSeparator />
                   </React.Fragment>
-                );
+                )
               } else {
                 return (
                   <BreadcrumbItem key={index}>
                     <BreadcrumbPage>{item.title}</BreadcrumbPage>
                   </BreadcrumbItem>
-                );
+                )
               }
             })}
           </BreadcrumbList>
         </Breadcrumb>
       </div>
     </header>
-  );
+  )
 }

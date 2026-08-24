@@ -17,36 +17,9 @@ import { Menu } from "lucide-react"
 import Link from "next/link"
 import { useIsMobile } from "@/hooks/use-mobile"
 import { pathClient } from "@/lib/path-client"
+import { MOVIE_BROWSE } from "../movie"
 
-type MovieType = {
-  title: string
-  params?: "movie" | "series" | "hoathinh" | "tv-shows"
-  typeList?: "phim-le" | "phim-bo" | "hoat-hinh" | "tv-shows"
-}
-
-const movieTypes: MovieType[] = [
-  { title: "Home" },
-  {
-    title: "Movie",
-    params: "movie",
-    typeList: "phim-le",
-  },
-  {
-    title: "Series",
-    params: "series",
-    typeList: "phim-bo",
-  },
-  {
-    title: "Animation",
-    params: "hoathinh",
-    typeList: "hoat-hinh",
-  },
-  {
-    title: "TV Shows",
-    params: "tv-shows",
-    typeList: "tv-shows",
-  },
-]
+const menuTabs = [{ segment: undefined, title: "Home" }, ...MOVIE_BROWSE]
 
 type Props = {
   paramsType: string
@@ -69,20 +42,20 @@ export default function MovieMenu({ paramsType }: Props) {
             <DrawerTitle>Menu</DrawerTitle>
           </DrawerHeader>
           <div className="grid grid-cols-2 gap-2 px-4 pb-4">
-            {movieTypes.map((type) => (
-              <a
-                key={type.title}
+            {menuTabs.map((tab) => (
+              <Link
+                key={tab.title}
                 className={cn(
                   buttonVariants({ variant: "default" }),
-                  type.params === paramsType &&
+                  tab.segment === paramsType &&
                     "bg-primary text-primary-foreground"
                 )}
                 href={pathClient(
-                  type?.params ? `/apps/movie/${type?.params}` : `/apps/movie`
+                  tab.segment ? `/apps/movie/${tab.segment}` : `/apps/movie`
                 )}
               >
-                {type.title}
-              </a>
+                {tab.title}
+              </Link>
             ))}
           </div>
         </DrawerContent>
@@ -100,19 +73,20 @@ export default function MovieMenu({ paramsType }: Props) {
           }
         ></DropdownMenuTrigger>
         <DropdownMenuContent className="w-56" align="start">
-          {movieTypes.map((type) => (
+          {menuTabs.map((tab) => (
             <DropdownMenuItem
-              key={type.title}
-              className={cn(type.params === paramsType && "bg-muted")}
-            >
-              <Link
-                href={pathClient(
-                  type?.params ? `/apps/movie/${type?.params}` : `/apps/movie`
-                )}
-              >
-                {type.title}
-              </Link>
-            </DropdownMenuItem>
+              key={tab.title}
+              className={cn(tab.segment === paramsType && "bg-muted")}
+              render={
+                <Link
+                  href={pathClient(
+                    tab.segment ? `/apps/movie/${tab.segment}` : `/apps/movie`
+                  )}
+                >
+                  {tab.title}
+                </Link>
+              }
+            />
           ))}
         </DropdownMenuContent>
       </DropdownMenu>

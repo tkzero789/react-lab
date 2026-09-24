@@ -16,6 +16,9 @@ const Drawer = ({
 )
 Drawer.displayName = "Drawer"
 
+/* Must render inside a parent Drawer. The parent scales back while this one is open. */
+const DrawerNested = DrawerPrimitive.NestedRoot
+
 const DrawerTrigger = DrawerPrimitive.Trigger
 
 const DrawerPortal = DrawerPrimitive.Portal
@@ -113,6 +116,7 @@ DrawerDescription.displayName = DrawerPrimitive.Description.displayName
 
 export {
   Drawer,
+  DrawerNested,
   DrawerPortal,
   DrawerOverlay,
   DrawerTrigger,

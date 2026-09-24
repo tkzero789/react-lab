@@ -1,23 +1,11 @@
-import { AppSidebar } from "@/components/sidebar/app-sidebar"
-import { ThemeProvider } from "@/components/theme/theme-provider"
-import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
+import DashboardShell from "@/components/layout/dashboard-shell"
 import React from "react"
 import QueryProvider from "./components/query-provider"
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <ThemeProvider
-      attribute="class"
-      defaultTheme="system"
-      enableSystem
-      disableTransitionOnChange
-    >
-      <SidebarProvider>
-        <AppSidebar />
-        <SidebarInset>
-          <QueryProvider>{children}</QueryProvider>
-        </SidebarInset>
-      </SidebarProvider>
-    </ThemeProvider>
+    <DashboardShell>
+      <QueryProvider>{children}</QueryProvider>
+    </DashboardShell>
   )
 }

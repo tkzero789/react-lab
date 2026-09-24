@@ -1,6 +1,6 @@
-"use client";
+"use client"
 
-import * as React from "react";
+import * as React from "react"
 import {
   AppWindow,
   CloudSun,
@@ -9,20 +9,21 @@ import {
   FlaskConical,
   Laptop,
   ListChecks,
+  Palette,
   PieChart,
   RollerCoaster,
   ShoppingBasket,
-} from "lucide-react";
-import { NavApps } from "./nav-app";
-import { NavProjects } from "@/components/sidebar/nav-projects";
-import { ThemeToggle } from "../theme/theme-toggle";
+} from "lucide-react"
+import { NavApps } from "./nav-app"
+import { NavProjects } from "@/components/sidebar/nav-projects"
+import { ThemeToggle } from "../theme/theme-toggle"
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
   SidebarHeader,
-} from "@/components/ui/sidebar";
-import { SidebarUser } from "./sidebar-user";
+} from "@/components/ui/sidebar"
+import { SidebarUser } from "./sidebar-user"
 
 const sidebarItems = {
   apps: [
@@ -74,12 +75,17 @@ const sidebarItems = {
       icon: RollerCoaster,
     },
     {
+      name: "Design System",
+      url: "/design-system",
+      icon: Palette,
+    },
+    {
       name: "ThreeJS",
       url: "/threejs",
       icon: PieChart,
     },
   ],
-};
+}
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
@@ -95,5 +101,5 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <ThemeToggle />
       </SidebarFooter>
     </Sidebar>
-  );
+  )
 }

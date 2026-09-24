@@ -63,11 +63,13 @@ export default function MovieFilter() {
   if (isMobile) {
     return (
       <Drawer>
-        <DrawerTrigger asChild>
-          <Button variant="muted">
-            <Filter />
-          </Button>
-        </DrawerTrigger>
+        <DrawerTrigger
+          render={
+            <Button variant="muted">
+              <Filter />
+            </Button>
+          }
+        />
         <DrawerContent>
           <DrawerHeader>
             <DrawerTitle>Filter</DrawerTitle>

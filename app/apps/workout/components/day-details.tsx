@@ -21,8 +21,9 @@ import {
 } from "@/components/ui/drawer"
 import { Doc, Id } from "@/convex/_generated/dataModel"
 import { useIsMobile } from "@/hooks/use-mobile"
-import DeleteLog from "./delete-log"
+import LogActions from "./log-actions"
 import LogExercise from "./log-exercise"
+import { WorkoutSets } from "./log-exercise-form"
 
 type Props = Pick<
   React.ComponentProps<typeof LogExercise>,
@@ -31,6 +32,7 @@ type Props = Pick<
   open: boolean
   onOpenChange: (open: boolean) => void
   logs: Doc<"workoutLogs">[]
+  onUpdate: (id: Id<"workoutLogs">, sets: WorkoutSets) => void
   onRemove: (id: Id<"workoutLogs">) => void
 }
 
@@ -41,6 +43,7 @@ export default function DayDetails({
   logs,
   exercises,
   onAdd,
+  onUpdate,
   onRemove,
 }: Props) {
   const isMobile = useIsMobile()
@@ -97,10 +100,13 @@ export default function DayDetails({
                   </span>
                   {getWeightComparison(log.exerciseId, maxWeight)}
                 </div>
-                <DeleteLog
+                <LogActions
+                  log={log}
+                  exercises={exercises}
                   exerciseName={exercise?.name}
                   date={date}
-                  onConfirm={() => onRemove(log._id)}
+                  onUpdate={(sets) => onUpdate(log._id, sets)}
+                  onRemove={() => onRemove(log._id)}
                 />
               </div>
               <ul className="flex flex-col gap-2">
@@ -125,11 +131,11 @@ export default function DayDetails({
   if (isMobile) {
     return (
       <Drawer open={open} onOpenChange={onOpenChange}>
-        <DrawerContent className="max-h-[90dvh]">
+        <DrawerContent>
           <DrawerHeader>
             <DrawerTitle>{title}</DrawerTitle>
           </DrawerHeader>
-          <DrawerBody className="min-h-0 overflow-y-auto">{content}</DrawerBody>
+          <DrawerBody>{content}</DrawerBody>
           <DrawerFooter>{logExercise}</DrawerFooter>
         </DrawerContent>
       </Drawer>

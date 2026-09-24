@@ -46,6 +46,7 @@ export default defineSchema({
     name: v.string(),
     muscleGroups: v.array(v.string()),
     personalBest: v.number(),
+    thumbnail: v.optional(v.id("_storage")),
   }),
 
   workoutLogs: defineTable({

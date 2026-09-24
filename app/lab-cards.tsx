@@ -36,27 +36,18 @@ const cardItems = [
   },
 ]
 
-function getHref(title: string, fallbackHref: string, host: string) {
+const ROOT_DOMAIN = "thinhtran.dev"
+
+function getHref(title: string, fallbackHref: string, hostname: string) {
   const subdomain = SUBDOMAIN_MAP[title]
   if (!subdomain) return fallbackHref
 
-  // Use path-based routing for localhost and LAN/private-network IPs
-  const hostname = host.split(":")[0]
-  const isLocalhost =
-    hostname === "localhost" ||
-    hostname === "127.0.0.1" ||
-    /^192\.168\./.test(hostname) ||
-    /^10\./.test(hostname) ||
-    /^172\.(1[6-9]|2\d|3[01])\./.test(hostname)
-  if (isLocalhost) {
-    return `/${subdomain}`
-  }
-
-  // Use subdomain routing in production
-  // e.g. lab.thinhtran.dev → apps.thinhtran.dev
-  const parts = host.replace(/^www\./, "").split(".")
-  const rootDomain = parts.slice(-2).join(".")
-  return `https://${subdomain}.${rootDomain}`
+  /* Only the production domain has subdomains. Other hosts, like tunnels and preview URLs, use path routing. */
+  const isProductionHost =
+    hostname === ROOT_DOMAIN || hostname.endsWith(`.${ROOT_DOMAIN}`)
+  return isProductionHost
+    ? `https://${subdomain}.${ROOT_DOMAIN}`
+    : fallbackHref
 }
 
 export default function LabCards() {
@@ -65,7 +56,7 @@ export default function LabCards() {
   // on any host — subdomain routing is a progressive enhancement.
   const [host, setHost] = React.useState<string | null>(null)
   React.useEffect(() => {
-    setHost(window.location.host)
+    setHost(window.location.hostname)
   }, [])
 
   return (

@@ -46,7 +46,7 @@ function DialogOverlay({
       className={cn(
         "fixed inset-0 isolate z-50 bg-black/10 duration-100 data-open:animate-in data-open:fade-in-0 data-closed:animate-out data-closed:fade-out-0",
         type === "alert" &&
-          "bg-black/20 supports-backdrop-filter:backdrop-blur-[1px]",
+          "bg-black/20 supports-backdrop-filter:backdrop-blur-xs",
         className
       )}
       {...props}

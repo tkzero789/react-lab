@@ -11,8 +11,8 @@ import {
   useComboboxAnchor,
 } from "@/components/ui/combobox"
 import { Input } from "@/components/ui/input"
-import { Id } from "@/convex/_generated/dataModel"
-import { MinusCircleIcon, Plus, X } from "lucide-react"
+import { Doc, Id } from "@/convex/_generated/dataModel"
+import { MinusCircleIcon, Plus } from "lucide-react"
 import React, { useState } from "react"
 
 type Exercise = {
@@ -22,29 +22,35 @@ type Exercise = {
   personalBest: number
 }
 
+export type WorkoutSets = Doc<"workoutLogs">["sets"]
+
 type Props = {
+  id: string
   exercises: Exercise[]
-  dateStr: string
-  onAdd: (
-    date: string,
-    exerciseId: Id<"exercises">,
-    sets: { reps: number; weight: number }[]
-  ) => void
-  onClose: () => void
+  defaultValues?: { exerciseId: Id<"exercises">; sets: WorkoutSets }
+  lockExercise?: boolean
+  onSubmit: (exerciseId: Id<"exercises">, sets: WorkoutSets) => void
 }
 
 export default function LogExerciseForm({
+  id,
   exercises,
-  dateStr,
-  onAdd,
-  onClose,
+  defaultValues,
+  lockExercise = false,
+  onSubmit,
 }: Props) {
   const [selectedExercise, setSelectedExercise] = useState<Exercise | null>(
-    null
+    () => exercises.find((e) => e._id === defaultValues?.exerciseId) ?? null
   )
-  const [sets, setSets] = useState<{ reps: string; weight: string }[]>([
-    { reps: "", weight: "" },
-  ])
+  const [sets, setSets] = useState<{ reps: string; weight: string }[]>(
+    () =>
+      defaultValues?.sets.map((s) => ({
+        reps: String(s.reps),
+        weight: String(s.weight),
+      })) ?? [{ reps: "", weight: "" }]
+  )
+  const [listOpen, setListOpen] = useState(false)
+  const [error, setError] = useState<string | null>(null)
   const anchor = useComboboxAnchor()
 
   function addSet() {
@@ -60,28 +66,29 @@ export default function LogExerciseForm({
     setSets(sets.map((s, i) => (i === index ? { ...s, [field]: value } : s)))
   }
 
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  function handleSubmit(e: React.SubmitEvent<HTMLFormElement>) {
     e.preventDefault()
-    if (!selectedExercise) return
+    /* Typed text does not select an exercise. The user must pick an option. */
+    if (!selectedExercise) {
+      setError("Pick an exercise from the list.")
+      return
+    }
     const parsedSets = sets
       .filter((s) => s.reps && s.weight)
       .map((s) => ({
         reps: parseInt(s.reps),
         weight: parseFloat(s.weight),
       }))
-    if (parsedSets.length === 0) return
-    onAdd(dateStr, selectedExercise._id, parsedSets)
-    onClose()
-    setSelectedExercise(null)
-    setSets([{ reps: "", weight: "" }])
+    if (parsedSets.length === 0) {
+      setError("Enter reps and weight for at least one set.")
+      return
+    }
+    setError(null)
+    onSubmit(selectedExercise._id, parsedSets)
   }
 
   return (
-    <form
-      id="logWorkout"
-      onSubmit={handleSubmit}
-      className="flex flex-col gap-4"
-    >
+    <form id={id} onSubmit={handleSubmit} className="flex flex-col gap-4">
       {/* Exercises */}
       <div className="flex flex-col gap-2">
         <label className="block text-sm font-medium">Exercise</label>
@@ -93,8 +100,19 @@ export default function LogExerciseForm({
           }
           itemToStringLabel={(ex: Exercise) => ex.name}
           itemToStringValue={(ex: Exercise) => ex._id}
+          disabled={lockExercise}
+          open={listOpen}
+          onOpenChange={setListOpen}
         >
-          <ComboboxInput placeholder="Search exercises" />
+          {/*
+           * In a drawer, a tap on the input sends an untrusted click.
+           * The combobox ignores it, so the input opens the list itself.
+           */}
+          <ComboboxInput
+            placeholder="Search exercises"
+            disabled={lockExercise}
+            onClick={() => setListOpen(true)}
+          />
           <ComboboxContent anchor={anchor} className="pointer-events-auto">
             <ComboboxEmpty>No exercises found.</ComboboxEmpty>
             <ComboboxList>
@@ -147,6 +165,7 @@ export default function LogExerciseForm({
                   variant="ghost-destructive"
                   size="icon-sm"
                   onClick={() => removeSet(i)}
+                  aria-label={`Remove set ${i + 1}`}
                 >
                   <MinusCircleIcon />
                 </Button>
@@ -154,10 +173,22 @@ export default function LogExerciseForm({
             </div>
           ))}
         </div>
-        <Button type="button" variant="outline" size="icon" onClick={addSet}>
+        <Button
+          type="button"
+          variant="outline"
+          size="icon"
+          onClick={addSet}
+          aria-label="Add set"
+        >
           <Plus />
         </Button>
       </div>
+
+      {error && (
+        <p role="alert" className="text-sm text-destructive">
+          {error}
+        </p>
+      )}
     </form>
   )
 }

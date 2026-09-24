@@ -43,9 +43,9 @@ export default function DrawerPage() {
           />
           <Preview className="min-h-60">
             <Drawer>
-              <DrawerTrigger asChild>
-                <Button variant="outline">Open drawer</Button>
-              </DrawerTrigger>
+              <DrawerTrigger
+                render={<Button variant="outline">Open drawer</Button>}
+              />
               <DrawerContent>
                 <DrawerHeader className="gap-1">
                   <DrawerTitle>Filter deployments</DrawerTitle>
@@ -63,9 +63,9 @@ export default function DrawerPage() {
                 </DrawerBody>
                 <DrawerFooter>
                   <Button>Apply</Button>
-                  <DrawerClose asChild>
-                    <Button variant="outline">Cancel</Button>
-                  </DrawerClose>
+                  <DrawerClose
+                    render={<Button variant="outline">Cancel</Button>}
+                  />
                 </DrawerFooter>
               </DrawerContent>
             </Drawer>
@@ -83,9 +83,9 @@ export default function DrawerPage() {
           }
         >
           <Drawer>
-            <DrawerTrigger asChild>
-              <Button variant="outline">Sort by</Button>
-            </DrawerTrigger>
+            <DrawerTrigger
+              render={<Button variant="outline">Sort by</Button>}
+            />
             <DrawerContent>
               <DrawerHeader>
                 <DrawerTitle>Sort by</DrawerTitle>
@@ -113,9 +113,9 @@ export default function DrawerPage() {
           }
         >
           <Drawer>
-            <DrawerTrigger asChild>
-              <Button variant="outline">Open actions</Button>
-            </DrawerTrigger>
+            <DrawerTrigger
+              render={<Button variant="outline">Open actions</Button>}
+            />
             <DrawerContent>
               <DrawerHeader className="gap-1">
                 <DrawerTitle>Deployment 421</DrawerTitle>
@@ -123,9 +123,9 @@ export default function DrawerPage() {
               </DrawerHeader>
               <DrawerFooter>
                 <Button>Promote to production</Button>
-                <DrawerClose asChild>
-                  <Button variant="outline">Close</Button>
-                </DrawerClose>
+                <DrawerClose
+                  render={<Button variant="outline">Close</Button>}
+                />
               </DrawerFooter>
             </DrawerContent>
           </Drawer>
@@ -142,9 +142,9 @@ export default function DrawerPage() {
           }
         >
           <Drawer>
-            <DrawerTrigger asChild>
-              <Button variant="outline">Hidden title</Button>
-            </DrawerTrigger>
+            <DrawerTrigger
+              render={<Button variant="outline">Hidden title</Button>}
+            />
             <DrawerContent>
               <DrawerHeader>
                 <DrawerTitle className="sr-only">Quick actions</DrawerTitle>

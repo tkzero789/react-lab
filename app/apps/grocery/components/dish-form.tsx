@@ -73,11 +73,13 @@ export default function DishForm() {
               <span className="font-medium">{dish.name}</span>
 
               <Drawer>
-                <DrawerTrigger asChild>
-                  <Button variant="ghost" size="icon-sm">
-                    <Trash2 />
-                  </Button>
-                </DrawerTrigger>
+                <DrawerTrigger
+                  render={
+                    <Button variant="ghost" size="icon-sm">
+                      <Trash2 />
+                    </Button>
+                  }
+                />
                 <DrawerContent className="mx-auto max-w-2xl">
                   <DrawerHeader>
                     <DrawerTitle>{dish.name}</DrawerTitle>
@@ -89,11 +91,13 @@ export default function DishForm() {
                     >
                       Delete
                     </Button>
-                    <DrawerClose>
-                      <Button variant="outline" className="w-full">
-                        Cancel
-                      </Button>
-                    </DrawerClose>
+                    <DrawerClose
+                      render={
+                        <Button variant="outline" className="w-full">
+                          Cancel
+                        </Button>
+                      }
+                    />
                   </DrawerFooter>
                 </DrawerContent>
               </Drawer>

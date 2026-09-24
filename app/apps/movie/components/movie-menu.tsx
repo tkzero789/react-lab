@@ -31,12 +31,14 @@ export default function MovieMenu({ paramsType }: Props) {
   if (isMobile) {
     return (
       <Drawer>
-        <DrawerTrigger asChild>
-          <Button variant="muted">
-            <Menu />
-            Menu
-          </Button>
-        </DrawerTrigger>
+        <DrawerTrigger
+          render={
+            <Button variant="muted">
+              <Menu />
+              Menu
+            </Button>
+          }
+        />
         <DrawerContent>
           <DrawerHeader>
             <DrawerTitle>Menu</DrawerTitle>
@@ -47,8 +49,7 @@ export default function MovieMenu({ paramsType }: Props) {
                 key={tab.title}
                 className={cn(
                   buttonVariants({ variant: "default" }),
-                  tab.segment === paramsType &&
-                    "bg-brand text-brand-foreground"
+                  tab.segment === paramsType && "bg-brand text-brand-foreground"
                 )}
                 href={pathClient(
                   tab.segment ? `/apps/movie/${tab.segment}` : `/apps/movie`

@@ -13,28 +13,28 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog"
 import {
+  Drawer,
   DrawerBody,
   DrawerContent,
   DrawerFooter,
   DrawerHeader,
-  DrawerNested,
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer"
+import { Id } from "@/convex/_generated/dataModel"
 import { useIsMobile } from "@/hooks/use-mobile"
-import LogExerciseForm from "./log-exercise-form"
+import LogExerciseForm, { WorkoutSets } from "./log-exercise-form"
 
-type Props = Pick<
-  React.ComponentProps<typeof LogExerciseForm>,
-  "exercises" | "onAdd"
-> & {
+type Props = Pick<React.ComponentProps<typeof LogExerciseForm>, "exercises"> & {
   date: Date
+  onAdd: (date: string, exerciseId: Id<"exercises">, sets: WorkoutSets) => void
 }
 
 /* On mobile this is a nested drawer, so it must render inside DayDetails */
 export default function LogExercise({ exercises, onAdd, date }: Props) {
   const isMobile = useIsMobile()
   const [open, setOpen] = React.useState(false)
+  const formId = React.useId()
 
   const title = `Log Exercise - ${format(date, "MMM d, yyyy")}`
   const trigger = (
@@ -44,31 +44,33 @@ export default function LogExercise({ exercises, onAdd, date }: Props) {
   )
   const form = (
     <LogExerciseForm
+      id={formId}
       exercises={exercises}
-      dateStr={format(date, "yyyy-MM-dd")}
-      onAdd={onAdd}
-      onClose={() => setOpen(false)}
+      onSubmit={(exerciseId, sets) => {
+        onAdd(format(date, "yyyy-MM-dd"), exerciseId, sets)
+        setOpen(false)
+      }}
     />
   )
   /* The button is outside the form, so it links to the form by ID */
   const submit = (
-    <Button form="logWorkout" type="submit" className="w-full">
+    <Button form={formId} type="submit" className="w-full">
       Save Workout
     </Button>
   )
 
   if (isMobile) {
     return (
-      <DrawerNested open={open} onOpenChange={setOpen}>
-        <DrawerTrigger asChild>{trigger}</DrawerTrigger>
-        <DrawerContent className="max-h-[90dvh]">
+      <Drawer open={open} onOpenChange={setOpen} fitContent>
+        <DrawerTrigger render={trigger} />
+        <DrawerContent>
           <DrawerHeader>
             <DrawerTitle>{title}</DrawerTitle>
           </DrawerHeader>
-          <DrawerBody className="min-h-0 overflow-y-auto">{form}</DrawerBody>
+          <DrawerBody>{form}</DrawerBody>
           <DrawerFooter>{submit}</DrawerFooter>
         </DrawerContent>
-      </DrawerNested>
+      </Drawer>
     )
   }
 

@@ -17,6 +17,7 @@ import {
 } from "date-fns"
 import { enUS } from "date-fns/locale"
 import DayDetails from "./day-details"
+import { WorkoutSets } from "./log-exercise-form"
 import {
   Calendar as BigCalendar,
   dateFnsLocalizer,
@@ -77,6 +78,7 @@ export default function WorkoutLogger() {
   const exercises = useQuery(api.exercises.list) ?? []
   const logs = useQuery(api.workoutLogs.list) ?? []
   const addWorkoutLog = useMutation(api.workoutLogs.add)
+  const updateWorkoutLog = useMutation(api.workoutLogs.update)
   const removeWorkoutLog = useMutation(api.workoutLogs.remove)
 
   const [selectedDate, setSelectedDate] = useState<Date>(new Date())
@@ -115,6 +117,10 @@ export default function WorkoutLogger() {
     sets: { reps: number; weight: number }[]
   ) {
     addWorkoutLog({ date, exerciseId, sets })
+  }
+
+  function handleUpdate(id: Id<"workoutLogs">, sets: WorkoutSets) {
+    updateWorkoutLog({ id, sets })
   }
 
   function handleRemove(id: Id<"workoutLogs">) {
@@ -179,6 +185,7 @@ export default function WorkoutLogger() {
         logs={dayLogs}
         exercises={exercises}
         onAdd={handleAdd}
+        onUpdate={handleUpdate}
         onRemove={handleRemove}
       />
     </div>

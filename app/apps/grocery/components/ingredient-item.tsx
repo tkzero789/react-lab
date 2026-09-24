@@ -127,9 +127,7 @@ export default function IngredientItem({
                 <Button
                   key={dish._id}
                   type="button"
-                  variant={
-                    editDishIds.includes(dish._id) ? "default" : "muted"
-                  }
+                  variant={editDishIds.includes(dish._id) ? "default" : "muted"}
                   size="sm"
                   onClick={() => toggleEditDish(dish._id)}
                 >
@@ -188,11 +186,13 @@ export default function IngredientItem({
 
         {isMobile && (
           <Drawer>
-            <DrawerTrigger asChild>
-              <Button variant="ghost-destructive" size="icon-sm">
-                <Trash2 />
-              </Button>
-            </DrawerTrigger>
+            <DrawerTrigger
+              render={
+                <Button variant="ghost-destructive" size="icon-sm">
+                  <Trash2 />
+                </Button>
+              }
+            />
             <DrawerContent className="mx-auto max-w-2xl">
               <DrawerHeader>
                 <DrawerTitle>{item.name}</DrawerTitle>
@@ -204,11 +204,13 @@ export default function IngredientItem({
                 >
                   Delete
                 </Button>
-                <DrawerClose asChild>
-                  <Button variant="outline" className="w-full">
-                    Cancel
-                  </Button>
-                </DrawerClose>
+                <DrawerClose
+                  render={
+                    <Button variant="outline" className="w-full">
+                      Cancel
+                    </Button>
+                  }
+                />
               </DrawerFooter>
             </DrawerContent>
           </Drawer>

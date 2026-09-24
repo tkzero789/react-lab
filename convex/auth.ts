@@ -16,12 +16,6 @@ export const createAuth = (ctx: GenericCtx<DataModel>) => {
   return betterAuth({
     baseURL: siteUrl,
     database: authComponent.adapter(ctx),
-    advanced: {
-      crossSubDomainCookies: {
-        enabled: true,
-        domain: process.env.COOKIE_DOMAIN!,
-      },
-    },
     trustedOrigins: (process.env.TRUSTED_ORIGINS ?? "").split(","),
     socialProviders: {
       google: {

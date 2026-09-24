@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  allowedDevOrigins: ["sook-posttracheal-arthur.ngrok-free.dev"],
   images: {
     formats: ["image/avif", "image/webp"],
     remotePatterns: [

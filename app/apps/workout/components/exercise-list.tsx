@@ -2,7 +2,6 @@
 
 import React from "react"
 import { Badge } from "@/components/ui/badge"
-import { Button, buttonVariants } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import {
   InputGroup,
@@ -17,47 +16,21 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { EllipsisIcon, Search } from "lucide-react"
+import { Search } from "lucide-react"
 import { useMutation, useQuery } from "convex/react"
 import { api } from "@/convex/_generated/api"
-import { Id } from "@/convex/_generated/dataModel"
 import { MUSCLE_GROUPS } from "@/types/workout"
-import UpdateExercise from "./update-exercise"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-} from "@/components/ui/dialog"
+import ExerciseActions from "./exercise-actions"
+import ExerciseThumbnail from "./exercise-thumbnail"
 
 const ALL = "All"
 
 export default function ExerciseList() {
   const exercises = useQuery(api.exercises.list) ?? []
-  const muscleGroups = exercises
-  console.log(muscleGroups)
   const removeExercise = useMutation(api.exercises.remove)
 
   const [search, setSearch] = React.useState<string>("")
   const [muscle, setMuscle] = React.useState<string>(ALL)
-  const [editingId, setEditingId] = React.useState<Id<"exercises"> | null>(null)
-  const [deleting, setDeleting] = React.useState<{
-    id: Id<"exercises">
-    name: string
-  } | null>(null)
-
-  function handleRemove(id: Id<"exercises">) {
-    removeExercise({ id })
-  }
 
   const query = search.trim().toLowerCase()
   const filtered = exercises.filter((e) => {
@@ -66,8 +39,6 @@ export default function ExerciseList() {
       muscle === ALL ? true : e.muscleGroups.includes(muscle)
     return matchesName && matchesMuscle
   })
-
-  console.log(muscle)
 
   return (
     <div className="flex flex-1 flex-col gap-3 px-4">
@@ -120,7 +91,8 @@ export default function ExerciseList() {
             <Card key={exercise._id}>
               <CardContent className="p-0">
                 {/* Details */}
-                <div className="flex justify-between px-4 pt-4 pb-2">
+                <div className="flex gap-3 px-4 pt-4 pb-2">
+                  <ExerciseThumbnail src={exercise.thumbnailUrl} />
                   <div className="flex flex-1 justify-between gap-2">
                     <div className="flex flex-col gap-1">
                       {/* Name */}
@@ -149,46 +121,9 @@ export default function ExerciseList() {
                 </div>
                 {/* Actions */}
                 <div className="flex justify-end gap-1 border-t px-4 pt-2 pb-4">
-                  <DropdownMenu>
-                    <DropdownMenuTrigger
-                      render={
-                        <Button variant="ghost" size="icon-sm">
-                          <EllipsisIcon />
-                        </Button>
-                      }
-                    ></DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                      <DropdownMenuGroup>
-                        <DropdownMenuItem
-                          onClick={() =>
-                            setTimeout(() => {
-                              setEditingId(exercise._id)
-                            }, 0)
-                          }
-                        >
-                          Edit
-                        </DropdownMenuItem>
-                        <DropdownMenuItem
-                          variant="destructive"
-                          onClick={() =>
-                            setDeleting(() => ({
-                              id: exercise._id,
-                              name: exercise.name,
-                            }))
-                          }
-                        >
-                          Delete
-                        </DropdownMenuItem>
-                      </DropdownMenuGroup>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-
-                  <UpdateExercise
+                  <ExerciseActions
                     exercise={exercise}
-                    open={editingId === exercise._id}
-                    onOpenChange={(open) =>
-                      setEditingId(open ? exercise._id : null)
-                    }
+                    onRemove={() => removeExercise({ id: exercise._id })}
                   />
                 </div>
               </CardContent>
@@ -196,32 +131,6 @@ export default function ExerciseList() {
           ))}
         </div>
       )}
-      <Dialog
-        type="alert"
-        open={deleting !== null}
-        onOpenChange={(open) => {
-          !open && setDeleting(null)
-        }}
-      >
-        <DialogContent showCloseButton={false}>
-          <DialogHeader>
-            <DialogDescription>Delete {deleting?.name}?</DialogDescription>
-          </DialogHeader>
-          <DialogFooter>
-            <DialogClose render={<Button variant="outline">Cancel</Button>} />
-            <Button
-              variant="destructive"
-              onClick={() => {
-                if (deleting) {
-                  handleRemove(deleting?.id)
-                }
-              }}
-            >
-              Delete
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
     </div>
   )
 }

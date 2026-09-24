@@ -1,53 +1,57 @@
 "use client"
 
+/* Form that saves changes to an exercise */
+
+import React from "react"
 import { useMutation } from "convex/react"
+import { FunctionReturnType } from "convex/server"
 import { api } from "@/convex/_generated/api"
-import { Doc } from "@/convex/_generated/dataModel"
-import {
-  Dialog,
-  DialogBody,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog"
+import { useUploadFile } from "@/hooks/use-upload-file"
+import { toast } from "@/lib/toast"
 import ExerciseForm, { ExerciseFormValues } from "./exercise-form"
 
+export type Exercise = FunctionReturnType<typeof api.exercises.list>[number]
+
 type Props = {
-  exercise: Doc<"exercises">
-  open: boolean
-  onOpenChange: (open: boolean) => void
+  exercise: Exercise
+  onSaved: () => void
 }
 
-export default function UpdateExercise({
-  exercise,
-  open,
-  onOpenChange,
-}: Props) {
+export default function UpdateExerciseForm({ exercise, onSaved }: Props) {
   const updateExercise = useMutation(api.exercises.update)
+  const uploadFile = useUploadFile()
+  const [isPending, startTransition] = React.useTransition()
 
-  function handleUpdate(data: ExerciseFormValues) {
-    updateExercise({ id: exercise._id, ...data })
-    onOpenChange(false)
+  function handleUpdate({ thumbnail, ...data }: ExerciseFormValues) {
+    startTransition(async () => {
+      try {
+        const storageId =
+          thumbnail instanceof File ? await uploadFile(thumbnail) : thumbnail
+        await updateExercise({
+          id: exercise._id,
+          ...data,
+          thumbnail: storageId,
+        })
+        onSaved()
+      } catch (error) {
+        toast.error(
+          error instanceof Error ? error.message : "Could not save exercise"
+        )
+      }
+    })
   }
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Edit Exercise</DialogTitle>
-        </DialogHeader>
-        <DialogBody className="flex flex-1 flex-col p-0">
-          <ExerciseForm
-            defaultValues={{
-              name: exercise.name,
-              muscleGroups: exercise.muscleGroups,
-              personalBest: exercise.personalBest,
-            }}
-            onSubmit={handleUpdate}
-            submitLabel="Save Changes"
-          />
-        </DialogBody>
-      </DialogContent>
-    </Dialog>
+    <ExerciseForm
+      defaultValues={{
+        name: exercise.name,
+        muscleGroups: exercise.muscleGroups,
+        personalBest: exercise.personalBest,
+        thumbnailUrl: exercise.thumbnailUrl,
+      }}
+      onSubmit={handleUpdate}
+      submitLabel="Save Changes"
+      isPending={isPending}
+    />
   )
 }

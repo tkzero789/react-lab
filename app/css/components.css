@@ -1,0 +1,183 @@
+/* Component tokens */
+
+/* Button */
+:root,
+.light {
+  --button-default-hover: var(--granite-800);
+
+  --button-muted-hover: color-mix(
+    in oklab,
+    var(--granite-200) 50%,
+    var(--granite-300) 50%
+  );
+
+  --button-outline-hover: color-mix(
+    in oklab,
+    var(--granite-100) 50%,
+    var(--granite-200) 50%
+  );
+
+  --button-ghost-hover: color-mix(
+    in oklab,
+    var(--granite-100) 50%,
+    var(--granite-200) 50%
+  );
+
+  --button-destructive-hover: color-mix(
+    in oklab,
+    var(--ruby-100) 50%,
+    var(--ruby-200) 50%
+  );
+  --button-ghost-destructive-hover: var(--ruby-100);
+
+  --button-input-hover: color-mix(
+    in oklab,
+    var(--granite-200) 50%,
+    var(--granite-300) 50%
+  );
+}
+
+.dark {
+  --button-default-hover: var(--granite-200);
+
+  --button-muted-hover: var(--granite-700);
+
+  --button-outline-hover: var(--granite-700);
+
+  --button-ghost-hover: color-mix(
+    in oklab,
+    var(--muted-foreground) 15%,
+    transparent
+  );
+
+  --button-destructive-hover: color-mix(
+    in oklab,
+    var(--destructive) 30%,
+    transparent
+  );
+  --button-ghost-destructive-hover: color-mix(
+    in oklab,
+    var(--destructive) 10%,
+    transparent
+  );
+
+  --button-input-hover: var(--granite-600);
+}
+
+@theme inline {
+  --color-button-default-hover: var(--button-default-hover);
+
+  --color-button-muted-hover: var(--button-muted-hover);
+
+  --color-button-outline-hover: var(--button-outline-hover);
+
+  --color-button-ghost-hover: var(--button-ghost-hover);
+
+  --color-button-destructive-hover: var(--button-destructive-hover);
+  --color-button-ghost-destructive-hover: var(--button-ghost-destructive-hover);
+
+  --color-button-input-hover: var(--button-input-hover);
+}
+
+/* Card */
+:root,
+.light {
+  --card: var(--granite-50);
+  --card-foreground: var(--granite-950);
+}
+
+.dark {
+  --card: var(--granite-900);
+  --card-foreground: var(--granite-50);
+}
+
+@theme inline {
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+}
+
+/* Chart */
+:root,
+.light {
+  --chart-1: var(--granite-300);
+  --chart-2: var(--granite-500);
+  --chart-3: var(--granite-600);
+  --chart-4: var(--granite-700);
+  --chart-5: var(--granite-900);
+}
+
+.dark {
+  --chart-1: var(--granite-200);
+  --chart-2: var(--granite-300);
+  --chart-3: var(--granite-400);
+  --chart-4: var(--granite-500);
+  --chart-5: var(--granite-600);
+}
+
+@theme inline {
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+}
+
+/* Input */
+:root,
+.light {
+  --input: var(--granite-200);
+}
+
+.dark {
+  --input: var(--granite-700);
+}
+
+:where(
+  [data-slot="card"],
+  [data-slot="dialog-content"],
+  [data-slot="alert-dialog-content"],
+  [data-slot="drawer-content"],
+  [data-slot="sheet-content"],
+  [data-slot="popover-content"]
+) {
+  --input: var(--granite-100);
+  --button-input-hover: color-mix(
+    in oklab,
+    var(--granite-100) 50%,
+    var(--granite-200) 50%
+  );
+}
+
+.dark
+  :where(
+    [data-slot="card"],
+    [data-slot="dialog-content"],
+    [data-slot="alert-dialog-content"],
+    [data-slot="drawer-content"],
+    [data-slot="sheet-content"],
+    [data-slot="popover-content"]
+  ) {
+  --input: var(--granite-800);
+  --button-input-hover: var(--granite-700);
+}
+
+@theme inline {
+  --color-input: var(--input);
+}
+
+/* Popover */
+:root,
+.light {
+  --popover: var(--pearl);
+  --popover-foreground: var(--granite-950);
+}
+
+.dark {
+  --popover: var(--granite-900);
+  --popover-foreground: var(--granite-50);
+}
+
+@theme inline {
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+}

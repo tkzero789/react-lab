@@ -56,7 +56,7 @@ export default function MovieBannerCarousel() {
   if (isPending) {
     return (
       <Container className="max-w-full px-0 lg:max-w-7xl lg:px-4">
-        <Skeleton className="h-56 rounded-none md:h-100 lg:h-137.5 lg:rounded-xl xl:h-175" />
+        <Skeleton className="h-56 rounded-none md:h-100 lg:h-137.5 lg:rounded-lg xl:h-175" />
       </Container>
     )
   }
@@ -64,7 +64,7 @@ export default function MovieBannerCarousel() {
   if (isError) {
     return (
       <Container className="max-w-full px-0 lg:max-w-7xl lg:px-4">
-        <Empty className="h-56 border md:h-100 lg:h-137.5 lg:rounded-xl xl:h-175">
+        <Empty className="h-56 border md:h-100 lg:h-137.5 lg:rounded-lg xl:h-175">
           <EmptyHeader>
             <EmptyMedia variant="icon">
               <TriangleAlertIcon />
@@ -92,7 +92,7 @@ export default function MovieBannerCarousel() {
   return (
     <Container className="px-0 lg:px-4">
       <div className="relative">
-        <Carousel ref={emblaRef} className="lg:rounded-xl">
+        <Carousel ref={emblaRef} className="lg:rounded-lg">
           <CarouselContainer>
             {data.items.map((movie, index) => {
               // thumb_url is the landscape still; poster_url is portrait.
@@ -122,7 +122,7 @@ export default function MovieBannerCarousel() {
                       ) : null}
                     </div>
 
-                    <div className="absolute right-2 bottom-2 left-2 flex flex-col gap-1 rounded-xl bg-secondary/50 p-2 text-secondary-foreground backdrop-blur-xs lg:right-6 lg:bottom-6 lg:left-6 lg:gap-4 lg:p-6 dark:bg-muted/50 dark:text-foreground">
+                    <div className="absolute right-2 bottom-2 left-2 flex flex-col gap-1 rounded-lg bg-muted/50 p-2 text-foreground backdrop-blur-xs lg:right-6 lg:bottom-6 lg:left-6 lg:gap-4 lg:p-6 dark:bg-muted/50 dark:text-foreground">
                       {/* Name */}
                       <div className="text-lg font-medium lg:text-2xl">
                         {movie.name}
@@ -157,11 +157,11 @@ export default function MovieBannerCarousel() {
         </Carousel>
         <CarouselPrev
           onClick={onPrevButtonClick}
-          className="absolute top-1/2 left-6 hidden h-12 w-12 -translate-y-1/2 rounded-full bg-secondary/20 text-background hover:bg-secondary/40 lg:flex dark:bg-muted/20 dark:text-foreground dark:hover:bg-muted/40 [&_svg]:size-10"
+          className="absolute top-1/2 left-6 hidden h-12 w-12 -translate-y-1/2 rounded-full bg-muted/20 text-background hover:bg-muted/40 lg:flex dark:bg-muted/20 dark:text-foreground dark:hover:bg-muted/40 [&_svg]:size-10"
         />
         <CarouselNext
           onClick={onNextButtonClick}
-          className="absolute top-1/2 right-6 hidden h-12 w-12 -translate-y-1/2 rounded-full bg-secondary/20 text-background hover:bg-secondary/40 lg:flex dark:bg-muted/20 dark:text-foreground dark:hover:bg-muted/40 [&_svg]:size-10"
+          className="absolute top-1/2 right-6 hidden h-12 w-12 -translate-y-1/2 rounded-full bg-muted/20 text-background hover:bg-muted/40 lg:flex dark:bg-muted/20 dark:text-foreground dark:hover:bg-muted/40 [&_svg]:size-10"
         />
       </div>
     </Container>

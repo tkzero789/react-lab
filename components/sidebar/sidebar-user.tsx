@@ -15,7 +15,7 @@ export function SidebarUser() {
       <SidebarMenuItem>
         <SidebarMenuButton
           size="lg"
-          className="p-0 data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+          className="p-0 data-[state=open]:bg-muted data-[state=open]:text-foreground"
         >
           <UserMenu type="sidebar" />
         </SidebarMenuButton>

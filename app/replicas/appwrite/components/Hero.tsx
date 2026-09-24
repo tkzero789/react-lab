@@ -10,7 +10,7 @@ export default function AppWriteHero() {
         {/* New button */}
         <Link
           href="/"
-          className={`mb-4 flex w-fit gap-1 rounded-[0.875rem] bg-[#fd356e14] px-2 py-1 leading-5 text-[#e4e4e7] ${styles.newButton}`}
+          className={`mb-4 flex w-fit gap-1 rounded-md bg-[#fd356e14] px-2 py-1 leading-5 text-[#e4e4e7] ${styles.newButton}`}
         >
           <div className="flex items-center gap-1">
             <Star className="h-4 w-5" strokeWidth={2.5} />
@@ -45,7 +45,7 @@ export default function AppWriteHero() {
             </p>
             <div className="mt-8 flex gap-4">
               <button
-                className="flex items-center justify-center rounded-lg px-[14px] py-2 font-medium text-[#e4e4e7]"
+                className="flex items-center justify-center rounded-md px-[14px] py-2 font-medium text-[#e4e4e7]"
                 style={{
                   background:
                     "linear-gradient(135deg, #fd356e, #fd356e 61%, #fe526c)",
@@ -54,7 +54,7 @@ export default function AppWriteHero() {
                 <span>Start building</span>
               </button>
               <button
-                className={`flex w-fit items-center gap-2 rounded-lg bg-[#fd356e14] px-[14px] py-[7px] leading-5 text-[#e4e4e7] ${styles.secondaryButton}`}
+                className={`flex w-fit items-center gap-2 rounded-md bg-[#fd356e14] px-[14px] py-[7px] leading-5 text-[#e4e4e7] ${styles.secondaryButton}`}
               >
                 <Play className="h-4 w-5" strokeWidth={2.5} />
                 <span className={`font-medium ${styles.secondaryButtonText}`}>

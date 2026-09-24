@@ -34,11 +34,17 @@ export function NavProjects({ projects }: Props) {
       <SidebarMenu>
         {projects.map((project: ProjectSidebar) => (
           <SidebarMenuItem key={project.name}>
-            <SidebarMenuButton asChild isActive={project.isActive}>
-              <Link href={pathClient(project.url)} onClick={() => setOpenMobile(false)}>
-                <project.icon />
-                <span>{project.name}</span>
-              </Link>
+            <SidebarMenuButton
+              isActive={project.isActive}
+              render={
+                <Link
+                  href={pathClient(project.url)}
+                  onClick={() => setOpenMobile(false)}
+                />
+              }
+            >
+              <project.icon />
+              <span>{project.name}</span>
             </SidebarMenuButton>
           </SidebarMenuItem>
         ))}

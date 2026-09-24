@@ -50,7 +50,7 @@ export default function TodoItem({ todo, onEdit, onToggle, onDelete }: Props) {
   const hasMeta = dateInfo !== null || todo.location !== "" || fileCount > 0
 
   return (
-    <li className="group relative rounded-xl border border-transparent transition-colors hover:border-border hover:bg-card">
+    <li className="group relative rounded-lg border border-transparent transition-colors hover:border-border hover:bg-card">
       <div className="flex gap-3 p-3">
         <button
           type="button"
@@ -61,7 +61,7 @@ export default function TodoItem({ todo, onEdit, onToggle, onDelete }: Props) {
           }
           className={cn(
             "mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full border-[1.5px] border-ring transition-colors hover:border-foreground focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-none",
-            isCompleted && "border-primary bg-primary text-primary-foreground"
+            isCompleted && "border-brand bg-brand text-brand-foreground"
           )}
         >
           {isCompleted ? (

@@ -73,7 +73,7 @@ export default function MovieFilter() {
             <DrawerTitle>Filter</DrawerTitle>
           </DrawerHeader>
           <div className="grid grid-cols-2 gap-4 px-4">
-            <NativeSelect width="full" className="h-10 rounded-xl bg-muted">
+            <NativeSelect width="full" className="h-10 bg-muted">
               {filter?.category.map((item) => (
                 <NativeSelectOption
                   key={item._id}
@@ -85,14 +85,14 @@ export default function MovieFilter() {
                   className={cn(
                     "pl-2",
                     selectedFilter.category?.slug === item.slug &&
-                      "bg-primary text-primary-foreground focus:bg-primary focus:text-primary-foreground"
+                      "bg-brand text-brand-foreground focus:bg-brand focus:text-brand-foreground"
                   )}
                 >
                   {item.name}
                 </NativeSelectOption>
               ))}
             </NativeSelect>
-            <NativeSelect width="full" className="h-10 rounded-xl bg-muted">
+            <NativeSelect width="full" className="h-10 bg-muted">
               {filter?.country.map((item) => (
                 <NativeSelectOption
                   key={item._id}
@@ -104,7 +104,7 @@ export default function MovieFilter() {
                   className={cn(
                     "pl-2",
                     selectedFilter.country?.slug === item.slug &&
-                      "bg-primary text-primary-foreground focus:bg-primary focus:text-primary-foreground"
+                      "bg-brand text-brand-foreground focus:bg-brand focus:text-brand-foreground"
                   )}
                 >
                   {item.name}
@@ -146,7 +146,7 @@ export default function MovieFilter() {
                   className={cn(
                     "pl-2",
                     selectedFilter.category?.slug === item.slug &&
-                      "bg-primary text-primary-foreground focus:bg-primary focus:text-primary-foreground"
+                      "bg-brand text-brand-foreground focus:bg-brand focus:text-brand-foreground"
                   )}
                 >
                   {item.name}
@@ -170,7 +170,7 @@ export default function MovieFilter() {
                   className={cn(
                     "pl-2",
                     selectedFilter.country?.slug === item.slug &&
-                      "bg-primary text-primary-foreground focus:bg-primary focus:text-primary-foreground"
+                      "bg-brand text-brand-foreground focus:bg-brand focus:text-brand-foreground"
                   )}
                 >
                   {item.name}

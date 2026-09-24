@@ -130,7 +130,7 @@ export default function FileUpload({
           {variant === "dropzone" && (
             <div
               className={cn(
-                "flex pressable cursor-pointer flex-col items-center justify-center gap-2 rounded-xl border border-dashed bg-background p-4 text-sm transition-colors",
+                "flex pressable cursor-pointer flex-col items-center justify-center gap-2 rounded-lg border border-dashed bg-background p-4 text-sm transition-colors",
                 isDragging && "border-solid bg-muted",
                 className
               )}

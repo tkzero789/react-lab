@@ -25,7 +25,7 @@ export default function MovieCard({ movie, segment }: Props) {
 
   return (
     <Link href={href} title={movie.name} className="group">
-      <div className="relative h-64 overflow-hidden rounded-xl bg-muted min-[425px]:h-80 sm:h-72 lg:h-88">
+      <div className="relative h-64 overflow-hidden rounded-lg bg-muted min-[425px]:h-80 sm:h-72 lg:h-88">
         {poster ? (
           <Image
             src={poster}
@@ -35,7 +35,7 @@ export default function MovieCard({ movie, segment }: Props) {
             className="object-cover transition-transform duration-500 will-change-transform group-hover:scale-105"
           />
         ) : null}
-        <div className="absolute right-2 bottom-2 left-2 flex flex-col gap-1 rounded-xl bg-secondary/50 p-2 text-secondary-foreground backdrop-blur-xs dark:bg-muted/50 dark:text-foreground">
+        <div className="absolute right-2 bottom-2 left-2 flex flex-col gap-1 rounded-lg bg-muted/50 p-2 text-foreground backdrop-blur-xs dark:bg-muted/50 dark:text-foreground">
           {/* Name */}
           <div className="truncate text-sm font-medium lg:text-lg">
             {movie.name}

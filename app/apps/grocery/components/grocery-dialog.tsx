@@ -45,14 +45,14 @@ export default function GroceryDialog() {
         <DialogBody>
           <Card>
             <CardHeader className="flex flex-row items-center justify-between">
-              <div className="flex h-10 w-fit items-center gap-1 rounded-xl bg-muted p-1">
+              <div className="flex h-10 w-fit items-center gap-1 rounded-lg bg-muted p-1">
                 <Button
                   variant="ghost"
                   size="sm"
                   className={cn(
                     "hover:bg-background hover:text-foreground dark:hover:bg-foreground dark:hover:text-background",
                     tab === "ingredient" &&
-                      "bg-background dark:bg-foreground dark:text-secondary-foreground"
+                      "bg-background dark:bg-foreground dark:text-foreground"
                   )}
                   onClick={() => setTab("ingredient")}
                 >
@@ -64,7 +64,7 @@ export default function GroceryDialog() {
                   className={cn(
                     "hover:bg-background hover:text-foreground dark:hover:bg-foreground dark:hover:text-background",
                     tab === "dish" &&
-                      "bg-background dark:bg-foreground dark:text-secondary-foreground"
+                      "bg-background dark:bg-foreground dark:text-foreground"
                   )}
                   onClick={() => setTab("dish")}
                 >

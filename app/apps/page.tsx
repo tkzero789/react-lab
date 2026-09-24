@@ -51,7 +51,7 @@ export default async function AppsPage() {
           <a
             key={app.title}
             href={app.href}
-            className={cn(buttonVariants({ variant: "secondary" }))}
+            className={cn(buttonVariants({ variant: "muted" }))}
           >
             {app.title}
           </a>

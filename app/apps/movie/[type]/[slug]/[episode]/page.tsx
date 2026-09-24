@@ -82,7 +82,7 @@ export default function EpisodePage() {
                   className={cn(
                     buttonVariants({
                       variant:
-                        episode.slug === episodeSlug ? "default" : "secondary",
+                        episode.slug === episodeSlug ? "default" : "muted",
                       size: "sm",
                     })
                   )}

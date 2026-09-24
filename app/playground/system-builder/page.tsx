@@ -117,7 +117,7 @@ export default function SystemBuilderPage() {
     <div className="flex flex-col items-center justify-center p-4">
       <div className="flex w-full max-w-4xl flex-col gap-4">
         {products.map((product, index) => (
-          <div key={index} className="rounded-2xl border bg-neutral-100 p-4">
+          <div key={index} className="rounded-lg border bg-neutral-100 p-4">
             {/* Header */}
             <div className="flex items-center justify-between">
               Zone {index + 1}
@@ -133,7 +133,7 @@ export default function SystemBuilderPage() {
                   alt="product"
                   height="80"
                   width="80"
-                  className="flex size-20 items-center justify-center rounded-2xl bg-white p-1"
+                  className="flex size-20 items-center justify-center rounded-lg bg-white p-1"
                 />
                 {/* Info */}
                 <div className="flex flex-col gap-4">
@@ -215,7 +215,7 @@ export default function SystemBuilderPage() {
               {products.map((product) => (
                 <div
                   key={product.title}
-                  className="group flex cursor-pointer flex-col gap-4 rounded-xl border border-neutral-300 p-4 transition-all hover:bg-neutral-100 lg:flex"
+                  className="group flex cursor-pointer flex-col gap-4 rounded-lg border border-neutral-300 p-4 transition-all hover:bg-neutral-100 lg:flex"
                 >
                   <div className="flex items-center justify-between">
                     {/* Img & Info */}
@@ -226,7 +226,7 @@ export default function SystemBuilderPage() {
                         width="80"
                         height="80"
                         alt={product.title}
-                        className="rounded-xl bg-white p-1"
+                        className="rounded-lg bg-white p-1"
                       />
                       <div className="flex flex-1 flex-col items-center gap-4 lg:flex-row lg:justify-between">
                         {/* Info */}
@@ -307,7 +307,7 @@ export default function SystemBuilderPage() {
               {products.map((product) => (
                 <div
                   key={product.title}
-                  className="group flex cursor-pointer flex-col gap-4 rounded-xl border border-neutral-300 transition-all hover:bg-neutral-100 lg:flex"
+                  className="group flex cursor-pointer flex-col gap-4 rounded-lg border border-neutral-300 transition-all hover:bg-neutral-100 lg:flex"
                 >
                   <div className="flex items-center justify-between px-4 pt-4">
                     {/* Img & Info */}
@@ -318,7 +318,7 @@ export default function SystemBuilderPage() {
                         width="80"
                         height="80"
                         alt={product.title}
-                        className="rounded-xl bg-white p-1"
+                        className="rounded-lg bg-white p-1"
                       />
                       <div className="flex flex-1 flex-col items-center gap-4 lg:flex-row lg:justify-between">
                         {/* Info */}

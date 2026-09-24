@@ -35,13 +35,24 @@ function ItemSeparator({
 }
 
 const itemVariants = cva(
-  "group/item flex w-full flex-wrap items-center rounded-lg border text-sm transition-colors duration-100 outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 [a]:transition-colors [a]:hover:bg-muted",
+  "group/item flex w-full flex-wrap items-center rounded-lg border border-transparent bg-clip-padding text-sm text-foreground transition-colors duration-100 outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50",
   {
     variants: {
       variant: {
-        default: "border-transparent",
-        outline: "border-border",
-        muted: "border-transparent bg-muted/50",
+        default:
+          "bg-brand text-brand-foreground [a]:hover:bg-button-default-hover",
+        outline:
+          "border-border bg-background aria-expanded:bg-muted aria-expanded:text-foreground [a]:hover:bg-button-outline-hover [a]:hover:text-foreground",
+        muted:
+          "bg-muted aria-expanded:bg-muted aria-expanded:text-foreground [a]:hover:bg-button-muted-hover",
+        ghost:
+          "aria-expanded:bg-transparent aria-expanded:text-foreground [a]:hover:bg-button-ghost-hover [a]:hover:text-foreground",
+        destructive:
+          "bg-destructive text-destructive-foreground [a]:hover:bg-button-destructive-hover",
+        "ghost-destructive":
+          "text-destructive-foreground aria-expanded:bg-transparent aria-expanded:text-destructive-foreground [a]:hover:bg-button-ghost-destructive-hover",
+        link: "underline-offset-4 [a]:hover:underline",
+        input: "border-border bg-input [a]:hover:bg-button-input-hover",
       },
       size: {
         default: "gap-2.5 px-3 py-2.5",
@@ -60,14 +71,19 @@ function Item({
   className,
   variant = "default",
   size = "default",
+  pressable = false,
   render,
   ...props
-}: useRender.ComponentProps<"div"> & VariantProps<typeof itemVariants>) {
+}: useRender.ComponentProps<"div"> &
+  VariantProps<typeof itemVariants> & { pressable?: boolean }) {
   return useRender({
     defaultTagName: "div",
     props: mergeProps<"div">(
       {
-        className: cn(itemVariants({ variant, size, className })),
+        className: cn(
+          itemVariants({ variant, size, className }),
+          pressable && "pressable transition-all"
+        ),
       },
       props
     ),
@@ -88,7 +104,7 @@ const itemMediaVariants = cva(
         default: "bg-transparent",
         icon: "[&_svg:not([class*='size-'])]:size-4",
         image:
-          "size-10 overflow-hidden rounded-sm group-data-[size=sm]/item:size-8 group-data-[size=xs]/item:size-6 [&_img]:size-full [&_img]:object-cover",
+          "size-10 overflow-hidden rounded-lg group-data-[size=sm]/item:size-8 group-data-[size=xs]/item:size-6 [&_img]:size-full [&_img]:object-cover",
       },
     },
     defaultVariants: {
@@ -143,7 +159,7 @@ function ItemDescription({ className, ...props }: React.ComponentProps<"p">) {
     <p
       data-slot="item-description"
       className={cn(
-        "line-clamp-2 text-left text-sm leading-normal font-normal text-muted-foreground group-data-[size=xs]/item:text-xs [&>a]:underline [&>a]:underline-offset-4 [&>a:hover]:text-primary",
+        "line-clamp-2 text-left text-sm leading-normal font-normal text-muted-foreground group-data-[size=xs]/item:text-xs group-data-[variant=default]/item:text-brand-foreground/80 group-data-[variant=destructive]/item:text-destructive-foreground/80 [&>a]:underline [&>a]:underline-offset-4 [&>a:hover]:text-brand",
         className
       )}
       {...props}

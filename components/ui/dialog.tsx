@@ -70,7 +70,7 @@ function DialogContent({
         data-slot="dialog-content"
         data-type={type}
         className={cn(
-          "fixed top-1/2 left-1/2 z-50 flex h-[calc(100dvh-16px)] w-[calc(100dvw-16px)] -translate-x-1/2 -translate-y-1/2 flex-col rounded-xl bg-popover text-sm text-popover-foreground ring-1 ring-foreground/10 duration-100 outline-none md:h-auto md:max-w-sm data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95",
+          "fixed top-1/2 left-1/2 z-50 flex h-[calc(100dvh-16px)] w-[calc(100dvw-16px)] -translate-x-1/2 -translate-y-1/2 flex-col rounded-lg bg-popover text-sm text-popover-foreground ring-1 ring-foreground/10 duration-100 outline-none md:h-auto md:max-w-sm data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95",
           type === "alert" && "h-fit",
           className
         )}
@@ -131,7 +131,7 @@ function DialogFooter({
       data-slot="dialog-footer"
       data-type={type}
       className={cn(
-        "mt-auto flex gap-2 rounded-b-xl p-4 sm:justify-end",
+        "mt-auto flex gap-2 rounded-b-lg p-4 sm:justify-end",
         type === "alert" && "[&_button]:flex-1",
 
         className

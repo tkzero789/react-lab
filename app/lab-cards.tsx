@@ -75,13 +75,13 @@ export default function LabCards() {
           href={host ? getHref(item.title, item.href, host) : item.href}
           key={item.title}
           className={cn(
-            "group size-30 pressable rounded-xl bg-muted p-2 transition-all duration-300 lg:size-48",
+            "group size-30 pressable rounded-lg bg-muted p-2 transition-all duration-300 lg:size-48",
             item.hoverBackground
           )}
         >
-          <div className="flex h-full flex-col items-center justify-center gap-2 rounded-xl bg-background">
+          <div className="flex h-full flex-col items-center justify-center gap-2 rounded-lg bg-background">
             <div
-              className={`flex size-10 items-center justify-center rounded-xl p-2 transition-all duration-300 group-hover:scale-105 lg:size-14 ${item.iconBackground}`}
+              className={`flex size-10 items-center justify-center rounded-lg p-2 transition-all duration-300 group-hover:scale-105 lg:size-14 ${item.iconBackground}`}
             >
               <item.icon />
             </div>

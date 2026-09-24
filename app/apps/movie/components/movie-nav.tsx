@@ -19,13 +19,13 @@ export default function MovieNav() {
   return (
     <div className="sticky top-0 z-50 bg-background">
       <Container className="flex items-center justify-between py-4">
-        <div className="hidden h-10 w-fit items-center rounded-xl bg-muted p-1 lg:flex">
+        <div className="hidden h-10 w-fit items-center rounded-full bg-muted p-1 lg:flex">
           {navTabs.map((tab) => (
             <Link
               key={tab.title}
               className={cn(
                 buttonVariants({ variant: "default" }),
-                "h-full border-0 bg-muted px-3 text-foreground hover:bg-transparent",
+                "h-full rounded-full border-0 bg-muted px-3 text-foreground hover:bg-transparent",
                 tab.segment === params.type &&
                   "bg-background text-foreground hover:bg-background hover:text-foreground"
               )}

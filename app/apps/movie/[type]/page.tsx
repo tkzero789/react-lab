@@ -55,7 +55,7 @@ export default function MovieTypePage() {
             ? Array.from({ length: 10 }).map((_, index) => (
                 <Skeleton
                   key={index}
-                  className="h-64 overflow-hidden rounded-xl min-[425px]:h-80 sm:h-72 lg:h-88"
+                  className="h-64 overflow-hidden rounded-lg min-[425px]:h-80 sm:h-72 lg:h-88"
                 />
               ))
             : data.items.map((movie) => (

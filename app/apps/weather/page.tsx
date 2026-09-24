@@ -118,7 +118,7 @@ export default function WeatherPage() {
               </Button>
             </form>
             {weatherData && (
-              <div className="mt-4 flex flex-col gap-8 rounded-xl border p-4">
+              <div className="mt-4 flex flex-col gap-8 rounded-lg border p-4">
                 {/* City & country */}
                 <div className="flex justify-between">
                   <h3>

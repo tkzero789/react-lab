@@ -41,14 +41,17 @@ export function NavApps({ apps }: Props) {
       <SidebarMenu>
         {activeAppSidebar.map((app: AppSidebar) => (
           <SidebarMenuItem key={app.name}>
-            <SidebarMenuButton asChild isActive={app.isActive}>
-              <Link
-                href={pathClient(app.url)}
-                onClick={() => setOpenMobile(false)}
-              >
-                <app.icon />
-                <span>{app.name}</span>
-              </Link>
+            <SidebarMenuButton
+              isActive={app.isActive}
+              render={
+                <Link
+                  href={pathClient(app.url)}
+                  onClick={() => setOpenMobile(false)}
+                />
+              }
+            >
+              <app.icon />
+              <span>{app.name}</span>
             </SidebarMenuButton>
           </SidebarMenuItem>
         ))}

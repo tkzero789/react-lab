@@ -93,7 +93,7 @@ export default function IngredientItem({
 
   if (editing) {
     return (
-      <div className="flex flex-col gap-2 rounded-xl border bg-background px-4 py-2">
+      <div className="flex flex-col gap-2 rounded-lg border bg-background px-4 py-2">
         <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
           <Input
             value={editName}
@@ -128,7 +128,7 @@ export default function IngredientItem({
                   key={dish._id}
                   type="button"
                   variant={
-                    editDishIds.includes(dish._id) ? "default" : "secondary"
+                    editDishIds.includes(dish._id) ? "default" : "muted"
                   }
                   size="sm"
                   onClick={() => toggleEditDish(dish._id)}
@@ -154,7 +154,7 @@ export default function IngredientItem({
   }
 
   return (
-    <div className="flex items-center gap-4 rounded-xl border bg-background px-4 py-2 transition-all">
+    <div className="flex items-center gap-4 rounded-lg border bg-background px-4 py-2 transition-all">
       <Input
         type="checkbox"
         checked={item.checked}

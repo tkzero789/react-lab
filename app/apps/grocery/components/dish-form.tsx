@@ -68,7 +68,7 @@ export default function DishForm() {
           {dishes.map((dish) => (
             <div
               key={dish._id}
-              className="flex items-center justify-between rounded-xl bg-muted px-4 py-2 text-sm"
+              className="flex items-center justify-between rounded-lg bg-muted px-4 py-2 text-sm"
             >
               <span className="font-medium">{dish.name}</span>
 

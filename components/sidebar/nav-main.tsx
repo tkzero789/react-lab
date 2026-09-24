@@ -18,6 +18,7 @@ import {
   SidebarMenuSubItem,
 } from "@/components/ui/sidebar"
 import { usePathname } from "next/navigation"
+import Link from "next/link"
 
 export function NavMain({
   items,
@@ -54,7 +55,7 @@ export function NavMain({
                     >
                       {item.icon && <item.icon />}
                       <span>{item.title}</span>
-                      <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
+                      <ChevronRight className="ml-auto transition-transform duration-200 group-data-panel-open/menu-button:rotate-90" />
                     </SidebarMenuButton>
                   }
                 ></CollapsibleTrigger>
@@ -63,12 +64,10 @@ export function NavMain({
                     {item.items?.map((subItem) => (
                       <SidebarMenuSubItem key={subItem.title}>
                         <SidebarMenuSubButton
-                          asChild
                           isActive={pathName.startsWith(subItem.url)}
+                          render={<Link href={subItem.url} />}
                         >
-                          <a href={subItem.url}>
-                            <span>{subItem.title}</span>
-                          </a>
+                          <span>{subItem.title}</span>
                         </SidebarMenuSubButton>
                       </SidebarMenuSubItem>
                     ))}

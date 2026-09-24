@@ -12,7 +12,7 @@ export default function GroceryStats() {
     .reduce((sum, i) => sum + i.price, 0)
 
   return (
-    <div className="grid flex-1 grid-cols-3 rounded-xl bg-muted p-4 text-secondary-foreground">
+    <div className="grid flex-1 grid-cols-3 rounded-lg bg-muted p-4 text-foreground">
       <div className="flex flex-col items-center gap-1">
         List
         <span className="font-medium">

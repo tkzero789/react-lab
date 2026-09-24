@@ -34,19 +34,19 @@ export default function AppwriteHeader() {
         <div className="flex items-center gap-2">
           <Link
             href="/"
-            className="flex items-center gap-2 rounded-lg px-4 py-2 text-[#acacaf] hover:bg-[#ffffff1a]"
+            className="flex items-center gap-2 rounded-md px-4 py-2 text-[#acacaf] hover:bg-[#ffffff1a]"
           >
             <Star
               className="h-4 w-5 text-[#acacaf] text-opacity-40"
               strokeWidth={2.5}
             />
             Star on GitHub
-            <div className="rounded-md bg-[#ffffff1f] px-1 py-[3px] leading-none text-[#e4e4e7]">
+            <div className="rounded-sm bg-[#ffffff1f] px-1 py-[3px] leading-none text-[#e4e4e7]">
               47K
             </div>
           </Link>
           <button
-            className="flex items-center justify-center rounded-lg px-[14px] py-2 font-medium text-[#e4e4e7]"
+            className="flex items-center justify-center rounded-md px-[14px] py-2 font-medium text-[#e4e4e7]"
             style={{
               background:
                 "linear-gradient(135deg, #fd356e, #fd356e 61%, #fe526c)",

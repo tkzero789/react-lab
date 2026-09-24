@@ -75,7 +75,7 @@ export default function MovieDetailPage() {
             <Skeleton className="h-56 md:h-[400px] lg:h-[550px] xl:h-[700px]" />
           ) : (
             <div className="relative">
-              <div className="relative aspect-video w-full overflow-hidden rounded-xl bg-muted">
+              <div className="relative aspect-video w-full overflow-hidden rounded-lg bg-muted">
                 {banner ? (
                   <Image
                     src={banner}
@@ -87,7 +87,7 @@ export default function MovieDetailPage() {
                   />
                 ) : null}
               </div>
-              <div className="absolute right-2 bottom-2 left-2 flex flex-col gap-1 rounded-xl bg-secondary/50 p-2 text-secondary-foreground backdrop-blur-xs lg:right-6 lg:bottom-6 lg:left-6 lg:gap-4 lg:p-6 dark:bg-muted/50 dark:text-foreground">
+              <div className="absolute right-2 bottom-2 left-2 flex flex-col gap-1 rounded-lg bg-muted/50 p-2 text-foreground backdrop-blur-xs lg:right-6 lg:bottom-6 lg:left-6 lg:gap-4 lg:p-6 dark:bg-muted/50 dark:text-foreground">
                 {/* Name */}
                 <div className="text-lg font-medium lg:text-2xl">
                   {movie.name}
@@ -132,7 +132,7 @@ export default function MovieDetailPage() {
             <div className="flex flex-col gap-4">
               {/* Content */}
               {movie.content ? (
-                <div className="rounded-xl bg-muted p-4">{movie.content}</div>
+                <div className="rounded-lg bg-muted p-4">{movie.content}</div>
               ) : null}
               {/* Categories */}
               <div className="flex flex-col gap-2 lg:hidden">
@@ -193,7 +193,7 @@ export default function MovieDetailPage() {
                           `/apps/movie/${segment}/${movie.slug}/${episode.slug}`
                         )}
                         className={cn(
-                          buttonVariants({ variant: "secondary", size: "sm" })
+                          buttonVariants({ variant: "muted", size: "sm" })
                         )}
                       >
                         {episode.slug === "full"

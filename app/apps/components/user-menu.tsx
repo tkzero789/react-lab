@@ -45,7 +45,7 @@ export default function UserMenu({ type = "default" }: Props) {
           <>
             <Avatar className="size-8">
               <AvatarImage src={session.user.image ?? undefined} />
-              <AvatarFallback className="rounded-full bg-sidebar-primary text-xs text-sidebar-primary-foreground">
+              <AvatarFallback className="rounded-full bg-muted text-xs text-foreground">
                 {session.user.name?.charAt(0)?.toUpperCase() ?? "?"}
               </AvatarFallback>
             </Avatar>
@@ -73,7 +73,7 @@ export default function UserMenu({ type = "default" }: Props) {
           <>
             <Avatar className="size-8 rounded-full">
               <AvatarImage src={session.user.image ?? undefined} />
-              <AvatarFallback className="rounded-full bg-sidebar-primary text-xs text-sidebar-primary-foreground">
+              <AvatarFallback className="rounded-full bg-muted text-xs text-foreground">
                 {session.user.name?.charAt(0)?.toUpperCase() ?? "?"}
               </AvatarFallback>
             </Avatar>

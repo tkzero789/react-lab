@@ -48,7 +48,7 @@ export default function MovieMenu({ paramsType }: Props) {
                 className={cn(
                   buttonVariants({ variant: "default" }),
                   tab.segment === paramsType &&
-                    "bg-primary text-primary-foreground"
+                    "bg-brand text-brand-foreground"
                 )}
                 href={pathClient(
                   tab.segment ? `/apps/movie/${tab.segment}` : `/apps/movie`

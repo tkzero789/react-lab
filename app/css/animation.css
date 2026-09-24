@@ -54,6 +54,10 @@
   }
 }
 
+:root {
+  --scale-pressed: 0.98;
+}
+
 @utility pressable {
   @apply transition-transform will-change-transform active:scale-(--scale-pressed) data-pressed:scale-(--scale-pressed);
 }

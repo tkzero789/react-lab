@@ -98,7 +98,7 @@ export default function IngredientForm() {
                 key={dish._id}
                 type="button"
                 variant={
-                  selectedDishIds.includes(dish._id) ? "default" : "secondary"
+                  selectedDishIds.includes(dish._id) ? "default" : "muted"
                 }
                 size="sm"
                 onClick={() => toggleDishSelection(dish._id)}

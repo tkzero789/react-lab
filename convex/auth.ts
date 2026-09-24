@@ -7,6 +7,8 @@ import { betterAuth } from "better-auth/minimal";
 import authConfig from "./auth.config";
 
 const siteUrl = process.env.SITE_URL!;
+/* Set only in production. Dev hosts like ngrok cannot share a parent cookie domain. */
+const cookieDomain = process.env.COOKIE_DOMAIN;
 
 // The component client has methods needed for integrating Convex with Better Auth,
 // as well as helper methods for general use.
@@ -16,6 +18,10 @@ export const createAuth = (ctx: GenericCtx<DataModel>) => {
   return betterAuth({
     baseURL: siteUrl,
     database: authComponent.adapter(ctx),
+    /* The OAuth callback runs on the SITE_URL subdomain. Sign-in can start on another subdomain, so the state cookie must be shared. */
+    advanced: cookieDomain
+      ? { crossSubDomainCookies: { enabled: true, domain: cookieDomain } }
+      : undefined,
     trustedOrigins: (process.env.TRUSTED_ORIGINS ?? "").split(","),
     socialProviders: {
       google: {

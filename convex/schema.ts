@@ -47,7 +47,7 @@ export default defineSchema({
     muscleGroups: v.array(v.string()),
     personalBest: v.number(),
     thumbnail: v.optional(v.id("_storage")),
-  }),
+  }).index("by_user", ["userId"]),
 
   workoutLogs: defineTable({
     userId: v.id("users"),
@@ -59,5 +59,7 @@ export default defineSchema({
         weight: v.number(),
       })
     ),
-  }).index("by_user_and_date", ["userId", "date"]),
+  })
+    .index("by_user_and_date", ["userId", "date"])
+    .index("by_exercise", ["exerciseId"]),
 })

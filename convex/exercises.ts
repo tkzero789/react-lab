@@ -27,7 +27,10 @@ export const list = query({
       throw new ConvexError("User not found");
     }
 
-    const exercises = await ctx.db.query("exercises").collect();
+    const exercises = await ctx.db
+      .query("exercises")
+      .withIndex("by_user", (q) => q.eq("userId", user._id))
+      .collect();
     return await Promise.all(
       exercises.map(async (exercise) => ({
         ...exercise,
@@ -138,11 +141,12 @@ export const remove = mutation({
       throw new ConvexError("Exercise not found or not owned by any user");
     }
 
-    const logs = await ctx.db.query("workoutLogs").collect();
+    const logs = await ctx.db
+      .query("workoutLogs")
+      .withIndex("by_exercise", (q) => q.eq("exerciseId", args.id))
+      .collect();
     for (const log of logs) {
-      if (log.exerciseId === args.id) {
-        await ctx.db.delete(log._id);
-      }
+      await ctx.db.delete(log._id);
     }
 
     if (exercise.thumbnail) await ctx.storage.delete(exercise.thumbnail);

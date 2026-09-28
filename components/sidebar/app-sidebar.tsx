@@ -13,6 +13,7 @@ import {
   PieChart,
   RollerCoaster,
   ShoppingBasket,
+  Wallet,
 } from "lucide-react"
 import { NavApps } from "./nav-app"
 import { NavProjects } from "@/components/sidebar/nav-projects"
@@ -52,6 +53,11 @@ const sidebarItems = {
       name: "Workout",
       url: "/apps/workout",
       icon: Dumbbell,
+    },
+    {
+      name: "Finance",
+      url: "/apps/finance",
+      icon: Wallet,
     },
   ],
   projects: [

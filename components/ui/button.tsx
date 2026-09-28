@@ -22,7 +22,7 @@ const buttonVariants = cva(
           "pressable text-destructive-foreground hover:bg-button-ghost-destructive-hover aria-expanded:bg-transparent aria-expanded:text-destructive-foreground",
         link: "text-foreground underline-offset-4 hover:underline",
         input:
-          "justify-start gap-3! border-border bg-input px-3! font-normal hover:bg-button-input-hover [&_svg]:text-muted-foreground",
+          "justify-start gap-3! border-transparent bg-input px-3! font-normal hover:bg-button-input-hover [&_svg]:text-muted-foreground",
       },
       size: {
         default:
@@ -33,7 +33,6 @@ const buttonVariants = cva(
         "icon-sm": "size-8",
         "icon-xs": "size-6 [&_svg:not([class*='size-'])]:size-3",
       },
-      /* A pill inside a ButtonGroup uses the group radius, so the outer corners of the group match */
       shape: {
         default: "",
         pill: "rounded-full in-data-[slot=button-group]:rounded-lg",

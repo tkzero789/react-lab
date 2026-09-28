@@ -1,26 +1,20 @@
 "use client"
 
 import React from "react"
-import { CalendarIcon, MapPinIcon, XIcon } from "lucide-react"
-import { addDays, format, isSameDay, startOfDay } from "date-fns"
+import { MapPinIcon, XIcon } from "lucide-react"
+import { addDays, isSameDay, startOfDay } from "date-fns"
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupButton,
   InputGroupInput,
 } from "@/components/ui/input-group"
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover"
-import { Calendar } from "@/components/ui/calendar"
+import DatePicker from "../../components/date-picker"
 import FileUpload from "./file-upload"
 import { FileMetadata, FileWithPreview } from "@/app/hooks/use-file-upload"
 import { Textarea } from "@/components/ui/textarea"
 import { Todo, TodoFormValues } from "../types"
 import { Button } from "@/components/ui/button"
-import { cn } from "@/lib/utils"
 
 const QUICK_DATES = [
   { label: "Today", offset: 0 },
@@ -50,7 +44,6 @@ export default function TodoForm({ id, todo, onSubmit }: Props) {
         : []
     ) ?? []
 
-  const [isDateOpen, setIsDateOpen] = React.useState<boolean>(false)
   // New todos default to today so the required field costs nothing to satisfy.
   const [date, setDate] = React.useState<Date | undefined>(() =>
     todo?.date ? new Date(todo.date) : startOfDay(new Date())
@@ -131,7 +124,9 @@ export default function TodoForm({ id, todo, onSubmit }: Props) {
 
       <div className="flex flex-col gap-2">
         <div className="flex items-center justify-between">
-          <span className={labelClass}>Due date</span>
+          <label htmlFor={`${id}-date`} className={labelClass}>
+            Due date
+          </label>
           {date ? (
             <Button
               variant="link"
@@ -146,34 +141,12 @@ export default function TodoForm({ id, todo, onSubmit }: Props) {
           )}
         </div>
 
-        <Popover open={isDateOpen} onOpenChange={setIsDateOpen}>
-          <PopoverTrigger
-            render={
-              <Button
-                variant="input"
-                aria-invalid={isDateInvalid}
-                className={cn(
-                  "w-full aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20",
-                  isDateOpen && "ring ring-ring"
-                )}
-              >
-                <CalendarIcon data-icon="inline-start" />
-                {date ? format(date, "EEE, MMM d, yyyy") : "Pick a date"}
-              </Button>
-            }
-          />
-          <PopoverContent align="start">
-            <Calendar
-              required
-              mode="single"
-              selected={date}
-              onSelect={(next) => {
-                setDate(next)
-                setIsDateOpen(false)
-              }}
-            />
-          </PopoverContent>
-        </Popover>
+        <DatePicker
+          id={`${id}-date`}
+          value={date}
+          onChange={setDate}
+          aria-invalid={isDateInvalid}
+        />
 
         <div className="flex flex-wrap gap-2">
           {QUICK_DATES.map(({ label, offset }) => {

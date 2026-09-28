@@ -1,6 +1,28 @@
 import { defineSchema, defineTable } from "convex/server"
 import { v } from "convex/values"
 
+const transactionFields = {
+  amountCents: v.number(),
+  date: v.string(),
+  note: v.optional(v.string()),
+}
+
+export const expenseInput = v.object({
+  ...transactionFields,
+  type: v.literal("expense"),
+  budgetId: v.optional(v.id("budgets")),
+  paymentMethod: v.union(
+    v.literal("credit"),
+    v.literal("debit"),
+    v.literal("cash")
+  ),
+})
+
+export const incomeInput = v.object({
+  ...transactionFields,
+  type: v.literal("income"),
+})
+
 export default defineSchema({
   users: defineTable({
     tokenIdentifier: v.optional(v.string()),
@@ -62,4 +84,20 @@ export default defineSchema({
   })
     .index("by_user_and_date", ["userId", "date"])
     .index("by_exercise", ["exerciseId"]),
+
+  budgets: defineTable({
+    userId: v.id("users"),
+    name: v.string(),
+    monthlyLimitCents: v.optional(v.number()),
+  }).index("by_user", ["userId"]),
+
+  /* The union lets only an expense have a budget and a payment method */
+  transactions: defineTable(
+    v.union(
+      expenseInput.extend({ userId: v.id("users") }),
+      incomeInput.extend({ userId: v.id("users") })
+    )
+  )
+    .index("by_user_and_date", ["userId", "date"])
+    .index("by_budget", ["budgetId"]),
 })

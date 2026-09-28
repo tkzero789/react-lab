@@ -30,6 +30,10 @@ const apps = [
     title: "Workout",
     href: "/apps/workout",
   },
+  {
+    title: "Finance",
+    href: "/apps/finance",
+  },
 ]
 
 export default async function AppsPage() {

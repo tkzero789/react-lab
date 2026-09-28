@@ -18,7 +18,7 @@ import { Todo } from "../types"
 const MAX_THUMBNAILS = 3
 
 const TONE_CLASS: Record<DateTone, string> = {
-  late: "text-destructive font-medium",
+  late: "text-destructive-foreground font-medium",
   now: "text-foreground font-medium",
   soon: "text-muted-foreground",
   far: "text-muted-foreground",
@@ -131,7 +131,7 @@ export default function TodoItem({ todo, onEdit, onToggle, onDelete }: Props) {
         </button>
       </div>
 
-      <div className="absolute top-2.5 right-2.5 flex gap-0.5 opacity-0 transition-opacity focus-within:opacity-100 group-hover:opacity-100">
+      <div className="absolute top-2.5 right-2.5 flex gap-0.5 opacity-0 transition-opacity group-hover:opacity-100 focus-within:opacity-100">
         <Button
           variant="ghost"
           size="icon-sm"

@@ -5,13 +5,20 @@
 import React from "react"
 import { format } from "date-fns"
 import { EllipsisIcon } from "lucide-react"
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+} from "@/components/ui/alert-dialog"
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
   DialogBody,
-  DialogClose,
   DialogContent,
-  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -98,7 +105,7 @@ export default function LogActions({
     </>
   )
   const confirmDelete = (
-    <Button
+    <AlertDialogAction
       variant="destructive"
       onClick={() => {
         onRemove()
@@ -106,25 +113,21 @@ export default function LogActions({
       }}
     >
       Delete
-    </Button>
+    </AlertDialogAction>
   )
 
   const deleteDialog = (
-    <Dialog
-      type="alert"
-      open={open && view === "delete"}
-      onOpenChange={setOpen}
-    >
-      <DialogContent showCloseButton={false}>
-        <DialogHeader>
-          <DialogDescription>{deleteMessage}</DialogDescription>
-        </DialogHeader>
-        <DialogFooter>
-          <DialogClose render={<Button variant="outline">Cancel</Button>} />
+    <AlertDialog open={open && view === "delete"} onOpenChange={setOpen}>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogDescription>{deleteMessage}</AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel>Cancel</AlertDialogCancel>
           {confirmDelete}
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
   )
 
   if (isMobile) {
@@ -132,6 +135,7 @@ export default function LogActions({
       <>
         {/* The drawer closes when the delete view opens the alert dialog */}
         <Drawer
+          fitContent
           open={open && view !== "delete"}
           onOpenChange={(next) => (next ? show("menu") : setOpen(false))}
         >

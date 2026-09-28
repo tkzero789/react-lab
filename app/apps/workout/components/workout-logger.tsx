@@ -1,6 +1,5 @@
 "use client"
 
-import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { ButtonGroup } from "@/components/ui/button-group"
 import { ChevronLeft, ChevronRight } from "lucide-react"
@@ -74,15 +73,24 @@ function CalendarNavigation({
   )
 }
 
-export default function WorkoutLogger() {
+type Props = {
+  selectedDate: Date
+  onSelectedDateChange: (date: Date) => void
+  dayDialogOpen: boolean
+  onDayDialogOpenChange: (open: boolean) => void
+}
+
+export default function WorkoutLogger({
+  selectedDate,
+  onSelectedDateChange,
+  dayDialogOpen,
+  onDayDialogOpenChange,
+}: Props) {
   const exercises = useQuery(api.exercises.list) ?? []
   const logs = useQuery(api.workoutLogs.list) ?? []
   const addWorkoutLog = useMutation(api.workoutLogs.add)
   const updateWorkoutLog = useMutation(api.workoutLogs.update)
   const removeWorkoutLog = useMutation(api.workoutLogs.remove)
-
-  const [selectedDate, setSelectedDate] = useState<Date>(new Date())
-  const [dayDialogOpen, setDayDialogOpen] = useState(false)
 
   const dateStr = format(selectedDate, "yyyy-MM-dd")
   const dayLogs = logs.filter((l) => l.date === dateStr)
@@ -128,8 +136,8 @@ export default function WorkoutLogger() {
   }
 
   function openDayDialog(date: Date) {
-    setSelectedDate(date)
-    setDayDialogOpen(true)
+    onSelectedDateChange(date)
+    onDayDialogOpenChange(true)
   }
 
   return (
@@ -153,7 +161,7 @@ export default function WorkoutLogger() {
         defaultView={Views.MONTH}
         views={[Views.MONTH]}
         date={selectedDate}
-        onNavigate={(d) => setSelectedDate(d)}
+        onNavigate={onSelectedDateChange}
         selectable
         onSelectSlot={(slot) => openDayDialog(slot.start as Date)}
         onSelectEvent={(event) => {
@@ -180,9 +188,10 @@ export default function WorkoutLogger() {
 
       <DayDetails
         open={dayDialogOpen}
-        onOpenChange={setDayDialogOpen}
+        onOpenChange={onDayDialogOpenChange}
         date={selectedDate}
         logs={dayLogs}
+        allLogs={logs}
         exercises={exercises}
         onAdd={handleAdd}
         onUpdate={handleUpdate}

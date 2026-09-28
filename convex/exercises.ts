@@ -1,6 +1,7 @@
 import { ConvexError, v } from "convex/values";
 import type { Id } from "./_generated/dataModel";
 import { mutation, query, type QueryCtx } from "./_generated/server";
+import { getCurrentUserId } from "./users";
 
 /* The upload URL accepts any file type, so the server checks it again */
 async function assertImage(ctx: QueryCtx, storageId: Id<"_storage">) {
@@ -12,24 +13,12 @@ async function assertImage(ctx: QueryCtx, storageId: Id<"_storage">) {
 
 export const list = query({
   handler: async (ctx) => {
-    const identity = await ctx.auth.getUserIdentity();
-    if (identity === null) {
-      throw new ConvexError("Not authenticated");
-    }
-
-    const user = await ctx.db
-      .query("users")
-      .withIndex("by_token", (q) =>
-        q.eq("tokenIdentifier", identity.tokenIdentifier),
-      )
-      .unique();
-    if (!user) {
-      throw new ConvexError("User not found");
-    }
+    const userId = await getCurrentUserId(ctx);
+    if (!userId) return [];
 
     const exercises = await ctx.db
       .query("exercises")
-      .withIndex("by_user", (q) => q.eq("userId", user._id))
+      .withIndex("by_user", (q) => q.eq("userId", userId))
       .collect();
     return await Promise.all(
       exercises.map(async (exercise) => ({
@@ -50,27 +39,12 @@ export const add = mutation({
     thumbnail: v.optional(v.id("_storage")),
   },
   handler: async (ctx, args) => {
-    const identity = await ctx.auth.getUserIdentity();
-    if (identity === null) {
-      throw new ConvexError("Not authenticated");
-    }
-
-    const user = await ctx.db
-      .query("users")
-      .withIndex("by_token", (q) =>
-        q.eq("tokenIdentifier", identity.tokenIdentifier),
-      )
-      .unique();
-    if (!user) {
-      throw new ConvexError("User not found");
-    }
+    const userId = await getCurrentUserId(ctx);
+    if (!userId) throw new ConvexError("Not authenticated");
 
     if (args.thumbnail) await assertImage(ctx, args.thumbnail);
 
-    return await ctx.db.insert("exercises", {
-      ...args,
-      userId: user._id,
-    });
+    return await ctx.db.insert("exercises", { ...args, userId });
   },
 });
 
@@ -84,24 +58,12 @@ export const update = mutation({
     thumbnail: v.optional(v.union(v.id("_storage"), v.null())),
   },
   handler: async (ctx, { id, thumbnail, ...args }) => {
-    const identity = await ctx.auth.getUserIdentity();
-    if (identity === null) {
-      throw new ConvexError("Not authenticated");
-    }
-
-    const user = await ctx.db
-      .query("users")
-      .withIndex("by_token", (q) =>
-        q.eq("tokenIdentifier", identity.tokenIdentifier),
-      )
-      .unique();
-    if (!user) {
-      throw new ConvexError("User not found");
-    }
+    const userId = await getCurrentUserId(ctx);
+    if (!userId) throw new ConvexError("Not authenticated");
 
     const exercise = await ctx.db.get(id);
-    if (!exercise || exercise.userId !== user._id) {
-      throw new ConvexError("Exercise not found or not owned by any user");
+    if (!exercise || exercise.userId !== userId) {
+      throw new ConvexError("Exercise not found");
     }
 
     if (thumbnail === undefined) {
@@ -121,24 +83,12 @@ export const update = mutation({
 export const remove = mutation({
   args: { id: v.id("exercises") },
   handler: async (ctx, args) => {
-    const identity = await ctx.auth.getUserIdentity();
-    if (identity === null) {
-      throw new ConvexError("Not authenticated");
-    }
-
-    const user = await ctx.db
-      .query("users")
-      .withIndex("by_token", (q) =>
-        q.eq("tokenIdentifier", identity.tokenIdentifier),
-      )
-      .unique();
-    if (!user) {
-      throw new ConvexError("User not found");
-    }
+    const userId = await getCurrentUserId(ctx);
+    if (!userId) throw new ConvexError("Not authenticated");
 
     const exercise = await ctx.db.get(args.id);
-    if (!exercise || exercise.userId !== user._id) {
-      throw new ConvexError("Exercise not found or not owned by any user");
+    if (!exercise || exercise.userId !== userId) {
+      throw new ConvexError("Exercise not found");
     }
 
     const logs = await ctx.db

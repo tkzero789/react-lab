@@ -2,6 +2,7 @@
 
 import React from "react"
 import { format } from "date-fns"
+import { PlusIcon } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
@@ -39,6 +40,7 @@ export default function LogExercise({ exercises, onAdd, date }: Props) {
   const title = `Log Exercise - ${format(date, "MMM d, yyyy")}`
   const trigger = (
     <Button disabled={exercises.length === 0} className="w-full">
+      <PlusIcon />
       Log Exercise
     </Button>
   )
@@ -61,7 +63,7 @@ export default function LogExercise({ exercises, onAdd, date }: Props) {
 
   if (isMobile) {
     return (
-      <Drawer open={open} onOpenChange={setOpen} fitContent>
+      <Drawer open={open} onOpenChange={setOpen}>
         <DrawerTrigger render={trigger} />
         <DrawerContent>
           <DrawerHeader>

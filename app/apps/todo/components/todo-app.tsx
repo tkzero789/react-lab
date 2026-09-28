@@ -12,15 +12,16 @@ import {
   SearchIcon,
   XIcon,
 } from "lucide-react"
-import { Button } from "@/components/ui/button"
 import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-} from "@/components/ui/dialog"
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+} from "@/components/ui/alert-dialog"
+import { Button } from "@/components/ui/button"
 import {
   Empty,
   EmptyContent,
@@ -228,22 +229,21 @@ export default function TodoApp() {
         onRequestDelete={setPendingDelete}
       />
 
-      <Dialog
-        type="alert"
+      <AlertDialog
         open={pendingDelete !== null}
         onOpenChange={(open) => {
           if (!open) setPendingDelete(null)
         }}
       >
-        <DialogContent showCloseButton={false}>
-          <DialogHeader>
-            <DialogDescription>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogDescription>
               Delete “{pendingDelete?.text}” from your list?
-            </DialogDescription>
-          </DialogHeader>
-          <DialogFooter>
-            <DialogClose render={<Button variant="outline">Cancel</Button>} />
-            <Button
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
               variant="destructive"
               disabled={isDeleting}
               onClick={() => {
@@ -252,21 +252,15 @@ export default function TodoApp() {
             >
               {isDeleting ? <Spinner /> : null}
               Delete
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </Tabs>
   )
 }
 
-function NoMatches({
-  query,
-  onClear,
-}: {
-  query: string
-  onClear: () => void
-}) {
+function NoMatches({ query, onClear }: { query: string; onClear: () => void }) {
   return (
     <Empty className="border">
       <EmptyHeader>

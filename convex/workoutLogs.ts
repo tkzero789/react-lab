@@ -42,10 +42,12 @@ export const add = mutation({
   handler: async (ctx, args) => {
     const userId = await getCurrentUserId(ctx);
     if (!userId) throw new Error("Not authenticated");
+    const exercise = await ctx.db.get(args.exerciseId);
+    if (!exercise || exercise.userId !== userId) {
+      throw new Error("Not authorized");
+    }
 
-    const logId = await ctx.db.insert("workoutLogs", { ...args, userId });
-
-    return logId;
+    return await ctx.db.insert("workoutLogs", { ...args, userId });
   },
 });
 
@@ -60,15 +62,6 @@ export const update = mutation({
     const log = await ctx.db.get(id);
     if (!log || log.userId !== userId) throw new Error("Not authorized");
     await ctx.db.patch(id, { sets });
-
-    // Auto-update personal best
-    const exercise = await ctx.db.get(log.exerciseId);
-    if (exercise) {
-      const maxWeight = Math.max(...sets.map((s) => s.weight));
-      if (maxWeight > exercise.personalBest) {
-        await ctx.db.patch(log.exerciseId, { personalBest: maxWeight });
-      }
-    }
   },
 });
 

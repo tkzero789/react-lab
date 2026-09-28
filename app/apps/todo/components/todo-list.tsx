@@ -27,7 +27,7 @@ export default function TodoList({ todos, grouped = true, ...actions }: Props) {
           <div
             className={cn(
               "flex items-center gap-2 px-3 text-xs tracking-wide text-muted-foreground uppercase",
-              group.id === "overdue" && "text-destructive"
+              group.id === "overdue" && "text-destructive-foreground"
             )}
           >
             <h3 className="font-semibold">{group.label}</h3>

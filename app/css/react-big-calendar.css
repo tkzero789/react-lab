@@ -19,7 +19,7 @@
 }
 
 .rbc-day-bg + .rbc-day-bg {
-  @apply border-l-border! transition-all;
+  @apply z-10 border-l-border! transition-all;
 }
 
 .rbc-off-range-bg {

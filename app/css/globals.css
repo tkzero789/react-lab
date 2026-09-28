@@ -12,6 +12,7 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-overlay: var(--overlay);
 
   --color-muted: var(--muted);
   --color-muted-foreground: var(--muted-foreground);
@@ -78,6 +79,7 @@
 .light {
   --background: var(--pearl);
   --foreground: var(--granite-950);
+  --overlay: color-mix(in oklch, var(--granite-900) 40%, transparent);
 
   --brand: var(--onyx);
   --brand-foreground: var(--pearl);
@@ -122,8 +124,8 @@
 .dark {
   --background: var(--granite-950);
   --foreground: var(--granite-50);
+  --overlay: color-mix(in oklch, var(--granite-950) 60%, transparent);
 
-  /* Invert the brand pair because onyx has no contrast on the dark background */
   --brand: var(--pearl);
   --brand-foreground: var(--onyx);
 
@@ -133,7 +135,7 @@
   --destructive: var(--ruby-400);
   --destructive-foreground: var(--granite-50);
 
-  --border: var(--granite-700);
+  --border: var(--granite-800);
   --ring: var(--granite-500);
 
   --font-sans:

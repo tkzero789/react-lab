@@ -105,36 +105,6 @@ export default function DialogPage() {
         </Example>
 
         <Example
-          title="Alert Type"
-          description={
-            <>
-              Set <code>{'type="alert"'}</code> on <code>Dialog</code>. The
-              description centers and the footer buttons share the width.
-            </>
-          }
-        >
-          <Dialog type="alert">
-            <DialogTrigger render={<Button variant="outline" />}>
-              Open alert
-            </DialogTrigger>
-            <DialogContent showCloseButton={false}>
-              <DialogHeader>
-                <DialogTitle>Remove the domain?</DialogTitle>
-                <DialogDescription>
-                  Traffic to this domain stops at once.
-                </DialogDescription>
-              </DialogHeader>
-              <DialogFooter>
-                <DialogClose render={<Button variant="outline" />}>
-                  Cancel
-                </DialogClose>
-                <Button variant="destructive">Remove</Button>
-              </DialogFooter>
-            </DialogContent>
-          </Dialog>
-        </Example>
-
-        <Example
           title="No Close Button"
           description={
             <>

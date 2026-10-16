@@ -4,6 +4,7 @@ import { components } from "./_generated/api";
 import { DataModel } from "./_generated/dataModel";
 import { query } from "./_generated/server";
 import { betterAuth } from "better-auth/minimal";
+import { expo } from "@better-auth/expo";
 import authConfig from "./auth.config";
 
 const siteUrl = process.env.SITE_URL!;
@@ -30,6 +31,8 @@ export const createAuth = (ctx: GenericCtx<DataModel>) => {
       },
     },
     plugins: [
+      /* The react-lab-expo app signs in through an in-app browser and returns by deep link */
+      expo(),
       // The Convex plugin is required for Convex compatibility
       convex({ authConfig }),
     ],

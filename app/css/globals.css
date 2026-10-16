@@ -6,6 +6,7 @@
 @import "./react-big-calendar.css";
 @import "./animation.css";
 @import "./components.css";
+@import "./custom.css";
 
 @custom-variant dark (&:is(.dark *));
 

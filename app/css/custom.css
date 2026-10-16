@@ -1,0 +1,55 @@
+/* Project accent tokens for the lab cards and the replicas page */
+
+/* Three.js */
+:root,
+.light {
+  --threejs-start: color-mix(in oklab, oklch(0.905 0.182 98.111) 70%, transparent);
+  --threejs-end: color-mix(in oklab, oklch(0.681 0.162 75.834) 80%, transparent);
+  --threejs-hover: color-mix(in oklab, oklch(0.852 0.199 91.936) 40%, transparent);
+}
+
+.dark {
+  --threejs-hover: color-mix(in oklab, oklch(0.852 0.199 91.936) 25%, transparent);
+}
+
+@theme inline {
+  --color-threejs-start: var(--threejs-start);
+  --color-threejs-end: var(--threejs-end);
+  --color-threejs-hover: var(--threejs-hover);
+}
+
+/* Replicas */
+:root,
+.light {
+  --replicas-start: color-mix(in oklab, oklch(0.871 0.15 154.449) 70%, transparent);
+  --replicas-end: oklch(0.723 0.219 149.579);
+  --replicas-hover: color-mix(in oklab, oklch(0.792 0.209 151.711) 40%, transparent);
+}
+
+.dark {
+  --replicas-hover: color-mix(in oklab, oklch(0.792 0.209 151.711) 25%, transparent);
+}
+
+@theme inline {
+  --color-replicas-start: var(--replicas-start);
+  --color-replicas-end: var(--replicas-end);
+  --color-replicas-hover: var(--replicas-hover);
+}
+
+/* Apps */
+:root,
+.light {
+  --apps-start: color-mix(in oklab, oklch(0.704 0.04 256.788) 50%, transparent);
+  --apps-end: color-mix(in oklab, oklch(0.372 0.044 257.287) 90%, transparent);
+  --apps-hover: color-mix(in oklab, oklch(0.704 0.04 256.788) 40%, transparent);
+}
+
+.dark {
+  --apps-hover: color-mix(in oklab, oklch(0.704 0.04 256.788) 25%, transparent);
+}
+
+@theme inline {
+  --color-apps-start: var(--apps-start);
+  --color-apps-end: var(--apps-end);
+  --color-apps-hover: var(--apps-hover);
+}

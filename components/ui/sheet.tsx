@@ -110,7 +110,7 @@ function SheetBody({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="sheet-body"
-      className={cn("overflow-y-auto p-4", className)}
+      className={cn("scroll-fade overflow-y-auto p-4", className)}
       {...props}
     />
   )

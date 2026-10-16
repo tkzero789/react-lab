@@ -129,7 +129,7 @@ function ComboboxList({ className, ...props }: ComboboxPrimitive.List.Props) {
     <ComboboxPrimitive.List
       data-slot="combobox-list"
       className={cn(
-        "scroll-py-1 overflow-y-auto p-1 data-empty:p-0",
+        "scroll-fade scroll-py-1 overflow-y-auto p-1 data-empty:p-0",
         className
       )}
       {...props}

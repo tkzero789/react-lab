@@ -68,7 +68,7 @@ export default function StepTransition({
             transition={{ duration: 0.25, ease: EASE_OUT }}
             className={cn(
               fill &&
-                "h-full scrollbar-thin overflow-y-auto overscroll-contain px-4"
+                "h-full scroll-fade scrollbar-thin overflow-y-auto overscroll-contain px-4"
             )}
           >
             {children}

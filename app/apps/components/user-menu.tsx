@@ -1,9 +1,12 @@
+/* Home page account button that opens the sign-in or account dialog */
 "use client"
 
-import { authClient } from "@/lib/auth-client"
-import { useRouter } from "next/navigation"
-import React from "react"
 import { Authenticated, AuthLoading, Unauthenticated } from "convex/react"
+import { LogOut } from "lucide-react"
+
+import GoogleIcon from "@/components/icons/google-icon"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Button } from "@/components/ui/button"
 import {
   Dialog,
   DialogBody,
@@ -13,102 +16,51 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { LogOut, User } from "lucide-react"
-import { Button } from "@/components/ui/button"
 import { Skeleton } from "@/components/ui/skeleton"
 import { Spinner } from "@/components/ui/spinner"
-import GoogleIcon from "@/components/icons/google-icon"
+import { useGoogleSignIn, useSignOut } from "@/hooks/use-auth-actions"
+import { authClient } from "@/lib/auth-client"
 
-type TriggerType = "default" | "sidebar"
-
-type Props = {
-  type?: TriggerType
-}
-
-export default function UserMenu({ type = "default" }: Props) {
+export default function UserMenu() {
   return (
     <>
       <Unauthenticated>
-        <SignInDialog type={type} />
+        <SignInDialog />
       </Unauthenticated>
       <AuthLoading>
-        <TriggerSkeleton type={type} />
+        <TriggerSkeleton />
       </AuthLoading>
       <Authenticated>
-        <AccountDialog type={type} />
+        <AccountDialog />
       </Authenticated>
     </>
   )
 }
 
-function TriggerSkeleton({ type }: { type: TriggerType }) {
-  const summary = (
-    <>
+function TriggerSkeleton() {
+  /* Match the outline button frame so the trigger does not shift when auth resolves */
+  return (
+    <div className="inline-flex h-12 items-center gap-1.5 rounded-lg border bg-background px-2.5">
       <Skeleton className="size-8 shrink-0 rounded-full" />
       <div className="grid flex-1 gap-1">
         <Skeleton className="h-3.5 w-24" />
         <Skeleton className="h-3 w-32" />
       </div>
-    </>
+    </div>
   )
-
-  if (type === "default") {
-    /* Match the outline button frame so the trigger does not shift when auth resolves */
-    return (
-      <div className="inline-flex h-12 items-center gap-1.5 rounded-lg border bg-background px-2.5">
-        {summary}
-      </div>
-    )
-  }
-
-  return <div className="flex flex-1 items-center gap-2 p-2">{summary}</div>
 }
 
-function SignInDialog({ type }: { type: TriggerType }) {
-  const [isSigningIn, setIsSigningIn] = React.useState(false)
-
-  React.useEffect(() => {
-    function handlePageShow(event: PageTransitionEvent) {
-      if (event.persisted) setIsSigningIn(false)
-    }
-    window.addEventListener("pageshow", handlePageShow)
-    return () => window.removeEventListener("pageshow", handlePageShow)
-  }, [])
-
-  async function handleGoogleSignIn() {
-    setIsSigningIn(true)
-    const { error } = await authClient.signIn.social({
-      provider: "google",
-      callbackURL: window.location.href,
-    })
-
-    if (error) setIsSigningIn(false)
-  }
+function SignInDialog() {
+  const { isSigningIn, signIn } = useGoogleSignIn()
 
   return (
     <Dialog>
       <DialogTrigger
-        nativeButton={type === "default"}
         render={
-          type === "default" ? (
-            <Button variant="outline" className="h-12">
-              <GoogleIcon />
-              Sign in with Google
-            </Button>
-          ) : (
-            <div className="flex flex-1 items-center gap-2 p-2">
-              <div className="flex size-8 items-center justify-center rounded-full border bg-background shadow-sm dark:bg-muted">
-                <User className="size-4" />
-              </div>
-              <div className="grid flex-1 text-left text-sm leading-tight">
-                <span className="truncate font-medium">Sign in</span>
-                <span className="truncate text-xs text-muted-foreground">
-                  to access your account
-                </span>
-              </div>
-            </div>
-          )
+          <Button variant="outline" className="h-12">
+            <GoogleIcon />
+            Sign in with Google
+          </Button>
         }
       />
       <DialogContent className="sm:max-w-sm">
@@ -119,7 +71,7 @@ function SignInDialog({ type }: { type: TriggerType }) {
           <Button
             className="w-full"
             variant="outline"
-            onClick={handleGoogleSignIn}
+            onClick={signIn}
             disabled={isSigningIn}
           >
             {isSigningIn ? <Spinner /> : <GoogleIcon />}
@@ -131,53 +83,34 @@ function SignInDialog({ type }: { type: TriggerType }) {
   )
 }
 
-function AccountDialog({ type }: { type: TriggerType }) {
+function AccountDialog() {
   const { data: session } = authClient.useSession()
-  const [isSigningOut, startSignOut] = React.useTransition()
-  const router = useRouter()
-
-  function handleSignOut() {
-    /* Sign-out flips Convex to Unauthenticated, so this dialog unmounts and needs no close call */
-    startSignOut(async () => {
-      await authClient.signOut()
-      router.refresh()
-    })
-  }
+  const { isSigningOut, signOut } = useSignOut()
 
   const user = session?.user
   /* Convex can report Authenticated before the session query returns */
-  if (!user) return <TriggerSkeleton type={type} />
+  if (!user) return <TriggerSkeleton />
 
   const initial = user.name.charAt(0).toUpperCase() || "?"
-  const summary = (
-    <>
-      <Avatar className="size-8">
-        <AvatarImage src={user.image ?? undefined} />
-        <AvatarFallback className="rounded-full bg-muted text-xs text-foreground">
-          {initial}
-        </AvatarFallback>
-      </Avatar>
-      <div className="grid flex-1 text-left text-sm leading-tight">
-        <span className="truncate font-medium">{user.name}</span>
-        <span className="truncate text-xs text-muted-foreground">
-          {user.email}
-        </span>
-      </div>
-    </>
-  )
 
   return (
     <Dialog>
       <DialogTrigger
-        nativeButton={type === "default"}
         render={
-          type === "default" ? (
-            <Button variant="outline" className="h-12">
-              {summary}
-            </Button>
-          ) : (
-            <div className="flex flex-1 items-center gap-2 p-2">{summary}</div>
-          )
+          <Button variant="outline" className="h-12">
+            <Avatar className="size-8">
+              <AvatarImage src={user.image ?? undefined} />
+              <AvatarFallback className="rounded-full bg-muted text-xs text-foreground">
+                {initial}
+              </AvatarFallback>
+            </Avatar>
+            <div className="grid flex-1 text-left text-sm leading-tight">
+              <span className="truncate font-medium">{user.name}</span>
+              <span className="truncate text-xs text-muted-foreground">
+                {user.email}
+              </span>
+            </div>
+          </Button>
         }
       />
       <DialogContent className="sm:max-w-sm">
@@ -197,9 +130,10 @@ function AccountDialog({ type }: { type: TriggerType }) {
           </div>
         </DialogBody>
         <DialogFooter>
+          {/* Sign-out flips Convex to Unauthenticated, so this dialog unmounts and needs no close call */}
           <Button
             variant="outline"
-            onClick={handleSignOut}
+            onClick={signOut}
             disabled={isSigningOut}
             className="w-full"
           >

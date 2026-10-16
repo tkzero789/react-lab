@@ -46,11 +46,12 @@ function CommandDialog({
 }) {
   return (
     <Dialog {...props}>
-      <DialogHeader className="sr-only" showCloseButton={showCloseButton}>
+      <DialogHeader className="sr-only">
         <DialogTitle>{title}</DialogTitle>
         <DialogDescription>{description}</DialogDescription>
       </DialogHeader>
       <DialogContent
+        showCloseButton={showCloseButton}
         className={cn(
           "top-2 h-auto max-h-[calc(100dvh-16px)] translate-y-0 overflow-hidden rounded-lg! p-0 md:top-1/3",
           className

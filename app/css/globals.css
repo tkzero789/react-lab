@@ -21,7 +21,20 @@
   --color-brand-foreground: var(--brand-foreground);
 
   --color-destructive: var(--destructive);
-  --color-destructive-foreground: var(--destructive-foreground);
+  --color-destructive-muted: var(--destructive-muted);
+  --color-destructive-muted-foreground: var(--destructive-muted-foreground);
+
+  --color-success: var(--success);
+  --color-success-muted: var(--success-muted);
+  --color-success-muted-foreground: var(--success-muted-foreground);
+
+  --color-warning: var(--warning);
+  --color-warning-muted: var(--warning-muted);
+  --color-warning-muted-foreground: var(--warning-muted-foreground);
+
+  --color-info: var(--info);
+  --color-info-muted: var(--info-muted);
+  --color-info-muted-foreground: var(--info-muted-foreground);
 
   --color-border: var(--border);
   --color-ring: var(--ring);
@@ -73,6 +86,42 @@
   --ruby-800: oklch(0.444 0.177 26.899);
   --ruby-900: oklch(0.396 0.141 25.723);
   --ruby-950: oklch(0.258 0.092 26.042);
+
+  --jade-50: oklch(0.982 0.018 155.826);
+  --jade-100: oklch(0.962 0.044 156.743);
+  --jade-200: oklch(0.925 0.084 155.995);
+  --jade-300: oklch(0.871 0.15 154.449);
+  --jade-400: oklch(0.792 0.209 151.711);
+  --jade-500: oklch(0.723 0.219 149.579);
+  --jade-600: oklch(0.627 0.194 149.214);
+  --jade-700: oklch(0.527 0.154 150.069);
+  --jade-800: oklch(0.448 0.119 151.328);
+  --jade-900: oklch(0.393 0.095 152.535);
+  --jade-950: oklch(0.266 0.065 152.934);
+
+  --topaz-50: oklch(0.987 0.022 95.277);
+  --topaz-100: oklch(0.962 0.059 95.617);
+  --topaz-200: oklch(0.924 0.12 95.746);
+  --topaz-300: oklch(0.879 0.169 91.605);
+  --topaz-400: oklch(0.828 0.189 84.429);
+  --topaz-500: oklch(0.769 0.188 70.08);
+  --topaz-600: oklch(0.666 0.179 58.318);
+  --topaz-700: oklch(0.555 0.163 48.998);
+  --topaz-800: oklch(0.473 0.137 46.201);
+  --topaz-900: oklch(0.414 0.112 45.904);
+  --topaz-950: oklch(0.279 0.077 45.635);
+
+  --sapphire-50: oklch(0.97 0.014 254.604);
+  --sapphire-100: oklch(0.932 0.032 255.585);
+  --sapphire-200: oklch(0.882 0.059 254.128);
+  --sapphire-300: oklch(0.809 0.105 251.813);
+  --sapphire-400: oklch(0.707 0.165 254.624);
+  --sapphire-500: oklch(0.623 0.214 259.815);
+  --sapphire-600: oklch(0.546 0.245 262.881);
+  --sapphire-700: oklch(0.488 0.243 264.376);
+  --sapphire-800: oklch(0.424 0.199 265.638);
+  --sapphire-900: oklch(0.379 0.146 265.522);
+  --sapphire-950: oklch(0.282 0.091 267.935);
 }
 
 :root,
@@ -87,8 +136,21 @@
   --muted: var(--granite-200);
   --muted-foreground: var(--granite-600);
 
-  --destructive: var(--ruby-100);
-  --destructive-foreground: var(--ruby-700);
+  --destructive: var(--ruby-600);
+  --destructive-muted: var(--ruby-100);
+  --destructive-muted-foreground: var(--ruby-700);
+
+  --success: var(--jade-700);
+  --success-muted: var(--jade-100);
+  --success-muted-foreground: var(--jade-800);
+
+  --warning: var(--topaz-700);
+  --warning-muted: var(--topaz-100);
+  --warning-muted-foreground: var(--topaz-800);
+
+  --info: var(--sapphire-600);
+  --info-muted: var(--sapphire-100);
+  --info-muted-foreground: var(--sapphire-700);
 
   --border: var(--granite-200);
   --ring: var(--granite-400);
@@ -133,7 +195,20 @@
   --muted-foreground: var(--granite-400);
 
   --destructive: var(--ruby-400);
-  --destructive-foreground: var(--granite-50);
+  --destructive-muted: color-mix(in oklab, var(--ruby-400) 15%, transparent);
+  --destructive-muted-foreground: var(--ruby-300);
+
+  --success: var(--jade-400);
+  --success-muted: color-mix(in oklab, var(--jade-400) 15%, transparent);
+  --success-muted-foreground: var(--jade-300);
+
+  --warning: var(--topaz-400);
+  --warning-muted: color-mix(in oklab, var(--topaz-400) 15%, transparent);
+  --warning-muted-foreground: var(--topaz-300);
+
+  --info: var(--sapphire-400);
+  --info-muted: color-mix(in oklab, var(--sapphire-400) 15%, transparent);
+  --info-muted-foreground: var(--sapphire-300);
 
   --border: var(--granite-800);
   --ring: var(--granite-500);

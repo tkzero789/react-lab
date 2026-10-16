@@ -40,7 +40,7 @@ export default function DatePicker({
             variant="input"
             {...props}
             className={cn(
-              "w-full aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20",
+              "w-full aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive-muted",
               open && "ring ring-ring",
               className
             )}

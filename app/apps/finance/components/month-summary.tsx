@@ -37,7 +37,7 @@ export default function MonthSummary({
       <Tile
         label="Net"
         cents={netCents}
-        className={cn(netCents < 0 && "text-(--ruby-600)")}
+        className={cn(netCents < 0 && "text-destructive")}
       />
     </div>
   )

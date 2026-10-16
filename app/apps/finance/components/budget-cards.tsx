@@ -76,7 +76,7 @@ function BudgetCard({
           value={Math.min(100, (spentCents / limitCents) * 100)}
           aria-label={`${title} spending`}
           className={cn(
-            overCents > 0 && "**:data-[slot=progress-indicator]:bg-(--ruby-600)"
+            overCents > 0 && "**:data-[slot=progress-indicator]:bg-destructive"
           )}
         />
       ) : (

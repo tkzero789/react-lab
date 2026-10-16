@@ -1,6 +1,12 @@
 /* Alert docs with a preview for each variant */
 import type { Metadata } from "next"
-import { CircleAlert, Info, Rocket } from "lucide-react"
+import {
+  CircleAlert,
+  CircleCheck,
+  Info,
+  Rocket,
+  TriangleAlert,
+} from "lucide-react"
 
 import DashboardBreadcrumb from "@/app/apps/components/dashboard-breadcrumb"
 import DashboardContainer from "@/components/layout/dashboard-container"
@@ -72,6 +78,60 @@ export default function AlertPage() {
             <AlertTitle>Payment failed</AlertTitle>
             <AlertDescription>
               The card was declined. Use another card to keep the subscription.
+            </AlertDescription>
+          </Alert>
+        </Example>
+
+        <Example
+          title="Success"
+          description={
+            <>
+              Set <code>{'variant="success"'}</code> to confirm that an action
+              is complete.
+            </>
+          }
+        >
+          <Alert variant="success" className="max-w-md">
+            <CircleCheck />
+            <AlertTitle>Payment received</AlertTitle>
+            <AlertDescription>
+              The receipt is in your inbox. The plan renews next month.
+            </AlertDescription>
+          </Alert>
+        </Example>
+
+        <Example
+          title="Warning"
+          description={
+            <>
+              Set <code>{'variant="warning"'}</code> for a problem that is not
+              a failure yet.
+            </>
+          }
+        >
+          <Alert variant="warning" className="max-w-md">
+            <TriangleAlert />
+            <AlertTitle>Card expires soon</AlertTitle>
+            <AlertDescription>
+              Update the card before the end of the month to avoid a failed
+              payment.
+            </AlertDescription>
+          </Alert>
+        </Example>
+
+        <Example
+          title="Info"
+          description={
+            <>
+              Set <code>{'variant="info"'}</code> for a neutral notice.
+            </>
+          }
+        >
+          <Alert variant="info" className="max-w-md">
+            <Info />
+            <AlertTitle>New billing page</AlertTitle>
+            <AlertDescription>
+              Invoices and payment methods are now in one place.
             </AlertDescription>
           </Alert>
         </Example>

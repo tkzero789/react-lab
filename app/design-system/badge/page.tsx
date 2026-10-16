@@ -68,6 +68,41 @@ export default function BadgePage() {
         </Example>
 
         <Example
+          title="Success"
+          description={
+            <>
+              Set <code>{'variant="success"'}</code> for a finished or healthy
+              state.
+            </>
+          }
+        >
+          <Badge variant="success">Passed</Badge>
+        </Example>
+
+        <Example
+          title="Warning"
+          description={
+            <>
+              Set <code>{'variant="warning"'}</code> for a state that needs
+              attention soon.
+            </>
+          }
+        >
+          <Badge variant="warning">Expiring</Badge>
+        </Example>
+
+        <Example
+          title="Info"
+          description={
+            <>
+              Set <code>{'variant="info"'}</code> for a neutral update.
+            </>
+          }
+        >
+          <Badge variant="info">Beta</Badge>
+        </Example>
+
+        <Example
           title="Outline"
           description={
             <>

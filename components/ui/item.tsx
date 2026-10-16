@@ -48,9 +48,9 @@ const itemVariants = cva(
         ghost:
           "aria-expanded:bg-transparent aria-expanded:text-foreground [a]:hover:bg-button-ghost-hover [a]:hover:text-foreground",
         destructive:
-          "bg-destructive text-destructive-foreground [a]:hover:bg-button-destructive-hover",
+          "bg-destructive-muted text-destructive-muted-foreground [a]:hover:bg-button-destructive-hover",
         "ghost-destructive":
-          "text-destructive-foreground aria-expanded:bg-transparent aria-expanded:text-destructive-foreground [a]:hover:bg-button-ghost-destructive-hover",
+          "text-destructive aria-expanded:bg-transparent aria-expanded:text-destructive [a]:hover:bg-button-ghost-destructive-hover",
         link: "underline-offset-4 [a]:hover:underline",
         input: "border-border bg-input [a]:hover:bg-button-input-hover",
       },
@@ -159,7 +159,7 @@ function ItemDescription({ className, ...props }: React.ComponentProps<"p">) {
     <p
       data-slot="item-description"
       className={cn(
-        "line-clamp-2 text-left text-sm leading-normal font-normal text-muted-foreground group-data-[size=xs]/item:text-xs group-data-[variant=default]/item:text-brand-foreground/80 group-data-[variant=destructive]/item:text-destructive-foreground/80 [&>a]:underline [&>a]:underline-offset-4 [&>a:hover]:text-brand",
+        "line-clamp-2 text-left text-sm leading-normal font-normal text-muted-foreground group-data-[size=xs]/item:text-xs group-data-[variant=default]/item:text-brand-foreground/80 group-data-[variant=destructive]/item:text-destructive-muted-foreground [&>a]:underline [&>a]:underline-offset-4 [&>a:hover]:text-brand",
         className
       )}
       {...props}

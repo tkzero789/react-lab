@@ -2,14 +2,17 @@
 import React from "react"
 
 import { AppSidebar } from "@/components/sidebar/app-sidebar"
+import type { ProjectId } from "@/components/sidebar/projects"
 import { ThemeProvider } from "@/components/theme/theme-provider"
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
 
-export default function DashboardShell({
-  children,
-}: {
+type Props = {
+  project: ProjectId
+  nav: React.ReactNode
   children: React.ReactNode
-}) {
+}
+
+export default function DashboardShell({ project, nav, children }: Props) {
   return (
     <ThemeProvider
       attribute="class"
@@ -18,7 +21,7 @@ export default function DashboardShell({
       disableTransitionOnChange
     >
       <SidebarProvider>
-        <AppSidebar />
+        <AppSidebar project={project} nav={nav} />
         <SidebarInset>{children}</SidebarInset>
       </SidebarProvider>
     </ThemeProvider>

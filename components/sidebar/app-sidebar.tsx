@@ -1,110 +1,34 @@
+/* Dashboard sidebar with the project switcher, the section nav, and the user menu */
 "use client"
 
 import * as React from "react"
-import {
-  AppWindow,
-  CloudSun,
-  Dumbbell,
-  Film,
-  FlaskConical,
-  Laptop,
-  ListChecks,
-  Palette,
-  PieChart,
-  RollerCoaster,
-  ShoppingBasket,
-  Wallet,
-} from "lucide-react"
-import { NavApps } from "./nav-app"
-import { NavProjects } from "@/components/sidebar/nav-projects"
-import { ThemeToggle } from "../theme/theme-toggle"
+
+import { ProjectSwitcher } from "@/components/sidebar/project-switcher"
+import type { ProjectId } from "@/components/sidebar/projects"
+import { SidebarUser } from "@/components/sidebar/sidebar-user"
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
   SidebarHeader,
 } from "@/components/ui/sidebar"
-import { SidebarUser } from "./sidebar-user"
 
-const sidebarItems = {
-  apps: [
-    {
-      name: "Todo",
-      url: "/apps/todo",
-      icon: ListChecks,
-    },
-
-    {
-      name: "Weather",
-      url: "/apps/weather",
-      icon: CloudSun,
-    },
-    {
-      name: "Movie",
-      url: "/apps/movie",
-      icon: Film,
-    },
-    {
-      name: "Grocery",
-      url: "/apps/grocery",
-      icon: ShoppingBasket,
-    },
-    {
-      name: "Workout",
-      url: "/apps/workout",
-      icon: Dumbbell,
-    },
-    {
-      name: "Finance",
-      url: "/apps/finance",
-      icon: Wallet,
-    },
-  ],
-  projects: [
-    {
-      name: "Lab",
-      url:
-        process.env.NODE_ENV === "production"
-          ? "https://lab.thinhtran.dev"
-          : "/",
-      icon: FlaskConical,
-    },
-    { name: "Apps", url: "/apps", icon: AppWindow },
-    {
-      name: "Web Replicas",
-      url: "/replicas",
-      icon: Laptop,
-    },
-    {
-      name: "Playground",
-      url: "/playground",
-      icon: RollerCoaster,
-    },
-    {
-      name: "Design System",
-      url: "/design-system",
-      icon: Palette,
-    },
-    {
-      name: "ThreeJS",
-      url: "/threejs",
-      icon: PieChart,
-    },
-  ],
+type Props = React.ComponentProps<typeof Sidebar> & {
+  project: ProjectId
+  nav: React.ReactNode
 }
 
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+export function AppSidebar({ project, nav, ...props }: Props) {
   return (
     <Sidebar variant="inset" {...props}>
       <SidebarHeader>
-        <SidebarUser />
+        <ProjectSwitcher project={project} />
       </SidebarHeader>
-      <SidebarContent>
-        <NavApps apps={sidebarItems.apps} />
-        <NavProjects projects={sidebarItems.projects} />
+      <SidebarContent className="scroll-fade scrollbar-thin">
+        {nav}
       </SidebarContent>
-      <SidebarFooter className="flex flex-col gap-2 p-4">
-        <ThemeToggle />
+      <SidebarFooter>
+        <SidebarUser />
       </SidebarFooter>
     </Sidebar>
   )

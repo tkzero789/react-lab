@@ -1,18 +1,31 @@
 "use client"
 
-/* Logged exercises and progress for one calendar day */
+/* Day view that logs and edits exercises in one overlay, step by step */
 
 import React from "react"
-import type { FunctionReturnType } from "convex/server"
 import { format, isToday, parseISO } from "date-fns"
+import { AnimatePresence, motion, MotionConfig } from "motion/react"
 import {
+  ChevronLeftIcon,
+  ChevronRightIcon,
   DumbbellIcon,
-  MinusIcon,
+  PlusIcon,
+  Trash2Icon,
   TrendingDownIcon,
   TrendingUpIcon,
   TrophyIcon,
 } from "lucide-react"
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+} from "@/components/ui/alert-dialog"
 import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
 import {
   Dialog,
   DialogBody,
@@ -23,51 +36,46 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog"
 import {
-  Drawer,
-  DrawerBody,
-  DrawerContent,
-  DrawerDescription,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerTitle,
-} from "@/components/ui/drawer"
-import {
   Empty,
   EmptyDescription,
   EmptyHeader,
   EmptyMedia,
   EmptyTitle,
 } from "@/components/ui/empty"
-import { api } from "@/convex/_generated/api"
 import { Doc, Id } from "@/convex/_generated/dataModel"
-import { useIsMobile } from "@/hooks/use-mobile"
 import { cn } from "@/lib/utils"
-import {
-  formatWeight,
-  getTopSet,
-  getVolume,
-  numberFormat,
-} from "../lib/sets"
+import { formatWeight, getTopSet, getVolume, numberFormat } from "../lib/sets"
+import ExercisePicker, { type Exercise } from "./exercise-picker"
 import ExerciseThumbnail from "./exercise-thumbnail"
-import LogActions from "./log-actions"
-import LogExercise from "./log-exercise"
-import { WorkoutSets } from "./log-exercise-form"
+import SetsForm, { type WorkoutSets } from "./sets-form"
+import StepTransition, { type Direction } from "./step-transition"
 
 type Log = Doc<"workoutLogs">
-type Exercise = FunctionReturnType<typeof api.exercises.list>[number]
 
-type Props = Pick<
-  React.ComponentProps<typeof LogExercise>,
-  "onAdd" | "date"
-> & {
+type Props = {
   open: boolean
   onOpenChange: (open: boolean) => void
+  date: Date
   exercises: Exercise[]
   logs: Log[]
   allLogs: Log[]
+  onAdd: (date: string, exerciseId: Id<"exercises">, sets: WorkoutSets) => void
   onUpdate: (id: Id<"workoutLogs">, sets: WorkoutSets) => void
   onRemove: (id: Id<"workoutLogs">) => void
 }
+
+type Step =
+  | { name: "day" }
+  | { name: "pick" }
+  | {
+      name: "sets"
+      exerciseId: Id<"exercises">
+      logId?: Id<"workoutLogs">
+      from: "day" | "pick"
+    }
+
+const STEP_DEPTH: Record<Step["name"], number> = { day: 0, pick: 1, sets: 2 }
+const INITIAL_NAV = { step: { name: "day" } as Step, direction: 1 as Direction }
 
 type Progress = {
   isPR: boolean
@@ -97,29 +105,16 @@ function getProgress(log: Log, allLogs: Log[]): Progress | null {
   }
 }
 
-function DaySummary({ logs }: { logs: Log[] }) {
-  const sets = logs.flatMap((l) => l.sets)
-  const stats = [
-    { label: "Exercises", value: new Set(logs.map((l) => l.exerciseId)).size },
-    { label: "Sets", value: sets.length },
-    { label: "Volume (reps)", value: getVolume(sets) },
-  ]
-
-  return (
-    <dl className="grid grid-cols-3 divide-x rounded-lg border">
-      {stats.map((stat) => (
-        <div
-          key={stat.label}
-          className="flex flex-col-reverse items-center gap-0.5 p-2"
-        >
-          <dt className="text-xs text-muted-foreground">{stat.label}</dt>
-          <dd className="text-lg font-semibold tabular-nums">
-            {numberFormat.format(stat.value)}
-          </dd>
-        </div>
-      ))}
-    </dl>
-  )
+function getLastSession(
+  exerciseId: Id<"exercises">,
+  dateStr: string,
+  allLogs: Log[]
+) {
+  return allLogs
+    .filter((l) => l.exerciseId === exerciseId && l.date < dateStr)
+    .reduce<
+      Log | undefined
+    >((latest, l) => (!latest || l.date > latest.date ? l : latest), undefined)
 }
 
 function ProgressNote({ progress }: { progress: Progress }) {
@@ -127,12 +122,7 @@ function ProgressNote({ progress }: { progress: Progress }) {
   const since = format(parseISO(lastDate), "MMM d")
 
   if (change === 0) {
-    return (
-      <span className="flex items-center gap-1">
-        <MinusIcon className="size-3.5" aria-hidden />
-        Same as {since}
-      </span>
-    )
+    return <span className="flex items-center gap-1">Same as {since}</span>
   }
 
   const Icon = change > 0 ? TrendingUpIcon : TrendingDownIcon
@@ -154,47 +144,50 @@ function LogCard({
   log,
   exercise,
   progress,
-  actions,
+  onEdit,
 }: {
   log: Log
   exercise: Exercise | undefined
   progress: Progress | null
-  actions: React.ReactNode
+  onEdit: () => void
 }) {
-  const topSet = getTopSet(log.sets)
   const volume = getVolume(log.sets)
+  const name = exercise?.name ?? "Unknown exercise"
 
   return (
     <li className="overflow-hidden rounded-lg border bg-card">
-      <div className="flex items-center gap-3 p-3">
+      <button
+        type="button"
+        onClick={onEdit}
+        aria-label={`Edit ${name}`}
+        className="flex w-full items-center gap-3 p-3 text-left transition-colors outline-none hover:bg-button-muted-hover focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-inset active:bg-button-muted-hover"
+      >
         <ExerciseThumbnail src={exercise?.thumbnailUrl} size={44} />
-        <div className="flex min-w-0 flex-1 flex-col gap-1">
-          <div className="flex items-center gap-2">
-            <div className="truncate font-medium">
-              {exercise?.name ?? "Unknown exercise"}
-            </div>
+        <span className="flex min-w-0 flex-1 flex-col gap-1">
+          <span className="flex items-center gap-2">
+            <span className="truncate font-medium">{name}</span>
             {progress?.isPR && (
               <Badge className="gap-1 [&_svg]:size-3">
                 <TrophyIcon aria-hidden />
                 PR
               </Badge>
             )}
-          </div>
+          </span>
           {exercise && exercise.muscleGroups.length > 0 && (
-            <div className="flex flex-wrap items-center gap-2">
+            <span className="flex flex-wrap items-center gap-2">
               {exercise.muscleGroups.map((mg) => (
                 <Badge key={mg} variant="secondary" className="w-fit">
                   {mg}
                 </Badge>
               ))}
-            </div>
+            </span>
           )}
-        </div>
-        {actions}
-      </div>
+        </span>
+        <ChevronRightIcon className="size-4 shrink-0" aria-hidden />
+      </button>
 
       <table className="w-full border-t text-sm tabular-nums">
-        <thead className="bg-muted/50 text-xs text-muted-foreground">
+        <thead className="bg-muted text-xs">
           <tr>
             <th scope="col" className="w-14 py-1.5 pl-3 text-left font-normal">
               Set
@@ -209,13 +202,8 @@ function LogCard({
         </thead>
         <tbody className="divide-y">
           {log.sets.map((set, index) => (
-            <tr
-              key={index}
-              className={cn(
-                log.sets.length > 1 && set === topSet && "font-semibold"
-              )}
-            >
-              <td className="py-2 pl-3 text-muted-foreground">{index + 1}</td>
+            <tr key={index}>
+              <td className="py-2 pl-3">{index + 1}</td>
               <td className="py-2 text-right">{formatWeight(set.weight)}</td>
               <td className="py-2 pr-3 text-right">{set.reps}</td>
             </tr>
@@ -223,11 +211,37 @@ function LogCard({
         </tbody>
       </table>
 
-      <div className="flex items-center justify-between gap-2 border-t px-3 py-2 text-xs text-muted-foreground">
+      <div className="flex items-center justify-between gap-2 border-t px-3 py-2 text-xs">
         <span>Volume {numberFormat.format(volume)} reps</span>
         {progress && <ProgressNote progress={progress} />}
       </div>
     </li>
+  )
+}
+
+/* Animate the footer in and out, so the overlay does not jump between steps */
+function StepFooter({
+  children,
+  render,
+}: {
+  children: React.ReactNode
+  render: (children: React.ReactNode) => React.ReactNode
+}) {
+  return (
+    <AnimatePresence initial={false}>
+      {children && (
+        <motion.div
+          key="footer"
+          initial={{ height: 0, opacity: 0 }}
+          animate={{ height: "auto", opacity: 1 }}
+          exit={{ height: 0, opacity: 0 }}
+          transition={{ duration: 0.25, ease: [0.32, 0.72, 0, 1] }}
+          className="mt-auto shrink-0 overflow-hidden"
+        >
+          {render(children)}
+        </motion.div>
+      )}
+    </AnimatePresence>
   )
 }
 
@@ -242,83 +256,209 @@ export default function DayDetails({
   onUpdate,
   onRemove,
 }: Props) {
-  const isMobile = useIsMobile()
-  const exerciseById = new Map(exercises.map((e) => [e._id, e]))
+  const formId = React.useId()
+  const [nav, setNav] = React.useState(INITIAL_NAV)
+  const [confirmDelete, setConfirmDelete] = React.useState(false)
+  const { step, direction } = nav
 
-  const title = isToday(date) ? "Today" : format(date, "EEEE")
-  const description = format(date, "MMMM d, yyyy")
-  const content =
-    logs.length === 0 ? (
-      <Empty className="p-8 md:p-8">
-        <EmptyHeader>
-          <EmptyMedia variant="icon">
-            <DumbbellIcon />
-          </EmptyMedia>
-          <EmptyTitle className="text-base">No workout logged</EmptyTitle>
-          <EmptyDescription>
-            {exercises.length === 0
-              ? "Add an exercise first, then log it here."
-              : "Log an exercise to track this day."}
-          </EmptyDescription>
-        </EmptyHeader>
-      </Empty>
-    ) : (
-      <div className="flex flex-col gap-4">
-        <DaySummary logs={logs} />
-        <ul className="flex flex-col gap-3">
-          {logs.map((log) => {
-            const exercise = exerciseById.get(log.exerciseId)
-            return (
+  const dateStr = format(date, "yyyy-MM-dd")
+  const exerciseById = new Map(exercises.map((e) => [e._id, e]))
+  const loggedExerciseIds = new Set(logs.map((l) => l.exerciseId))
+
+  function go(next: Step) {
+    setNav((prev) => ({
+      step: next,
+      direction: STEP_DEPTH[next.name] >= STEP_DEPTH[prev.step.name] ? 1 : -1,
+    }))
+  }
+
+  function back() {
+    go(step.name === "sets" ? { name: step.from } : { name: "day" })
+  }
+
+  /* Reset after the close animation, so the user does not see the step change */
+  function handleOpenChangeComplete(isOpen: boolean) {
+    if (isOpen) return
+    setNav(INITIAL_NAV)
+    setConfirmDelete(false)
+  }
+
+  /* An exercise that is already logged on this day opens its log, not a duplicate */
+  function pickExercise(exercise: Exercise) {
+    const existing = logs.find((l) => l.exerciseId === exercise._id)
+    go({
+      name: "sets",
+      exerciseId: exercise._id,
+      logId: existing?._id,
+      from: "pick",
+    })
+  }
+
+  const dayTitle = isToday(date) ? "Today" : format(date, "EEEE")
+  const editingLog =
+    step.name === "sets" && step.logId
+      ? logs.find((l) => l._id === step.logId)
+      : undefined
+  const stepExercise =
+    step.name === "sets" ? exerciseById.get(step.exerciseId) : undefined
+
+  let title: string
+  let description: string
+  let body: React.ReactNode
+  let footer: React.ReactNode = null
+
+  if (step.name === "pick") {
+    title = "Choose exercise"
+    body = (
+      <ExercisePicker
+        exercises={exercises}
+        loggedExerciseIds={loggedExerciseIds}
+        onSelect={pickExercise}
+      />
+    )
+  } else if (step.name === "sets" && stepExercise) {
+    title = editingLog ? "Edit sets" : "Log sets"
+    body = (
+      <SetsForm
+        id={formId}
+        exercise={stepExercise}
+        defaultSets={editingLog?.sets}
+        lastSession={getLastSession(stepExercise._id, dateStr, allLogs)}
+        onSubmit={(sets) => {
+          if (editingLog) onUpdate(editingLog._id, sets)
+          else onAdd(dateStr, stepExercise._id, sets)
+          go({ name: "day" })
+        }}
+      />
+    )
+    footer = (
+      <>
+        {editingLog && (
+          <Button
+            variant="destructive"
+            size="icon"
+            aria-label="Remove"
+            onClick={() => setConfirmDelete(true)}
+          >
+            <Trash2Icon />
+          </Button>
+        )}
+        <Button form={formId} type="submit" className="md:order-last">
+          {editingLog ? "Save changes" : "Save workout"}
+        </Button>
+      </>
+    )
+  } else {
+    title = dayTitle
+    body =
+      logs.length === 0 ? (
+        <Empty className="p-8 md:p-8">
+          <EmptyHeader>
+            <EmptyMedia variant="icon">
+              <DumbbellIcon />
+            </EmptyMedia>
+            <EmptyTitle className="text-base">No workout logged</EmptyTitle>
+            <EmptyDescription>
+              {exercises.length === 0
+                ? "Add an exercise first, then log it here."
+                : "Log an exercise to track this day."}
+            </EmptyDescription>
+          </EmptyHeader>
+        </Empty>
+      ) : (
+        <div className="flex flex-col gap-4">
+          <ul className="flex flex-col gap-3">
+            {logs.map((log) => (
               <LogCard
                 key={log._id}
                 log={log}
-                exercise={exercise}
+                exercise={exerciseById.get(log.exerciseId)}
                 progress={getProgress(log, allLogs)}
-                actions={
-                  <LogActions
-                    log={log}
-                    exercises={exercises}
-                    exerciseName={exercise?.name}
-                    date={date}
-                    onUpdate={(sets) => onUpdate(log._id, sets)}
-                    onRemove={() => onRemove(log._id)}
-                  />
+                onEdit={() =>
+                  go({
+                    name: "sets",
+                    exerciseId: log.exerciseId,
+                    logId: log._id,
+                    from: "day",
+                  })
                 }
               />
-            )
-          })}
-        </ul>
-      </div>
-    )
-  const logExercise = (
-    <LogExercise exercises={exercises} date={date} onAdd={onAdd} />
-  )
-
-  if (isMobile) {
-    return (
-      <Drawer open={open} onOpenChange={onOpenChange}>
-        <DrawerContent>
-          <DrawerHeader>
-            <DrawerTitle>{title}</DrawerTitle>
-            <DrawerDescription>{description}</DrawerDescription>
-          </DrawerHeader>
-          <DrawerBody>{content}</DrawerBody>
-          <DrawerFooter>{logExercise}</DrawerFooter>
-        </DrawerContent>
-      </Drawer>
+            ))}
+          </ul>
+        </div>
+      )
+    footer = (
+      <Button
+        disabled={exercises.length === 0}
+        onClick={() => go({ name: "pick" })}
+        className="w-full"
+      >
+        <PlusIcon data-icon="inline-start" />
+        Log exercise
+      </Button>
     )
   }
 
+  const stepKey =
+    step.name === "sets" ? `sets-${step.exerciseId}-${step.logId}` : step.name
+  const backButton = step.name !== "day" && (
+    <Button variant="ghost" onClick={back} className="mr-auto">
+      Back
+    </Button>
+  )
+  const animatedBody = (
+    <StepTransition stepKey={stepKey} direction={direction} fill>
+      {body}
+    </StepTransition>
+  )
+  /* Delete needs a clear decision, so it uses the alert dialog on all screens */
+  const deleteDialog = editingLog && (
+    <AlertDialog open={confirmDelete} onOpenChange={setConfirmDelete}>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogDescription>
+            Remove <span className="font-medium">{stepExercise?.name}</span>{" "}
+            from {format(date, "EEEE, MMM d, yyyy")}?
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogAction
+            variant="destructive"
+            onClick={() => {
+              onRemove(editingLog._id)
+              setConfirmDelete(false)
+              go({ name: "day" })
+            }}
+          >
+            Remove
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
+  )
+
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="md:max-w-md">
-        <DialogHeader>
-          <DialogTitle>{title}</DialogTitle>
-          <DialogDescription>{description}</DialogDescription>
-        </DialogHeader>
-        <DialogBody>{content}</DialogBody>
-        <DialogFooter>{logExercise}</DialogFooter>
-      </DialogContent>
-    </Dialog>
+    <MotionConfig reducedMotion="user">
+      <Dialog
+        open={open}
+        onOpenChange={onOpenChange}
+        onOpenChangeComplete={handleOpenChangeComplete}
+      >
+        <DialogContent className="md:h-[min(40rem,calc(100dvh-4rem))] md:max-w-md">
+          <DialogHeader>
+            <DialogTitle>{title}</DialogTitle>
+          </DialogHeader>
+          <DialogBody className="overflow-hidden p-0">
+            {animatedBody}
+          </DialogBody>
+          <StepFooter render={(c) => <DialogFooter>{c}</DialogFooter>}>
+            {backButton}
+            {footer}
+          </StepFooter>
+          {deleteDialog}
+        </DialogContent>
+      </Dialog>
+    </MotionConfig>
   )
 }

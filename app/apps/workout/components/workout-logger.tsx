@@ -1,5 +1,6 @@
 "use client"
 
+import { cloneElement, useCallback, useMemo } from "react"
 import { Button } from "@/components/ui/button"
 import { ButtonGroup } from "@/components/ui/button-group"
 import { ChevronLeft, ChevronRight } from "lucide-react"
@@ -16,12 +17,15 @@ import {
 } from "date-fns"
 import { enUS } from "date-fns/locale"
 import DayDetails from "./day-details"
-import { WorkoutSets } from "./log-exercise-form"
+import { WorkoutSets } from "./sets-form"
 import {
   Calendar as BigCalendar,
   dateFnsLocalizer,
   Views,
+  type Components,
+  type DateCellWrapperProps,
   type Event,
+  type EventProps,
   type ToolbarProps,
 } from "react-big-calendar"
 import "react-big-calendar/lib/css/react-big-calendar.css"
@@ -69,6 +73,19 @@ function CalendarNavigation({
           <ChevronRight />
         </Button>
       </ButtonGroup>
+    </div>
+  )
+}
+
+function WorkoutEventLabel({ event }: EventProps<WorkoutEvent>) {
+  return (
+    <div>
+      <span className="hidden truncate text-xs lg:block dark:text-brand-foreground">
+        {event.title}
+      </span>
+      <span className="read-only invisible truncate text-xs opacity-0 lg:hidden">
+        Exercise item
+      </span>
     </div>
   )
 }
@@ -135,10 +152,28 @@ export default function WorkoutLogger({
     removeWorkoutLog({ id })
   }
 
-  function openDayDialog(date: Date) {
-    onSelectedDateChange(date)
-    onDayDialogOpenChange(true)
-  }
+  const openDayDialog = useCallback(
+    (date: Date) => {
+      onSelectedDateChange(date)
+      onDayDialogOpenChange(true)
+    },
+    [onSelectedDateChange, onDayDialogOpenChange]
+  )
+
+  /* Memoize so the calendar does not remount the day cells on each render */
+  const components = useMemo<Components<WorkoutEvent, object>>(
+    () => ({
+      toolbar: CalendarNavigation,
+      event: WorkoutEventLabel,
+      /*
+       * Use a plain click, not the selectable prop. The library selects a
+       * slot on touch only after a long press, so a tap does nothing.
+       */
+      dateCellWrapper: ({ value, children }: DateCellWrapperProps) =>
+        cloneElement(children, { onClick: () => openDayDialog(value) }),
+    }),
+    [openDayDialog]
+  )
 
   return (
     <div className="flex flex-col gap-4 px-4">
@@ -162,8 +197,6 @@ export default function WorkoutLogger({
         views={[Views.MONTH]}
         date={selectedDate}
         onNavigate={onSelectedDateChange}
-        selectable
-        onSelectSlot={(slot) => openDayDialog(slot.start as Date)}
         onSelectEvent={(event) => {
           const d = (event.start as Date) ?? new Date()
           openDayDialog(d)
@@ -171,19 +204,7 @@ export default function WorkoutLogger({
         onDrillDown={(d) => openDayDialog(d)}
         popup
         style={{ height: 600 }}
-        components={{
-          toolbar: CalendarNavigation,
-          event: ({ event }) => (
-            <div className="">
-              <span className="hidden truncate text-xs lg:block dark:text-brand-foreground">
-                {event.title}
-              </span>
-              <span className="read-only invisible truncate text-xs opacity-0 lg:hidden">
-                Exercise item
-              </span>
-            </div>
-          ),
-        }}
+        components={components}
       />
 
       <DayDetails

@@ -16,6 +16,13 @@ import {
 } from "@/components/ui/alert-dialog"
 import { Button } from "@/components/ui/button"
 import {
+  Dialog,
+  DialogBody,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog"
+import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuGroup,
@@ -25,7 +32,6 @@ import {
 import { api } from "@/convex/_generated/api"
 import { toast } from "@/lib/toast"
 import type { Budget, Transaction } from "../lib/transactions"
-import ResponsiveDialog from "./responsive-dialog"
 import TransactionForm, { type TransactionInput } from "./transaction-form"
 
 type Props = {
@@ -94,19 +100,22 @@ export default function TransactionActions({ transaction, budgets }: Props) {
         </DropdownMenuContent>
       </DropdownMenu>
 
-      <ResponsiveDialog
-        open={view === "edit"}
-        onOpenChange={(open) => !open && close()}
-        title="Edit Transaction"
-      >
-        <TransactionForm
-          budgets={budgets}
-          transaction={transaction}
-          onSubmit={handleUpdate}
-          submitLabel="Save Changes"
-          isPending={isPending}
-        />
-      </ResponsiveDialog>
+      <Dialog open={view === "edit"} onOpenChange={(open) => !open && close()}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Edit Transaction</DialogTitle>
+          </DialogHeader>
+          <DialogBody className="flex flex-1 flex-col p-0">
+            <TransactionForm
+              budgets={budgets}
+              transaction={transaction}
+              onSubmit={handleUpdate}
+              submitLabel="Save Changes"
+              isPending={isPending}
+            />
+          </DialogBody>
+        </DialogContent>
+      </Dialog>
 
       <AlertDialog
         open={view === "delete"}

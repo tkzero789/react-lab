@@ -12,15 +12,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
-import {
-  Drawer,
-  DrawerBody,
-  DrawerContent,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
-} from "@/components/ui/drawer"
-import { useIsMobile } from "@/hooks/use-mobile"
 import { useUploadFile } from "@/hooks/use-upload-file"
 import { toast } from "@/lib/toast"
 import { Plus } from "lucide-react"
@@ -29,7 +20,6 @@ import ExerciseForm, { ExerciseFormValues } from "./exercise-form"
 export default function AddExercise() {
   const addExercise = useMutation(api.exercises.add)
   const uploadFile = useUploadFile()
-  const isMobile = useIsMobile()
   const [open, setOpen] = React.useState(false)
   const [isPending, startTransition] = React.useTransition()
 
@@ -60,20 +50,6 @@ export default function AddExercise() {
       isPending={isPending}
     />
   )
-
-  if (isMobile) {
-    return (
-      <Drawer open={open} onOpenChange={setOpen}>
-        <DrawerTrigger render={trigger} />
-        <DrawerContent>
-          <DrawerHeader>
-            <DrawerTitle>Add Exercise</DrawerTitle>
-          </DrawerHeader>
-          <DrawerBody className="flex flex-col p-0">{form}</DrawerBody>
-        </DrawerContent>
-      </Drawer>
-    )
-  }
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>

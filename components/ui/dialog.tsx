@@ -49,7 +49,6 @@ function DialogContent({
 }) {
   return (
     <DialogPortal>
-      {/* Base UI skips the backdrop of a nested dialog unless forceRender is set */}
       <DialogOverlay forceRender />
       <DialogPrimitive.Popup
         data-slot="dialog-content"
@@ -84,19 +83,18 @@ function DialogHeader({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="dialog-header"
-      className={cn("flex shrink-0 flex-col gap-2 border-b p-4", className)}
+      className={cn("flex shrink-0 flex-col gap-2 p-4 pr-12", className)}
       {...props}
     />
   )
 }
 
-/* The popup limits its height. The body shrinks and scrolls so the header and footer stay visible. */
 function DialogBody({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="dialog-body"
       className={cn(
-        "min-h-0 flex-1 overflow-y-auto overscroll-contain p-4",
+        "min-h-0 flex-1 overflow-y-auto overscroll-contain px-4",
         className
       )}
       {...props}
@@ -116,7 +114,7 @@ function DialogFooter({
     <div
       data-slot="dialog-footer"
       className={cn(
-        "mt-auto flex shrink-0 gap-2 rounded-b-lg border-t p-4 sm:justify-end",
+        "mt-auto flex shrink-0 gap-2 rounded-b-lg p-4 sm:justify-end",
         className
       )}
       {...props}

@@ -4,14 +4,14 @@ import { Input } from "@/components/ui/input"
 import { Plus, Trash2 } from "lucide-react"
 import { toast } from "@/lib/toast"
 import {
-  Drawer,
-  DrawerClose,
-  DrawerContent,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
-} from "@/components/ui/drawer"
+  Dialog,
+  DialogBody,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
 import { useMutation, useQuery } from "convex/react"
 import { api } from "@/convex/_generated/api"
 import { Id } from "@/convex/_generated/dataModel"
@@ -72,35 +72,30 @@ export default function DishForm() {
             >
               <span className="font-medium">{dish.name}</span>
 
-              <Drawer>
-                <DrawerTrigger
+              <Dialog>
+                <DialogTrigger
                   render={
                     <Button variant="ghost" size="icon-sm">
                       <Trash2 />
                     </Button>
                   }
                 />
-                <DrawerContent className="mx-auto max-w-2xl">
-                  <DrawerHeader>
-                    <DrawerTitle>{dish.name}</DrawerTitle>
-                  </DrawerHeader>
-                  <DrawerFooter>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Delete dish</DialogTitle>
+                  </DialogHeader>
+                  <DialogBody>{dish.name}</DialogBody>
+                  <DialogFooter>
                     <Button
                       variant="destructive"
+                      className="w-full"
                       onClick={() => handleRemove(dish._id)}
                     >
                       Delete
                     </Button>
-                    <DrawerClose
-                      render={
-                        <Button variant="outline" className="w-full">
-                          Cancel
-                        </Button>
-                      }
-                    />
-                  </DrawerFooter>
-                </DrawerContent>
-              </Drawer>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
             </div>
           ))}
         </div>

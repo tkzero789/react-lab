@@ -6,11 +6,18 @@ import React from "react"
 import { useMutation } from "convex/react"
 import { Plus } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import {
+  Dialog,
+  DialogBody,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
 import { api } from "@/convex/_generated/api"
 import { toast } from "@/lib/toast"
 import { MAX_BUDGETS } from "@/types/finance"
 import BudgetForm, { type BudgetFormValues } from "./budget-form"
-import ResponsiveDialog from "./responsive-dialog"
 
 export default function AddBudget({ budgetCount }: { budgetCount: number }) {
   const createBudget = useMutation(api.budgets.create)
@@ -32,29 +39,34 @@ export default function AddBudget({ budgetCount }: { budgetCount: number }) {
   }
 
   return (
-    <ResponsiveDialog
-      open={open}
-      onOpenChange={setOpen}
-      title="Add Budget"
-      trigger={
-        <Button
-          variant="outline"
-          size="sm"
-          disabled={isFull}
-          title={
-            isFull ? `You can have up to ${MAX_BUDGETS} budgets` : undefined
-          }
-        >
-          <Plus data-icon="inline-start" />
-          Add Budget
-        </Button>
-      }
-    >
-      <BudgetForm
-        onSubmit={handleCreate}
-        submitLabel="Add Budget"
-        isPending={isPending}
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger
+        render={
+          <Button
+            variant="outline"
+            size="sm"
+            disabled={isFull}
+            title={
+              isFull ? `You can have up to ${MAX_BUDGETS} budgets` : undefined
+            }
+          >
+            <Plus data-icon="inline-start" />
+            Add Budget
+          </Button>
+        }
       />
-    </ResponsiveDialog>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Add Budget</DialogTitle>
+        </DialogHeader>
+        <DialogBody className="flex flex-1 flex-col p-0">
+          <BudgetForm
+            onSubmit={handleCreate}
+            submitLabel="Add Budget"
+            isPending={isPending}
+          />
+        </DialogBody>
+      </DialogContent>
+    </Dialog>
   )
 }

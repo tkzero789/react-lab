@@ -6,10 +6,17 @@ import React from "react"
 import { useMutation } from "convex/react"
 import { Plus } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import {
+  Dialog,
+  DialogBody,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
 import { api } from "@/convex/_generated/api"
 import { toast } from "@/lib/toast"
 import type { Budget } from "../lib/transactions"
-import ResponsiveDialog from "./responsive-dialog"
 import TransactionForm, { type TransactionInput } from "./transaction-form"
 
 export default function AddTransaction({ budgets }: { budgets: Budget[] }) {
@@ -31,23 +38,28 @@ export default function AddTransaction({ budgets }: { budgets: Budget[] }) {
   }
 
   return (
-    <ResponsiveDialog
-      open={open}
-      onOpenChange={setOpen}
-      title="Add Transaction"
-      trigger={
-        <Button>
-          <Plus data-icon="inline-start" />
-          Add Transaction
-        </Button>
-      }
-    >
-      <TransactionForm
-        budgets={budgets}
-        onSubmit={handleAdd}
-        submitLabel="Add Transaction"
-        isPending={isPending}
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger
+        render={
+          <Button>
+            <Plus data-icon="inline-start" />
+            Add Transaction
+          </Button>
+        }
       />
-    </ResponsiveDialog>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Add Transaction</DialogTitle>
+        </DialogHeader>
+        <DialogBody className="flex flex-1 flex-col p-0">
+          <TransactionForm
+            budgets={budgets}
+            onSubmit={handleAdd}
+            submitLabel="Add Transaction"
+            isPending={isPending}
+          />
+        </DialogBody>
+      </DialogContent>
+    </Dialog>
   )
 }

@@ -4,16 +4,6 @@ import { Input } from "@/components/ui/input"
 import { Check, Pencil, Trash2, X } from "lucide-react"
 import { toast } from "@/lib/toast"
 import { cn } from "@/lib/utils"
-import {
-  Drawer,
-  DrawerClose,
-  DrawerContent,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
-} from "@/components/ui/drawer"
-import { useIsMobile } from "@/hooks/use-mobile"
 import { Id } from "@/convex/_generated/dataModel"
 import { Dish, Ingredient } from "@/types/grocery"
 import {
@@ -52,7 +42,6 @@ export default function IngredientItem({
   onRemove,
   onEdit,
 }: Props) {
-  const isMobile = useIsMobile()
   const [editing, setEditing] = React.useState(false)
   const [editName, setEditName] = React.useState(item.name)
   const [editQty, setEditQty] = React.useState(item.quantity)
@@ -183,38 +172,6 @@ export default function IngredientItem({
         <Button variant="ghost" size="icon-sm" onClick={() => setEditing(true)}>
           <Pencil />
         </Button>
-
-        {isMobile && (
-          <Drawer>
-            <DrawerTrigger
-              render={
-                <Button variant="ghost-destructive" size="icon-sm">
-                  <Trash2 />
-                </Button>
-              }
-            />
-            <DrawerContent className="mx-auto max-w-2xl">
-              <DrawerHeader>
-                <DrawerTitle>{item.name}</DrawerTitle>
-              </DrawerHeader>
-              <DrawerFooter>
-                <Button
-                  variant="destructive"
-                  onClick={() => onRemove(item._id)}
-                >
-                  Delete
-                </Button>
-                <DrawerClose
-                  render={
-                    <Button variant="outline" className="w-full">
-                      Cancel
-                    </Button>
-                  }
-                />
-              </DrawerFooter>
-            </DrawerContent>
-          </Drawer>
-        )}
 
         <Dialog>
           <DialogTrigger

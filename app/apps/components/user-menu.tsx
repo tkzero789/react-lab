@@ -43,17 +43,26 @@ export default function UserMenu({ type = "default" }: Props) {
 }
 
 function TriggerSkeleton({ type }: { type: TriggerType }) {
-  if (type === "default") return <Skeleton className="h-12 w-56" />
-
-  return (
-    <div className="flex flex-1 items-center gap-2 p-2">
+  const summary = (
+    <>
       <Skeleton className="size-8 shrink-0 rounded-full" />
       <div className="grid flex-1 gap-1">
         <Skeleton className="h-3.5 w-24" />
         <Skeleton className="h-3 w-32" />
       </div>
-    </div>
+    </>
   )
+
+  if (type === "default") {
+    /* Match the outline button frame so the trigger does not shift when auth resolves */
+    return (
+      <div className="inline-flex h-12 items-center gap-1.5 rounded-lg border bg-background px-2.5">
+        {summary}
+      </div>
+    )
+  }
+
+  return <div className="flex flex-1 items-center gap-2 p-2">{summary}</div>
 }
 
 function SignInDialog({ type }: { type: TriggerType }) {
@@ -106,7 +115,7 @@ function SignInDialog({ type }: { type: TriggerType }) {
         <DialogHeader>
           <DialogTitle>Sign in</DialogTitle>
         </DialogHeader>
-        <DialogBody>
+        <DialogBody className="pb-4">
           <Button
             className="w-full"
             variant="outline"
@@ -136,7 +145,8 @@ function AccountDialog({ type }: { type: TriggerType }) {
   }
 
   const user = session?.user
-  if (!user) return null
+  /* Convex can report Authenticated before the session query returns */
+  if (!user) return <TriggerSkeleton type={type} />
 
   const initial = user.name.charAt(0).toUpperCase() || "?"
   const summary = (

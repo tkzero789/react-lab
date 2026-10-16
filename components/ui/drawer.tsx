@@ -194,7 +194,10 @@ function DrawerHeader({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="drawer-header"
-      className={cn("flex shrink-0 flex-col gap-0.5 border-b p-4", className)}
+      className={cn(
+        "flex shrink-0 flex-col gap-0.5 border-b p-4 pr-12",
+        className
+      )}
       {...props}
     />
   )

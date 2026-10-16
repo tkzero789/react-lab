@@ -22,21 +22,12 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog"
 import {
-  Drawer,
-  DrawerBody,
-  DrawerContent,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
-} from "@/components/ui/drawer"
-import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { useIsMobile } from "@/hooks/use-mobile"
 import UpdateExerciseForm, { Exercise } from "./update-exercise"
 
 type Props = {
@@ -44,16 +35,11 @@ type Props = {
   onRemove: () => void
 }
 
-type View = "menu" | "edit" | "delete"
+type View = "edit" | "delete"
 
-/*
- * One drawer swaps between the menu and the edit form on mobile.
- * Delete needs a clear decision, so it uses the alert dialog on all screens.
- */
 export default function ExerciseActions({ exercise, onRemove }: Props) {
-  const isMobile = useIsMobile()
   const [open, setOpen] = React.useState(false)
-  const [view, setView] = React.useState<View>("menu")
+  const [view, setView] = React.useState<View>("edit")
 
   function show(next: View) {
     setView(next)
@@ -98,41 +84,6 @@ export default function ExerciseActions({ exercise, onRemove }: Props) {
       </AlertDialogContent>
     </AlertDialog>
   )
-
-  if (isMobile) {
-    return (
-      <>
-        {/* The drawer closes when the delete view opens the alert dialog */}
-        <Drawer
-          open={open && view !== "delete"}
-          onOpenChange={(next) => (next ? show("menu") : setOpen(false))}
-          fitContent={view !== "edit"}
-        >
-          <DrawerTrigger render={trigger} />
-          <DrawerContent>
-            <DrawerHeader>
-              <DrawerTitle>
-                {view === "edit" ? "Edit Exercise" : exercise.name}
-              </DrawerTitle>
-            </DrawerHeader>
-            {view === "edit" ? (
-              <DrawerBody className="flex flex-col p-0">{editForm}</DrawerBody>
-            ) : (
-              <DrawerBody className="flex flex-col gap-2">
-                <Button variant="muted" onClick={() => setView("edit")}>
-                  Edit
-                </Button>
-                <Button variant="destructive" onClick={() => setView("delete")}>
-                  Delete
-                </Button>
-              </DrawerBody>
-            )}
-          </DrawerContent>
-        </Drawer>
-        {deleteDialog}
-      </>
-    )
-  }
 
   return (
     <>

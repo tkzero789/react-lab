@@ -18,8 +18,16 @@
   @apply right-0!;
 }
 
+.rbc-day-bg {
+  @apply cursor-pointer transition-colors;
+}
+
+.rbc-day-bg:not(.rbc-today) {
+  @apply hover:bg-muted/50!;
+}
+
 .rbc-day-bg + .rbc-day-bg {
-  @apply z-10 border-l-border! transition-all;
+  @apply border-l-border!;
 }
 
 .rbc-off-range-bg {
@@ -35,8 +43,13 @@
   @apply bg-brand! px-1! py-0!;
 }
 
+/* The event rows cover the day cells. Pass clicks through to the day cell below. */
 .rbc-row-content {
-  @apply flex flex-col gap-1;
+  @apply pointer-events-none flex flex-col gap-1;
+}
+
+.rbc-row-content :is(.rbc-event, .rbc-show-more, .rbc-button-link) {
+  @apply pointer-events-auto;
 }
 
 .rbc-row-segment {

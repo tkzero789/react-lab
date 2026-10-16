@@ -16,6 +16,13 @@ import {
 } from "@/components/ui/alert-dialog"
 import { Button } from "@/components/ui/button"
 import {
+  Dialog,
+  DialogBody,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog"
+import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuGroup,
@@ -35,7 +42,6 @@ import { api } from "@/convex/_generated/api"
 import { toast } from "@/lib/toast"
 import { UNASSIGNED, type Budget, type BudgetKey } from "../lib/transactions"
 import BudgetForm, { type BudgetFormValues } from "./budget-form"
-import ResponsiveDialog from "./responsive-dialog"
 
 type Props = {
   budget: Budget
@@ -123,18 +129,21 @@ export default function BudgetActions({ budget, budgets }: Props) {
         </DropdownMenuContent>
       </DropdownMenu>
 
-      <ResponsiveDialog
-        open={view === "edit"}
-        onOpenChange={(open) => !open && close()}
-        title="Edit Budget"
-      >
-        <BudgetForm
-          budget={budget}
-          onSubmit={handleUpdate}
-          submitLabel="Save Changes"
-          isPending={isPending}
-        />
-      </ResponsiveDialog>
+      <Dialog open={view === "edit"} onOpenChange={(open) => !open && close()}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Edit Budget</DialogTitle>
+          </DialogHeader>
+          <DialogBody className="flex flex-1 flex-col p-0">
+            <BudgetForm
+              budget={budget}
+              onSubmit={handleUpdate}
+              submitLabel="Save Changes"
+              isPending={isPending}
+            />
+          </DialogBody>
+        </DialogContent>
+      </Dialog>
 
       <AlertDialog
         open={view === "delete"}

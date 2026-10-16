@@ -49,7 +49,12 @@ export function Example({ title, description, children }: ExampleProps) {
   const id = title.toLowerCase().replaceAll(" ", "-")
 
   return (
-    <section id={id} className="flex scroll-mt-20 flex-col gap-3">
+    <section
+      id={id}
+      data-slot="example"
+      data-title={title}
+      className="flex scroll-mt-20 flex-col gap-3"
+    >
       <div className="flex flex-col gap-1">
         <h2 className="text-lg font-semibold tracking-tight">{title}</h2>
         <Description>{description}</Description>

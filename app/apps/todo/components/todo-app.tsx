@@ -36,6 +36,7 @@ import { cn } from "@/lib/utils"
 import TodoDetail from "./todo-detail"
 import TodoList from "./todo-list"
 import TodoNew from "./todo-new"
+import TodoOverview from "./todo-overview"
 import TodoSearch from "./todo-search"
 import { Todo } from "../types"
 
@@ -324,17 +325,13 @@ export default function TodoApp() {
               />
             </div>
           ) : (
-            <Empty className="min-h-96">
-              <EmptyHeader>
-                <EmptyMedia variant="icon">
-                  <ListTodoIcon />
-                </EmptyMedia>
-                <EmptyTitle>Nothing selected</EmptyTitle>
-                <EmptyDescription>
-                  Select a todo to see and edit its date, place, and files.
-                </EmptyDescription>
-              </EmptyHeader>
-            </Empty>
+            <div className="mx-auto max-w-2xl">
+              <TodoOverview
+                open={open}
+                completed={completed}
+                onSelect={openFromSearch}
+              />
+            </div>
           )}
         </div>
       </section>

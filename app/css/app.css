@@ -58,12 +58,15 @@
 :root,
 .light {
   --panel: var(--granite-50);
+  --panel-card: var(--background);
 }
 
 .dark {
   --panel: var(--granite-900);
+  --panel-card: var(--background);
 }
 
 @theme inline {
   --color-panel: var(--panel);
+  --color-panel-card: var(--panel-card);
 }

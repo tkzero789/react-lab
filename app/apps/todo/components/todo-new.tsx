@@ -7,7 +7,7 @@ import { Id } from "@/convex/_generated/dataModel"
 import { useConvexMutation } from "@convex-dev/react-query"
 import { useMutation } from "@tanstack/react-query"
 import { startOfDay } from "date-fns"
-import { MapPinIcon, XIcon } from "lucide-react"
+import { MapPinIcon } from "lucide-react"
 import React from "react"
 import { Button } from "@/components/ui/button"
 import {
@@ -18,6 +18,7 @@ import {
 import { Spinner } from "@/components/ui/spinner"
 import { toast } from "@/lib/toast"
 import TodoDateField from "./todo-date-field"
+import TodoOverviewButton from "./todo-overview-button"
 
 type Props = {
   onAdded: (id: Id<"todos">) => void
@@ -48,15 +49,7 @@ export default function TodoNew({ onAdded, onClose }: Props) {
     <form onSubmit={handleSubmit} className="flex flex-col gap-6 p-4 md:p-6">
       <div className="flex items-center gap-2">
         <h2 className="text-sm font-medium">New todo</h2>
-        <Button
-          variant="ghost"
-          size="icon-sm"
-          aria-label="Close new todo"
-          onClick={onClose}
-          className="ml-auto"
-        >
-          <XIcon />
-        </Button>
+        <TodoOverviewButton onClick={onClose} className="ml-auto" />
       </div>
 
       <div>

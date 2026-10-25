@@ -37,6 +37,7 @@ import { Spinner } from "@/components/ui/spinner"
 import { toast } from "@/lib/toast"
 import TodoAttachments from "./todo-attachments"
 import TodoDateField from "./todo-date-field"
+import TodoOverviewButton from "./todo-overview-button"
 import { Todo } from "../types"
 
 type TodoPatch = {
@@ -122,14 +123,7 @@ export default function TodoDetail({ todo, onClose, onToggle }: Props) {
             </>
           ) : null}
         </span>
-        <Button
-          variant="ghost"
-          size="icon-sm"
-          aria-label="Close details"
-          onClick={onClose}
-        >
-          <XIcon />
-        </Button>
+        <TodoOverviewButton onClick={onClose} />
       </div>
 
       <div>

@@ -122,6 +122,21 @@
   --color-chart-5: var(--chart-5);
 }
 
+/* Focus */
+/* Each theme declares the mix again, so it resolves with the --ring of that theme */
+:root,
+.light {
+  --focus-ring: color-mix(in oklab, var(--ring) 50%, transparent);
+}
+
+.dark {
+  --focus-ring: color-mix(in oklab, var(--ring) 50%, transparent);
+}
+
+@theme inline {
+  --color-focus-ring: var(--focus-ring);
+}
+
 /* Input */
 :root,
 .light {
@@ -163,6 +178,35 @@
 
 @theme inline {
   --color-input: var(--input);
+}
+
+/* Kbd */
+/* A tooltip has a foreground background, so a key inside it uses a light tint of the page background */
+:root,
+.light {
+  --kbd-tooltip: color-mix(in oklab, var(--background) 20%, transparent);
+}
+
+.dark {
+  --kbd-tooltip: color-mix(in oklab, var(--background) 10%, transparent);
+}
+
+@theme inline {
+  --color-kbd-tooltip: var(--kbd-tooltip);
+}
+
+/* Overlay */
+:root,
+.light {
+  --overlay-ring: color-mix(in oklab, var(--foreground) 10%, transparent);
+}
+
+.dark {
+  --overlay-ring: color-mix(in oklab, var(--foreground) 10%, transparent);
+}
+
+@theme inline {
+  --color-overlay-ring: var(--overlay-ring);
 }
 
 /* Popover */

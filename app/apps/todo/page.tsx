@@ -7,6 +7,7 @@ import { Authenticated, AuthLoading, Unauthenticated } from "convex/react"
 import SignInPrompt from "../components/sign-in-prompt"
 import Loader from "@/components/ui/loader"
 import TodoApp from "./components/todo-app"
+import { Suspense } from "react"
 
 export default function TodoPage() {
   return (
@@ -22,7 +23,7 @@ export default function TodoPage() {
           },
         ]}
       />
-      <DashboardContainer className="p-0">
+      <DashboardContainer className="flex max-w-none flex-1 flex-col p-0">
         <Unauthenticated>
           <SignInPrompt description="Add and manage your todos in one place" />
         </Unauthenticated>
@@ -30,7 +31,10 @@ export default function TodoPage() {
           <Loader />
         </AuthLoading>
         <Authenticated>
-          <TodoApp />
+          {/* useSearchParams in TodoApp needs a Suspense boundary for prerendering */}
+          <Suspense fallback={<Loader />}>
+            <TodoApp />
+          </Suspense>
         </Authenticated>
       </DashboardContainer>
     </>

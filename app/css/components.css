@@ -209,6 +209,20 @@
   --color-overlay-ring: var(--overlay-ring);
 }
 
+/* Panel */
+:root,
+.light {
+  --panel: var(--granite-50);
+}
+
+.dark {
+  --panel: var(--granite-900);
+}
+
+@theme inline {
+  --color-panel: var(--panel);
+}
+
 /* Popover */
 :root,
 .light {

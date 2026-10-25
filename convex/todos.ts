@@ -2,7 +2,7 @@ import { ConvexError, v } from "convex/values"
 import type { Id } from "./_generated/dataModel"
 import { mutation, query } from "./_generated/server"
 import { getCurrentUserId } from "./users"
-import { getFileObject } from "./files"
+import { deleteFiles, getFileObject } from "./files"
 
 export const list = query({
   handler: async (ctx) => {
@@ -51,12 +51,13 @@ export const add = mutation({
   },
 })
 
+/* Every field is optional, so an autosave sends only the field that changed */
 export const update = mutation({
   args: {
     id: v.id("todos"),
-    text: v.string(),
-    date: v.number(),
-    location: v.string(),
+    text: v.optional(v.string()),
+    date: v.optional(v.number()),
+    location: v.optional(v.string()),
     image: v.optional(v.array(v.id("_storage"))),
   },
   handler: async (ctx, args) => {
@@ -68,12 +69,16 @@ export const update = mutation({
       throw new ConvexError("Todo not found")
     }
 
-    return await ctx.db.patch(args.id, {
-      text: args.text,
-      date: args.date,
-      location: args.location,
-      ...(args.image !== undefined && { image: args.image }),
-    })
+    if (args.image !== undefined) {
+      const kept = new Set<string>(args.image)
+      await deleteFiles(
+        ctx,
+        todo.image.filter((id) => !kept.has(id))
+      )
+    }
+
+    const { id, ...fields } = args
+    return await ctx.db.patch(id, fields)
   },
 })
 
@@ -106,6 +111,7 @@ export const remove = mutation({
       throw new ConvexError("Todo not found")
     }
 
+    await deleteFiles(ctx, todo.image)
     await ctx.db.delete(args.id)
   },
 })

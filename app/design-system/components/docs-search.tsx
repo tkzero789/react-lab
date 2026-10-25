@@ -17,24 +17,12 @@ import {
   CommandList,
 } from "@/components/ui/command"
 import { Kbd, KbdGroup } from "@/components/ui/kbd"
+import { useIsMac } from "@/hooks/use-is-mac"
 import { pathClient } from "@/lib/path-client"
 
 import { uiComponents } from "../registry"
 
 const components = uiComponents.filter((component) => component.documented)
-
-function subscribe() {
-  return () => {}
-}
-
-/* The server cannot know the platform. It renders Ctrl, and the client swaps in ⌘ after hydration. */
-function useIsMac() {
-  return React.useSyncExternalStore(
-    subscribe,
-    () => /Mac|iPhone|iPad/.test(navigator.userAgent),
-    () => false
-  )
-}
 
 export default function DocsSearch() {
   const router = useRouter()

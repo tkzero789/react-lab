@@ -2,11 +2,10 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
-@import "./carousel.css";
 @import "./react-big-calendar.css";
 @import "./animation.css";
 @import "./components.css";
-@import "./custom.css";
+@import "./app.css";
 
 @custom-variant dark (&:is(.dark *));
 

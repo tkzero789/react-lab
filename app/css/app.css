@@ -1,4 +1,4 @@
-/* Project accent tokens for the lab cards and the replicas page */
+/* App-specific tokens and styles */
 
 /* Three.js */
 :root,
@@ -52,4 +52,18 @@
   --color-apps-start: var(--apps-start);
   --color-apps-end: var(--apps-end);
   --color-apps-hover: var(--apps-hover);
+}
+
+/* Panel */
+:root,
+.light {
+  --panel: var(--granite-50);
+}
+
+.dark {
+  --panel: var(--granite-900);
+}
+
+@theme inline {
+  --color-panel: var(--panel);
 }

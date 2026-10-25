@@ -1,13 +1,19 @@
 # React Lab
 
+The desktop client of React Lab. The mobile client is the Android app in `../react-lab-expo`. Both clients use the Convex backend in this repo and share the same data.
+
 ## Platform priority
 
-This project is built for desktop first. Mobile must still work, but it has a lower priority.
+This web app is optimized for desktop use only. Phone users use the Expo app. The web app stays responsive, but it does not get a phone-optimized UI or UX.
 
-- **Design and test on desktop first.** Desktop sets the layout, the density, and the interaction model.
-- **Keep every page responsive.** Content must fit, scroll, and stay usable on a phone. Nothing can overflow or break.
+- **Design and test on desktop.** Design for a mouse, a keyboard, and a wide window. Desktop sets the layout, the density, and the interaction model.
+- **Use desktop patterns where they help.** Examples are multi-column layouts, side panels, dense lists and tables, context menus, tooltips, and keyboard shortcuts.
+- **Make every main task work from the keyboard.** Enter submits, Escape closes, and focus is always visible.
+- **Do not hide an action behind hover only.** Hover can reveal an action, but keyboard focus must reveal it too.
+- **Keep every page responsive.** In a narrow window, on a tablet, or on a phone, content must fit, scroll, and stay usable. Nothing can overflow or break.
+- **Accept a simpler result on small screens.** A dense table or a wide menu that is usable on a phone is enough. Do not trade desktop quality for mobile polish.
 - **Do not build mobile-only variants.** Do not add a second component tree, a mobile-only flow, or `useIsMobile()` branches for a better phone experience. Use responsive CSS on the same component.
-- **Accept a simpler mobile result.** A dense table or a wide menu that is usable on a phone is enough. Do not trade desktop quality for mobile polish.
+- **Match features with the Expo app, not layouts.** A feature on both clients keeps the same data and behavior. Each client designs its own UI for its own platform. See `../react-lab-expo/AGENTS.md`.
 
 ## Overlays
 

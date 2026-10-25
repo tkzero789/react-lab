@@ -40,7 +40,13 @@ Use the same overlay on all screen sizes. This follows the platform priority. Do
 - **Use only defined color tokens** for every color utility (`bg-`, `text-`, `border-`, `ring-`, `outline-`, `fill-`, `stroke-`, `divide-`, `shadow-`). Examples: `bg-muted`, `bg-button-ghost-hover`, `text-muted-foreground`, or `bg-(--token)` for a CSS variable.
 - **Do not use an opacity modifier** on a color, such as `bg-muted/30` or `ring-ring/50`.
 - **Do not use arbitrary color values,** such as `bg-[#f4f4f5]` or `bg-[oklch(...)]`.
-- **Add a token when you need a new shade.** Define it in `app/css/components.css` with `color-mix`, for light and dark, and map it in `@theme inline`. See `--button-ghost-hover`.
+- **Add a token when you need a new shade.** Define it with `color-mix`, for light and dark, and map it in `@theme inline`. See `--button-ghost-hover`.
+- **Put each style in the correct CSS file** in `app/css`:
+  - `globals.css` holds the global tokens.
+  - `components.css` holds the tokens and styles for shared UI components.
+  - `app.css` holds the tokens and styles for one app, such as `--panel`.
+  - `animation.css` holds every animation class, global or app-specific.
+  - `react-big-calendar.css` holds only the library styles. Do not mix it with other CSS.
 - **Use `opacity-*` on the element only when the whole element must fade.** It also fades the text and the children.
 
 ### Radius

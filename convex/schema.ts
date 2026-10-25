@@ -60,6 +60,7 @@ export default defineSchema({
     price: v.number(),
     checked: v.boolean(),
     dishIds: v.array(v.id("dishes")),
+    emoji: v.optional(v.string()),
   }).index("by_user", ["userId"]),
 
   // Workout

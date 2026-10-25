@@ -2,6 +2,16 @@ import { v } from "convex/values";
 import { mutation, query } from "./_generated/server";
 import { getCurrentUserId } from "./users";
 
+/* One emoji can be a ZWJ sequence of many UTF-16 code units */
+const MAX_EMOJI_LENGTH = 16;
+
+/* Null clears the emoji. Update keeps the emoji when the field is left out. */
+const emojiArg = v.optional(v.union(v.string(), v.null()));
+
+function checkEmoji(emoji: string | null | undefined) {
+  if (emoji && emoji.length > MAX_EMOJI_LENGTH) throw new Error("Emoji is too long");
+}
+
 export const list = query({
   handler: async (ctx) => {
     const userId = await getCurrentUserId(ctx);
@@ -19,16 +29,19 @@ export const add = mutation({
     quantity: v.string(),
     price: v.number(),
     dishIds: v.array(v.id("dishes")),
+    emoji: emojiArg,
   },
   handler: async (ctx, args) => {
     const userId = await getCurrentUserId(ctx);
     if (!userId) throw new Error("Not authenticated");
+    checkEmoji(args.emoji);
     return await ctx.db.insert("ingredients", {
       name: args.name,
       quantity: args.quantity,
       price: args.price,
       checked: false,
       dishIds: args.dishIds,
+      emoji: args.emoji ?? undefined,
       userId,
     });
   },
@@ -41,10 +54,12 @@ export const update = mutation({
     quantity: v.string(),
     price: v.number(),
     dishIds: v.array(v.id("dishes")),
+    emoji: emojiArg,
   },
   handler: async (ctx, args) => {
     const userId = await getCurrentUserId(ctx);
     if (!userId) throw new Error("Not authenticated");
+    checkEmoji(args.emoji);
     const ingredient = await ctx.db.get(args.id);
     if (!ingredient || ingredient.userId !== userId) return;
     await ctx.db.patch(args.id, {
@@ -52,6 +67,8 @@ export const update = mutation({
       quantity: args.quantity,
       price: args.price,
       dishIds: args.dishIds,
+      /* Patch removes a field that is set to undefined */
+      ...(args.emoji !== undefined && { emoji: args.emoji ?? undefined }),
     });
   },
 });

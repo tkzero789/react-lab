@@ -174,30 +174,6 @@ export default function ButtonPage() {
         </Example>
 
         <Example
-          title="Pill"
-          description={
-            <>
-              Set <code>{'shape="pill"'}</code>. An icon button becomes a
-              circle.
-            </>
-          }
-        >
-          <Button shape="pill">Pill</Button>
-          <Button shape="pill" variant="outline">
-            <Mail data-icon="inline-start" />
-            Login with Email
-          </Button>
-          <Button
-            shape="pill"
-            size="icon-sm"
-            variant="outline"
-            aria-label="Add"
-          >
-            <Plus />
-          </Button>
-        </Example>
-
-        <Example
           title="With Icon"
           description={
             <>

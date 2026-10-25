@@ -178,13 +178,13 @@ export default function WorkoutLogger({
   return (
     <div className="flex flex-col gap-4 px-4">
       <div className="flex gap-2 text-center text-sm">
-        <div className="flex-1 rounded-lg border p-3">
+        <div className="flex-1 rounded-md border p-3">
           <p className="text-lg font-semibold">{dayTotalSets}</p>
           <p className="text-xs text-muted-foreground">
             Sets on {format(selectedDate, "MMM d")}
           </p>
         </div>
-        <div className="flex-1 rounded-lg border p-3">
+        <div className="flex-1 rounded-md border p-3">
           <p className="text-lg font-semibold">{weekTotalSets}</p>
           <p className="text-xs text-muted-foreground">Sets This Week</p>
         </div>

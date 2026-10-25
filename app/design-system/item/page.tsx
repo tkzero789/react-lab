@@ -154,7 +154,7 @@ export default function ItemPage() {
             </>
           }
         >
-          <ItemGroup className="max-w-md rounded-lg border p-2">
+          <ItemGroup className="max-w-md rounded-md border p-2">
             <Item variant="ghost">
               <ItemMedia>
                 <Avatar size="sm">

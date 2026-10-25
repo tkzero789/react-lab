@@ -32,7 +32,7 @@ export default function ScrollAreaPage() {
             description="A box that scrolls with a styled scrollbar."
           />
           <Preview className="min-h-60">
-            <ScrollArea className="h-48 w-full max-w-xs rounded-lg border *:data-[slot=scroll-area-viewport]:scroll-fade">
+            <ScrollArea className="h-48 w-full max-w-xs rounded-md border *:data-[slot=scroll-area-viewport]:scroll-fade">
               <div className="flex flex-col p-3 text-sm">
                 {tags.map((tag) => (
                   <div key={tag} className="flex flex-col">
@@ -54,7 +54,7 @@ export default function ScrollAreaPage() {
             </>
           }
         >
-          <ScrollArea className="h-32 w-full max-w-xs rounded-lg border p-3 text-sm text-muted-foreground *:data-[slot=scroll-area-viewport]:scroll-fade">
+          <ScrollArea className="h-32 w-full max-w-xs rounded-md border p-3 text-sm text-muted-foreground *:data-[slot=scroll-area-viewport]:scroll-fade">
             <p className="mb-3">
               Use a scroll area for a list inside a panel, such as a sidebar or
               a popover.
@@ -75,12 +75,12 @@ export default function ScrollAreaPage() {
             </>
           }
         >
-          <ScrollArea className="w-full max-w-sm rounded-lg border">
+          <ScrollArea className="w-full max-w-sm rounded-md border">
             <div className="flex gap-3 p-3">
               {Array.from({ length: 10 }, (_, index) => (
                 <div
                   key={index}
-                  className="flex size-24 shrink-0 items-center justify-center rounded-lg bg-muted text-sm text-muted-foreground"
+                  className="flex size-24 shrink-0 items-center justify-center rounded-md bg-muted text-sm text-muted-foreground"
                 >
                   {index + 1}
                 </div>

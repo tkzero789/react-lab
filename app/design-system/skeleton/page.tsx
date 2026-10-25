@@ -59,13 +59,13 @@ export default function SkeletonPage() {
           description={
             <>
               Add <code>rounded-full</code> for an avatar, or{" "}
-              <code>rounded-lg</code> for a card.
+              <code>rounded-md</code> for a card.
             </>
           }
         >
           <Skeleton className="size-10 rounded-full" />
-          <Skeleton className="size-10 rounded-lg" />
-          <Skeleton className="h-16 w-28 rounded-lg" />
+          <Skeleton className="size-10 rounded-md" />
+          <Skeleton className="h-16 w-28 rounded-md" />
         </Example>
 
         <Example

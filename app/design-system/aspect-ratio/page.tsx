@@ -31,7 +31,7 @@ export default function AspectRatioPage() {
           <Preview className="min-h-60">
             <AspectRatio
               ratio={16 / 9}
-              className="w-full max-w-md rounded-lg bg-muted"
+              className="w-full max-w-md rounded-md bg-muted"
             />
           </Preview>
         </div>
@@ -48,19 +48,19 @@ export default function AspectRatioPage() {
         >
           <div className="grid w-full gap-4 sm:grid-cols-3">
             <div className="flex flex-col gap-2">
-              <AspectRatio ratio={1} className="rounded-lg bg-muted" />
+              <AspectRatio ratio={1} className="rounded-md bg-muted" />
               <span className="text-center font-mono text-xs text-muted-foreground">
                 1 / 1
               </span>
             </div>
             <div className="flex flex-col gap-2">
-              <AspectRatio ratio={4 / 3} className="rounded-lg bg-muted" />
+              <AspectRatio ratio={4 / 3} className="rounded-md bg-muted" />
               <span className="text-center font-mono text-xs text-muted-foreground">
                 4 / 3
               </span>
             </div>
             <div className="flex flex-col gap-2">
-              <AspectRatio ratio={16 / 9} className="rounded-lg bg-muted" />
+              <AspectRatio ratio={16 / 9} className="rounded-md bg-muted" />
               <span className="text-center font-mono text-xs text-muted-foreground">
                 16 / 9
               </span>
@@ -79,7 +79,7 @@ export default function AspectRatioPage() {
         >
           <AspectRatio
             ratio={21 / 9}
-            className="w-full max-w-lg overflow-hidden rounded-lg border"
+            className="w-full max-w-lg overflow-hidden rounded-md border"
           >
             <div className="flex size-full items-center justify-center bg-muted text-sm text-muted-foreground">
               21 / 9 banner

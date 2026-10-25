@@ -54,7 +54,7 @@ export default function MessageScrollerPage() {
           />
           <Preview className="min-h-60">
             <MessageScrollerProvider>
-              <MessageScroller className="h-72 w-full max-w-sm rounded-lg border">
+              <MessageScroller className="h-72 w-full max-w-sm rounded-md border">
                 <MessageScrollerViewport className="p-3">
                   <MessageScrollerContent className="gap-3">
                     <MessageScrollerItem>
@@ -106,7 +106,7 @@ export default function MessageScrollerPage() {
           }
         >
           <MessageScrollerProvider>
-            <MessageScroller className="h-48 w-full max-w-sm rounded-lg border">
+            <MessageScroller className="h-48 w-full max-w-sm rounded-md border">
               <MessageScrollerViewport className="p-3">
                 <MessageScrollerContent className="gap-3">
                   {conversation.slice(0, 6).map((message) => (
@@ -136,7 +136,7 @@ export default function MessageScrollerPage() {
           }
         >
           <MessageScrollerProvider>
-            <MessageScroller className="h-48 w-full max-w-sm rounded-lg border">
+            <MessageScroller className="h-48 w-full max-w-sm rounded-md border">
               <MessageScrollerViewport className="p-3">
                 <MessageScrollerContent className="gap-3">
                   {conversation.map((message) => (

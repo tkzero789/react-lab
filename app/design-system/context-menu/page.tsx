@@ -45,7 +45,7 @@ export default function ContextMenuPage() {
           />
           <Preview className="min-h-60">
             <ContextMenu>
-              <ContextMenuTrigger className="flex h-32 w-full max-w-sm items-center justify-center rounded-lg border border-dashed text-sm text-muted-foreground">
+              <ContextMenuTrigger className="flex h-32 w-full max-w-sm items-center justify-center rounded-md border border-dashed text-sm text-muted-foreground">
                 Right click here
               </ContextMenuTrigger>
               <ContextMenuContent>
@@ -81,7 +81,7 @@ export default function ContextMenuPage() {
           }
         >
           <ContextMenu>
-            <ContextMenuTrigger className="flex h-24 w-full max-w-sm items-center justify-center rounded-lg border text-sm text-muted-foreground">
+            <ContextMenuTrigger className="flex h-24 w-full max-w-sm items-center justify-center rounded-md border text-sm text-muted-foreground">
               A file row
             </ContextMenuTrigger>
             <ContextMenuContent>
@@ -104,7 +104,7 @@ export default function ContextMenuPage() {
           }
         >
           <ContextMenu>
-            <ContextMenuTrigger className="flex h-24 w-full max-w-sm items-center justify-center rounded-lg border text-sm text-muted-foreground">
+            <ContextMenuTrigger className="flex h-24 w-full max-w-sm items-center justify-center rounded-md border text-sm text-muted-foreground">
               Right click for view options
             </ContextMenuTrigger>
             <ContextMenuContent>
@@ -134,7 +134,7 @@ export default function ContextMenuPage() {
           }
         >
           <ContextMenu>
-            <ContextMenuTrigger className="flex h-24 w-full max-w-sm items-center justify-center rounded-lg border text-sm text-muted-foreground">
+            <ContextMenuTrigger className="flex h-24 w-full max-w-sm items-center justify-center rounded-md border text-sm text-muted-foreground">
               Right click to share
             </ContextMenuTrigger>
             <ContextMenuContent>

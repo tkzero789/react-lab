@@ -211,7 +211,7 @@ export default function TransactionTable({ transactions, budgets }: Props) {
       </div>
 
       {selected.length > 0 && (
-        <div className="flex flex-wrap items-center gap-2 rounded-lg border p-2">
+        <div className="flex flex-wrap items-center gap-2 rounded-md border p-2">
           <Button
             variant="ghost"
             size="icon-sm"
@@ -280,14 +280,14 @@ export default function TransactionTable({ transactions, budgets }: Props) {
       )}
 
       {visible.length === 0 ? (
-        <p className="rounded-lg border border-dashed py-8 text-center text-sm text-muted-foreground">
+        <p className="rounded-md border border-dashed py-8 text-center text-sm text-muted-foreground">
           {transactions.length === 0
             ? "No transactions this month."
             : "No transactions match your filters."}
         </p>
       ) : (
         <>
-          <div className="hidden rounded-lg border md:block">
+          <div className="hidden rounded-md border md:block">
             <Table>
               <TableHeader>
                 <TableRow>
@@ -345,7 +345,7 @@ export default function TransactionTable({ transactions, budgets }: Props) {
             </Table>
           </div>
 
-          <ul className="flex flex-col divide-y rounded-lg border md:hidden">
+          <ul className="flex flex-col divide-y rounded-md border md:hidden">
             <li className="flex items-center gap-3 px-3 py-2">
               <Checkbox
                 checked={allSelected}

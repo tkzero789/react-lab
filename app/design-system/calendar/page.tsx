@@ -38,7 +38,7 @@ export default function CalendarPage() {
               mode="single"
               defaultMonth={june}
               selected={june}
-              className="rounded-lg border"
+              className="rounded-md border"
             />
           </Preview>
         </div>
@@ -57,7 +57,7 @@ export default function CalendarPage() {
             mode="range"
             defaultMonth={june}
             selected={{ from: juneStart, to: juneEnd }}
-            className="rounded-lg border"
+            className="rounded-md border"
           />
         </Example>
 
@@ -76,7 +76,7 @@ export default function CalendarPage() {
             defaultMonth={june}
             startMonth={new Date(2020, 0)}
             endMonth={new Date(2030, 11)}
-            className="rounded-lg border"
+            className="rounded-md border"
           />
         </Example>
 
@@ -93,7 +93,7 @@ export default function CalendarPage() {
             mode="single"
             defaultMonth={june}
             disabled={{ dayOfWeek: [0, 6] }}
-            className="rounded-lg border"
+            className="rounded-md border"
           />
         </Example>
 

@@ -155,7 +155,7 @@ function LogCard({
   const name = exercise?.name ?? "Unknown exercise"
 
   return (
-    <li className="overflow-hidden rounded-lg border bg-card">
+    <li className="overflow-hidden rounded-md border bg-card">
       <button
         type="button"
         onClick={onEdit}

@@ -22,7 +22,7 @@ function Slide({ index, className }: { index: number; className?: string }) {
   return (
     <div
       className={cn(
-        "flex h-32 items-center justify-center rounded-lg bg-muted text-sm text-muted-foreground",
+        "flex h-32 items-center justify-center rounded-md bg-muted text-sm text-muted-foreground",
         className
       )}
     >

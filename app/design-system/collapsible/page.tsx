@@ -47,10 +47,10 @@ export default function CollapsiblePage() {
                 </CollapsibleTrigger>
               </div>
               <CollapsibleContent className="flex flex-col gap-2">
-                <div className="rounded-lg bg-muted px-3 py-2 font-mono text-xs">
+                <div className="rounded-md bg-muted px-3 py-2 font-mono text-xs">
                   next build
                 </div>
-                <div className="rounded-lg bg-muted px-3 py-2 font-mono text-xs">
+                <div className="rounded-md bg-muted px-3 py-2 font-mono text-xs">
                   next start
                 </div>
               </CollapsibleContent>
@@ -70,7 +70,7 @@ export default function CollapsiblePage() {
             <CollapsibleTrigger render={<Button variant="outline" size="sm" />}>
               Toggle details
             </CollapsibleTrigger>
-            <CollapsibleContent className="rounded-lg bg-muted px-3 py-2 text-sm">
+            <CollapsibleContent className="rounded-md bg-muted px-3 py-2 text-sm">
               This content is open when the page renders.
             </CollapsibleContent>
           </Collapsible>
@@ -89,7 +89,7 @@ export default function CollapsiblePage() {
             <CollapsibleTrigger render={<Button variant="outline" size="sm" />}>
               Locked
             </CollapsibleTrigger>
-            <CollapsibleContent className="rounded-lg bg-muted px-3 py-2 text-sm">
+            <CollapsibleContent className="rounded-md bg-muted px-3 py-2 text-sm">
               You cannot open this.
             </CollapsibleContent>
           </Collapsible>

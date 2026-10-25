@@ -14,7 +14,7 @@ function Tile({
   className?: string
 }) {
   return (
-    <div className="flex-1 rounded-lg border p-3">
+    <div className="flex-1 rounded-md border p-3">
       <p className={cn("text-lg font-semibold tabular-nums", className)}>
         {formatCents(cents)}
       </p>

@@ -59,7 +59,7 @@ export default function SpendingChart({ month, transactions }: Props) {
   const data = getRunningTotals(month, transactions)
 
   return (
-    <section className="flex flex-col gap-3 rounded-lg border p-4">
+    <section className="flex flex-col gap-3 rounded-md border p-4">
       <h3 className="font-semibold">Income vs spending</h3>
       <ChartContainer config={config} className="h-56 w-full">
         <LineChart data={data} margin={{ left: 0, right: 8, top: 8 }}>

@@ -45,7 +45,7 @@ export default function GroceryDialog() {
         <DialogBody>
           <Card>
             <CardHeader className="flex flex-row items-center justify-between">
-              <div className="flex h-10 w-fit items-center gap-1 rounded-lg bg-muted p-1">
+              <div className="flex h-10 w-fit items-center gap-1 rounded-md bg-muted p-1">
                 <Button
                   variant="ghost"
                   size="sm"

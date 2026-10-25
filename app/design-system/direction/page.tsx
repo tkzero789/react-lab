@@ -86,10 +86,10 @@ export default function DirectionPage() {
           }
         >
           <div className="flex w-full max-w-sm flex-col gap-3 text-sm">
-            <div dir="ltr" className="rounded-lg border p-3">
+            <div dir="ltr" className="rounded-md border p-3">
               Left to right
             </div>
-            <div dir="rtl" className="rounded-lg border p-3">
+            <div dir="rtl" className="rounded-md border p-3">
               من اليمين إلى اليسار
             </div>
           </div>

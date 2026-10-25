@@ -30,7 +30,7 @@ export default function LoaderPage() {
             description="A loading mark that centers itself in the closest box."
           />
           <Preview className="min-h-60">
-            <div className="relative h-40 w-full max-w-sm rounded-lg border">
+            <div className="relative h-40 w-full max-w-sm rounded-md border">
               <Loader />
             </div>
           </Preview>
@@ -47,7 +47,7 @@ export default function LoaderPage() {
             </>
           }
         >
-          <div className="relative h-32 w-full max-w-sm rounded-lg bg-muted">
+          <div className="relative h-32 w-full max-w-sm rounded-md bg-muted">
             <Loader />
           </div>
         </Example>
@@ -62,7 +62,7 @@ export default function LoaderPage() {
           }
         >
           <div className="flex w-full max-w-sm items-center justify-center gap-6">
-            <div className="relative h-24 flex-1 rounded-lg border">
+            <div className="relative h-24 flex-1 rounded-md border">
               <Loader />
             </div>
             <div className="flex flex-1 items-center justify-center gap-2 text-sm text-muted-foreground">

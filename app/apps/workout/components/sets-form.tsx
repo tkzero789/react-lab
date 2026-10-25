@@ -41,7 +41,7 @@ function ExerciseHeader({
   const lastTop = lastSession && getTopSet(lastSession.sets)
 
   return (
-    <div className="flex flex-col gap-3 rounded-lg border bg-card p-3">
+    <div className="flex flex-col gap-3 rounded-md border bg-card p-3">
       <div className="flex items-center gap-3">
         <ExerciseThumbnail src={exercise.thumbnailUrl} size={56} />
         <ExerciseInfo exercise={exercise} />

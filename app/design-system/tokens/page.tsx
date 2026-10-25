@@ -33,7 +33,7 @@ function PaletteSwatch({ name, label }: { name: string; label: string }) {
   return (
     <div className="flex min-w-0 flex-col gap-1">
       <div
-        className="h-10 rounded-lg border"
+        className="h-10 rounded-md border"
         style={{ background: `var(--${name})` }}
       />
       <span className="truncate font-mono text-xs text-muted-foreground">
@@ -48,7 +48,7 @@ function ColorToken({ token }: { token: ThemeToken }) {
 
   return (
     <div className="flex min-w-0 flex-col gap-2">
-      <div className="flex h-14 overflow-hidden rounded-lg border">
+      <div className="flex h-14 overflow-hidden rounded-md border">
         <div className="flex-1" style={{ background: token.light }} />
         <div
           className="flex-1"
@@ -249,10 +249,11 @@ export default function TokensPage() {
           title="Radius"
           description={
             <>
-              Use <code>rounded-lg</code> for every component,{" "}
-              <code>rounded-xs</code> for badges, code, and keys, and{" "}
-              <code>rounded-full</code> for avatars and pills. Change{" "}
-              <code>--radius</code> to rescale every size.
+              Use <code>rounded-md</code> for surfaces and controls,{" "}
+              <code>rounded-full</code> for buttons, avatars, and pills,{" "}
+              <code>rounded-sm</code> for tooltips, and <code>rounded-xs</code>{" "}
+              for badges, code, and keys. Change <code>--radius</code> to
+              rescale every size.
             </>
           }
         >
@@ -304,7 +305,7 @@ export default function TokensPage() {
                 className="flex flex-col items-center gap-3"
               >
                 <div
-                  className="size-20 rounded-lg bg-card"
+                  className="size-20 rounded-md bg-card"
                   style={{ boxShadow: token.value }}
                 />
                 <span className="font-mono text-xs">{token.name}</span>

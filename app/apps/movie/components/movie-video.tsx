@@ -12,7 +12,7 @@ export default function MovieVideo({ source }: Props) {
       height="800px"
       allowFullScreen
       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-      className="h-[400px] rounded-lg lg:h-[800px]"
+      className="h-[400px] rounded-md lg:h-[800px]"
     ></iframe>
   );
 }

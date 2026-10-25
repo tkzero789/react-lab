@@ -12,7 +12,7 @@ export function Preview({ children, className }: PreviewProps) {
   return (
     <div
       className={cn(
-        "flex min-h-40 flex-wrap items-center justify-center gap-4 rounded-lg border p-6",
+        "flex min-h-40 flex-wrap items-center justify-center gap-4 rounded-md border p-6",
         className
       )}
     >

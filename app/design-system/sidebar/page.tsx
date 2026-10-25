@@ -51,7 +51,7 @@ export default function SidebarPage() {
             description="The navigation panel of the app shell."
           />
           <Preview className="min-h-60">
-            <SidebarProvider className="min-h-72 w-full max-w-md overflow-hidden rounded-lg border">
+            <SidebarProvider className="min-h-72 w-full max-w-md overflow-hidden rounded-md border">
               <Sidebar collapsible="none" className="w-48 border-r">
                 <SidebarHeader className="px-3 py-2 text-sm font-medium">
                   Acme
@@ -99,7 +99,7 @@ export default function SidebarPage() {
             </>
           }
         >
-          <SidebarProvider className="min-h-56 w-full max-w-md overflow-hidden rounded-lg border">
+          <SidebarProvider className="min-h-56 w-full max-w-md overflow-hidden rounded-md border">
             <Sidebar collapsible="none" className="w-48 border-r">
               <SidebarContent>
                 <SidebarGroup>
@@ -135,7 +135,7 @@ export default function SidebarPage() {
             </>
           }
         >
-          <SidebarProvider className="min-h-56 w-full max-w-md overflow-hidden rounded-lg border">
+          <SidebarProvider className="min-h-56 w-full max-w-md overflow-hidden rounded-md border">
             <div className="flex-1 p-4 text-sm text-muted-foreground">
               A sidebar on the right.
             </div>
@@ -165,7 +165,7 @@ export default function SidebarPage() {
             </>
           }
         >
-          <SidebarProvider className="min-h-24 w-full max-w-md items-center justify-center rounded-lg border">
+          <SidebarProvider className="min-h-24 w-full max-w-md items-center justify-center rounded-md border">
             <SidebarTrigger />
           </SidebarProvider>
         </Example>

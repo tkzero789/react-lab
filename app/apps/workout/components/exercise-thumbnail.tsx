@@ -19,7 +19,7 @@ export default function ExerciseThumbnail({
   return (
     <div
       className={cn(
-        "relative flex shrink-0 items-center justify-center overflow-hidden rounded-lg bg-muted text-muted-foreground",
+        "relative flex shrink-0 items-center justify-center overflow-hidden rounded-md bg-muted text-muted-foreground",
         className
       )}
       style={{ width: size, height: size }}

@@ -40,7 +40,7 @@ export default function CommandPage() {
             description="A list of commands that filters as the user types."
           />
           <Preview className="min-h-60">
-            <Command className="w-full max-w-sm rounded-lg border">
+            <Command className="w-full max-w-sm rounded-md border">
               <CommandInput placeholder="Type to search" />
               <CommandList>
                 <CommandEmpty>No result.</CommandEmpty>
@@ -94,7 +94,7 @@ export default function CommandPage() {
             </>
           }
         >
-          <Command className="w-full max-w-sm rounded-lg border">
+          <Command className="w-full max-w-sm rounded-md border">
             <CommandList>
               <CommandGroup heading="Recent">
                 <CommandItem>my-app</CommandItem>
@@ -118,7 +118,7 @@ export default function CommandPage() {
             </>
           }
         >
-          <Command className="w-full max-w-sm rounded-lg border">
+          <Command className="w-full max-w-sm rounded-md border">
             <CommandInput defaultValue="zzz" placeholder="Type to search" />
             <CommandList>
               <CommandEmpty>No project matches.</CommandEmpty>
@@ -138,7 +138,7 @@ export default function CommandPage() {
             </>
           }
         >
-          <Command className="w-full max-w-sm rounded-lg border">
+          <Command className="w-full max-w-sm rounded-md border">
             <CommandList>
               <CommandGroup heading="Actions">
                 <CommandItem>

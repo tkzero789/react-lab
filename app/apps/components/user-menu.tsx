@@ -40,7 +40,7 @@ export default function UserMenu() {
 function TriggerSkeleton() {
   /* Match the outline button frame so the trigger does not shift when auth resolves */
   return (
-    <div className="inline-flex h-12 items-center gap-1.5 rounded-lg border bg-background px-2.5">
+    <div className="inline-flex h-12 items-center gap-1.5 rounded-md border bg-background px-2.5">
       <Skeleton className="size-8 shrink-0 rounded-full" />
       <div className="grid flex-1 gap-1">
         <Skeleton className="h-3.5 w-24" />

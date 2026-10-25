@@ -37,6 +37,16 @@ Use the same overlay on all screen sizes. This follows the platform priority. Do
 - **Add a token when you need a new shade.** Define it in `app/css/components.css` with `color-mix`, for light and dark, and map it in `@theme inline`. See `--button-ghost-hover`.
 - **Use `opacity-*` on the element only when the whole element must fade.** It also fades the text and the children.
 
+### Radius
+
+- **Use only `rounded-none`, `rounded-xs`, `rounded-sm`, `rounded-md`, and `rounded-full`.** Side and corner variants follow the same scale, such as `rounded-t-md`. `globals.css` does not define `--radius-lg`, so `rounded-lg` does not exist.
+- **`rounded-md` is the default** for surfaces and controls: cards, dialogs, popovers, menu panels, inputs, selects, and sidebar items.
+- **`rounded-full` is for buttons** and other round shapes: `Button`, `Toggle`, `ToggleGroup`, tabs, avatars, switches, sliders, radios, progress bars, and pills. Inside a `ButtonGroup`, a button uses `rounded-md`.
+- **`rounded-sm` is for tooltips and for items inside a menu panel.** An inner radius is the outer radius minus the padding. A `rounded-md` panel with `p-1` gives `rounded-sm` items.
+- **`rounded-xs` is for small inline marks:** badges, `Kbd`, `code`, checkboxes, and chips.
+- **`rounded-none` is for joined edges,** such as the inner sides of a group or a range.
+- **Do not use bare `rounded` or arbitrary values,** such as `rounded-[10px]`. `rounded-[inherit]` and `rounded-(--cell-radius)` are allowed because they pass a scale value through.
+
 ### Hover and press feedback
 
 - **Give every hover color the same active color.** Write `hover:bg-button-ghost-hover active:bg-button-ghost-hover`. Tailwind applies `hover:` only on devices that can hover, so a touch screen gets no feedback without `active:`.

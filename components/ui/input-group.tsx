@@ -14,7 +14,7 @@ function InputGroup({ className, ...props }: React.ComponentProps<"div">) {
       data-slot="input-group"
       role="group"
       className={cn(
-        "group/input-group relative flex w-full items-center rounded-lg bg-input outline-hidden",
+        "group/input-group relative flex w-full items-center rounded-md bg-input outline-hidden",
         "h-10 has-[>textarea]:h-auto",
 
         // Variants based on alignment.
@@ -78,7 +78,7 @@ function InputGroupAddon({
 }
 
 const inputGroupButtonVariants = cva(
-  "flex items-center gap-2 rounded-lg border-0! text-sm shadow-none",
+  "flex items-center gap-2 border-0! text-sm shadow-none",
   {
     variants: {
       size: {

@@ -35,7 +35,7 @@ export default function ResizablePage() {
           <Preview className="min-h-60">
             <ResizablePanelGroup
               orientation="horizontal"
-              className="h-40 max-w-md rounded-lg border"
+              className="h-40 max-w-md rounded-md border"
             >
               <ResizablePanel defaultSize={40}>
                 <div className="flex h-full items-center justify-center p-4 text-sm text-muted-foreground">
@@ -64,7 +64,7 @@ export default function ResizablePage() {
         >
           <ResizablePanelGroup
             orientation="vertical"
-            className="h-48 max-w-md rounded-lg border"
+            className="h-48 max-w-md rounded-md border"
           >
             <ResizablePanel defaultSize={60}>
               <div className="flex h-full items-center justify-center p-4 text-sm text-muted-foreground">
@@ -91,7 +91,7 @@ export default function ResizablePage() {
         >
           <ResizablePanelGroup
             orientation="horizontal"
-            className="h-40 max-w-md rounded-lg border"
+            className="h-40 max-w-md rounded-md border"
           >
             <ResizablePanel defaultSize={30} minSize={20} maxSize={50}>
               <div className="flex h-full items-center justify-center p-4 text-sm text-muted-foreground">
@@ -118,7 +118,7 @@ export default function ResizablePage() {
         >
           <ResizablePanelGroup
             orientation="horizontal"
-            className="h-32 max-w-md rounded-lg border"
+            className="h-32 max-w-md rounded-md border"
           >
             <ResizablePanel>
               <div className="flex h-full items-center justify-center text-sm text-muted-foreground">

@@ -46,7 +46,7 @@ export function ProjectSwitcher({ project }: Props) {
               />
             }
           >
-            <div className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-brand text-brand-foreground">
+            <div className="flex size-8 shrink-0 items-center justify-center rounded-md bg-brand text-brand-foreground">
               <Icon className="size-4" />
             </div>
             <div className="grid flex-1 text-left leading-tight">

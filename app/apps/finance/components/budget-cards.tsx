@@ -123,7 +123,7 @@ export default function BudgetCards({ budgets, transactions }: Props) {
       </div>
 
       {budgets.length === 0 && unassignedCents === 0 ? (
-        <p className="rounded-lg border border-dashed py-6 text-center text-sm text-muted-foreground">
+        <p className="rounded-md border border-dashed py-6 text-center text-sm text-muted-foreground">
           Add a budget to track spending against a monthly limit.
         </p>
       ) : (

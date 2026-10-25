@@ -1,5 +1,5 @@
 .rbc-month-view {
-  @apply overflow-hidden rounded-lg border-border!;
+  @apply overflow-hidden rounded-md border-border!;
 }
 
 .rbc-header {
@@ -69,7 +69,7 @@
 }
 
 .rbc-overlay {
-  @apply rounded-lg;
+  @apply rounded-md;
 }
 
 .rbc-overlay-header {

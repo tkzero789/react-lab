@@ -52,8 +52,8 @@ Use the same overlay on all screen sizes. This follows the platform priority. Do
 ### Radius
 
 - **Use only `rounded-none`, `rounded-xs`, `rounded-sm`, `rounded-md`, and `rounded-full`.** Side and corner variants follow the same scale, such as `rounded-t-md`. `globals.css` does not define `--radius-lg`, so `rounded-lg` does not exist.
-- **`rounded-md` is the default** for surfaces and controls: cards, dialogs, popovers, menu panels, inputs, selects, and sidebar items.
-- **`rounded-full` is for buttons** and other round shapes: `Button`, `Toggle`, `ToggleGroup`, tabs, avatars, switches, sliders, radios, progress bars, and pills. Inside a `ButtonGroup`, a button uses `rounded-md`.
+- **`rounded-md` is the default** for surfaces and controls: cards, dialogs, popovers, menu panels, buttons, toggles, toggle groups, inputs, selects, and sidebar items.
+- **`rounded-full` is for round shapes:** tabs, avatars, switches, sliders, radios, progress bars, and pills.
 - **`rounded-sm` is for tooltips and for items inside a menu panel.** An inner radius is the outer radius minus the padding. A `rounded-md` panel with `p-1` gives `rounded-sm` items.
 - **`rounded-xs` is for small inline marks:** badges, `Kbd`, `code`, checkboxes, and chips.
 - **`rounded-none` is for joined edges,** such as the inner sides of a group or a range.

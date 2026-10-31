@@ -4,7 +4,7 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 
 const buttonVariants = cva(
-  "group/button inline-flex shrink-0 items-center justify-center rounded-full border border-transparent bg-clip-padding text-sm font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-focus-ring disabled:pointer-events-none disabled:opacity-50 in-data-[slot=button-group]:rounded-md aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive-muted [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+  "group/button inline-flex shrink-0 items-center justify-center rounded-md border border-transparent bg-clip-padding text-sm font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-focus-ring disabled:pointer-events-none disabled:opacity-50 in-data-[slot=button-group]:rounded-md aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive-muted [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
   {
     variants: {
       variant: {
@@ -22,7 +22,7 @@ const buttonVariants = cva(
           "pressable text-destructive hover:bg-button-ghost-destructive-hover aria-expanded:bg-transparent aria-expanded:text-destructive",
         link: "text-foreground underline-offset-4 hover:underline",
         input:
-          "justify-start gap-3! border-transparent bg-input px-3! font-normal hover:bg-button-input-hover [&_svg]:text-muted-foreground",
+          "justify-start gap-3! rounded-md border-transparent bg-input px-3! font-normal hover:bg-button-input-hover **:data-[slot=kbd]:bg-kbd-input [&_svg]:text-muted-foreground",
       },
       size: {
         default:

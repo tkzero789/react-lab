@@ -206,7 +206,7 @@ export default function TodoNew({
               attachments={drafts.map((item) => ({
                 id: item.id,
                 url: item.url,
-                isImage: item.file.type.startsWith("image/"),
+                contentType: item.file.type,
                 size: item.file.size,
               }))}
               disabled={isPending}

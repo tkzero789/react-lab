@@ -4,10 +4,12 @@
 
 import { FileTextIcon, PlusIcon, XIcon } from "lucide-react"
 import Image from "next/image"
+import React from "react"
 import { formatBytes, useFileUpload } from "@/app/hooks/use-file-upload"
 import { Spinner } from "@/components/ui/spinner"
 import { toast } from "@/lib/toast"
 import { cn } from "@/lib/utils"
+import TodoAttachmentViewer from "./todo-attachment-viewer"
 
 export const MAX_FILES = 10
 const MAX_SIZE = 2 * 1024 * 1024
@@ -15,7 +17,7 @@ const MAX_SIZE = 2 * 1024 * 1024
 export type Attachment = {
   id: string
   url: string | null
-  isImage: boolean
+  contentType?: string
   size: number
 }
 
@@ -36,6 +38,9 @@ export default function TodoAttachmentGrid({
   onRemove,
 }: Props) {
   const total = attachments.length + pendingCount
+  const [isViewerOpen, setIsViewerOpen] = React.useState(false)
+  /* Keep the ID after the dialog closes, so the content stays during the close animation */
+  const [viewerStartId, setViewerStartId] = React.useState<string | null>(null)
 
   const [
     { isDragging },
@@ -88,7 +93,7 @@ export default function TodoAttachmentGrid({
         {attachments.map((item, index) => {
           const label = `Attachment ${index + 1} of ${attachments.length}`
           const preview =
-            item.isImage && item.url ? (
+            item.contentType?.startsWith("image/") && item.url ? (
               <Image
                 src={item.url}
                 alt=""
@@ -108,18 +113,20 @@ export default function TodoAttachmentGrid({
           return (
             <div key={item.id} className="group/tile relative">
               {item.url ? (
-                <a
-                  href={item.url}
-                  target="_blank"
-                  rel="noreferrer"
-                  aria-label={`Open ${label.toLowerCase()}`}
+                <button
+                  type="button"
+                  aria-label={`View ${label.toLowerCase()}`}
+                  onClick={() => {
+                    setViewerStartId(item.id)
+                    setIsViewerOpen(true)
+                  }}
                   className={cn(
                     tileClass,
-                    "pressable outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                    "w-full pressable outline-none focus-visible:ring-2 focus-visible:ring-ring"
                   )}
                 >
                   {preview}
-                </a>
+                </button>
               ) : (
                 <div className={tileClass}>{preview}</div>
               )}
@@ -163,6 +170,13 @@ export default function TodoAttachmentGrid({
         Drop files here. Up to {MAX_FILES} files, {formatBytes(MAX_SIZE, 0)}{" "}
         each.
       </p>
+      {/* React events bubble through a portal. Stay outside the drop target, or a drag in the dialog reaches its handlers. */}
+      <TodoAttachmentViewer
+        open={isViewerOpen}
+        onOpenChange={setIsViewerOpen}
+        attachments={attachments}
+        startId={viewerStartId}
+      />
     </div>
   )
 }

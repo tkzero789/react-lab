@@ -23,7 +23,7 @@ export default function TodoAttachments({ todo, onSave }: Props) {
   const attachments: Attachment[] = files.map((item) => ({
     id: item.storageId,
     url: item.url,
-    isImage: item.contentType?.startsWith("image/") ?? true,
+    contentType: item.contentType,
     size: item.size,
   }))
 

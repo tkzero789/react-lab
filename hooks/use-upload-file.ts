@@ -16,7 +16,7 @@ export function useUploadFile() {
       headers: { "Content-Type": file.type },
       body: file,
     })
-    if (!result.ok) throw new Error("Could not upload the image")
+    if (!result.ok) throw new Error(`Could not upload ${file.name}`)
     const { storageId } = (await result.json()) as {
       storageId: Id<"_storage">
     }

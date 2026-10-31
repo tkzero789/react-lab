@@ -1,5 +1,25 @@
 /* Component tokens and styles */
 
+/* Bubble */
+:root,
+.light {
+  --bubble-muted-hover: color-mix(in oklch, var(--muted), var(--foreground) 5%);
+  --bubble-tinted: oklch(from var(--brand) 0.93 calc(c * 0.4) h);
+  --bubble-tinted-hover: oklch(from var(--brand) 0.88 calc(c * 0.5) h);
+}
+
+.dark {
+  --bubble-muted-hover: color-mix(in oklch, var(--muted), var(--foreground) 5%);
+  --bubble-tinted: oklch(from var(--brand) 0.3 calc(c * 0.4) h);
+  --bubble-tinted-hover: oklch(from var(--brand) 0.35 calc(c * 0.5) h);
+}
+
+@theme inline {
+  --color-bubble-muted-hover: var(--bubble-muted-hover);
+  --color-bubble-tinted: var(--bubble-tinted);
+  --color-bubble-tinted-hover: var(--bubble-tinted-hover);
+}
+
 /* Button */
 :root,
 .light {
@@ -79,6 +99,20 @@
   --color-button-input-hover: var(--button-input-hover);
 }
 
+/* Calendar */
+:root,
+.light {
+  --calendar-today: var(--muted);
+}
+
+.dark {
+  --calendar-today: var(--granite-700);
+}
+
+@theme inline {
+  --color-calendar-today: var(--calendar-today);
+}
+
 /* Card */
 :root,
 .light {
@@ -150,6 +184,7 @@
   --chart-3: var(--granite-600);
   --chart-4: var(--granite-700);
   --chart-5: var(--granite-900);
+  --chart-border: color-mix(in oklab, var(--border) 50%, transparent);
 }
 
 .dark {
@@ -158,6 +193,7 @@
   --chart-3: var(--granite-400);
   --chart-4: var(--granite-500);
   --chart-5: var(--granite-600);
+  --chart-border: color-mix(in oklab, var(--border) 50%, transparent);
 }
 
 @theme inline {
@@ -166,10 +202,27 @@
   --color-chart-3: var(--chart-3);
   --color-chart-4: var(--chart-4);
   --color-chart-5: var(--chart-5);
+  --color-chart-border: var(--chart-border);
+}
+
+/* Choice */
+:root,
+.light {
+  --choice-checked: color-mix(in oklab, var(--brand) 5%, transparent);
+  --choice-checked-border: color-mix(in oklab, var(--brand) 30%, transparent);
+}
+
+.dark {
+  --choice-checked: color-mix(in oklab, var(--brand) 10%, transparent);
+  --choice-checked-border: color-mix(in oklab, var(--brand) 20%, transparent);
+}
+
+@theme inline {
+  --color-choice-checked: var(--choice-checked);
+  --color-choice-checked-border: var(--choice-checked-border);
 }
 
 /* Focus */
-/* Each theme declares the mix again, so it resolves with the --ring of that theme */
 :root,
 .light {
   --focus-ring: color-mix(in oklab, var(--ring) 50%, transparent);
@@ -187,10 +240,14 @@
 :root,
 .light {
   --input: var(--granite-200);
+  --control: transparent;
+  --switch-unchecked: var(--input);
 }
 
 .dark {
   --input: var(--granite-700);
+  --control: color-mix(in oklab, var(--input) 30%, transparent);
+  --switch-unchecked: color-mix(in oklab, var(--input) 80%, transparent);
 }
 
 :where(
@@ -202,6 +259,7 @@
   [data-slot="popover-content"]
 ) {
   --input: var(--granite-100);
+  --switch-unchecked: var(--input);
   --button-input-hover: color-mix(
     in oklab,
     var(--granite-100) 50%,
@@ -219,26 +277,54 @@
     [data-slot="popover-content"]
   ) {
   --input: var(--granite-800);
+  --control: color-mix(in oklab, var(--input) 30%, transparent);
+  --switch-unchecked: color-mix(in oklab, var(--input) 80%, transparent);
   --button-input-hover: var(--granite-700);
 }
 
 @theme inline {
   --color-input: var(--input);
+  --color-control: var(--control);
+  --color-switch-unchecked: var(--switch-unchecked);
+}
+
+/* Item */
+:root,
+.light {
+  --item-default-description: color-mix(
+    in oklab,
+    var(--brand-foreground) 80%,
+    transparent
+  );
+}
+
+.dark {
+  --item-default-description: color-mix(
+    in oklab,
+    var(--brand-foreground) 80%,
+    transparent
+  );
+}
+
+@theme inline {
+  --color-item-default-description: var(--item-default-description);
 }
 
 /* Kbd */
-/* A tooltip has a foreground background, so a key inside it uses a light tint of the page background */
 :root,
 .light {
   --kbd-tooltip: color-mix(in oklab, var(--background) 20%, transparent);
+  --kbd-input: color-mix(in oklab, var(--background) 60%, transparent);
 }
 
 .dark {
   --kbd-tooltip: color-mix(in oklab, var(--background) 10%, transparent);
+  --kbd-input: color-mix(in oklab, var(--background) 30%, transparent);
 }
 
 @theme inline {
   --color-kbd-tooltip: var(--kbd-tooltip);
+  --color-kbd-input: var(--kbd-input);
 }
 
 /* Overlay */

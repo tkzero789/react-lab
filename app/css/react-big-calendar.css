@@ -23,7 +23,7 @@
 }
 
 .rbc-day-bg:not(.rbc-today) {
-  @apply hover:bg-muted/50!;
+  @apply hover:bg-button-ghost-hover! active:bg-button-ghost-hover!;
 }
 
 .rbc-day-bg + .rbc-day-bg {
@@ -31,7 +31,7 @@
 }
 
 .rbc-off-range-bg {
-  @apply bg-muted/20!;
+  @apply bg-card!;
 }
 
 .rbc-today {

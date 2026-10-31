@@ -35,7 +35,7 @@ export default function MovieCard({ movie, segment }: Props) {
             className="object-cover transition-transform duration-500 will-change-transform group-hover:scale-105"
           />
         ) : null}
-        <div className="absolute right-2 bottom-2 left-2 flex flex-col gap-1 rounded-md bg-muted/50 p-2 text-foreground backdrop-blur-xs dark:bg-muted/50 dark:text-foreground">
+        <div className="absolute right-2 bottom-2 left-2 flex flex-col gap-1 rounded-md bg-muted p-2 text-foreground backdrop-blur-xs dark:text-foreground">
           {/* Name */}
           <div className="truncate text-sm font-medium lg:text-lg">
             {movie.name}

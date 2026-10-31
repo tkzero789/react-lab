@@ -70,3 +70,29 @@
   --color-panel: var(--panel);
   --color-panel-card: var(--panel-card);
 }
+
+/* Movie */
+/* The carousel buttons sit on a poster image, so the image shows through */
+:root,
+.light {
+  --movie-carousel-button: color-mix(in oklab, var(--muted) 20%, transparent);
+  --movie-carousel-button-hover: color-mix(
+    in oklab,
+    var(--muted) 40%,
+    transparent
+  );
+}
+
+.dark {
+  --movie-carousel-button: color-mix(in oklab, var(--muted) 20%, transparent);
+  --movie-carousel-button-hover: color-mix(
+    in oklab,
+    var(--muted) 40%,
+    transparent
+  );
+}
+
+@theme inline {
+  --color-movie-carousel-button: var(--movie-carousel-button);
+  --color-movie-carousel-button-hover: var(--movie-carousel-button-hover);
+}

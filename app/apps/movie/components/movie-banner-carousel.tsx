@@ -122,7 +122,7 @@ export default function MovieBannerCarousel() {
                       ) : null}
                     </div>
 
-                    <div className="absolute right-2 bottom-2 left-2 flex flex-col gap-1 rounded-md bg-muted/50 p-2 text-foreground backdrop-blur-xs lg:right-6 lg:bottom-6 lg:left-6 lg:gap-4 lg:p-6 dark:bg-muted/50 dark:text-foreground">
+                    <div className="absolute right-2 bottom-2 left-2 flex flex-col gap-1 rounded-md bg-muted p-2 text-foreground backdrop-blur-xs lg:right-6 lg:bottom-6 lg:left-6 lg:gap-4 lg:p-6 dark:text-foreground">
                       {/* Name */}
                       <div className="text-lg font-medium lg:text-2xl">
                         {movie.name}
@@ -157,11 +157,11 @@ export default function MovieBannerCarousel() {
         </Carousel>
         <CarouselPrev
           onClick={onPrevButtonClick}
-          className="absolute top-1/2 left-6 hidden h-12 w-12 -translate-y-1/2 rounded-full bg-muted/20 text-background hover:bg-muted/40 lg:flex dark:bg-muted/20 dark:text-foreground dark:hover:bg-muted/40 [&_svg]:size-10"
+          className="absolute top-1/2 left-6 hidden h-12 w-12 -translate-y-1/2 rounded-full bg-movie-carousel-button text-background hover:bg-movie-carousel-button-hover active:bg-movie-carousel-button-hover lg:flex dark:text-foreground [&_svg]:size-10"
         />
         <CarouselNext
           onClick={onNextButtonClick}
-          className="absolute top-1/2 right-6 hidden h-12 w-12 -translate-y-1/2 rounded-full bg-muted/20 text-background hover:bg-muted/40 lg:flex dark:bg-muted/20 dark:text-foreground dark:hover:bg-muted/40 [&_svg]:size-10"
+          className="absolute top-1/2 right-6 hidden h-12 w-12 -translate-y-1/2 rounded-full bg-movie-carousel-button text-background hover:bg-movie-carousel-button-hover active:bg-movie-carousel-button-hover lg:flex dark:text-foreground [&_svg]:size-10"
         />
       </div>
     </Container>

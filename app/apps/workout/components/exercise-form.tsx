@@ -118,7 +118,7 @@ export default function ExerciseForm({
               onDragOver={handleDragOver}
               onDrop={handleDrop}
               className={cn(
-                "pressable rounded-md outline-none focus-visible:ring-3 focus-visible:ring-ring/50",
+                "pressable rounded-md outline-none focus-visible:ring-3 focus-visible:ring-focus-ring",
                 isDragging && "ring-2 ring-ring"
               )}
             >

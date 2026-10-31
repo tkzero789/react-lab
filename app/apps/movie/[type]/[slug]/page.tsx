@@ -87,7 +87,7 @@ export default function MovieDetailPage() {
                   />
                 ) : null}
               </div>
-              <div className="absolute right-2 bottom-2 left-2 flex flex-col gap-1 rounded-md bg-muted/50 p-2 text-foreground backdrop-blur-xs lg:right-6 lg:bottom-6 lg:left-6 lg:gap-4 lg:p-6 dark:bg-muted/50 dark:text-foreground">
+              <div className="absolute right-2 bottom-2 left-2 flex flex-col gap-1 rounded-md bg-muted p-2 text-foreground backdrop-blur-xs lg:right-6 lg:bottom-6 lg:left-6 lg:gap-4 lg:p-6 dark:text-foreground">
                 {/* Name */}
                 <div className="text-lg font-medium lg:text-2xl">
                   {movie.name}

@@ -6,7 +6,8 @@ import { CheckIcon } from "lucide-react"
 import React from "react"
 import { cn } from "@/lib/utils"
 import { DateTone, getDateInfo } from "../dates"
-import { Todo } from "../types"
+import ListEmoji from "./list-emoji"
+import { List, Todo } from "../types"
 
 const TONE_CLASS: Record<DateTone, string> = {
   late: "text-destructive",
@@ -17,6 +18,7 @@ const TONE_CLASS: Record<DateTone, string> = {
 
 type Props = {
   todo: Todo
+  list?: List
   isSelected: boolean
   onSelect: (todo: Todo) => void
   onToggle: (todo: Todo) => void
@@ -24,6 +26,7 @@ type Props = {
 
 export default function TodoItem({
   todo,
+  list,
   isSelected,
   onSelect,
   onToggle,
@@ -38,6 +41,12 @@ export default function TodoItem({
     ) : null,
     todo.location || null,
     fileCount > 0 ? (fileCount === 1 ? "1 file" : `${fileCount} files`) : null,
+    list ? (
+      <span className="inline-flex items-center gap-1 align-middle">
+        <ListEmoji emoji={list.emoji} />
+        {list.name}
+      </span>
+    ) : null,
   ].filter((part) => part !== null)
 
   return (
@@ -56,7 +65,7 @@ export default function TodoItem({
         aria-label={
           isCompleted ? `Reopen “${todo.text}”` : `Complete “${todo.text}”`
         }
-        className="group/toggle pressable flex size-9 shrink-0 items-center justify-center rounded-md outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        className="group/toggle flex size-9 shrink-0 pressable items-center justify-center rounded-md outline-none focus-visible:ring-2 focus-visible:ring-ring"
       >
         <span
           className={cn(

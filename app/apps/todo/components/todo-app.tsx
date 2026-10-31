@@ -1,6 +1,6 @@
 "use client"
 
-/* Todo app with the list on the left and the selected todo in a side panel on the right */
+/* Todo app with the views on the left, the todo list in the middle, and the selected todo in a side panel on the right */
 
 import { api } from "@/convex/_generated/api"
 import { useConvexMutation } from "@convex-dev/react-query"
@@ -9,6 +9,7 @@ import {
   CheckCheckIcon,
   CircleCheckIcon,
   ListTodoIcon,
+  MousePointerClickIcon,
   PlusIcon,
 } from "lucide-react"
 import { useSearchParams } from "next/navigation"
@@ -33,22 +34,55 @@ import {
 import { todoQueries } from "@/lib/query-options"
 import { toast } from "@/lib/toast"
 import { cn } from "@/lib/utils"
+import ListEmojiPicker from "./list-emoji-picker"
+import ListTitle from "./list-title"
 import TodoDetail from "./todo-detail"
 import TodoList from "./todo-list"
+import TodoNav from "./todo-nav"
 import TodoNew from "./todo-new"
-import TodoOverview from "./todo-overview"
-import TodoSearch from "./todo-search"
+import TodoSummary from "./todo-summary"
 import { Todo } from "../types"
+import {
+  BuiltInView,
+  DEFAULT_VIEW,
+  isInView,
+  parseView,
+  View,
+  VIEWS,
+} from "../views"
 
 type Tab = "todo" | "completed"
 
-/* The selected todo is in the URL, so a refresh or a shared link opens the same todo */
+/* The selected todo and the view are in the URL, so a refresh or a shared link opens the same place */
 const SELECTED_PARAM = "todo"
+const VIEW_PARAM = "view"
 
 /* The new todo form uses the same param, so the panel cannot show a todo and the form at once */
 const NEW_TODO = "new"
 
 const NEW_TODO_KEY = "n"
+
+const EMPTY_OPEN: Record<
+  BuiltInView | "list",
+  { title: string; description: string }
+> = {
+  today: {
+    title: "Nothing due today",
+    description: "Todos that are due today or overdue show here.",
+  },
+  week: {
+    title: "Nothing due this week",
+    description: "Todos that are due in the next 7 days show here.",
+  },
+  all: {
+    title: "Your list is empty",
+    description: "Add your first todo with its date and place.",
+  },
+  list: {
+    title: "This list is empty",
+    description: "Add a todo, and it goes into this list.",
+  },
+}
 
 /* A letter key must still type text and must not act behind an open dialog */
 function ignoresShortcut(target: EventTarget | null) {
@@ -64,13 +98,32 @@ function focusRow(id: string) {
   document.querySelector<HTMLElement>(`[data-todo-id="${id}"]`)?.focus()
 }
 
+/* The History API updates useSearchParams without a server round trip */
+function setParams(changes: Record<string, string | null>) {
+  const params = new URLSearchParams(window.location.search)
+  for (const [key, value] of Object.entries(changes)) {
+    if (value) params.set(key, value)
+    else params.delete(key)
+  }
+  const next = params.toString()
+  window.history.replaceState(
+    null,
+    "",
+    next ? `?${next}` : window.location.pathname
+  )
+}
+
 export default function TodoApp() {
   const { data: todos, isPending } = useQuery(todoQueries.list())
+  const { data: lists = [], isPending: isListsPending } = useQuery(
+    todoQueries.lists()
+  )
   const searchParams = useSearchParams()
   const selectedId = searchParams.get(SELECTED_PARAM)
   const isNew = selectedId === NEW_TODO
+  const view = parseView(searchParams.get(VIEW_PARAM), lists)
+  const activeList = lists.find((list) => list._id === view) ?? null
   const detailRef = React.useRef<HTMLDivElement>(null)
-  const addButtonRef = React.useRef<HTMLButtonElement>(null)
 
   const [tab, setTab] = React.useState<Tab>("todo")
 
@@ -94,27 +147,28 @@ export default function TodoApp() {
     return { open, completed }
   }, [todos])
 
+  const viewOpen = open.filter((todo) => isInView(todo, view))
+  const viewCompleted = completed.filter((todo) => isInView(todo, view))
+
   const selected = todos?.find((todo) => todo._id === selectedId) ?? null
 
-  function select(id: string | null) {
-    const params = new URLSearchParams(window.location.search)
-    if (id) params.set(SELECTED_PARAM, id)
-    else params.delete(SELECTED_PARAM)
-    const next = params.toString()
-    /* The History API updates useSearchParams without a server round trip */
-    window.history.replaceState(
-      null,
-      "",
-      next ? `?${next}` : window.location.pathname
-    )
-  }
-
-  function showPanel(id: string) {
-    select(id)
-    /* A narrow window shows the panel below the list. On desktop the sticky panel is already in view, so nothing scrolls. */
+  function showPanel(id: string, nextView = view) {
+    setParams({
+      [SELECTED_PARAM]: id,
+      [VIEW_PARAM]: nextView === DEFAULT_VIEW ? null : nextView,
+    })
+    /* A narrow window shows the panel below the list. On a wide window the sticky panel is already in view, so nothing scrolls. */
     requestAnimationFrame(() =>
       detailRef.current?.scrollIntoView({ block: "nearest" })
     )
+  }
+
+  function selectView(next: View) {
+    setParams({
+      [VIEW_PARAM]: next === DEFAULT_VIEW ? null : next,
+      /* Keep an unsaved new todo open. Close a todo that can be outside the new view. */
+      ...(isNew ? {} : { [SELECTED_PARAM]: null }),
+    })
   }
 
   function openTodo(todo: Todo) {
@@ -123,7 +177,8 @@ export default function TodoApp() {
 
   function openFromSearch(todo: Todo) {
     setTab(todo.status === "completed" ? "completed" : "todo")
-    showPanel(todo._id)
+    /* Switch to the view with every todo, so the found todo shows in the list too */
+    showPanel(todo._id, isInView(todo, view) ? view : "all")
   }
 
   function startNew() {
@@ -155,18 +210,11 @@ export default function TodoApp() {
   }, [])
 
   function closeDetail() {
-    const id = selectedId
-    select(null)
-    /* Give focus back to the control that opened the panel, so the keyboard user keeps their place */
-    if (id === NEW_TODO) {
-      addButtonRef.current?.focus()
-    } else if (id) {
-      focusRow(id)
-    }
+    setParams({ [SELECTED_PARAM]: null })
   }
 
   function handleAdded(id: string) {
-    select(id)
+    setParams({ [SELECTED_PARAM]: id })
     /* The form unmounts, so move focus to the new row instead of the page body */
     requestAnimationFrame(() => focusRow(id))
   }
@@ -185,17 +233,20 @@ export default function TodoApp() {
     }
   }
 
-  if (isPending) {
+  if (isPending || isListsPending) {
     return <Loader />
   }
 
+  const viewLabel = VIEWS.find((item) => item.id === view)?.label
+
   function renderList(listTab: Tab) {
-    const list = listTab === "todo" ? open : completed
+    const list = listTab === "todo" ? viewOpen : viewCompleted
 
     if (list.length > 0) {
       return (
         <TodoList
           todos={list}
+          lists={activeList ? [] : lists}
           grouped={listTab === "todo"}
           selectedId={selectedId}
           onSelect={openTodo}
@@ -214,17 +265,22 @@ export default function TodoApp() {
       )
     }
 
-    return completed.length > 0 ? (
-      <ListEmpty
-        icon={CheckCheckIcon}
-        title="All done"
-        description="You finished everything on your list."
-      />
-    ) : (
+    if (viewCompleted.length > 0) {
+      return (
+        <ListEmpty
+          icon={CheckCheckIcon}
+          title="All done"
+          description="You finished everything here."
+        />
+      )
+    }
+
+    const empty = EMPTY_OPEN[activeList ? "list" : (view as BuiltInView)]
+    return (
       <ListEmpty
         icon={ListTodoIcon}
-        title="Your list is empty"
-        description="Add your first todo with its date and place."
+        title={empty.title}
+        description={empty.description}
       >
         <Button variant="outline" onClick={startNew}>
           <PlusIcon data-icon="inline-start" />
@@ -235,39 +291,57 @@ export default function TodoApp() {
   }
 
   return (
-    <div className="flex flex-1 flex-col md:flex-row">
-      <section
-        aria-label="Todos"
-        className="flex flex-col md:w-96 md:shrink-0 md:border-r lg:w-md"
-      >
+    <div className="grid flex-1 grid-cols-1 md:grid-cols-[13rem_minmax(0,1fr)] xl:grid-cols-[15rem_minmax(20rem,1fr)_minmax(22.5rem,28.75rem)]">
+      <div className="border-b md:border-r md:border-b-0">
+        <div className="md:sticky md:top-0 md:max-h-svh md:overflow-y-auto">
+          <TodoNav
+            open={open}
+            completed={completed}
+            lists={lists}
+            view={view}
+            onSelectView={selectView}
+            onSearchSelect={openFromSearch}
+          />
+        </div>
+      </div>
+
+      <section aria-label="Todos" className="min-w-0">
         <Tabs
           value={tab}
           onValueChange={(value) => setTab(value as Tab)}
-          className="gap-3 p-4"
+          className="gap-4 p-4 md:p-6"
         >
-          <div className="flex items-center gap-2">
-            <TabsList>
-              <TabsTrigger value="todo">
-                Todo
-                <span className="text-xs tabular-nums">{open.length}</span>
-              </TabsTrigger>
-              <TabsTrigger value="completed">
-                Completed
-                <span className="text-xs tabular-nums">{completed.length}</span>
-              </TabsTrigger>
-            </TabsList>
+          <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
+            <div className="flex min-w-0 items-center gap-1">
+              {activeList ? (
+                <React.Fragment key={activeList._id}>
+                  <ListEmojiPicker list={activeList} />
+                  <ListTitle list={activeList} />
+                </React.Fragment>
+              ) : (
+                <h1 className="truncate text-xl font-semibold">{viewLabel}</h1>
+              )}
+            </div>
 
             <div className="ml-auto flex items-center gap-1">
-              <TodoSearch
-                open={open}
-                completed={completed}
-                onSelect={openFromSearch}
-              />
+              <TabsList>
+                <TabsTrigger value="todo">
+                  Todo
+                  <span className="text-xs leading-none tabular-nums">
+                    {viewOpen.length}
+                  </span>
+                </TabsTrigger>
+                <TabsTrigger value="completed">
+                  Completed
+                  <span className="text-xs leading-none tabular-nums">
+                    {viewCompleted.length}
+                  </span>
+                </TabsTrigger>
+              </TabsList>
               <Tooltip>
                 <TooltipTrigger
                   render={
                     <Button
-                      ref={addButtonRef}
                       variant={isNew ? "muted" : "ghost"}
                       size="icon"
                       aria-label="New todo"
@@ -286,6 +360,8 @@ export default function TodoApp() {
             </div>
           </div>
 
+          <TodoSummary open={viewOpen} completed={viewCompleted} />
+
           <TabsContent value="todo">{renderList("todo")}</TabsContent>
           <TabsContent value="completed">{renderList("completed")}</TabsContent>
         </Tabs>
@@ -293,45 +369,48 @@ export default function TodoApp() {
 
       <section
         aria-label="Todo details"
-        onKeyDown={(e) => {
-          /* Ignore keys from portals, such as the date popover, which bubble here through React */
-          if (
-            e.key === "Escape" &&
-            e.currentTarget.contains(e.target as Node)
-          ) {
-            closeDetail()
-          }
-        }}
         className={cn(
-          "min-w-0 flex-1 border-t bg-panel md:border-t-0",
-          !selected && !isNew && "hidden md:block"
+          "min-w-0 border-t md:col-span-2 xl:col-span-1 xl:border-t-0 xl:border-l",
+          /* Below the list, an empty panel only adds scroll */
+          !selected && !isNew && "hidden xl:block"
         )}
       >
         <div
           ref={detailRef}
-          className="md:sticky md:top-0 md:max-h-svh md:overflow-y-auto"
+          className="mx-auto max-w-2xl xl:sticky xl:top-0 xl:h-full xl:max-h-svh xl:overflow-y-auto"
         >
           {isNew ? (
-            <div className="mx-auto max-w-2xl">
-              <TodoNew onAdded={handleAdded} onClose={closeDetail} />
-            </div>
+            <TodoNew
+              lists={lists}
+              defaultListId={activeList?._id ?? null}
+              onAdded={handleAdded}
+              onClose={closeDetail}
+            />
           ) : selected ? (
-            <div className="mx-auto max-w-2xl">
-              <TodoDetail
-                key={selected._id}
-                todo={selected}
-                onClose={closeDetail}
-                onToggle={toggleStatus}
-              />
-            </div>
+            <TodoDetail
+              key={selected._id}
+              todo={selected}
+              lists={lists}
+              onClose={closeDetail}
+              onToggle={toggleStatus}
+            />
           ) : (
-            <div className="mx-auto max-w-2xl">
-              <TodoOverview
-                open={open}
-                completed={completed}
-                onSelect={openFromSearch}
-              />
-            </div>
+            <Empty className="h-full">
+              <EmptyHeader>
+                <EmptyMedia variant="icon">
+                  <MousePointerClickIcon />
+                </EmptyMedia>
+                <EmptyTitle>No todo selected</EmptyTitle>
+                <EmptyDescription>
+                  Select a todo to see its details.
+                </EmptyDescription>
+              </EmptyHeader>
+              <EmptyContent>
+                <p className="flex items-center gap-1.5 text-sm text-muted-foreground">
+                  Press <Kbd>N</Kbd> to add a todo
+                </p>
+              </EmptyContent>
+            </Empty>
           )}
         </div>
       </section>

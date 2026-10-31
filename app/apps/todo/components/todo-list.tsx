@@ -6,10 +6,12 @@ import React from "react"
 import { cn } from "@/lib/utils"
 import { groupByDate } from "../dates"
 import TodoItem from "./todo-item"
-import { Todo } from "../types"
+import { List, Todo } from "../types"
 
 type Props = {
   todos: Todo[]
+  /* The lists to name on each row. Leave it empty when every row is in the same list. */
+  lists: List[]
   /* Due-date groups do not help in the completed list */
   grouped?: boolean
   selectedId: string | null
@@ -19,6 +21,7 @@ type Props = {
 
 export default function TodoList({
   todos,
+  lists,
   grouped = true,
   selectedId,
   onSelect,
@@ -42,7 +45,7 @@ export default function TodoList({
     onSelect(todo)
   }
 
-  const rowProps = { selectedId, onSelect, onToggle }
+  const rowProps = { lists, selectedId, onSelect, onToggle }
 
   return (
     <div onKeyDown={handleKeyDown}>
@@ -57,7 +60,7 @@ export default function TodoList({
                 )}
               >
                 {group.label}
-                <span className="font-medium tabular-nums">
+                <span className="leading-none font-medium tabular-nums">
                   {group.todos.length}
                 </span>
               </h3>
@@ -74,6 +77,7 @@ export default function TodoList({
 
 function Rows({
   todos,
+  lists,
   selectedId,
   onSelect,
   onToggle,
@@ -84,6 +88,7 @@ function Rows({
         <TodoItem
           key={todo._id}
           todo={todo}
+          list={lists.find((list) => list._id === todo.listId)}
           isSelected={todo._id === selectedId}
           onSelect={onSelect}
           onToggle={onToggle}

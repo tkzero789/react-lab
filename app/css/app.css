@@ -54,23 +54,6 @@
   --color-apps-hover: var(--apps-hover);
 }
 
-/* Panel */
-:root,
-.light {
-  --panel: var(--granite-50);
-  --panel-card: var(--background);
-}
-
-.dark {
-  --panel: var(--granite-900);
-  --panel-card: var(--background);
-}
-
-@theme inline {
-  --color-panel: var(--panel);
-  --color-panel-card: var(--panel-card);
-}
-
 /* Movie */
 /* The carousel buttons sit on a poster image, so the image shows through */
 :root,

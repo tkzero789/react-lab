@@ -44,7 +44,7 @@ Use the same overlay on all screen sizes. This follows the platform priority. Do
 - **Put each style in the correct CSS file** in `app/css`:
   - `globals.css` holds the global tokens.
   - `components.css` holds the tokens and styles for shared UI components.
-  - `app.css` holds the tokens and styles for one app, such as `--panel`.
+  - `app.css` holds the tokens and styles for one app, such as `--todo-list-blue`.
   - `animation.css` holds every animation class, global or app-specific.
   - `react-big-calendar.css` holds only the library styles. Do not mix it with other CSS.
 - **Use `opacity-*` on the element only when the whole element must fade.** It also fades the text and the children.

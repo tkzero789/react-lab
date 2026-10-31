@@ -5,4 +5,5 @@ import { api } from "@/convex/_generated/api"
 // from the Convex function reference + args — no hand-written keys needed.
 export const todoQueries = {
   list: () => convexQuery(api.todos.list, {}),
+  lists: () => convexQuery(api.todoLists.list, {}),
 }

@@ -7,14 +7,7 @@ import { Id } from "@/convex/_generated/dataModel"
 import { useConvexMutation } from "@convex-dev/react-query"
 import { useMutation } from "@tanstack/react-query"
 import { format } from "date-fns"
-import {
-  CheckIcon,
-  CircleCheckIcon,
-  MapPinIcon,
-  RotateCcwIcon,
-  Trash2Icon,
-  XIcon,
-} from "lucide-react"
+import { CircleCheckIcon, RotateCcwIcon, Trash2Icon } from "lucide-react"
 import React from "react"
 import {
   AlertDialog,
@@ -27,33 +20,37 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
 import { Button } from "@/components/ui/button"
-import {
-  InputGroup,
-  InputGroupAddon,
-  InputGroupButton,
-  InputGroupInput,
-} from "@/components/ui/input-group"
 import { Spinner } from "@/components/ui/spinner"
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
 import { toast } from "@/lib/toast"
 import TodoAttachments from "./todo-attachments"
 import TodoDateField from "./todo-date-field"
-import TodoOverviewButton from "./todo-overview-button"
-import { Todo } from "../types"
+import TodoListField from "./todo-list-field"
+import TodoLocationField from "./todo-location-field"
+import { Coordinates } from "../places"
+import { List, Todo } from "../types"
 
 type TodoPatch = {
   text?: string
   date?: number
   location?: string
+  coordinates?: Coordinates | null
   image?: Id<"_storage">[]
+  listId?: Id<"todoLists"> | null
 }
 
 type Props = {
   todo: Todo
+  lists: List[]
   onClose: () => void
   onToggle: (todo: Todo) => void
 }
 
-export default function TodoDetail({ todo, onClose, onToggle }: Props) {
+export default function TodoDetail({ todo, lists, onClose, onToggle }: Props) {
   const id = React.useId()
   const isCompleted = todo.status === "completed"
   const [isDeleteOpen, setIsDeleteOpen] = React.useState(false)
@@ -62,7 +59,6 @@ export default function TodoDetail({ todo, onClose, onToggle }: Props) {
   const {
     mutate: save,
     isPending: isSaving,
-    isSuccess: isSaved,
     variables,
   } = useMutation({
     mutationFn: (patch: TodoPatch) => updateTodo({ id: todo._id, ...patch }),
@@ -78,9 +74,13 @@ export default function TodoDetail({ todo, onClose, onToggle }: Props) {
     onError: (error) => toast.error(error.message),
   })
 
-  /* Show the new date at once. The live query catches up a moment later. */
+  /* Show the new date and list at once. The live query catches up a moment later. */
   const date =
     isSaving && variables?.date !== undefined ? variables.date : todo.date
+  const listId =
+    isSaving && variables?.listId !== undefined
+      ? variables.listId
+      : (todo.listId ?? null)
 
   const titleField = useCommitOnBlur(todo.text, (next) => {
     const text = next.trim()
@@ -88,17 +88,11 @@ export default function TodoDetail({ todo, onClose, onToggle }: Props) {
     save({ text })
   })
 
-  const locationField = useCommitOnBlur(todo.location, (next) => {
-    const location = next.trim()
-    if (location === todo.location) return false
-    save({ location })
-  })
-
   const fileCount = todo.imageObject.filter(Boolean).length
 
   return (
     <div className="flex flex-col gap-6 p-4 md:p-6">
-      <div className="flex items-center gap-2">
+      <div className="flex items-center justify-end gap-2">
         <Button variant="outline" size="sm" onClick={() => onToggle(todo)}>
           {isCompleted ? (
             <RotateCcwIcon data-icon="inline-start" />
@@ -107,23 +101,21 @@ export default function TodoDetail({ todo, onClose, onToggle }: Props) {
           )}
           {isCompleted ? "Reopen" : "Mark complete"}
         </Button>
-        <span
-          aria-live="polite"
-          className="ml-auto flex items-center gap-1.5 text-xs text-muted-foreground"
-        >
-          {isSaving ? (
-            <>
-              <Spinner className="size-3.5" />
-              Saving…
-            </>
-          ) : isSaved ? (
-            <>
-              <CheckIcon className="size-3.5" />
-              Saved
-            </>
-          ) : null}
-        </span>
-        <TodoOverviewButton onClick={onClose} />
+        <Tooltip>
+          <TooltipTrigger
+            render={
+              <Button
+                variant="ghost-destructive"
+                size="icon-sm"
+                aria-label="Delete todo"
+                onClick={() => setIsDeleteOpen(true)}
+              />
+            }
+          >
+            <Trash2Icon />
+          </TooltipTrigger>
+          <TooltipContent>Delete</TooltipContent>
+        </Tooltip>
       </div>
 
       <div>
@@ -150,32 +142,30 @@ export default function TodoDetail({ todo, onClose, onToggle }: Props) {
           />
         </dd>
 
+        <dt id={`${id}-list`} className="pt-1.5 text-sm text-muted-foreground">
+          List
+        </dt>
+        <dd>
+          <TodoListField
+            labelId={`${id}-list`}
+            lists={lists}
+            value={listId}
+            onChange={(next) => save({ listId: next })}
+          />
+        </dd>
+
         <dt className="pt-2.5 text-sm text-muted-foreground">
           <label htmlFor={`${id}-location`}>Location</label>
         </dt>
         <dd>
-          <InputGroup>
-            <InputGroupAddon>
-              <MapPinIcon />
-            </InputGroupAddon>
-            <InputGroupInput
-              id={`${id}-location`}
-              placeholder="Add a place"
-              {...locationField}
-            />
-            {todo.location ? (
-              <InputGroupAddon align="inline-end">
-                <InputGroupButton
-                  variant="ghost"
-                  size="icon-xs"
-                  aria-label="Clear location"
-                  onClick={() => save({ location: "" })}
-                >
-                  <XIcon />
-                </InputGroupButton>
-              </InputGroupAddon>
-            ) : null}
-          </InputGroup>
+          <TodoLocationField
+            id={`${id}-location`}
+            value={{
+              location: todo.location,
+              coordinates: todo.coordinates ?? null,
+            }}
+            onChange={(next) => save(next)}
+          />
         </dd>
 
         <dt className="pt-1 text-sm text-muted-foreground">Attachments</dt>
@@ -184,18 +174,8 @@ export default function TodoDetail({ todo, onClose, onToggle }: Props) {
         </dd>
       </dl>
 
-      <div className="flex items-center justify-between border-t pt-4">
-        <span className="text-xs text-muted-foreground">
-          Created {format(todo._creationTime, "EEE, MMM d")}
-        </span>
-        <Button
-          variant="ghost-destructive"
-          size="sm"
-          onClick={() => setIsDeleteOpen(true)}
-        >
-          <Trash2Icon data-icon="inline-start" />
-          Delete
-        </Button>
+      <div className="flex w-full justify-end border-t pt-4 text-xs text-muted-foreground">
+        Created {format(todo._creationTime, "EEE, MMM d")}
       </div>
 
       <AlertDialog open={isDeleteOpen} onOpenChange={setIsDeleteOpen}>
@@ -258,8 +238,6 @@ function useCommitOnBlur(
         e.currentTarget.blur()
       }
       if (e.key === "Escape") {
-        /* Escape here cancels the edit. It must not also close the panel. */
-        e.stopPropagation()
         skipCommit.current = true
         setDraft(value)
         e.currentTarget.blur()

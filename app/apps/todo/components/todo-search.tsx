@@ -16,14 +16,10 @@ import {
   CommandList,
 } from "@/components/ui/command"
 import { Kbd, KbdGroup } from "@/components/ui/kbd"
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip"
 import { useIsMac } from "@/hooks/use-is-mac"
 import { getDateInfo } from "../dates"
 import { Todo } from "../types"
+import { Input } from "@/components/ui/input"
 
 type Props = {
   open: Todo[]
@@ -59,28 +55,18 @@ export default function TodoSearch({ open, completed, onSelect }: Props) {
 
   return (
     <>
-      <Tooltip>
-        <TooltipTrigger
-          render={
-            <Button
-              variant="ghost"
-              size="icon"
-              aria-label="Search todos"
-              aria-keyshortcuts={isMac ? "Meta+K" : "Control+K"}
-              onClick={() => setIsOpen(true)}
-            />
-          }
-        >
-          <SearchIcon />
-        </TooltipTrigger>
-        <TooltipContent>
-          Search
-          <KbdGroup>
-            <Kbd>{isMac ? "⌘" : "Ctrl"}</Kbd>
-            <Kbd>K</Kbd>
-          </KbdGroup>
-        </TooltipContent>
-      </Tooltip>
+      <Button
+        variant="input"
+        aria-keyshortcuts={isMac ? "Meta+K" : "Control+K"}
+        onClick={() => setIsOpen(true)}
+        className="w-full"
+      >
+        <SearchIcon />
+        <span className="text-muted-foreground">Search...</span>
+        <KbdGroup className="ml-auto">
+          <Kbd className="bg-kbd-tooltip">{isMac ? "⌘ + K" : "Ctrl + K"}</Kbd>
+        </KbdGroup>
+      </Button>
       <CommandDialog
         open={isOpen}
         onOpenChange={setIsOpen}

@@ -20,7 +20,7 @@ type Props = React.ComponentProps<typeof Sidebar> & {
 
 export function AppSidebar({ project, nav, ...props }: Props) {
   return (
-    <Sidebar variant="inset" {...props}>
+    <Sidebar variant="inset" collapsible="icon" {...props}>
       <SidebarHeader>
         <ProjectSwitcher project={project} />
       </SidebarHeader>

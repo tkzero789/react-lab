@@ -14,6 +14,7 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar"
 import { pathClient } from "@/lib/path-client"
+import { cn } from "@/lib/utils"
 
 export type NavItem = {
   name: string
@@ -34,9 +35,13 @@ function isActive(pathName: string, url: string) {
 export function NavGroup({ label, items }: Props) {
   const pathName = usePathname()
   const { setOpenMobile } = useSidebar()
+  /* An item without an icon is an empty button in the collapsed sidebar */
+  const hasIcons = items.every((item) => item.icon)
 
   return (
-    <SidebarGroup className="group-data-[collapsible=icon]:hidden">
+    <SidebarGroup
+      className={cn(!hasIcons && "group-data-[collapsible=icon]:hidden")}
+    >
       <SidebarGroupLabel>{label}</SidebarGroupLabel>
       <SidebarMenu>
         {items.map((item) => {
@@ -44,6 +49,7 @@ export function NavGroup({ label, items }: Props) {
           return (
             <SidebarMenuItem key={item.url}>
               <SidebarMenuButton
+                tooltip={item.name}
                 isActive={isActive(pathName, url)}
                 render={<Link href={url} onClick={() => setOpenMobile(false)} />}
               >

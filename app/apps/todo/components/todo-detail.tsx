@@ -7,7 +7,7 @@ import { Id } from "@/convex/_generated/dataModel"
 import { useConvexMutation } from "@convex-dev/react-query"
 import { useMutation } from "@tanstack/react-query"
 import { format } from "date-fns"
-import { CircleCheckIcon, RotateCcwIcon, Trash2Icon } from "lucide-react"
+import { CircleCheckIcon, RotateCcwIcon, Trash2Icon, XIcon } from "lucide-react"
 import React from "react"
 import {
   AlertDialog,
@@ -115,6 +115,21 @@ export default function TodoDetail({ todo, lists, onClose, onToggle }: Props) {
             <Trash2Icon />
           </TooltipTrigger>
           <TooltipContent>Delete</TooltipContent>
+        </Tooltip>
+        <Tooltip>
+          <TooltipTrigger
+            render={
+              <Button
+                variant="ghost"
+                size="icon-sm"
+                aria-label="Close"
+                onClick={onClose}
+              />
+            }
+          >
+            <XIcon />
+          </TooltipTrigger>
+          <TooltipContent>Close</TooltipContent>
         </Tooltip>
       </div>
 

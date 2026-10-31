@@ -24,6 +24,8 @@ import { Input } from "@/components/ui/input"
 type Props = {
   open: Todo[]
   completed: Todo[]
+  isOpen: boolean
+  onOpenChange: (isOpen: boolean) => void
   onSelect: (todo: Todo) => void
 }
 
@@ -32,15 +34,41 @@ function filter(_value: string, search: string, keywords?: string[]) {
   return defaultFilter(keywords?.join(" ") ?? "", search)
 }
 
-export default function TodoSearch({ open, completed, onSelect }: Props) {
+export function TodoSearchButton({ onClick }: { onClick: () => void }) {
   const isMac = useIsMac()
-  const [isOpen, setIsOpen] = React.useState(false)
+
+  return (
+    <Button
+      variant="input"
+      aria-keyshortcuts={isMac ? "Meta+K" : "Control+K"}
+      onClick={onClick}
+      className="w-full"
+    >
+      <SearchIcon />
+      <span className="text-muted-foreground">Search...</span>
+      <KbdGroup className="ml-auto">
+        <Kbd className="bg-kbd-tooltip">{isMac ? "⌘ + K" : "Ctrl + K"}</Kbd>
+      </KbdGroup>
+    </Button>
+  )
+}
+
+/* The parent keeps this mounted, because the search button can be inside a closed sheet and the shortcut must still work */
+export default function TodoSearch({
+  open,
+  completed,
+  isOpen,
+  onOpenChange,
+  onSelect,
+}: Props) {
+  /* An Effect Event reads the latest isOpen, so the listener subscribes once */
+  const onShortcut = React.useEffectEvent(() => onOpenChange(!isOpen))
 
   React.useEffect(() => {
     function onKeyDown(event: KeyboardEvent) {
       if (event.key.toLowerCase() === "k" && (event.metaKey || event.ctrlKey)) {
         event.preventDefault()
-        setIsOpen((value) => !value)
+        onShortcut()
       }
     }
 
@@ -49,52 +77,38 @@ export default function TodoSearch({ open, completed, onSelect }: Props) {
   }, [])
 
   function select(todo: Todo) {
-    setIsOpen(false)
+    onOpenChange(false)
     onSelect(todo)
   }
 
   return (
-    <>
-      <Button
-        variant="input"
-        aria-keyshortcuts={isMac ? "Meta+K" : "Control+K"}
-        onClick={() => setIsOpen(true)}
-        className="w-full"
-      >
-        <SearchIcon />
-        <span className="text-muted-foreground">Search...</span>
-        <KbdGroup className="ml-auto">
-          <Kbd className="bg-kbd-tooltip">{isMac ? "⌘ + K" : "Ctrl + K"}</Kbd>
-        </KbdGroup>
-      </Button>
-      <CommandDialog
-        open={isOpen}
-        onOpenChange={setIsOpen}
-        title="Search todos"
-        description="Find a todo by its text or location."
-      >
-        <Command filter={filter}>
-          <CommandInput placeholder="Search todos" />
-          <CommandList>
-            <CommandEmpty>No todos found.</CommandEmpty>
-            {open.length > 0 ? (
-              <CommandGroup heading="Todo">
-                {open.map((todo) => (
-                  <SearchItem key={todo._id} todo={todo} onSelect={select} />
-                ))}
-              </CommandGroup>
-            ) : null}
-            {completed.length > 0 ? (
-              <CommandGroup heading="Completed">
-                {completed.map((todo) => (
-                  <SearchItem key={todo._id} todo={todo} onSelect={select} />
-                ))}
-              </CommandGroup>
-            ) : null}
-          </CommandList>
-        </Command>
-      </CommandDialog>
-    </>
+    <CommandDialog
+      open={isOpen}
+      onOpenChange={onOpenChange}
+      title="Search todos"
+      description="Find a todo by its text or location."
+    >
+      <Command filter={filter}>
+        <CommandInput placeholder="Search todos" />
+        <CommandList>
+          <CommandEmpty>No todos found.</CommandEmpty>
+          {open.length > 0 ? (
+            <CommandGroup heading="Todo">
+              {open.map((todo) => (
+                <SearchItem key={todo._id} todo={todo} onSelect={select} />
+              ))}
+            </CommandGroup>
+          ) : null}
+          {completed.length > 0 ? (
+            <CommandGroup heading="Completed">
+              {completed.map((todo) => (
+                <SearchItem key={todo._id} todo={todo} onSelect={select} />
+              ))}
+            </CommandGroup>
+          ) : null}
+        </CommandList>
+      </Command>
+    </CommandDialog>
   )
 }
 

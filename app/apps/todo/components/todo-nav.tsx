@@ -38,7 +38,7 @@ import { MAX_LISTS } from "@/types/todo"
 import ListEmoji from "./list-emoji"
 import { ListEmojiPopover } from "./list-emoji-picker"
 import ListNameInput, { restoreFocus } from "./list-name-input"
-import TodoSearch from "./todo-search"
+import { TodoSearchButton } from "./todo-search"
 import { List, Todo } from "../types"
 import { DEFAULT_VIEW, isInView, View, VIEWS } from "../views"
 
@@ -48,7 +48,7 @@ type Props = {
   lists: List[]
   view: View
   onSelectView: (view: View) => void
-  onSearchSelect: (todo: Todo) => void
+  onSearchOpen: () => void
 }
 
 const NAV_ITEM_CLASS =
@@ -60,7 +60,7 @@ export default function TodoNav({
   lists,
   view,
   onSelectView,
-  onSearchSelect,
+  onSearchOpen,
 }: Props) {
   const id = React.useId()
   const [isCreating, setIsCreating] = React.useState(false)
@@ -83,7 +83,7 @@ export default function TodoNav({
 
   return (
     <nav aria-label="Todo views" className="flex flex-col gap-5 p-3">
-      <TodoSearch open={open} completed={completed} onSelect={onSearchSelect} />
+      <TodoSearchButton onClick={onSearchOpen} />
 
       <ul className="flex flex-col gap-0.5">
         {VIEWS.map(({ id: viewId, label, icon: Icon }) => (

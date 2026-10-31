@@ -1,6 +1,6 @@
 "use client"
 
-/* Todo app with the views on the left, the todo list in the middle, and the selected todo in a side panel on the right */
+/* Todo app with the views on the left, the todo list in the middle, and the selected todo on the right. The middle panel is always on screen. */
 
 import { api } from "@/convex/_generated/api"
 import { useConvexMutation } from "@convex-dev/react-query"
@@ -14,6 +14,7 @@ import {
 } from "lucide-react"
 import { useSearchParams } from "next/navigation"
 import React from "react"
+import SidePanel from "@/components/layout/side-panel"
 import { Button } from "@/components/ui/button"
 import {
   Empty,
@@ -31,15 +32,17 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip"
+import { MIN_WIDTH, useMediaQuery } from "@/hooks/use-media-query"
 import { todoQueries } from "@/lib/query-options"
 import { toast } from "@/lib/toast"
-import { cn } from "@/lib/utils"
 import ListEmojiPicker from "./list-emoji-picker"
 import ListTitle from "./list-title"
 import TodoDetail from "./todo-detail"
 import TodoList from "./todo-list"
+import TodoMenu from "./todo-menu"
 import TodoNav from "./todo-nav"
 import TodoNew from "./todo-new"
+import TodoSearch from "./todo-search"
 import TodoSummary from "./todo-summary"
 import { Todo } from "../types"
 import {
@@ -58,7 +61,7 @@ const SELECTED_PARAM = "todo"
 const VIEW_PARAM = "view"
 
 /* The new todo form uses the same param, so the panel cannot show a todo and the form at once */
-const NEW_TODO = "new"
+const NEW_TODO = "new" as const
 
 const NEW_TODO_KEY = "n"
 
@@ -123,9 +126,16 @@ export default function TodoApp() {
   const isNew = selectedId === NEW_TODO
   const view = parseView(searchParams.get(VIEW_PARAM), lists)
   const activeList = lists.find((list) => list._id === view) ?? null
-  const detailRef = React.useRef<HTMLDivElement>(null)
+  const isNavInline = useMediaQuery(MIN_WIDTH.md)
+  const isDetailInline = useMediaQuery(MIN_WIDTH.xl)
+  const newTodoButtonRef = React.useRef<HTMLButtonElement>(null)
 
   const [tab, setTab] = React.useState<Tab>("todo")
+  const [isNavOpen, setIsNavOpen] = React.useState(false)
+  const [isSearchOpen, setIsSearchOpen] = React.useState(false)
+
+  /* A sheet must not open again when the window becomes narrow */
+  if (isNavInline && isNavOpen) setIsNavOpen(false)
 
   const { mutate: setStatus } = useMutation({
     mutationFn: useConvexMutation(api.todos.setStatus),
@@ -151,24 +161,34 @@ export default function TodoApp() {
   const viewCompleted = completed.filter((todo) => isInView(todo, view))
 
   const selected = todos?.find((todo) => todo._id === selectedId) ?? null
+  const panel = isNew ? NEW_TODO : selected
+
+  /* A closing sheet stays on screen after the URL clears, so it keeps the last content */
+  const [lastPanel, setLastPanel] = React.useState(panel)
+  if (panel && panel !== lastPanel) setLastPanel(panel)
+  const shownPanel = isDetailInline ? panel : (panel ?? lastPanel)
 
   function showPanel(id: string, nextView = view) {
     setParams({
       [SELECTED_PARAM]: id,
       [VIEW_PARAM]: nextView === DEFAULT_VIEW ? null : nextView,
     })
-    /* A narrow window shows the panel below the list. On a wide window the sticky panel is already in view, so nothing scrolls. */
-    requestAnimationFrame(() =>
-      detailRef.current?.scrollIntoView({ block: "nearest" })
-    )
   }
 
   function selectView(next: View) {
+    setIsNavOpen(false)
     setParams({
       [VIEW_PARAM]: next === DEFAULT_VIEW ? null : next,
       /* Keep an unsaved new todo open. Close a todo that can be outside the new view. */
       ...(isNew ? {} : { [SELECTED_PARAM]: null }),
     })
+  }
+
+  /* One modal shows at a time. The detail sheet stays and search does not open, so an unsaved new todo is safe. */
+  function changeSearchOpen(next: boolean) {
+    if (next && !isDetailInline && panel) return
+    setIsSearchOpen(next)
+    if (next) setIsNavOpen(false)
   }
 
   function openTodo(todo: Todo) {
@@ -214,6 +234,11 @@ export default function TodoApp() {
   }
 
   function handleAdded(id: string) {
+    /* A sheet covers the list, so close it to show the new row */
+    if (!isDetailInline) {
+      closeDetail()
+      return
+    }
     setParams({ [SELECTED_PARAM]: id })
     /* The form unmounts, so move focus to the new row instead of the page body */
     requestAnimationFrame(() => focusRow(id))
@@ -248,6 +273,7 @@ export default function TodoApp() {
           todos={list}
           lists={activeList ? [] : lists}
           grouped={listTab === "todo"}
+          selectOnArrow={isDetailInline}
           selectedId={selectedId}
           onSelect={openTodo}
           onToggle={toggleStatus}
@@ -292,24 +318,29 @@ export default function TodoApp() {
 
   return (
     <div className="grid flex-1 grid-cols-1 md:grid-cols-[13rem_minmax(0,1fr)] xl:grid-cols-[15rem_minmax(20rem,1fr)_minmax(22.5rem,28.75rem)]">
-      <div className="border-b md:border-r md:border-b-0">
-        <div className="md:sticky md:top-0 md:max-h-svh md:overflow-y-auto">
-          <TodoNav
-            open={open}
-            completed={completed}
-            lists={lists}
-            view={view}
-            onSelectView={selectView}
-            onSearchSelect={openFromSearch}
-          />
-        </div>
-      </div>
+      <SidePanel
+        side="left"
+        label="Views and lists"
+        inline={isNavInline}
+        open={isNavOpen}
+        onOpenChange={setIsNavOpen}
+      >
+        <TodoNav
+          open={open}
+          completed={completed}
+          lists={lists}
+          view={view}
+          onSelectView={selectView}
+          onSearchOpen={() => changeSearchOpen(true)}
+        />
+      </SidePanel>
 
       <section aria-label="Todos" className="min-w-0">
+        <TodoMenu onOpen={() => setIsNavOpen(true)} />
         <Tabs
           value={tab}
           onValueChange={(value) => setTab(value as Tab)}
-          className="gap-4 p-4 md:p-6"
+          className="gap-4 p-4 pt-0 md:p-6"
         >
           <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
             <div className="flex min-w-0 items-center gap-1">
@@ -342,6 +373,7 @@ export default function TodoApp() {
                 <TooltipTrigger
                   render={
                     <Button
+                      ref={newTodoButtonRef}
                       variant={isNew ? "muted" : "ghost"}
                       size="icon"
                       aria-label="New todo"
@@ -367,53 +399,61 @@ export default function TodoApp() {
         </Tabs>
       </section>
 
-      <section
-        aria-label="Todo details"
-        className={cn(
-          "min-w-0 border-t md:col-span-2 xl:col-span-1 xl:border-t-0 xl:border-l",
-          /* Below the list, an empty panel only adds scroll */
-          !selected && !isNew && "hidden xl:block"
-        )}
+      <SidePanel
+        side="right"
+        label="Todo details"
+        inline={isDetailInline}
+        open={panel !== null}
+        onOpenChange={(isOpen) => {
+          if (!isOpen) closeDetail()
+        }}
+        /* The new todo form takes focus when it mounts, before the sheet records the last focused element */
+        finalFocus={() =>
+          shownPanel === NEW_TODO ? newTodoButtonRef.current : true
+        }
       >
-        <div
-          ref={detailRef}
-          className="mx-auto max-w-2xl xl:sticky xl:top-0 xl:h-full xl:max-h-svh xl:overflow-y-auto"
-        >
-          {isNew ? (
-            <TodoNew
-              lists={lists}
-              defaultListId={activeList?._id ?? null}
-              onAdded={handleAdded}
-              onClose={closeDetail}
-            />
-          ) : selected ? (
-            <TodoDetail
-              key={selected._id}
-              todo={selected}
-              lists={lists}
-              onClose={closeDetail}
-              onToggle={toggleStatus}
-            />
-          ) : (
-            <Empty className="h-full">
-              <EmptyHeader>
-                <EmptyMedia variant="icon">
-                  <MousePointerClickIcon />
-                </EmptyMedia>
-                <EmptyTitle>No todo selected</EmptyTitle>
-                <EmptyDescription>
-                  Select a todo to see its details.
-                </EmptyDescription>
-              </EmptyHeader>
-              <EmptyContent>
-                <p className="flex items-center gap-1.5 text-sm text-muted-foreground">
-                  Press <Kbd>N</Kbd> to add a todo
-                </p>
-              </EmptyContent>
-            </Empty>
-          )}
-        </div>
-      </section>
+        {shownPanel === NEW_TODO ? (
+          <TodoNew
+            lists={lists}
+            defaultListId={activeList?._id ?? null}
+            onAdded={handleAdded}
+            onClose={closeDetail}
+          />
+        ) : shownPanel ? (
+          <TodoDetail
+            key={shownPanel._id}
+            todo={shownPanel}
+            lists={lists}
+            onClose={closeDetail}
+            onToggle={toggleStatus}
+          />
+        ) : (
+          <Empty className="h-full">
+            <EmptyHeader>
+              <EmptyMedia variant="icon">
+                <MousePointerClickIcon />
+              </EmptyMedia>
+              <EmptyTitle>No todo selected</EmptyTitle>
+              <EmptyDescription>
+                Select a todo to see its details.
+              </EmptyDescription>
+            </EmptyHeader>
+            <EmptyContent>
+              <p className="flex items-center gap-1.5 text-sm text-muted-foreground">
+                Press <Kbd>N</Kbd> to add a todo
+              </p>
+            </EmptyContent>
+          </Empty>
+        )}
+      </SidePanel>
+
+      <TodoSearch
+        open={open}
+        completed={completed}
+        isOpen={isSearchOpen}
+        onOpenChange={changeSearchOpen}
+        onSelect={openFromSearch}
+      />
     </div>
   )
 }

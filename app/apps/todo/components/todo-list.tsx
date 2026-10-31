@@ -14,6 +14,8 @@ type Props = {
   lists: List[]
   /* Due-date groups do not help in the completed list */
   grouped?: boolean
+  /* A sheet takes focus when it opens, so arrow keys select a row only when the panel is a column */
+  selectOnArrow: boolean
   selectedId: string | null
   onSelect: (todo: Todo) => void
   onToggle: (todo: Todo) => void
@@ -23,6 +25,7 @@ export default function TodoList({
   todos,
   lists,
   grouped = true,
+  selectOnArrow,
   selectedId,
   onSelect,
   onToggle,
@@ -42,7 +45,7 @@ export default function TodoList({
     if (!next || !todo) return
 
     next.focus()
-    onSelect(todo)
+    if (selectOnArrow) onSelect(todo)
   }
 
   const rowProps = { lists, selectedId, onSelect, onToggle }
@@ -81,7 +84,7 @@ function Rows({
   selectedId,
   onSelect,
   onToggle,
-}: Omit<Props, "grouped">) {
+}: Omit<Props, "grouped" | "selectOnArrow">) {
   return (
     <ul className="flex flex-col gap-0.5">
       {todos.map((todo) => (

@@ -207,7 +207,12 @@ export default function TodoLocationPicker({ initial, start, onPick }: Props) {
     mapRef.current?.flyTo({ center: [longitude, latitude], zoom })
   }
 
-  function placePin(point: Coordinates, place: PlaceSuggestion | null = null) {
+  function placePin(
+    { latitude, longitude }: Coordinates,
+    place: PlaceSuggestion | null = null
+  ) {
+    /* A PlaceSuggestion also fits Coordinates, but the Convex validator rejects its extra fields */
+    const point = { latitude, longitude }
     setPin(point)
     setChosen(place)
     flyTo(point, Math.max(mapRef.current?.getZoom() ?? 0, STREET_ZOOM))

@@ -42,6 +42,10 @@
   --font-sans: var(--font-sans);
   --font-mono: var(--font-mono);
   --font-serif: var(--font-serif);
+  /* Noto draws the same emoji as Android. A system font such as Windows 10 Segoe UI Emoji lacks newer emoji. */
+  --font-emoji:
+    var(--font-noto-emoji), "Apple Color Emoji", "Segoe UI Emoji",
+    "Noto Color Emoji", sans-serif;
 
   --radius-*: initial;
   --radius-xs: calc(var(--radius) * 0.25);

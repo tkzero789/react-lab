@@ -1,8 +1,10 @@
 import { ConvexError, v } from "convex/values"
-import type { Id } from "./_generated/dataModel"
+import type { Doc, Id } from "./_generated/dataModel"
 import { mutation, query } from "./_generated/server"
 import { getCurrentUserId } from "./users"
 import { deleteFiles, getFileObject } from "./files"
+import { coordinatesInput } from "./schema"
+import { getOwnList } from "./todoLists"
 
 export const list = query({
   handler: async (ctx) => {
@@ -34,11 +36,14 @@ export const add = mutation({
     text: v.string(),
     date: v.number(),
     location: v.string(),
+    coordinates: v.optional(coordinatesInput),
     image: v.optional(v.array(v.id("_storage"))),
+    listId: v.optional(v.id("todoLists")),
   },
   handler: async (ctx, args) => {
     const userId = await getCurrentUserId(ctx)
     if (!userId) throw new ConvexError("Not authenticated")
+    if (args.listId) await getOwnList(ctx, userId, args.listId)
 
     return await ctx.db.insert("todos", {
       userId,
@@ -46,7 +51,9 @@ export const add = mutation({
       status: "todo",
       date: args.date,
       location: args.location,
+      coordinates: args.location ? args.coordinates : undefined,
       image: args.image ? args.image : [],
+      listId: args.listId,
     })
   },
 })
@@ -58,7 +65,11 @@ export const update = mutation({
     text: v.optional(v.string()),
     date: v.optional(v.number()),
     location: v.optional(v.string()),
+    /* Null removes the pin */
+    coordinates: v.optional(v.union(coordinatesInput, v.null())),
     image: v.optional(v.array(v.id("_storage"))),
+    /* Null takes the todo out of its list */
+    listId: v.optional(v.union(v.id("todoLists"), v.null())),
   },
   handler: async (ctx, args) => {
     const userId = await getCurrentUserId(ctx)
@@ -68,6 +79,7 @@ export const update = mutation({
     if (!todo || todo.userId !== userId) {
       throw new ConvexError("Todo not found")
     }
+    if (args.listId) await getOwnList(ctx, userId, args.listId)
 
     if (args.image !== undefined) {
       const kept = new Set<string>(args.image)
@@ -77,8 +89,18 @@ export const update = mutation({
       )
     }
 
-    const { id, ...fields } = args
-    return await ctx.db.patch(id, fields)
+    /* Patch removes a field set to undefined. Send listId and coordinates only when they change. */
+    const { id, listId, coordinates, ...fields } = args
+    const patch: Partial<Doc<"todos">> = fields
+    if (listId !== undefined) patch.listId = listId ?? undefined
+
+    /* The mobile app sends the location on every save. Only new text without a pin drops the old pin. */
+    const isNewText =
+      args.location !== undefined && args.location !== todo.location
+    if (coordinates !== undefined) patch.coordinates = coordinates ?? undefined
+    else if (isNewText) patch.coordinates = undefined
+
+    return await ctx.db.patch(id, patch)
   },
 })
 

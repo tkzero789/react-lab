@@ -16,6 +16,7 @@ import type * as files from "../files.js";
 import type * as http from "../http.js";
 import type * as ingredients from "../ingredients.js";
 import type * as migrations from "../migrations.js";
+import type * as todoLists from "../todoLists.js";
 import type * as todos from "../todos.js";
 import type * as transactions from "../transactions.js";
 import type * as users from "../users.js";
@@ -36,6 +37,7 @@ declare const fullApi: ApiFromModules<{
   http: typeof http;
   ingredients: typeof ingredients;
   migrations: typeof migrations;
+  todoLists: typeof todoLists;
   todos: typeof todos;
   transactions: typeof transactions;
   users: typeof users;

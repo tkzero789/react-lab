@@ -1,6 +1,11 @@
 import { defineSchema, defineTable } from "convex/server"
 import { v } from "convex/values"
 
+export const coordinatesInput = v.object({
+  latitude: v.number(),
+  longitude: v.number(),
+})
+
 const transactionFields = {
   amountCents: v.number(),
   date: v.string(),
@@ -45,7 +50,17 @@ export default defineSchema({
     text: v.string(),
     date: v.number(),
     location: v.string(),
+    /* The map pin for the location. Typed text has no pin. */
+    coordinates: v.optional(coordinatesInput),
     image: v.array(v.string()),
+    listId: v.optional(v.id("todoLists")),
+  })
+    .index("by_user", ["userId"])
+    .index("by_list", ["listId"]),
+  todoLists: defineTable({
+    userId: v.id("users"),
+    name: v.string(),
+    emoji: v.string(),
   }).index("by_user", ["userId"]),
 
   // Grocery

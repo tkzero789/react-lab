@@ -445,7 +445,10 @@ export default function DayDetails({
         onOpenChange={onOpenChange}
         onOpenChangeComplete={handleOpenChangeComplete}
       >
-        <DialogContent className="md:h-[min(40rem,calc(100dvh-4rem))] md:max-w-md">
+        <DialogContent
+          fixedHeight
+          className="md:h-[min(40rem,calc(100dvh-4rem))] md:max-w-md"
+        >
           <DialogHeader>
             <DialogTitle>{title}</DialogTitle>
           </DialogHeader>

@@ -35,25 +35,22 @@ function CommandDialog({
   description = "Search for a command to run...",
   children,
   className,
-  showCloseButton = false,
   ...props
 }: Omit<React.ComponentProps<typeof Dialog>, "children"> & {
   title?: string
   description?: string
   className?: string
-  showCloseButton?: boolean
   children: React.ReactNode
 }) {
   return (
     <Dialog {...props}>
-      <DialogHeader className="sr-only">
+      <DialogHeader showCloseButton={false} className="sr-only">
         <DialogTitle>{title}</DialogTitle>
         <DialogDescription>{description}</DialogDescription>
       </DialogHeader>
       <DialogContent
-        showCloseButton={showCloseButton}
         className={cn(
-          "top-2 h-auto max-h-[calc(100dvh-16px)] translate-y-0 overflow-hidden rounded-md! p-0 md:top-1/3",
+          "top-2 translate-y-0 overflow-hidden rounded-md! p-0 md:top-1/3",
           className
         )}
       >

@@ -37,7 +37,10 @@ export default function TodoLocationDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="md:h-[min(44rem,calc(100dvh-4rem))] md:max-w-4xl">
+      <DialogContent
+        fixedHeight
+        className="md:h-[min(44rem,calc(100dvh-4rem))] md:max-w-4xl"
+      >
         <DialogHeader>
           <DialogTitle>Choose on map</DialogTitle>
         </DialogHeader>

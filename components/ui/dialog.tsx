@@ -39,53 +39,92 @@ function DialogOverlay({
   )
 }
 
+const FOCUSABLE =
+  'a[href], button:not(:disabled), input:not(:disabled):not([type="hidden"]), select:not(:disabled), textarea:not(:disabled), [tabindex]:not([tabindex="-1"])'
+
 function DialogContent({
   className,
   children,
-  showCloseButton = true,
+  fixedHeight = false,
   ...props
 }: DialogPrimitive.Popup.Props & {
-  showCloseButton?: boolean
+  fixedHeight?: boolean
 }) {
+  const popupRef = React.useRef<HTMLDivElement>(null)
+
+  /* The close button is first in the DOM. Skip the header, so a form opens with focus on its first field. */
+  function getInitialFocus(openType: string) {
+    if (openType === "touch" || !popupRef.current) return true
+    const first = Array.from(
+      popupRef.current.querySelectorAll<HTMLElement>(FOCUSABLE)
+    ).find(
+      (element) =>
+        !element.closest('[data-slot="dialog-header"], [inert]') &&
+        element.checkVisibility()
+    )
+    return first ?? true
+  }
+
   return (
     <DialogPortal>
       <DialogOverlay forceRender />
       <DialogPrimitive.Popup
+        ref={popupRef}
+        initialFocus={getInitialFocus}
         data-slot="dialog-content"
         className={cn(
-          "fixed top-1/2 left-1/2 z-50 flex h-[calc(100dvh-16px)] w-[calc(100dvw-16px)] -translate-x-1/2 -translate-y-1/2 flex-col rounded-md bg-popover text-sm text-popover-foreground ring-1 ring-overlay-ring duration-100 outline-none md:h-auto md:max-h-[calc(100dvh-4rem)] md:max-w-sm data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95",
+          "fixed top-1/2 left-1/2 z-50 flex max-h-[calc(100dvh-16px)] w-[calc(100dvw-16px)] -translate-x-1/2 -translate-y-1/2 flex-col rounded-md bg-popover text-sm text-popover-foreground ring-1 ring-overlay-ring duration-100 outline-none md:max-h-[calc(100dvh-4rem)] md:max-w-sm data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95",
+          fixedHeight && "h-[80dvh]",
           className
         )}
         {...props}
       >
         {children}
-        {showCloseButton && (
-          <DialogPrimitive.Close
-            data-slot="dialog-close"
-            render={
-              <Button
-                variant="ghost"
-                className="absolute top-2 right-2"
-                size="icon-sm"
-              >
-                <XIcon />
-                <span className="sr-only">Close</span>
-              </Button>
-            }
-          />
-        )}
       </DialogPrimitive.Popup>
     </DialogPortal>
   )
 }
 
-function DialogHeader({ className, ...props }: React.ComponentProps<"div">) {
+function DialogHeader({
+  className,
+  children,
+  actions,
+  showCloseButton = true,
+  ...props
+}: React.ComponentProps<"div"> & {
+  actions?: React.ReactNode
+  showCloseButton?: boolean
+}) {
   return (
     <div
       data-slot="dialog-header"
-      className={cn("flex shrink-0 flex-col gap-2 p-4 pr-12", className)}
+      className={cn(
+        "flex shrink-0 items-start justify-between gap-2 py-2.5 pr-2 pl-4",
+        className
+      )}
       {...props}
-    />
+    >
+      {/* The padding makes the first line as tall as a button, so the title centers on the close button */}
+      <div className="flex min-w-0 flex-1 flex-col gap-2 py-1.5">
+        {children}
+      </div>
+      {actions || showCloseButton ? (
+        <div className="flex shrink-0 items-center gap-1">
+          {actions}
+          {showCloseButton && (
+            <DialogPrimitive.Close
+              data-slot="dialog-close"
+              render={
+                <Button variant="ghost" size="icon-sm">
+                  <XIcon />
+                  <span className="sr-only">Close</span>
+                </Button>
+              }
+            />
+          )}
+        </div>
+      ) : null}
+    </div>
   )
 }
 

@@ -108,8 +108,8 @@ export default function DialogPage() {
           title="No Close Button"
           description={
             <>
-              Set <code>{"showCloseButton={false}"}</code> when the footer has
-              the only way out.
+              Set <code>{"showCloseButton={false}"}</code> on{" "}
+              <code>DialogHeader</code> when the footer has the only way out.
             </>
           }
         >
@@ -117,8 +117,8 @@ export default function DialogPage() {
             <DialogTrigger render={<Button variant="outline" />}>
               Footer only
             </DialogTrigger>
-            <DialogContent showCloseButton={false}>
-              <DialogHeader>
+            <DialogContent>
+              <DialogHeader showCloseButton={false}>
                 <DialogTitle>One more step</DialogTitle>
                 <DialogDescription>
                   Confirm to finish the setup.
@@ -157,6 +157,35 @@ export default function DialogPage() {
               </DialogHeader>
               <DialogBody className="text-muted-foreground">
                 The content area is wider here.
+              </DialogBody>
+              <DialogFooter showCloseButton />
+            </DialogContent>
+          </Dialog>
+        </Example>
+
+        <Example
+          title="Height"
+          description={
+            <>
+              The height follows the content. Set <code>fixedHeight</code> for a
+              height of <code>80dvh</code> at every window size, when the
+              content fills the dialog or changes size between views.
+            </>
+          }
+        >
+          <Dialog>
+            <DialogTrigger render={<Button variant="outline" />}>
+              Fixed height
+            </DialogTrigger>
+            <DialogContent fixedHeight>
+              <DialogHeader>
+                <DialogTitle>Attachment</DialogTitle>
+                <DialogDescription>
+                  The dialog keeps its height when the content changes.
+                </DialogDescription>
+              </DialogHeader>
+              <DialogBody className="text-muted-foreground">
+                The body fills the space between the header and the footer.
               </DialogBody>
               <DialogFooter showCloseButton />
             </DialogContent>

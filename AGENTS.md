@@ -12,16 +12,32 @@ This web app is optimized for desktop use only. Phone users use the Expo app. Th
 - **Do not hide an action behind hover only.** Hover can reveal an action, but keyboard focus must reveal it too.
 - **Keep every page responsive.** In a narrow window, on a tablet, or on a phone, content must fit, scroll, and stay usable. Nothing can overflow or break.
 - **Accept a simpler result on small screens.** A dense table or a wide menu that is usable on a phone is enough. Do not trade desktop quality for mobile polish.
-- **Do not build mobile-only variants.** Do not add a second component tree, a mobile-only flow, or `useIsMobile()` branches for a better phone experience. Use responsive CSS on the same component.
+- **Do not build mobile-only variants.** Do not add a second component tree, a mobile-only flow, or `useIsMobile()` branches for a better phone experience. Use responsive CSS on the same component. The one exception is `SidePanel` in the panel layout.
 - **Match features with the Expo app, not layouts.** A feature on both clients keeps the same data and behavior. Each client designs its own UI for its own platform. See `../react-lab-expo/AGENTS.md`.
+
+## Panel layout
+
+The main layout of an app is two or three panels: an optional left panel, a middle panel, and an optional right panel. See `app/apps/todo/components/todo-app.tsx`.
+
+- **The middle panel is the main screen.** It is always on screen, at every window size. It holds the primary content, such as the list.
+- **Side panels are columns when they fit, and sheets when they do not.** The left panel opens as a `Sheet` from the left. The right panel opens as a `Sheet` from the right. Use `SidePanel` from `components/layout/side-panel.tsx` for both.
+- **Do not stack a panel below the middle panel.** Do not hide the content of a panel on any window size. A sheet gives access to all of it.
+- **Use these breakpoints as the default.** Below `md`, both side panels are sheets. From `md`, the left panel is a column. From `xl`, the right panel is a column too. Keep the grid columns and the `useMediaQuery` values on the same breakpoints.
+- **Give each sheet one way to open.** A standalone sticky bar at the top of the middle panel holds a `Menu` button on the left, and that button opens the left sheet. The bar has `md:hidden`. See `app/apps/todo/components/todo-menu.tsx`. A selected item opens the right sheet, so its open state comes from the selection.
+- **Give each right panel a visible close button.** `SidePanel` removes the default sheet close button, so the panel content must have its own. The left sheet closes with a click outside it, Escape, or a selected item.
+- **Close the sheet when its job is done.** Selecting a view closes the left sheet. Adding an item closes the right sheet and shows the middle panel.
+- **Keep the last content while a sheet closes.** The sheet stays on screen during the close animation, after the selection clears. See `lastPanel` in `todo-app.tsx`.
+- **Keep shortcuts working when a sheet is closed.** A closed sheet unmounts its content. Keep a global shortcut listener, and any dialog that it opens, outside the `SidePanel`.
+- **Do not act on keyboard focus when a panel is a sheet.** A sheet takes focus when it opens, so arrow keys only move the focus in the list.
+- **Do not show an empty state in a sheet.** A column can show an empty state. A sheet opens only when it has content.
 
 ## Overlays
 
-Use the same overlay on all screen sizes. This follows the platform priority. Do not swap a `Dialog`, `Popover`, `DropdownMenu`, or `Select` for a `Drawer` or `NativeSelect` on mobile.
+Use the same overlay on all screen sizes. This follows the platform priority. Do not swap a `Dialog`, `Popover`, `DropdownMenu`, or `Select` for a `Drawer` or `NativeSelect` on mobile. A side panel of the panel layout is not an overlay in this rule. It becomes a `Sheet` on a narrow window.
 
 ### Multi-step flows
 
-- **Do not stack overlays.** One flow uses one `Dialog`. Only an `AlertDialog` can open on top of it.
+- **Do not stack overlays.** One flow uses one `Dialog`. Only an `AlertDialog` can open on top of it. A `SidePanel` sheet counts as a panel, so a `Dialog` that the panel opens can show on top of the sheet.
 - **Show each step inside the same overlay.** Keep the step in state, change the header title, and show a back button after the first step.
 - **Animate steps with `StepTransition`** from `app/apps/workout/components/step-transition.tsx`. It slides by direction. Give the `Dialog` a fixed height and set `fill`, so the dialog does not resize between steps.
 - **Reset the step in `onOpenChangeComplete`,** not in `onOpenChange`. The reset then happens after the close animation.

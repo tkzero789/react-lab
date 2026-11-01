@@ -11,6 +11,7 @@ import { XIcon } from "lucide-react"
 import React from "react"
 import { Button } from "@/components/ui/button"
 import { Spinner } from "@/components/ui/spinner"
+import { Textarea } from "@/components/ui/textarea"
 import {
   Tooltip,
   TooltipContent,
@@ -49,6 +50,7 @@ export default function TodoNew({
 }: Props) {
   const id = React.useId()
   const [text, setText] = React.useState("")
+  const [note, setNote] = React.useState("")
   const [date, setDate] = React.useState(0)
   const [listId, setListId] = React.useState(defaultListId)
   const [location, setLocation] = React.useState<LocationValue>({
@@ -90,6 +92,7 @@ export default function TodoNew({
     if (!canSubmit) return
     submit({
       text: text.trim(),
+      note,
       date,
       location: location.location,
       coordinates: location.coordinates ?? undefined,
@@ -160,7 +163,7 @@ export default function TodoNew({
       <dl className="flex flex-col gap-6">
         <div className="flex items-center gap-4">
           <dt className="w-28 shrink-0 text-sm text-muted-foreground">
-            <label htmlFor={`${id}-date`}>Due date</label>
+            <label htmlFor={`${id}-date`}>Date</label>
           </dt>
           <dd className="min-w-0 flex-1">
             <TodoDateField id={`${id}-date`} value={date} onChange={setDate} />
@@ -193,6 +196,21 @@ export default function TodoNew({
               id={`${id}-location`}
               value={location}
               onChange={setLocation}
+            />
+          </dd>
+        </div>
+
+        <div className="flex items-start gap-4">
+          <dt className="w-28 shrink-0 pt-2 text-sm text-muted-foreground">
+            <label htmlFor={`${id}-note`}>Note</label>
+          </dt>
+          <dd className="min-w-0 flex-1">
+            <Textarea
+              id={`${id}-note`}
+              placeholder="Add a note"
+              value={note}
+              onChange={(e) => setNote(e.target.value)}
+              className="resize-none"
             />
           </dd>
         </div>

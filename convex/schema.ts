@@ -48,6 +48,7 @@ export default defineSchema({
     userId: v.id("users"),
     status: v.union(v.literal("todo"), v.literal("completed")),
     text: v.string(),
+    note: v.optional(v.string()),
     date: v.number(),
     location: v.string(),
     /* The map pin for the location. Typed text has no pin. */

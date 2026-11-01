@@ -21,6 +21,7 @@ import {
 } from "@/components/ui/alert-dialog"
 import { Button } from "@/components/ui/button"
 import { Spinner } from "@/components/ui/spinner"
+import { Textarea } from "@/components/ui/textarea"
 import {
   Tooltip,
   TooltipContent,
@@ -36,6 +37,7 @@ import { List, Todo } from "../types"
 
 type TodoPatch = {
   text?: string
+  note?: string
   date?: number
   location?: string
   coordinates?: Coordinates | null
@@ -87,6 +89,16 @@ export default function TodoDetail({ todo, lists, onClose, onToggle }: Props) {
     if (!text || text === todo.text) return false
     save({ text })
   })
+
+  const noteField = useCommitOnBlur(
+    todo.note ?? "",
+    (next) => {
+      const note = next.trim()
+      if (note === (todo.note ?? "")) return false
+      save({ note })
+    },
+    { multiline: true }
+  )
 
   const fileCount = todo.imageObject.filter(Boolean).length
 
@@ -147,7 +159,7 @@ export default function TodoDetail({ todo, lists, onClose, onToggle }: Props) {
 
       <dl className="grid grid-cols-[7rem_minmax(0,1fr)] items-start gap-x-4 gap-y-6">
         <dt className="pt-2.5 text-sm text-muted-foreground">
-          <label htmlFor={`${id}-date`}>Due date</label>
+          <label htmlFor={`${id}-date`}>Date</label>
         </dt>
         <dd>
           <TodoDateField
@@ -180,6 +192,18 @@ export default function TodoDetail({ todo, lists, onClose, onToggle }: Props) {
               coordinates: todo.coordinates ?? null,
             }}
             onChange={(next) => save(next)}
+          />
+        </dd>
+
+        <dt className="pt-2 text-sm text-muted-foreground">
+          <label htmlFor={`${id}-note`}>Note</label>
+        </dt>
+        <dd>
+          <Textarea
+            id={`${id}-note`}
+            placeholder="Add a note"
+            {...noteField}
+            className="resize-none"
           />
         </dd>
 
@@ -222,10 +246,11 @@ export default function TodoDetail({ todo, lists, onClose, onToggle }: Props) {
 
 type FieldElement = HTMLInputElement | HTMLTextAreaElement
 
-/* Keeps a local draft and commits it on blur or Enter. Escape drops the draft. Return false from onCommit to drop it too. */
+/* Keeps a local draft and commits it on blur or Enter. Escape drops the draft. Return false from onCommit to drop it too. A multiline field keeps Enter for a new line. */
 function useCommitOnBlur(
   value: string,
-  onCommit: (next: string) => boolean | void
+  onCommit: (next: string) => boolean | void,
+  { multiline = false }: { multiline?: boolean } = {}
 ) {
   const [draft, setDraft] = React.useState(value)
   const [syncedValue, setSyncedValue] = React.useState(value)
@@ -248,7 +273,7 @@ function useCommitOnBlur(
       if (draft !== value && onCommit(draft) === false) setDraft(value)
     },
     onKeyDown: (e: React.KeyboardEvent<FieldElement>) => {
-      if (e.key === "Enter" && !e.shiftKey) {
+      if (e.key === "Enter" && !e.shiftKey && !multiline) {
         e.preventDefault()
         e.currentTarget.blur()
       }

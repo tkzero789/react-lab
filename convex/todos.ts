@@ -34,6 +34,7 @@ export const list = query({
 export const add = mutation({
   args: {
     text: v.string(),
+    note: v.optional(v.string()),
     date: v.number(),
     location: v.string(),
     coordinates: v.optional(coordinatesInput),
@@ -48,6 +49,7 @@ export const add = mutation({
     return await ctx.db.insert("todos", {
       userId,
       text: args.text,
+      note: args.note?.trim() || undefined,
       status: "todo",
       date: args.date,
       location: args.location,
@@ -63,6 +65,8 @@ export const update = mutation({
   args: {
     id: v.id("todos"),
     text: v.optional(v.string()),
+    /* An empty string removes the note */
+    note: v.optional(v.string()),
     date: v.optional(v.number()),
     location: v.optional(v.string()),
     /* Null removes the pin */
@@ -89,10 +93,11 @@ export const update = mutation({
       )
     }
 
-    /* Patch removes a field set to undefined. Send listId and coordinates only when they change. */
-    const { id, listId, coordinates, ...fields } = args
+    /* Patch removes a field set to undefined. Send listId, coordinates, and note only when they change. */
+    const { id, listId, coordinates, note, ...fields } = args
     const patch: Partial<Doc<"todos">> = fields
     if (listId !== undefined) patch.listId = listId ?? undefined
+    if (note !== undefined) patch.note = note.trim() || undefined
 
     /* The mobile app sends the location on every save. Only new text without a pin drops the old pin. */
     const isNewText =
